@@ -1,0 +1,90 @@
+<div class="max-w-md mx-auto">
+    <div class="text-center mb-8">
+        <i class="fas fa-user-circle text-6xl mb-4" style="color: var(--sky-blue);"></i>
+        <h1 class="text-3xl font-bold">Welcome Back</h1>
+        <p class="text-gray-600 mt-2">Sign in to your UPC Access account</p>
+    </div>
+    
+    <% if (error) { %>
+        <div class="bg-red-50 border border-red-300 text-red-700 px-4 py-3 rounded mb-4">
+            <% if (error === 'missing_email') { %>
+                Please enter your email address.
+            <% } else if (error === 'Please enter a valid @upc.com email address') { %>
+                Please enter your UPC email address (ending in @upc.com)
+            <% } else if (error === 'Email not found. Please check your email or register first.') { %>
+                <i class="fas fa-exclamation-circle mr-2"></i>
+                Email not found. Please check your email or <a href="/auth/register" class="underline font-semibold">create an account</a>.
+            <% } else { %>
+                <%= error %>
+            <% } %>
+        </div>
+    <% } %>
+    
+    <% if (typeof registered !== 'undefined' && registered) { %>
+        <div class="bg-green-50 border border-green-300 text-green-700 px-4 py-3 rounded mb-4">
+            Registration successful! Please login with your email.
+        </div>
+    <% } %>
+    
+    <form action="/auth/login" method="POST" class="module-card">
+        <div class="mb-6">
+            <label class="block text-gray-700 text-sm font-bold mb-2" for="email">
+                UPC Email Address
+            </label>
+            <input 
+                class="shadow appearance-none border rounded w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-lg" 
+                id="email" 
+                type="email" 
+                name="email"
+                placeholder="firstnamelastname@upc.com"
+                required
+                autofocus
+            >
+            <p class="text-gray-600 text-sm mt-2">Enter the @upc.com email you received when you registered</p>
+        </div>
+        
+        <button 
+            class="btn-primary w-full text-center mb-4" 
+            type="submit"
+        >
+            <i class="fas fa-sign-in-alt mr-2"></i>
+            Sign In
+        </button>
+        
+        <div class="text-center text-sm">
+            <a href="/auth/register" class="text-sky-blue hover:underline">
+                Don't have an account? Register here
+            </a>
+        </div>
+    </form>
+    
+    <!-- How It Works Info -->
+    <div class="mt-8 module-card bg-blue-50">
+        <h3 class="font-semibold mb-3 flex items-center">
+            <i class="fas fa-shield-alt mr-2" style="color: var(--sky-blue);"></i>
+            Passwordless Login
+        </h3>
+        <ul class="space-y-2 text-sm text-gray-700">
+            <li class="flex items-start">
+                <i class="fas fa-check-circle text-green-500 mr-2 mt-0.5"></i>
+                <span>No password to remember or forget</span>
+            </li>
+            <li class="flex items-start">
+                <i class="fas fa-check-circle text-green-500 mr-2 mt-0.5"></i>
+                <span>Just enter your UPC email to access your account</span>
+            </li>
+            <li class="flex items-start">
+                <i class="fas fa-check-circle text-green-500 mr-2 mt-0.5"></i>
+                <span>Stay logged in for 30 days on this device</span>
+            </li>
+        </ul>
+    </div>
+    
+    <!-- Forgot Email Section -->
+    <div class="mt-6 text-center">
+        <p class="text-sm text-gray-600">
+            Forgot your UPC email? Check your personal email for our welcome message, or 
+            <a href="/auth/register" class="text-sky-blue hover:underline">create a new account</a>
+        </p>
+    </div>
+</div>

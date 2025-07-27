@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title><%= typeof title !== 'undefined' ? title : 'United Presbyterian Church' %></title>
+    <meta name="description" content="United Presbyterian Church - A welcoming community of faith">
+    <meta name="theme-color" content="#87CEEB">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'sky-blue': '#87CEEB',
+                        'heaven-blue': '#B6E5F8',
+                        'cloud-white': '#F0F8FF',
+                        'soft-blue': '#E6F3FF',
+                        'text-primary': '#2C5282',
+                        'text-secondary': '#4A7C7E',
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Custom styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    
+    <!-- PWA manifest -->
+    <link rel="manifest" href="/manifest.json">
+    
+    <!-- iOS meta tags -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="min-h-screen pb-20">
+    <!-- Mobile Header -->
+    <header class="lg:hidden bg-white/80 backdrop-blur-md sticky top-0 z-40 shadow-sm">
+        <div class="flex items-center justify-between px-4 py-3">
+            <h1 class="text-xl font-bold text-text-primary">UPC</h1>
+            <% if (typeof user !== 'undefined' && user) { %>
+                <a href="/profile" class="text-text-primary">
+                    <i class="fas fa-user-circle text-2xl"></i>
+                </a>
+            <% } %>
+        </div>
+    </header>
+    
+    <!-- Desktop Header -->
+    <header class="hidden lg:block bg-white/90 backdrop-blur-md shadow-sm">
+        <nav class="container mx-auto px-4 py-4">
+            <div class="flex justify-between items-center">
+                <a href="/" class="text-2xl font-bold text-text-primary">United Presbyterian Church</a>
+                
+                <div class="flex items-center space-x-6">
+                    <a href="/" class="text-text-secondary hover:text-text-primary transition">Home</a>
+                    <a href="/daily" class="text-text-secondary hover:text-text-primary transition">Daily Content</a>
+                    <a href="/share" class="text-text-secondary hover:text-text-primary transition">Share</a>
+                    <a href="/about" class="text-text-secondary hover:text-text-primary transition">About</a>
+                    
+                    <% if (typeof user !== 'undefined' && user) { %>
+                        <a href="/profile" class="text-text-secondary hover:text-text-primary transition">Profile</a>
+                        <a href="/auth/logout" class="btn-primary">Logout</a>
+                    <% } else { %>
+                        <a href="/auth/login" class="btn-primary">Login</a>
+                    <% } %>
+                </div>
+            </div>
+        </nav>
+    </header>
+    
+    <!-- Main content with padding for mobile nav -->
+    <main class="min-h-screen">
+        <div class="container mx-auto px-4 py-6 lg:py-8">
+            <%- body %>
+        </div>
+    </main>
+    
+    <!-- Mobile Bottom Navigation -->
+    <nav class="mobile-nav lg:hidden px-6 py-2">
+        <div class="flex justify-around items-center">
+            <a href="/" class="flex flex-col items-center py-2 text-text-secondary hover:text-sky-blue transition">
+                <i class="fas fa-home text-xl mb-1"></i>
+                <span class="text-xs">Home</span>
+            </a>
+            <a href="/daily" class="flex flex-col items-center py-2 text-text-secondary hover:text-sky-blue transition">
+                <i class="fas fa-book-bible text-xl mb-1"></i>
+                <span class="text-xs">Daily</span>
+            </a>
+            <a href="/share" class="flex flex-col items-center py-2 px-3 bg-gradient-to-br from-sky-blue to-heaven-blue text-white rounded-full shadow-lg">
+                <i class="fas fa-plus text-xl"></i>
+            </a>
+            <a href="/events" class="flex flex-col items-center py-2 text-text-secondary hover:text-sky-blue transition">
+                <i class="fas fa-calendar text-xl mb-1"></i>
+                <span class="text-xs">Events</span>
+            </a>
+            <% if (typeof user !== 'undefined' && user) { %>
+                <a href="/profile" class="flex flex-col items-center py-2 text-text-secondary hover:text-sky-blue transition">
+                    <i class="fas fa-user text-xl mb-1"></i>
+                    <span class="text-xs">Profile</span>
+                </a>
+            <% } else { %>
+                <a href="/auth/login" class="flex flex-col items-center py-2 text-text-secondary hover:text-sky-blue transition">
+                    <i class="fas fa-sign-in-alt text-xl mb-1"></i>
+                    <span class="text-xs">Login</span>
+                </a>
+            <% } %>
+        </div>
+    </nav>
+    
+    <!-- Custom scripts -->
+    <script src="/js/main.js"></script>
+    
+    <!-- Time-based greeting script -->
+    <script>
+        function getGreeting() {
+            const hour = new Date().getHours();
+            if (hour < 12) return 'Good Morning';
+            if (hour < 17) return 'Good Afternoon';
+            return 'Good Evening';
+        }
+        
+        // Update greeting if element exists
+        document.addEventListener('DOMContentLoaded', function() {
+            const greetingEl = document.getElementById('greeting');
+            if (greetingEl) {
+                greetingEl.textContent = getGreeting();
+            }
+        });
+    </script>
+</body>
+</html>

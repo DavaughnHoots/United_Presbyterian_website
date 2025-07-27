@@ -1,0 +1,28 @@
+const { sequelize } = require('../config/database');
+const { DataTypes } = require('sequelize');
+
+// Import model definitions
+const User = require('./User')(sequelize, DataTypes);
+const Content = require('./Content')(sequelize, DataTypes);
+const Submission = require('./Submission')(sequelize, DataTypes);
+const Progress = require('./Progress')(sequelize, DataTypes);
+const DailyContent = require('./DailyContent')(sequelize, DataTypes);
+
+// Define associations
+User.hasMany(Progress, { foreignKey: 'userId' });
+Progress.belongsTo(User, { foreignKey: 'userId' });
+
+Content.hasMany(Progress, { foreignKey: 'contentId' });
+Progress.belongsTo(Content, { foreignKey: 'contentId' });
+
+Content.hasMany(DailyContent, { foreignKey: 'contentId' });
+DailyContent.belongsTo(Content, { foreignKey: 'contentId' });
+
+module.exports = {
+  sequelize,
+  User,
+  Content,
+  Submission,
+  Progress,
+  DailyContent
+};

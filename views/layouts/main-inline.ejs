@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title><%= typeof title !== 'undefined' ? title : 'United Presbyterian Church' %></title>
+    <meta name="description" content="United Presbyterian Church - A welcoming community of faith">
+    <meta name="theme-color" content="#87CEEB">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'sky-blue': '#87CEEB',
+                        'heaven-blue': '#B6E5F8',
+                        'cloud-white': '#F0F8FF',
+                        'soft-blue': '#E6F3FF',
+                        'text-primary': '#2C5282',
+                        'text-secondary': '#4A7C7E',
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Inline critical styles -->
+    <style>
+        :root {
+            --sky-blue: #87CEEB;
+            --heaven-blue: #B6E5F8;
+            --cloud-white: #F0F8FF;
+            --soft-blue: #E6F3FF;
+            --gradient-start: #87CEEB;
+            --gradient-mid: #B6E5F8;
+            --gradient-end: #F0F8FF;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(180deg, var(--gradient-start) 0%, var(--gradient-mid) 50%, var(--gradient-end) 100%);
+            min-height: 100vh;
+        }
+        
+        .module-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 4px 20px rgba(135, 206, 235, 0.15);
+            padding: 1.5rem;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--sky-blue) 0%, var(--heaven-blue) 100%);
+            color: white;
+            padding: 0.75rem 2rem;
+            border-radius: 25px;
+            font-weight: 600;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2), 0 1px 2px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+    
+    <!-- PWA manifest -->
+    <link rel="manifest" href="/manifest.json">
+    
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="min-h-screen pb-20">
+    <!-- Mobile Header -->
+    <header class="lg:hidden bg-white/80 backdrop-blur-md sticky top-0 z-40 shadow-sm">
+        <div class="flex items-center justify-between px-4 py-3">
+            <h1 class="text-xl font-bold" style="color: #2C5282;">UPC</h1>
+            <% if (typeof user !== 'undefined' && user) { %>
+                <a href="/profile" style="color: #2C5282;">
+                    <i class="fas fa-user-circle text-2xl"></i>
+                </a>
+            <% } %>
+        </div>
+    </header>
+    
+    <!-- Main content -->
+    <main class="min-h-screen">
+        <div class="container mx-auto px-4 py-6 lg:py-8">
+            <%- body %>
+        </div>
+    </main>
+    
+    <!-- Mobile Bottom Navigation -->
+    <nav class="fixed bottom-0 left-0 right-0 bg-white/98 backdrop-blur-md shadow-lg px-6 py-2 lg:hidden" style="border-radius: 20px 20px 0 0;">
+        <div class="flex justify-around items-center">
+            <a href="/" class="flex flex-col items-center py-2">
+                <i class="fas fa-home text-xl mb-1"></i>
+                <span class="text-xs">Home</span>
+            </a>
+            <a href="/daily" class="flex flex-col items-center py-2">
+                <i class="fas fa-book-bible text-xl mb-1"></i>
+                <span class="text-xs">Daily</span>
+            </a>
+            <a href="/share" class="flex flex-col items-center py-2 px-3 text-white rounded-full" style="background: linear-gradient(135deg, #87CEEB 0%, #B6E5F8 100%);">
+                <i class="fas fa-plus text-xl"></i>
+            </a>
+            <a href="/events" class="flex flex-col items-center py-2">
+                <i class="fas fa-calendar text-xl mb-1"></i>
+                <span class="text-xs">Events</span>
+            </a>
+            <% if (typeof user !== 'undefined' && user) { %>
+                <a href="/profile" class="flex flex-col items-center py-2">
+                    <i class="fas fa-user text-xl mb-1"></i>
+                    <span class="text-xs">Profile</span>
+                </a>
+            <% } else { %>
+                <a href="/auth/login" class="flex flex-col items-center py-2">
+                    <i class="fas fa-sign-in-alt text-xl mb-1"></i>
+                    <span class="text-xs">Login</span>
+                </a>
+            <% } %>
+        </div>
+    </nav>
+</body>
+</html>

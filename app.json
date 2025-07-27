@@ -1,0 +1,45 @@
+{
+  "name": "United Presbyterian Church Website",
+  "description": "Mobile-optimized church website with daily content and community features",
+  "keywords": ["church", "presbyterian", "mobile", "spiritual", "community"],
+  "website": "https://github.com/yourusername/United_Presbyterian_website",
+  "repository": "https://github.com/yourusername/United_Presbyterian_website",
+  "success_url": "/",
+  "scripts": {
+    "postdeploy": "npx sequelize-cli db:seed:all"
+  },
+  "env": {
+    "NODE_ENV": {
+      "description": "Node environment",
+      "value": "production"
+    },
+    "SESSION_SECRET": {
+      "description": "Secret key for session encryption",
+      "generator": "secret"
+    },
+    "RECAPTCHA_SITE_KEY": {
+      "description": "Google reCAPTCHA v3 site key",
+      "required": false
+    },
+    "RECAPTCHA_SECRET_KEY": {
+      "description": "Google reCAPTCHA v3 secret key",
+      "required": false
+    }
+  },
+  "formation": {
+    "web": {
+      "quantity": 1,
+      "size": "eco"
+    }
+  },
+  "addons": [
+    {
+      "plan": "heroku-postgresql:essential-0"
+    }
+  ],
+  "buildpacks": [
+    {
+      "url": "heroku/nodejs"
+    }
+  ]
+}

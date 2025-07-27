@@ -1,0 +1,213 @@
+<div class="max-w-2xl mx-auto">
+    <!-- Header -->
+    <div class="text-center mb-6">
+        <div class="icon-circle mx-auto mb-3">
+            <i class="fas fa-heart text-2xl"></i>
+        </div>
+        <h1 class="text-3xl font-bold text-gray-800 mb-2">Share Your Heart</h1>
+        <p class="text-gray-600">Submit your joys, concerns, and testimonies anonymously</p>
+    </div>
+    
+    <!-- Submission Form Card -->
+    <div class="module-card mb-6">
+        <form id="submissionForm">
+            <!-- Type Selection -->
+            <div class="mb-6">
+                <label class="block text-gray-700 font-semibold mb-3">What would you like to share?</label>
+                <div class="grid grid-cols-1 gap-3">
+                    <label class="flex items-center p-4 border-2 border-gray-200 rounded-lg cursor-pointer hover:border-sky-blue transition">
+                        <input type="radio" name="type" value="joy" class="mr-3" required>
+                        <div class="flex items-center flex-1">
+                            <div class="w-10 h-10 bg-yellow-100 rounded-full flex items-center justify-center mr-3">
+                                <i class="fas fa-smile text-yellow-600"></i>
+                            </div>
+                            <div>
+                                <span class="font-medium">Joy</span>
+                                <p class="text-sm text-gray-600">Share something you're thankful for</p>
+                            </div>
+                        </div>
+                    </label>
+                    
+                    <label class="flex items-center p-4 border-2 border-gray-200 rounded-lg cursor-pointer hover:border-sky-blue transition">
+                        <input type="radio" name="type" value="concern" class="mr-3" required>
+                        <div class="flex items-center flex-1">
+                            <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center mr-3">
+                                <i class="fas fa-praying-hands text-blue-600"></i>
+                            </div>
+                            <div>
+                                <span class="font-medium">Concern</span>
+                                <p class="text-sm text-gray-600">Request prayer for a situation</p>
+                            </div>
+                        </div>
+                    </label>
+                    
+                    <label class="flex items-center p-4 border-2 border-gray-200 rounded-lg cursor-pointer hover:border-sky-blue transition">
+                        <input type="radio" name="type" value="testimony" class="mr-3" required>
+                        <div class="flex items-center flex-1">
+                            <div class="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center mr-3">
+                                <i class="fas fa-dove text-purple-600"></i>
+                            </div>
+                            <div>
+                                <span class="font-medium">Testimony</span>
+                                <p class="text-sm text-gray-600">Share how God is working in your life</p>
+                            </div>
+                        </div>
+                    </label>
+                </div>
+            </div>
+            
+            <!-- Message Input -->
+            <div class="mb-6">
+                <label class="block text-gray-700 font-semibold mb-2" for="content">Your Message</label>
+                <textarea 
+                    id="content"
+                    name="content"
+                    class="w-full p-4 border border-gray-200 rounded-lg focus:ring-2 focus:ring-sky-blue focus:border-transparent resize-none" 
+                    rows="6"
+                    maxlength="2000"
+                    placeholder="Share your heart here..."
+                    required
+                ></textarea>
+                <p class="text-sm text-gray-600 mt-1">
+                    <span id="charCount">0</span> / 2000 characters
+                </p>
+            </div>
+            
+            <!-- Privacy Notice -->
+            <div class="bg-blue-50 rounded-lg p-4 mb-6">
+                <div class="flex items-start">
+                    <i class="fas fa-shield-alt text-sky-blue mt-1 mr-3"></i>
+                    <div>
+                        <p class="font-semibold text-gray-700 mb-1">Your Privacy is Protected</p>
+                        <p class="text-sm text-gray-600">
+                            Your submission is completely anonymous. We do not collect or store any identifying information. 
+                            All submissions are reviewed by pastoral staff before sharing with the community.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Messages -->
+            <div id="errorMessage" class="hidden bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-4"></div>
+            <div id="successMessage" class="hidden bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg mb-4"></div>
+            
+            <!-- Submit Button -->
+            <button type="submit" class="btn-primary w-full">
+                <i class="fas fa-paper-plane mr-2"></i>Submit Anonymously
+            </button>
+        </form>
+    </div>
+    
+    <!-- Recent Shares Section -->
+    <div class="module-card">
+        <h2 class="text-xl font-semibold mb-4">Recent Community Shares</h2>
+        <p class="text-gray-600 mb-4">Here are some recent anonymous submissions from our church family:</p>
+        
+        <!-- Example Share Cards -->
+        <div class="space-y-3">
+            <div class="bg-yellow-50 rounded-lg p-4">
+                <div class="flex items-center mb-2">
+                    <i class="fas fa-smile text-yellow-600 mr-2"></i>
+                    <span class="font-medium text-gray-700">Joy</span>
+                    <span class="text-sm text-gray-500 ml-auto">2 days ago</span>
+                </div>
+                <p class="text-gray-700">Thank you Lord for the beautiful weather and the opportunity to spend time with family this weekend!</p>
+            </div>
+            
+            <div class="bg-blue-50 rounded-lg p-4">
+                <div class="flex items-center mb-2">
+                    <i class="fas fa-praying-hands text-blue-600 mr-2"></i>
+                    <span class="font-medium text-gray-700">Prayer Request</span>
+                    <span class="text-sm text-gray-500 ml-auto">3 days ago</span>
+                </div>
+                <p class="text-gray-700">Please pray for healing and comfort for those in our community facing health challenges.</p>
+            </div>
+            
+            <div class="bg-purple-50 rounded-lg p-4">
+                <div class="flex items-center mb-2">
+                    <i class="fas fa-dove text-purple-600 mr-2"></i>
+                    <span class="font-medium text-gray-700">Testimony</span>
+                    <span class="text-sm text-gray-500 ml-auto">1 week ago</span>
+                </div>
+                <p class="text-gray-700">God has been so faithful! After months of uncertainty, He provided a new job opportunity that exceeded all my expectations.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('submissionForm');
+    const content = document.getElementById('content');
+    const charCount = document.getElementById('charCount');
+    const errorMessage = document.getElementById('errorMessage');
+    const successMessage = document.getElementById('successMessage');
+    
+    // Update radio button styling when selected
+    const radioButtons = document.querySelectorAll('input[name="type"]');
+    radioButtons.forEach(radio => {
+        radio.addEventListener('change', function() {
+            // Reset all labels
+            radioButtons.forEach(r => {
+                r.closest('label').classList.remove('border-sky-blue', 'bg-soft-blue');
+                r.closest('label').classList.add('border-gray-200');
+            });
+            // Highlight selected
+            if (this.checked) {
+                this.closest('label').classList.remove('border-gray-200');
+                this.closest('label').classList.add('border-sky-blue', 'bg-soft-blue');
+            }
+        });
+    });
+    
+    // Character counter
+    content.addEventListener('input', function() {
+        charCount.textContent = content.value.length;
+    });
+    
+    // Form submission
+    form.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        errorMessage.classList.add('hidden');
+        successMessage.classList.add('hidden');
+        
+        const formData = {
+            type: form.type.value,
+            content: content.value
+        };
+        
+        try {
+            const response = await fetch('/api/submissions', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            });
+            
+            const result = await response.json();
+            
+            if (response.ok) {
+                successMessage.innerHTML = '<i class="fas fa-check-circle mr-2"></i>' + (result.message || 'Your submission has been received.');
+                successMessage.classList.remove('hidden');
+                form.reset();
+                charCount.textContent = '0';
+                // Reset radio styling
+                radioButtons.forEach(r => {
+                    r.closest('label').classList.remove('border-sky-blue', 'bg-soft-blue');
+                    r.closest('label').classList.add('border-gray-200');
+                });
+                // Scroll to top
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            } else {
+                errorMessage.innerHTML = '<i class="fas fa-exclamation-circle mr-2"></i>' + (result.error || 'Failed to submit. Please try again.');
+                errorMessage.classList.remove('hidden');
+            }
+        } catch (error) {
+            errorMessage.innerHTML = '<i class="fas fa-exclamation-circle mr-2"></i>Network error. Please try again.';
+            errorMessage.classList.remove('hidden');
+        }
+    });
+});
+</script>

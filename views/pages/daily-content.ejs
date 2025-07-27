@@ -1,0 +1,206 @@
+<div class="max-w-4xl mx-auto">
+    <!-- Header -->
+    <div class="text-center mb-6">
+        <h1 class="text-3xl font-bold mb-2" style="color: var(--text-primary);">Daily Spiritual Journey</h1>
+        <p class="text-gray-600"><%= today %></p>
+        
+        <% if (user && userProgress && userProgress.completed) { %>
+            <div class="inline-flex items-center gap-2 mt-3 px-4 py-2 bg-green-100 text-green-700 rounded-full">
+                <i class="fas fa-check-circle"></i>
+                <span>Completed</span>
+            </div>
+        <% } %>
+    </div>
+    
+    <% if (!content) { %>
+        <!-- No Content Available -->
+        <div class="module-card text-center py-12">
+            <i class="fas fa-seedling text-6xl mb-4" style="color: var(--sky-blue);"></i>
+            <h2 class="text-2xl font-semibold mb-2">Content Coming Soon</h2>
+            <p class="text-gray-600">We're preparing today's spiritual content. Please check back later!</p>
+        </div>
+    <% } else { %>
+        <!-- Bible Reading Card -->
+        <% if (content.bibleReading) { %>
+            <div class="module-card mb-6">
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
+                        <i class="fas fa-book-bible text-xl" style="color: var(--sky-blue);"></i>
+                    </div>
+                    <h2 class="text-xl font-semibold">Daily Bible Reading</h2>
+                </div>
+                
+                <div class="bg-gradient-to-r from-sky-50 to-blue-50 rounded-lg p-6">
+                    <p class="text-gray-700 leading-relaxed whitespace-pre-line"><%= content.bibleReading %></p>
+                </div>
+            </div>
+        <% } %>
+        
+        <!-- Prayer Card -->
+        <% if (content.prayer) { %>
+            <div class="module-card mb-6">
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="w-12 h-12 rounded-full flex items-center justify-center" style="background-color: var(--cloud-white);">
+                        <i class="fas fa-praying-hands text-xl" style="color: var(--heaven-blue);"></i>
+                    </div>
+                    <h2 class="text-xl font-semibold">Today's Prayer</h2>
+                </div>
+                
+                <div class="rounded-lg p-6" style="background-color: var(--soft-blue);">
+                    <p class="text-gray-700 leading-relaxed italic whitespace-pre-line"><%= content.prayer %></p>
+                </div>
+            </div>
+        <% } %>
+        
+        <!-- Hymn Card -->
+        <% if (content.hymn) { %>
+            <div class="module-card mb-6">
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
+                        <i class="fas fa-music text-green-600 text-xl"></i>
+                    </div>
+                    <h2 class="text-xl font-semibold">Hymn of the Day</h2>
+                </div>
+                
+                <div class="bg-green-50 rounded-lg p-6">
+                    <p class="text-gray-700 leading-relaxed whitespace-pre-line"><%= content.hymn %></p>
+                    
+                    <% if (content.hymnVideoUrl) { %>
+                        <div class="mt-4">
+                            <a href="<%= content.hymnVideoUrl %>" target="_blank" class="inline-flex items-center gap-2 text-green-600 hover:text-green-700">
+                                <i class="fas fa-play-circle"></i>
+                                <span>Listen on YouTube</span>
+                            </a>
+                        </div>
+                    <% } %>
+                </div>
+            </div>
+        <% } %>
+        
+        <!-- Reflection Question Card -->
+        <% if (content.question) { %>
+            <div class="module-card mb-6">
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center">
+                        <i class="fas fa-lightbulb text-yellow-600 text-xl"></i>
+                    </div>
+                    <h2 class="text-xl font-semibold">Question for Reflection</h2>
+                </div>
+                
+                <div class="bg-yellow-50 rounded-lg p-6 mb-4">
+                    <p class="text-lg text-gray-700"><%= content.question %></p>
+                </div>
+                
+                <% if (user) { %>
+                    <% if (userProgress && userProgress.personalReflection) { %>
+                        <div class="bg-gray-50 rounded-lg p-4">
+                            <p class="text-sm text-gray-600 mb-2">Your reflection:</p>
+                            <p class="text-gray-700"><%= userProgress.personalReflection %></p>
+                        </div>
+                    <% } else { %>
+                        <form id="reflectionForm" class="mt-4">
+                            <textarea 
+                                id="reflection"
+                                name="reflection"
+                                class="w-full p-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-transparent resize-none" 
+                                rows="4" 
+                                placeholder="Share your thoughts (private - only you can see this)..."
+                            ></textarea>
+                            <button type="submit" class="btn-primary mt-3 w-full">
+                                <i class="fas fa-save mr-2"></i>Save Reflection
+                            </button>
+                        </form>
+                    <% } %>
+                <% } else { %>
+                    <div class="bg-gray-50 rounded-lg p-4 text-center">
+                        <p class="text-gray-600 mb-3">Login to save your personal reflections</p>
+                        <a href="/auth/login" class="btn-primary">Login</a>
+                    </div>
+                <% } %>
+            </div>
+        <% } %>
+        
+        <% if (user && (!userProgress || !userProgress.completed)) { %>
+            <!-- Complete Day Card -->
+            <div class="module-card text-center">
+                <div class="w-20 h-20 mx-auto mb-3 rounded-full flex items-center justify-center" style="background: linear-gradient(135deg, var(--sky-blue) 0%, var(--heaven-blue) 100%);">
+                    <i class="fas fa-flag-checkered text-3xl text-white"></i>
+                </div>
+                <h3 class="text-xl font-semibold mb-2">Complete Today's Journey</h3>
+                <p class="text-gray-600 mb-4">Mark today's spiritual content as complete to build your streak!</p>
+                <button id="completeDay" class="btn-primary" data-content-id="<%= content.id %>">
+                    <i class="fas fa-check-circle mr-2"></i>Mark as Complete
+                </button>
+            </div>
+        <% } %>
+    <% } %>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Handle reflection form
+    const reflectionForm = document.getElementById('reflectionForm');
+    if (reflectionForm) {
+        reflectionForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const reflection = document.getElementById('reflection').value.trim();
+            
+            if (!reflection) {
+                alert('Please write a reflection before saving.');
+                return;
+            }
+            
+            try {
+                const response = await fetch('/api/daily/reflection', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        contentId: '<%= content ? content.id : null %>',
+                        reflection: reflection
+                    })
+                });
+                
+                if (response.ok) {
+                    location.reload();
+                } else {
+                    alert('Failed to save reflection. Please try again.');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An error occurred. Please try again.');
+            }
+        });
+    }
+    
+    // Handle complete day button
+    const completeBtn = document.getElementById('completeDay');
+    if (completeBtn) {
+        completeBtn.addEventListener('click', async function() {
+            const contentId = this.getAttribute('data-content-id');
+            
+            try {
+                const response = await fetch('/api/daily/complete', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        contentId: contentId
+                    })
+                });
+                
+                if (response.ok) {
+                    location.reload();
+                } else {
+                    alert('Failed to mark as complete. Please try again.');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An error occurred. Please try again.');
+            }
+        });
+    }
+});
+</script>
