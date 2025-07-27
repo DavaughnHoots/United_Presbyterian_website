@@ -59,8 +59,18 @@ router.post('/submissions', submissionLimiter, async (req, res) => {
       return res.status(400).json({ error: 'Content too long (max 2000 characters)' });
     }
     
-    // TODO: Save submission to database with pending status
-    res.json({ success: true, message: 'Your submission has been received and will be reviewed.' });
+    // Save submission to database with pending status
+    const submission = await Submission.create({
+      type,
+      content: content.trim(),
+      status: 'pending',
+      ipHash: req.ip ? require('crypto').createHash('sha256').update(req.ip).digest('hex').substring(0, 16) : null
+    });
+    
+    res.json({ 
+      success: true, 
+      message: 'Thank you for sharing! Your submission will be reviewed by our pastoral team.' 
+    });
   } catch (error) {
     console.error('Error processing submission:', error);
     res.status(500).json({ error: 'Failed to process submission' });
@@ -192,5 +202,63 @@ router.get('/user/stats', requireAuth, async (req, res) => {
     res.status(500).json({ error: 'Failed to get stats' });
   }
 });
+
+// Get approved submissions
+router.get('/submissions/approved', async (req, res) => {
+  try {
+    const { type, limit = 10 } = req.query;
+    
+    const where = { status: 'approved' };
+    if (type && ['joy', 'concern', 'testimony'].includes(type)) {
+      where.type = type;
+    }
+    
+    const submissions = await Submission.findAll({
+      where,
+      order: [['approvedAt', 'DESC']],
+      limit: parseInt(limit),
+      attributes: ['id', 'type', 'content', 'approvedAt']
+    });
+    
+    // Format submissions for display
+    const formattedSubmissions = submissions.map(sub => ({
+      id: sub.id,
+      type: sub.type,
+      content: sub.content,
+      timeAgo: getTimeAgo(sub.approvedAt)
+    }));
+    
+    res.json(formattedSubmissions);
+  } catch (error) {
+    console.error('Error fetching submissions:', error);
+    res.status(500).json({ error: 'Failed to fetch submissions' });
+  }
+});
+
+// Helper function to get relative time
+function getTimeAgo(date) {
+  const now = new Date();
+  const diffMs = now - new Date(date);
+  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+  
+  if (diffDays === 0) {
+    const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+    if (diffHours === 0) {
+      const diffMins = Math.floor(diffMs / (1000 * 60));
+      return diffMins <= 1 ? 'just now' : `${diffMins} minutes ago`;
+    }
+    return diffHours === 1 ? '1 hour ago' : `${diffHours} hours ago`;
+  } else if (diffDays === 1) {
+    return 'yesterday';
+  } else if (diffDays < 7) {
+    return `${diffDays} days ago`;
+  } else if (diffDays < 30) {
+    const weeks = Math.floor(diffDays / 7);
+    return weeks === 1 ? '1 week ago' : `${weeks} weeks ago`;
+  } else {
+    const months = Math.floor(diffDays / 30);
+    return months === 1 ? '1 month ago' : `${months} months ago`;
+  }
+}
 
 module.exports = router;

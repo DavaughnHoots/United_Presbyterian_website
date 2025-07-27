@@ -103,34 +103,35 @@
         <h2 class="text-xl font-semibold mb-4">Recent Community Shares</h2>
         <p class="text-gray-600 mb-4">Here are some recent anonymous submissions from our church family:</p>
         
-        <!-- Example Share Cards -->
-        <div class="space-y-3">
-            <div class="bg-yellow-50 rounded-lg p-4">
-                <div class="flex items-center mb-2">
-                    <i class="fas fa-smile text-yellow-600 mr-2"></i>
-                    <span class="font-medium text-gray-700">Joy</span>
-                    <span class="text-sm text-gray-500 ml-auto">2 days ago</span>
-                </div>
-                <p class="text-gray-700">Thank you Lord for the beautiful weather and the opportunity to spend time with family this weekend!</p>
+        <!-- Filter Buttons -->
+        <div class="flex flex-wrap gap-2 mb-4">
+            <button class="filter-btn active" data-type="all">
+                <i class="fas fa-list mr-1"></i>All
+            </button>
+            <button class="filter-btn" data-type="joy">
+                <i class="fas fa-smile mr-1"></i>Joys
+            </button>
+            <button class="filter-btn" data-type="concern">
+                <i class="fas fa-praying-hands mr-1"></i>Prayers
+            </button>
+            <button class="filter-btn" data-type="testimony">
+                <i class="fas fa-dove mr-1"></i>Testimonies
+            </button>
+        </div>
+        
+        <!-- Submissions Container -->
+        <div id="submissionsContainer" class="space-y-3">
+            <div class="text-center py-8">
+                <i class="fas fa-spinner fa-spin text-3xl text-gray-400"></i>
+                <p class="text-gray-500 mt-2">Loading submissions...</p>
             </div>
-            
-            <div class="bg-blue-50 rounded-lg p-4">
-                <div class="flex items-center mb-2">
-                    <i class="fas fa-praying-hands text-blue-600 mr-2"></i>
-                    <span class="font-medium text-gray-700">Prayer Request</span>
-                    <span class="text-sm text-gray-500 ml-auto">3 days ago</span>
-                </div>
-                <p class="text-gray-700">Please pray for healing and comfort for those in our community facing health challenges.</p>
-            </div>
-            
-            <div class="bg-purple-50 rounded-lg p-4">
-                <div class="flex items-center mb-2">
-                    <i class="fas fa-dove text-purple-600 mr-2"></i>
-                    <span class="font-medium text-gray-700">Testimony</span>
-                    <span class="text-sm text-gray-500 ml-auto">1 week ago</span>
-                </div>
-                <p class="text-gray-700">God has been so faithful! After months of uncertainty, He provided a new job opportunity that exceeded all my expectations.</p>
-            </div>
+        </div>
+        
+        <!-- Load More Button -->
+        <div class="text-center mt-4">
+            <button id="loadMoreBtn" class="text-sky-blue hover:underline hidden">
+                Load more shares
+            </button>
         </div>
     </div>
 </div>
@@ -209,5 +210,136 @@ document.addEventListener('DOMContentLoaded', function() {
             errorMessage.classList.remove('hidden');
         }
     });
+    
+    // Load submissions functionality
+    let currentFilter = 'all';
+    let submissions = [];
+    let displayLimit = 10;
+    
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    const submissionsContainer = document.getElementById('submissionsContainer');
+    const loadMoreBtn = document.getElementById('loadMoreBtn');
+    
+    // Add filter button styles
+    const style = document.createElement('style');
+    style.textContent = `
+        .filter-btn {
+            padding: 0.5rem 1rem;
+            border: 2px solid #e5e7eb;
+            background: white;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .filter-btn:hover {
+            border-color: #87CEEB;
+            background: #F0F8FF;
+        }
+        .filter-btn.active {
+            background: linear-gradient(135deg, #87CEEB 0%, #B6E5F8 100%);
+            color: white;
+            border-color: transparent;
+        }
+    `;
+    document.head.appendChild(style);
+    
+    // Filter button click handlers
+    filterButtons.forEach(btn => {
+        btn.addEventListener('click', function() {
+            filterButtons.forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            currentFilter = this.dataset.type;
+            loadSubmissions();
+        });
+    });
+    
+    // Load more button
+    loadMoreBtn.addEventListener('click', function() {
+        displayLimit += 10;
+        displaySubmissions();
+    });
+    
+    // Load submissions from API
+    async function loadSubmissions() {
+        try {
+            const url = currentFilter === 'all' 
+                ? '/api/submissions/approved' 
+                : `/api/submissions/approved?type=${currentFilter}`;
+                
+            const response = await fetch(url);
+            submissions = await response.json();
+            displayLimit = 10;
+            displaySubmissions();
+        } catch (error) {
+            console.error('Error loading submissions:', error);
+            submissionsContainer.innerHTML = `
+                <div class="text-center py-8 text-gray-500">
+                    <i class="fas fa-exclamation-circle text-3xl mb-2"></i>
+                    <p>Unable to load submissions. Please try again later.</p>
+                </div>
+            `;
+        }
+    }
+    
+    // Display submissions
+    function displaySubmissions() {
+        if (submissions.length === 0) {
+            submissionsContainer.innerHTML = `
+                <div class="text-center py-8 text-gray-500">
+                    <i class="fas fa-inbox text-3xl mb-2"></i>
+                    <p>No submissions yet in this category.</p>
+                </div>
+            `;
+            loadMoreBtn.classList.add('hidden');
+            return;
+        }
+        
+        const toDisplay = submissions.slice(0, displayLimit);
+        submissionsContainer.innerHTML = toDisplay.map(sub => {
+            const bgColor = sub.type === 'joy' ? 'bg-yellow-50' : 
+                          sub.type === 'concern' ? 'bg-blue-50' : 'bg-purple-50';
+            const iconColor = sub.type === 'joy' ? 'text-yellow-600' : 
+                            sub.type === 'concern' ? 'text-blue-600' : 'text-purple-600';
+            const icon = sub.type === 'joy' ? 'fa-smile' : 
+                        sub.type === 'concern' ? 'fa-praying-hands' : 'fa-dove';
+            const label = sub.type === 'joy' ? 'Joy' : 
+                         sub.type === 'concern' ? 'Prayer Request' : 'Testimony';
+            
+            return `
+                <div class="${bgColor} rounded-lg p-4 fade-in">
+                    <div class="flex items-center mb-2">
+                        <i class="fas ${icon} ${iconColor} mr-2"></i>
+                        <span class="font-medium text-gray-700">${label}</span>
+                        <span class="text-sm text-gray-500 ml-auto">${sub.timeAgo}</span>
+                    </div>
+                    <p class="text-gray-700">${sub.content}</p>
+                </div>
+            `;
+        }).join('');
+        
+        // Show/hide load more button
+        if (submissions.length > displayLimit) {
+            loadMoreBtn.classList.remove('hidden');
+        } else {
+            loadMoreBtn.classList.add('hidden');
+        }
+    }
+    
+    // Add fade-in animation
+    const fadeStyle = document.createElement('style');
+    fadeStyle.textContent = `
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    `;
+    document.head.appendChild(fadeStyle);
+    
+    // Initial load
+    loadSubmissions();
 });
 </script>
