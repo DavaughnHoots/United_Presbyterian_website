@@ -33,18 +33,14 @@ router.get('/daily', async (req, res) => {
     // Fetch today's content
     let todayContent = await DailyContent.findOne({
       where: {
-        publishDate: today,
-        isPublished: true
+        date: today
       }
     });
     
-    // If no content for today, get the most recent published content
+    // If no content for today, get the most recent content
     if (!todayContent) {
       todayContent = await DailyContent.findOne({
-        where: {
-          isPublished: true
-        },
-        order: [['publishDate', 'DESC']]
+        order: [['date', 'DESC']]
       });
     }
     
