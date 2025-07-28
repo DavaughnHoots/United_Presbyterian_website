@@ -87,14 +87,20 @@ router.post('/register', async (req, res) => {
 // Handle login
 router.post('/login', async (req, res) => {
   try {
-    const { email } = req.body;
+    const { email, password } = req.body;
     
     if (!email) {
       return res.redirect('/auth/login?error=missing_email');
     }
 
     // Login user with AuthService
-    const result = await AuthService.login(email);
+    const result = await AuthService.login(email, password);
+    
+    if (result.requiresPassword) {
+      // Store email in session for password form
+      req.session.pendingEmail = email;
+      return res.redirect('/auth/admin-login');
+    }
     
     if (result.success) {
       // Create session
@@ -121,6 +127,60 @@ router.post('/login', async (req, res) => {
   } catch (error) {
     console.error('Login error:', error);
     res.redirect('/auth/login?error=login_failed');
+  }
+});
+
+// Admin login page (password required)
+router.get('/admin-login', (req, res) => {
+  if (!req.session.pendingEmail) {
+    return res.redirect('/auth/login');
+  }
+  
+  res.render('pages/admin-login', {
+    title: 'Admin Login',
+    user: null,
+    email: req.session.pendingEmail,
+    error: req.query.error
+  });
+});
+
+// Handle admin login with password
+router.post('/admin-login', async (req, res) => {
+  try {
+    const email = req.session.pendingEmail;
+    const { password } = req.body;
+    
+    if (!email) {
+      return res.redirect('/auth/login');
+    }
+    
+    if (!password) {
+      return res.redirect('/auth/admin-login?error=missing_password');
+    }
+    
+    // Try login with password
+    const result = await AuthService.login(email, password);
+    
+    if (result.success) {
+      // Clear pending email
+      delete req.session.pendingEmail;
+      
+      // Create session
+      AuthService.createSession(req, result.user);
+      
+      // Save session before redirect
+      req.session.save((err) => {
+        if (err) {
+          console.error('Session save error:', err);
+        }
+        res.redirect('/admin');
+      });
+    } else {
+      res.redirect('/auth/admin-login?error=' + encodeURIComponent(result.error));
+    }
+  } catch (error) {
+    console.error('Admin login error:', error);
+    res.redirect('/auth/admin-login?error=login_failed');
   }
 });
 

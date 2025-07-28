@@ -1,0 +1,546 @@
+<div class="max-w-7xl mx-auto">
+    <!-- Page Header -->
+    <div class="text-center mb-8">
+        <h1 class="text-3xl lg:text-4xl font-bold mb-4">Church Events</h1>
+        <p class="text-gray-600 text-lg">Join us for worship, fellowship, and service</p>
+    </div>
+    
+    <!-- Featured Events -->
+    <% if (featuredEvents && featuredEvents.length > 0) { %>
+        <div class="mb-12">
+            <h2 class="text-2xl font-semibold mb-6 flex items-center">
+                <i class="fas fa-star text-yellow-500 mr-2"></i>
+                Featured Events
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <% featuredEvents.forEach(event => { %>
+                    <div class="module-card hover:shadow-xl transition-shadow">
+                        <div class="flex items-start justify-between mb-4">
+                            <div class="flex-1">
+                                <h3 class="font-semibold text-lg mb-2">
+                                    <a href="/events/<%= event.id %>" class="hover:text-sky-blue transition">
+                                        <%= event.title %>
+                                    </a>
+                                </h3>
+                                <div class="text-sm text-gray-600 space-y-1">
+                                    <div>
+                                        <i class="fas fa-calendar mr-2"></i>
+                                        <%= new Date(event.startDate).toLocaleDateString('en-US', { 
+                                            weekday: 'short', 
+                                            month: 'short', 
+                                            day: 'numeric' 
+                                        }) %>
+                                    </div>
+                                    <div>
+                                        <i class="fas fa-clock mr-2"></i>
+                                        <%= new Date(event.startDate).toLocaleTimeString('en-US', { 
+                                            hour: 'numeric', 
+                                            minute: '2-digit' 
+                                        }) %>
+                                    </div>
+                                    <% if (event.location) { %>
+                                        <div>
+                                            <i class="fas fa-map-marker-alt mr-2"></i>
+                                            <%= event.location %>
+                                        </div>
+                                    <% } %>
+                                </div>
+                            </div>
+                            <div class="event-category-badge <%= event.category %>">
+                                <i class="fas <%= getCategoryIcon(event.category) %>"></i>
+                            </div>
+                        </div>
+                        <a href="/events/<%= event.id %>" class="inline-flex items-center text-sky-blue hover:underline">
+                            View Details <i class="fas fa-arrow-right ml-1"></i>
+                        </a>
+                    </div>
+                <% }) %>
+            </div>
+        </div>
+    <% } %>
+    
+    <!-- Calendar Controls -->
+    <div class="module-card mb-6">
+        <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+            <!-- View Toggle -->
+            <div class="flex items-center gap-2">
+                <button class="calendar-view-btn active" data-view="month">
+                    <i class="fas fa-calendar-alt mr-1"></i> Month
+                </button>
+                <button class="calendar-view-btn" data-view="week">
+                    <i class="fas fa-calendar-week mr-1"></i> Week
+                </button>
+                <button class="calendar-view-btn" data-view="list">
+                    <i class="fas fa-list mr-1"></i> List
+                </button>
+            </div>
+            
+            <!-- Navigation -->
+            <div class="flex items-center gap-4">
+                <button id="prevBtn" class="p-2 hover:bg-gray-100 rounded-lg transition">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <h3 id="currentMonth" class="text-lg font-semibold min-w-[150px] text-center"></h3>
+                <button id="nextBtn" class="p-2 hover:bg-gray-100 rounded-lg transition">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+            
+            <!-- Category Filter -->
+            <div class="flex items-center gap-2">
+                <label class="text-sm text-gray-600">Category:</label>
+                <select id="categoryFilter" class="px-3 py-1 border rounded-lg">
+                    <option value="">All Events</option>
+                    <option value="worship">Worship</option>
+                    <option value="bible-study">Bible Study</option>
+                    <option value="fellowship">Fellowship</option>
+                    <option value="service">Service</option>
+                    <option value="meeting">Meeting</option>
+                    <option value="special">Special</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Calendar Container -->
+    <div id="calendar" class="module-card">
+        <!-- Calendar will be rendered here -->
+    </div>
+    
+    <!-- Event Details Modal -->
+    <div id="eventModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-xl max-w-md w-full p-6">
+            <div class="flex justify-between items-start mb-4">
+                <h3 id="modalTitle" class="text-xl font-semibold"></h3>
+                <button onclick="closeEventModal()" class="text-gray-400 hover:text-gray-600">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div id="modalContent" class="space-y-3 text-sm">
+                <!-- Event details will be populated here -->
+            </div>
+            <div class="mt-6 flex gap-3">
+                <a id="modalViewBtn" href="#" class="btn-primary flex-1 text-center">
+                    View Details
+                </a>
+                <button onclick="closeEventModal()" class="flex-1 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.calendar-view-btn {
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    transition: all 0.2s;
+    background: white;
+    border: 1px solid #e5e7eb;
+}
+
+.calendar-view-btn:hover {
+    background: #f3f4f6;
+}
+
+.calendar-view-btn.active {
+    background: var(--sky-blue);
+    color: white;
+    border-color: var(--sky-blue);
+}
+
+.event-category-badge {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+}
+
+.event-category-badge.worship { background: #dbeafe; color: #1e40af; }
+.event-category-badge.bible-study { background: #fef3c7; color: #92400e; }
+.event-category-badge.fellowship { background: #ede9fe; color: #5b21b6; }
+.event-category-badge.service { background: #d1fae5; color: #065f46; }
+.event-category-badge.meeting { background: #fed7aa; color: #9a3412; }
+.event-category-badge.special { background: #fce7f3; color: #9f1239; }
+
+/* Calendar Styles */
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 1px;
+    background: #e5e7eb;
+    border-radius: 0.5rem;
+    overflow: hidden;
+}
+
+.calendar-header {
+    background: #f9fafb;
+    padding: 0.75rem;
+    text-align: center;
+    font-weight: 600;
+    color: #6b7280;
+    font-size: 0.875rem;
+}
+
+.calendar-day {
+    background: white;
+    min-height: 80px;
+    padding: 0.5rem;
+    position: relative;
+}
+
+.calendar-day.other-month {
+    background: #f9fafb;
+    color: #9ca3af;
+}
+
+.calendar-day.today {
+    background: #eff6ff;
+}
+
+.calendar-day-number {
+    font-size: 0.875rem;
+    font-weight: 500;
+    margin-bottom: 0.25rem;
+}
+
+.calendar-event {
+    font-size: 0.75rem;
+    padding: 0.125rem 0.375rem;
+    margin-bottom: 0.125rem;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.calendar-event:hover {
+    opacity: 0.8;
+}
+
+/* List View Styles */
+.event-list-item {
+    padding: 1rem;
+    border-bottom: 1px solid #e5e7eb;
+    display: flex;
+    gap: 1rem;
+    align-items: start;
+}
+
+.event-list-item:last-child {
+    border-bottom: none;
+}
+
+.event-list-date {
+    min-width: 60px;
+    text-align: center;
+}
+
+.event-list-date-day {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--sky-blue);
+}
+
+.event-list-date-month {
+    font-size: 0.875rem;
+    color: #6b7280;
+}
+</style>
+
+<script>
+// Category icon mapping
+function getCategoryIcon(category) {
+    const icons = {
+        'worship': 'fa-pray',
+        'bible-study': 'fa-book-bible',
+        'fellowship': 'fa-users',
+        'service': 'fa-hands-helping',
+        'meeting': 'fa-comments',
+        'special': 'fa-star'
+    };
+    return icons[category] || 'fa-calendar';
+}
+
+// Calendar functionality
+let currentDate = new Date();
+let currentView = 'month';
+let events = [];
+
+// Initialize calendar
+document.addEventListener('DOMContentLoaded', function() {
+    // Set up event listeners
+    document.getElementById('prevBtn').addEventListener('click', () => navigateCalendar(-1));
+    document.getElementById('nextBtn').addEventListener('click', () => navigateCalendar(1));
+    document.getElementById('categoryFilter').addEventListener('change', () => loadEvents());
+    
+    // View toggle buttons
+    document.querySelectorAll('.calendar-view-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            document.querySelectorAll('.calendar-view-btn').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            currentView = this.dataset.view;
+            renderCalendar();
+        });
+    });
+    
+    // Initial load
+    loadEvents();
+});
+
+function navigateCalendar(direction) {
+    if (currentView === 'month') {
+        currentDate.setMonth(currentDate.getMonth() + direction);
+    } else if (currentView === 'week') {
+        currentDate.setDate(currentDate.getDate() + (7 * direction));
+    }
+    renderCalendar();
+    loadEvents();
+}
+
+async function loadEvents() {
+    const start = getViewStart();
+    const end = getViewEnd();
+    const category = document.getElementById('categoryFilter').value;
+    
+    try {
+        const params = new URLSearchParams({
+            start: start.toISOString(),
+            end: end.toISOString()
+        });
+        
+        if (category) {
+            params.append('category', category);
+        }
+        
+        const response = await fetch(`/events/api/calendar?${params}`);
+        events = await response.json();
+        renderCalendar();
+    } catch (error) {
+        console.error('Error loading events:', error);
+    }
+}
+
+function getViewStart() {
+    const date = new Date(currentDate);
+    
+    if (currentView === 'month') {
+        date.setDate(1);
+        const dayOfWeek = date.getDay();
+        date.setDate(date.getDate() - dayOfWeek);
+    } else if (currentView === 'week') {
+        const dayOfWeek = date.getDay();
+        date.setDate(date.getDate() - dayOfWeek);
+    }
+    
+    date.setHours(0, 0, 0, 0);
+    return date;
+}
+
+function getViewEnd() {
+    const date = new Date(currentDate);
+    
+    if (currentView === 'month') {
+        date.setMonth(date.getMonth() + 1);
+        date.setDate(0);
+        const dayOfWeek = date.getDay();
+        date.setDate(date.getDate() + (6 - dayOfWeek));
+    } else if (currentView === 'week') {
+        const dayOfWeek = date.getDay();
+        date.setDate(date.getDate() + (6 - dayOfWeek));
+    } else if (currentView === 'list') {
+        date.setMonth(date.getMonth() + 3);
+    }
+    
+    date.setHours(23, 59, 59, 999);
+    return date;
+}
+
+function renderCalendar() {
+    updateHeader();
+    
+    const container = document.getElementById('calendar');
+    
+    if (currentView === 'month') {
+        renderMonthView(container);
+    } else if (currentView === 'week') {
+        renderWeekView(container);
+    } else if (currentView === 'list') {
+        renderListView(container);
+    }
+}
+
+function updateHeader() {
+    const header = document.getElementById('currentMonth');
+    
+    if (currentView === 'month') {
+        header.textContent = currentDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+    } else if (currentView === 'week') {
+        const start = getViewStart();
+        const end = getViewEnd();
+        header.textContent = `${start.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} - ${end.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}`;
+    } else {
+        header.textContent = 'Upcoming Events';
+    }
+}
+
+function renderMonthView(container) {
+    const start = getViewStart();
+    const end = getViewEnd();
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    
+    let html = '<div class="calendar-grid">';
+    
+    // Day headers
+    const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    days.forEach(day => {
+        html += `<div class="calendar-header">${day}</div>`;
+    });
+    
+    // Calendar days
+    const current = new Date(start);
+    while (current <= end) {
+        const isCurrentMonth = current.getMonth() === currentDate.getMonth();
+        const isToday = current.getTime() === today.getTime();
+        const dayEvents = getEventsForDay(current);
+        
+        html += `<div class="calendar-day ${!isCurrentMonth ? 'other-month' : ''} ${isToday ? 'today' : ''}">`;
+        html += `<div class="calendar-day-number">${current.getDate()}</div>`;
+        
+        dayEvents.slice(0, 3).forEach(event => {
+            const eventColor = event.color || '#87CEEB';
+            html += `<div class="calendar-event" style="background: ${eventColor}; color: white;" onclick="showEventModal(${event.id})">`;
+            html += `${event.title}`;
+            html += `</div>`;
+        });
+        
+        if (dayEvents.length > 3) {
+            html += `<div class="text-xs text-gray-500">+${dayEvents.length - 3} more</div>`;
+        }
+        
+        html += '</div>';
+        current.setDate(current.getDate() + 1);
+    }
+    
+    html += '</div>';
+    container.innerHTML = html;
+}
+
+function renderWeekView(container) {
+    // Similar to month view but only showing one week
+    renderMonthView(container);
+}
+
+function renderListView(container) {
+    const groupedEvents = {};
+    
+    events.forEach(event => {
+        const date = new Date(event.start).toDateString();
+        if (!groupedEvents[date]) {
+            groupedEvents[date] = [];
+        }
+        groupedEvents[date].push(event);
+    });
+    
+    let html = '<div class="divide-y">';
+    
+    Object.keys(groupedEvents).sort().forEach(dateStr => {
+        const date = new Date(dateStr);
+        const dayEvents = groupedEvents[dateStr];
+        
+        dayEvents.forEach(event => {
+            html += '<div class="event-list-item">';
+            html += '<div class="event-list-date">';
+            html += `<div class="event-list-date-day">${date.getDate()}</div>`;
+            html += `<div class="event-list-date-month">${date.toLocaleDateString('en-US', { month: 'short' })}</div>`;
+            html += '</div>';
+            html += '<div class="flex-1">';
+            html += `<h4 class="font-semibold mb-1">${event.title}</h4>`;
+            html += '<div class="text-sm text-gray-600 space-y-1">';
+            html += `<div><i class="fas fa-clock mr-2"></i>${new Date(event.start).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })}</div>`;
+            if (event.location) {
+                html += `<div><i class="fas fa-map-marker-alt mr-2"></i>${event.location}</div>`;
+            }
+            html += '</div>';
+            html += '</div>';
+            html += `<a href="/events/${event.id}" class="btn-primary btn-sm">Details</a>`;
+            html += '</div>';
+        });
+    });
+    
+    if (events.length === 0) {
+        html += '<div class="text-center py-8 text-gray-500">No events found</div>';
+    }
+    
+    html += '</div>';
+    container.innerHTML = html;
+}
+
+function getEventsForDay(date) {
+    const dayStart = new Date(date);
+    dayStart.setHours(0, 0, 0, 0);
+    const dayEnd = new Date(date);
+    dayEnd.setHours(23, 59, 59, 999);
+    
+    return events.filter(event => {
+        const eventStart = new Date(event.start);
+        const eventEnd = new Date(event.end);
+        return (eventStart >= dayStart && eventStart <= dayEnd) ||
+               (eventEnd >= dayStart && eventEnd <= dayEnd) ||
+               (eventStart <= dayStart && eventEnd >= dayEnd);
+    });
+}
+
+function showEventModal(eventId) {
+    const event = events.find(e => e.id === eventId);
+    if (!event) return;
+    
+    document.getElementById('modalTitle').textContent = event.title;
+    
+    let content = '';
+    content += `<div><i class="fas fa-calendar mr-2 text-sky-blue"></i>${new Date(event.start).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}</div>`;
+    content += `<div><i class="fas fa-clock mr-2 text-sky-blue"></i>${new Date(event.start).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })}</div>`;
+    
+    if (event.location) {
+        content += `<div><i class="fas fa-map-marker-alt mr-2 text-sky-blue"></i>${event.location}</div>`;
+    }
+    
+    content += `<div><i class="fas ${getCategoryIcon(event.category)} mr-2 text-sky-blue"></i>${event.category.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase())}</div>`;
+    
+    document.getElementById('modalContent').innerHTML = content;
+    document.getElementById('modalViewBtn').href = `/events/${event.id}`;
+    document.getElementById('eventModal').classList.remove('hidden');
+}
+
+function closeEventModal() {
+    document.getElementById('eventModal').classList.add('hidden');
+}
+
+// Close modal on outside click
+document.getElementById('eventModal').addEventListener('click', function(e) {
+    if (e.target === this) {
+        closeEventModal();
+    }
+});
+</script>
+
+<%
+// Helper function embedded in template
+function getCategoryIcon(category) {
+    const icons = {
+        'worship': 'fa-pray',
+        'bible-study': 'fa-book-bible',
+        'fellowship': 'fa-users',
+        'service': 'fa-hands-helping',
+        'meeting': 'fa-comments',
+        'special': 'fa-star'
+    };
+    return icons[category] || 'fa-calendar';
+}
+%>

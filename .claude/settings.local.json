@@ -1,0 +1,25 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm install:*)",
+      "Bash(mkdir:*)",
+      "Bash(npx sequelize-cli migration:generate:*)",
+      "Bash(psql:*)",
+      "Bash(git init:*)",
+      "Bash(git branch:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git config:*)",
+      "Bash(heroku config:*)",
+      "Bash(heroku logs:*)",
+      "Bash(git push:*)",
+      "Bash(ls:*)",
+      "Bash(npm run migrate:*)",
+      "Bash(grep:*)",
+      "Bash(git checkout:*)",
+      "Bash(git reset:*)",
+      "Bash(touch:*)"
+    ],
+    "deny": []
+  }
+}

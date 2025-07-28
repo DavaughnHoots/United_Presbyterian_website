@@ -7,6 +7,10 @@ const { Op } = require('sequelize');
 // Admin dashboard
 router.get('/', requireAdmin, async (req, res) => {
   try {
+    // Check if admin has password set
+    const adminUser = await User.findByPk(req.session.user.id);
+    const needsPassword = !adminUser.password;
+    
     // Get statistics
     const stats = {
       totalUsers: await User.count(),
@@ -28,7 +32,9 @@ router.get('/', requireAdmin, async (req, res) => {
       title: 'Admin Dashboard',
       user: req.session.user,
       stats,
-      recentSubmissions
+      recentSubmissions,
+      needsPassword,
+      success: req.query.success
     });
   } catch (error) {
     console.error('Error rendering admin dashboard:', error);
@@ -122,6 +128,49 @@ router.post('/submissions/:id/reject', requireAdmin, async (req, res) => {
   } catch (error) {
     console.error('Error rejecting submission:', error);
     res.status(500).json({ error: 'Failed to reject submission' });
+  }
+});
+
+// Admin password setup page
+router.get('/setup-password', requireAdmin, async (req, res) => {
+  try {
+    const user = await User.findByPk(req.session.user.id);
+    
+    res.render('pages/admin/setup-password', {
+      title: 'Setup Admin Password',
+      user: req.session.user,
+      hasPassword: !!user.password
+    });
+  } catch (error) {
+    console.error('Error rendering password setup:', error);
+    res.status(500).send('Internal server error');
+  }
+});
+
+// Handle password setup
+router.post('/setup-password', requireAdmin, async (req, res) => {
+  try {
+    const { password, confirmPassword } = req.body;
+    
+    if (!password || password.length < 8) {
+      return res.redirect('/admin/setup-password?error=Password must be at least 8 characters');
+    }
+    
+    if (password !== confirmPassword) {
+      return res.redirect('/admin/setup-password?error=Passwords do not match');
+    }
+    
+    const AuthService = require('../services/authService');
+    const result = await AuthService.setAdminPassword(req.session.user.id, password);
+    
+    if (result.success) {
+      res.redirect('/admin?success=Password set successfully');
+    } else {
+      res.redirect('/admin/setup-password?error=' + encodeURIComponent(result.error));
+    }
+  } catch (error) {
+    console.error('Error setting password:', error);
+    res.redirect('/admin/setup-password?error=Failed to set password');
   }
 });
 

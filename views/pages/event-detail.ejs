@@ -1,0 +1,312 @@
+<div class="max-w-4xl mx-auto">
+    <!-- Event Header -->
+    <div class="module-card mb-6">
+        <div class="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-6">
+            <div class="flex-1">
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="event-category-badge <%= event.category %> text-2xl">
+                        <i class="fas <%= getCategoryIcon(event.category) %>"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-2xl lg:text-3xl font-bold"><%= event.title %></h1>
+                        <p class="text-gray-600">
+                            Organized by <%= event.User.firstName %> <%= event.User.lastName %>
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- Event Details -->
+                <div class="space-y-3 text-gray-700">
+                    <div class="flex items-center">
+                        <i class="fas fa-calendar text-sky-blue mr-3 w-5"></i>
+                        <div>
+                            <div class="font-medium">
+                                <%= new Date(event.startDate).toLocaleDateString('en-US', { 
+                                    weekday: 'long', 
+                                    year: 'numeric', 
+                                    month: 'long', 
+                                    day: 'numeric' 
+                                }) %>
+                            </div>
+                            <% if (event.endDate && new Date(event.endDate).toDateString() !== new Date(event.startDate).toDateString()) { %>
+                                <div class="text-sm text-gray-600">
+                                    to <%= new Date(event.endDate).toLocaleDateString('en-US', { 
+                                        weekday: 'long', 
+                                        month: 'long', 
+                                        day: 'numeric' 
+                                    }) %>
+                                </div>
+                            <% } %>
+                        </div>
+                    </div>
+                    
+                    <% if (!event.allDay) { %>
+                        <div class="flex items-center">
+                            <i class="fas fa-clock text-sky-blue mr-3 w-5"></i>
+                            <div>
+                                <%= new Date(event.startDate).toLocaleTimeString('en-US', { 
+                                    hour: 'numeric', 
+                                    minute: '2-digit' 
+                                }) %>
+                                <% if (event.endDate) { %>
+                                    - <%= new Date(event.endDate).toLocaleTimeString('en-US', { 
+                                        hour: 'numeric', 
+                                        minute: '2-digit' 
+                                    }) %>
+                                <% } %>
+                            </div>
+                        </div>
+                    <% } %>
+                    
+                    <% if (event.location) { %>
+                        <div class="flex items-center">
+                            <i class="fas fa-map-marker-alt text-sky-blue mr-3 w-5"></i>
+                            <span><%= event.location %></span>
+                        </div>
+                    <% } %>
+                    
+                    <% if (event.recurring) { %>
+                        <div class="flex items-center">
+                            <i class="fas fa-redo text-sky-blue mr-3 w-5"></i>
+                            <span>Repeats <%= event.recurringPattern %></span>
+                        </div>
+                    <% } %>
+                </div>
+            </div>
+            
+            <!-- Registration Status -->
+            <% if (event.registrationRequired) { %>
+                <div class="module-card bg-gray-50 min-w-[280px]">
+                    <h3 class="font-semibold mb-3">Registration</h3>
+                    
+                    <% if (event.maxAttendees) { %>
+                        <div class="mb-4">
+                            <div class="flex justify-between text-sm mb-1">
+                                <span>Spots filled</span>
+                                <span><%= registrationCount %> / <%= event.maxAttendees %></span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2">
+                                <div class="bg-sky-blue h-2 rounded-full" style="width: <%= (registrationCount / event.maxAttendees * 100) %>%"></div>
+                            </div>
+                        </div>
+                    <% } else { %>
+                        <p class="text-sm text-gray-600 mb-4">
+                            <%= registrationCount %> registered
+                        </p>
+                    <% } %>
+                    
+                    <% if (userRegistration && userRegistration.status === 'registered') { %>
+                        <div class="bg-green-50 border border-green-200 rounded-lg p-3 mb-3">
+                            <p class="text-sm text-green-700">
+                                <i class="fas fa-check-circle mr-1"></i>
+                                You're registered!
+                            </p>
+                        </div>
+                        <button onclick="cancelRegistration()" class="w-full px-4 py-2 border border-red-300 text-red-600 rounded-lg hover:bg-red-50 transition">
+                            Cancel Registration
+                        </button>
+                    <% } else if (isRegistrationOpen) { %>
+                        <% if (user) { %>
+                            <button onclick="showRegistrationForm()" class="w-full btn-primary">
+                                Register Now
+                            </button>
+                        <% } else { %>
+                            <a href="/auth/login?redirect=/events/<%= event.id %>" class="block w-full btn-primary text-center">
+                                Login to Register
+                            </a>
+                        <% } %>
+                    <% } else if (availableSpots === 0) { %>
+                        <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-3">
+                            <p class="text-sm text-yellow-700">
+                                <i class="fas fa-exclamation-circle mr-1"></i>
+                                Event is full
+                            </p>
+                        </div>
+                    <% } else if (event.registrationDeadline && new Date(event.registrationDeadline) < new Date()) { %>
+                        <div class="bg-gray-100 border border-gray-200 rounded-lg p-3">
+                            <p class="text-sm text-gray-600">
+                                <i class="fas fa-clock mr-1"></i>
+                                Registration closed
+                            </p>
+                        </div>
+                    <% } %>
+                    
+                    <% if (event.registrationDeadline) { %>
+                        <p class="text-xs text-gray-500 mt-3">
+                            Registration deadline: <%= new Date(event.registrationDeadline).toLocaleDateString() %>
+                        </p>
+                    <% } %>
+                </div>
+            <% } %>
+        </div>
+    </div>
+    
+    <!-- Event Description -->
+    <% if (event.description) { %>
+        <div class="module-card mb-6">
+            <h2 class="text-xl font-semibold mb-4">About This Event</h2>
+            <div class="prose prose-blue max-w-none">
+                <%- event.description.replace(/\n/g, '<br>') %>
+            </div>
+        </div>
+    <% } %>
+    
+    <!-- Back to Calendar -->
+    <div class="text-center">
+        <a href="/events" class="inline-flex items-center text-sky-blue hover:underline">
+            <i class="fas fa-arrow-left mr-2"></i>
+            Back to Events Calendar
+        </a>
+    </div>
+</div>
+
+<!-- Registration Modal -->
+<div id="registrationModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-xl max-w-md w-full p-6">
+        <h3 class="text-xl font-semibold mb-4">Register for Event</h3>
+        
+        <form id="registrationForm" onsubmit="submitRegistration(event)">
+            <% if (!user) { %>
+                <div class="mb-4">
+                    <label class="block text-sm font-medium mb-1">Name</label>
+                    <input type="text" name="guestName" required class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-sky-blue focus:border-transparent">
+                </div>
+                
+                <div class="mb-4">
+                    <label class="block text-sm font-medium mb-1">Email</label>
+                    <input type="email" name="guestEmail" required class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-sky-blue focus:border-transparent">
+                </div>
+            <% } %>
+            
+            <div class="mb-4">
+                <label class="block text-sm font-medium mb-1">Number of Attendees</label>
+                <select name="numberOfAttendees" class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-sky-blue focus:border-transparent">
+                    <% for (let i = 1; i <= Math.min(10, availableSpots || 10); i++) { %>
+                        <option value="<%= i %>"><%= i %></option>
+                    <% } %>
+                </select>
+            </div>
+            
+            <div class="mb-6">
+                <label class="block text-sm font-medium mb-1">Notes (Optional)</label>
+                <textarea name="notes" rows="3" class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-sky-blue focus:border-transparent" placeholder="Any special requirements or questions?"></textarea>
+            </div>
+            
+            <div class="flex gap-3">
+                <button type="submit" class="flex-1 btn-primary">
+                    Confirm Registration
+                </button>
+                <button type="button" onclick="hideRegistrationForm()" class="flex-1 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition">
+                    Cancel
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<style>
+.event-category-badge {
+    width: 3.5rem;
+    height: 3.5rem;
+    border-radius: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.event-category-badge.worship { background: #dbeafe; color: #1e40af; }
+.event-category-badge.bible-study { background: #fef3c7; color: #92400e; }
+.event-category-badge.fellowship { background: #ede9fe; color: #5b21b6; }
+.event-category-badge.service { background: #d1fae5; color: #065f46; }
+.event-category-badge.meeting { background: #fed7aa; color: #9a3412; }
+.event-category-badge.special { background: #fce7f3; color: #9f1239; }
+
+.prose { max-width: none; }
+.prose p { margin-bottom: 1rem; }
+</style>
+
+<script>
+function showRegistrationForm() {
+    document.getElementById('registrationModal').classList.remove('hidden');
+}
+
+function hideRegistrationForm() {
+    document.getElementById('registrationModal').classList.add('hidden');
+}
+
+async function submitRegistration(e) {
+    e.preventDefault();
+    
+    const form = e.target;
+    const formData = new FormData(form);
+    const data = Object.fromEntries(formData.entries());
+    
+    try {
+        const response = await fetch('/events/<%= event.id %>/register', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            alert('Successfully registered for this event!');
+            location.reload();
+        } else {
+            alert(result.error || 'Failed to register');
+        }
+    } catch (error) {
+        console.error('Registration error:', error);
+        alert('An error occurred. Please try again.');
+    }
+}
+
+async function cancelRegistration() {
+    if (!confirm('Are you sure you want to cancel your registration?')) {
+        return;
+    }
+    
+    try {
+        const response = await fetch('/events/<%= event.id %>/cancel', {
+            method: 'POST'
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            alert('Registration cancelled successfully');
+            location.reload();
+        } else {
+            alert(result.error || 'Failed to cancel registration');
+        }
+    } catch (error) {
+        console.error('Cancellation error:', error);
+        alert('An error occurred. Please try again.');
+    }
+}
+
+// Close modal on outside click
+document.getElementById('registrationModal').addEventListener('click', function(e) {
+    if (e.target === this) {
+        hideRegistrationForm();
+    }
+});
+</script>
+
+<%
+// Helper function
+function getCategoryIcon(category) {
+    const icons = {
+        'worship': 'fa-pray',
+        'bible-study': 'fa-book-bible',
+        'fellowship': 'fa-users',
+        'service': 'fa-hands-helping',
+        'meeting': 'fa-comments',
+        'special': 'fa-star'
+    };
+    return icons[category] || 'fa-calendar';
+}
+%>

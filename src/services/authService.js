@@ -1,5 +1,6 @@
 const { User } = require('../models');
 const { Op } = require('sequelize');
+const bcrypt = require('bcryptjs');
 
 class AuthService {
   /**
@@ -84,9 +85,9 @@ class AuthService {
   }
 
   /**
-   * Login user with email only (passwordless)
+   * Login user with email only (passwordless) or with password for admins
    */
-  static async login(email) {
+  static async login(email, password = null) {
     try {
       // Validate email
       if (!email || !email.includes('@upc.com')) {
@@ -103,6 +104,23 @@ class AuthService {
       
       if (!user) {
         throw new Error('Email not found. Please check your email or register first.');
+      }
+      
+      // Check if admin requires password
+      if (user.isAdmin) {
+        if (!password) {
+          return {
+            success: false,
+            requiresPassword: true,
+            error: 'Password required for admin accounts'
+          };
+        }
+        
+        // Verify password
+        const isValidPassword = await bcrypt.compare(password, user.password || '');
+        if (!isValidPassword) {
+          throw new Error('Invalid password');
+        }
       }
       
       // Update last active date for streak tracking
@@ -170,6 +188,28 @@ class AuthService {
    */
   static isAdmin(req) {
     return req.session && req.session.user && req.session.user.isAdmin;
+  }
+
+  /**
+   * Set password for admin user
+   */
+  static async setAdminPassword(userId, password) {
+    try {
+      const user = await User.findByPk(userId);
+      if (!user || !user.isAdmin) {
+        throw new Error('User not found or not an admin');
+      }
+      
+      // Hash password
+      const hashedPassword = await bcrypt.hash(password, 10);
+      user.password = hashedPassword;
+      await user.save();
+      
+      return { success: true };
+    } catch (error) {
+      console.error('Error setting admin password:', error);
+      return { success: false, error: error.message };
+    }
   }
 }
 

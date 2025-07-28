@@ -7,6 +7,8 @@ const Content = require('./Content')(sequelize, DataTypes);
 const Submission = require('./Submission')(sequelize, DataTypes);
 const Progress = require('./Progress')(sequelize, DataTypes);
 const DailyContent = require('./DailyContent')(sequelize, DataTypes);
+const Event = require('./Event');
+const EventRegistration = require('./EventRegistration');
 
 // Define associations
 User.hasMany(Progress, { foreignKey: 'userId' });
@@ -18,11 +20,23 @@ Progress.belongsTo(Content, { foreignKey: 'contentId' });
 Content.hasMany(DailyContent, { foreignKey: 'contentId' });
 DailyContent.belongsTo(Content, { foreignKey: 'contentId' });
 
+// Event associations
+User.hasMany(Event, { foreignKey: 'createdBy' });
+Event.belongsTo(User, { foreignKey: 'createdBy' });
+
+Event.hasMany(EventRegistration, { foreignKey: 'eventId' });
+EventRegistration.belongsTo(Event, { foreignKey: 'eventId' });
+
+User.hasMany(EventRegistration, { foreignKey: 'userId' });
+EventRegistration.belongsTo(User, { foreignKey: 'userId' });
+
 module.exports = {
   sequelize,
   User,
   Content,
   Submission,
   Progress,
-  DailyContent
+  DailyContent,
+  Event,
+  EventRegistration
 };

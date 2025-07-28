@@ -37,6 +37,11 @@ module.exports = (sequelize, DataTypes) => {
         isEmail: true
       }
     },
+    password: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      comment: 'Only required for admin users'
+    },
     isAdmin: {
       type: DataTypes.BOOLEAN,
       defaultValue: false
