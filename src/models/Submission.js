@@ -43,6 +43,39 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.DATE,
       allowNull: true
     },
+    approvedAt: {
+      type: DataTypes.DATE,
+      allowNull: true
+    },
+    approvedBy: {
+      type: DataTypes.UUID,
+      allowNull: true,
+      references: {
+        model: 'users',
+        key: 'id'
+      }
+    },
+    rejectedAt: {
+      type: DataTypes.DATE,
+      allowNull: true
+    },
+    rejectedBy: {
+      type: DataTypes.UUID,
+      allowNull: true,
+      references: {
+        model: 'users',
+        key: 'id'
+      }
+    },
+    rejectionReason: {
+      type: DataTypes.TEXT,
+      allowNull: true
+    },
+    ipHash: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      comment: 'Hashed IP address for rate limiting'
+    },
     flags: {
       type: DataTypes.ARRAY(DataTypes.STRING),
       defaultValue: []

@@ -15,6 +15,16 @@
         <h1 class="text-3xl font-bold text-gray-800" id="greeting">Good Morning</h1>
     </div>
     
+    <% if (user && user.isAdmin) { %>
+        <!-- Admin Quick Access -->
+        <div class="mb-6 text-center">
+            <a href="/admin" class="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-purple-500 to-purple-600 text-white rounded-full hover:from-purple-600 hover:to-purple-700 transition shadow-lg">
+                <i class="fas fa-shield-alt"></i>
+                <span class="font-medium">Admin Dashboard</span>
+            </a>
+        </div>
+    <% } %>
+    
     <!-- Quick Actions Grid -->
     <div class="grid grid-cols-2 gap-4 mb-6">
         <!-- Events Card -->

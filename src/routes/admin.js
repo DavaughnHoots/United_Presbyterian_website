@@ -1,23 +1,34 @@
 const express = require('express');
 const router = express.Router();
-
-// Middleware to check if user is admin
-const requireAdmin = (req, res, next) => {
-  if (!req.session.user || !req.session.user.isAdmin) {
-    return res.status(403).render('pages/403', {
-      title: '403 - Forbidden',
-      user: req.session.user
-    });
-  }
-  next();
-};
+const { requireAuth, requireAdmin } = require('../middleware/auth');
+const { Submission, DailyContent, User } = require('../models');
+const { Op } = require('sequelize');
 
 // Admin dashboard
 router.get('/', requireAdmin, async (req, res) => {
   try {
+    // Get statistics
+    const stats = {
+      totalUsers: await User.count(),
+      activeUsers: await User.count({ where: { isActive: true } }),
+      pendingSubmissions: await Submission.count({ where: { status: 'pending' } }),
+      approvedSubmissions: await Submission.count({ where: { status: 'approved' } }),
+      totalContent: await DailyContent.count(),
+      publishedContent: await DailyContent.count({ where: { isPublished: true } })
+    };
+    
+    // Get recent submissions
+    const recentSubmissions = await Submission.findAll({
+      where: { status: 'pending' },
+      order: [['createdAt', 'DESC']],
+      limit: 5
+    });
+    
     res.render('pages/admin/dashboard', {
       title: 'Admin Dashboard',
-      user: req.session.user
+      user: req.session.user,
+      stats,
+      recentSubmissions
     });
   } catch (error) {
     console.error('Error rendering admin dashboard:', error);
@@ -43,11 +54,24 @@ router.get('/content', requireAdmin, async (req, res) => {
 // Submission moderation
 router.get('/submissions', requireAdmin, async (req, res) => {
   try {
-    // TODO: Fetch pending submissions from database
+    const { status = 'pending', type } = req.query;
+    
+    // Build query
+    const where = {};
+    if (status) where.status = status;
+    if (type) where.type = type;
+    
+    const submissions = await Submission.findAll({
+      where,
+      order: [['createdAt', 'DESC']]
+    });
+    
     res.render('pages/admin/submissions', {
       title: 'Submission Moderation',
       user: req.session.user,
-      submissions: []
+      submissions,
+      currentStatus: status,
+      currentType: type
     });
   } catch (error) {
     console.error('Error rendering submission moderation:', error);
@@ -59,8 +83,18 @@ router.get('/submissions', requireAdmin, async (req, res) => {
 router.post('/submissions/:id/approve', requireAdmin, async (req, res) => {
   try {
     const { id } = req.params;
-    // TODO: Update submission status in database
-    res.json({ success: true });
+    
+    const submission = await Submission.findByPk(id);
+    if (!submission) {
+      return res.status(404).json({ error: 'Submission not found' });
+    }
+    
+    submission.status = 'approved';
+    submission.approvedAt = new Date();
+    submission.approvedBy = req.session.user.id;
+    await submission.save();
+    
+    res.json({ success: true, message: 'Submission approved successfully' });
   } catch (error) {
     console.error('Error approving submission:', error);
     res.status(500).json({ error: 'Failed to approve submission' });
@@ -71,8 +105,20 @@ router.post('/submissions/:id/approve', requireAdmin, async (req, res) => {
 router.post('/submissions/:id/reject', requireAdmin, async (req, res) => {
   try {
     const { id } = req.params;
-    // TODO: Update submission status in database
-    res.json({ success: true });
+    const { reason } = req.body;
+    
+    const submission = await Submission.findByPk(id);
+    if (!submission) {
+      return res.status(404).json({ error: 'Submission not found' });
+    }
+    
+    submission.status = 'rejected';
+    submission.rejectedAt = new Date();
+    submission.rejectedBy = req.session.user.id;
+    submission.rejectionReason = reason;
+    await submission.save();
+    
+    res.json({ success: true, message: 'Submission rejected' });
   } catch (error) {
     console.error('Error rejecting submission:', error);
     res.status(500).json({ error: 'Failed to reject submission' });

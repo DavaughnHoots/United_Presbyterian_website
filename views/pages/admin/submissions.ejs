@@ -1,0 +1,255 @@
+<div class="max-w-7xl mx-auto">
+    <!-- Header -->
+    <div class="mb-8">
+        <div class="flex items-center mb-4">
+            <a href="/admin" class="text-gray-600 hover:text-gray-800 mr-3">
+                <i class="fas fa-arrow-left"></i>
+            </a>
+            <h1 class="text-3xl font-bold" style="color: var(--text-primary);">Submission Moderation</h1>
+        </div>
+        <p class="text-gray-600">Review and approve community submissions</p>
+    </div>
+    
+    <!-- Filters -->
+    <div class="module-card mb-6">
+        <div class="flex flex-wrap gap-4 items-center">
+            <div class="flex items-center gap-2">
+                <label class="font-medium text-gray-700">Status:</label>
+                <select id="statusFilter" class="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-transparent">
+                    <option value="pending" <%= currentStatus === 'pending' ? 'selected' : '' %>>Pending</option>
+                    <option value="approved" <%= currentStatus === 'approved' ? 'selected' : '' %>>Approved</option>
+                    <option value="rejected" <%= currentStatus === 'rejected' ? 'selected' : '' %>>Rejected</option>
+                    <option value="all" <%= currentStatus === 'all' ? 'selected' : '' %>>All</option>
+                </select>
+            </div>
+            
+            <div class="flex items-center gap-2">
+                <label class="font-medium text-gray-700">Type:</label>
+                <select id="typeFilter" class="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-transparent">
+                    <option value="">All Types</option>
+                    <option value="joy" <%= currentType === 'joy' ? 'selected' : '' %>>Joys</option>
+                    <option value="concern" <%= currentType === 'concern' ? 'selected' : '' %>>Prayer Requests</option>
+                    <option value="testimony" <%= currentType === 'testimony' ? 'selected' : '' %>>Testimonies</option>
+                </select>
+            </div>
+            
+            <button id="applyFilters" class="btn-primary">
+                <i class="fas fa-filter mr-2"></i>Apply Filters
+            </button>
+        </div>
+    </div>
+    
+    <!-- Submissions List -->
+    <% if (submissions.length === 0) { %>
+        <div class="module-card text-center py-12">
+            <i class="fas fa-inbox text-6xl text-gray-300 mb-4"></i>
+            <p class="text-xl text-gray-600">No submissions found</p>
+            <p class="text-gray-500 mt-2">Adjust your filters or check back later</p>
+        </div>
+    <% } else { %>
+        <div class="space-y-4" id="submissionsList">
+            <% submissions.forEach(submission => { %>
+                <div class="module-card submission-item" data-id="<%= submission.id %>">
+                    <!-- Submission Header -->
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center gap-3">
+                            <% if (submission.type === 'joy') { %>
+                                <div class="w-10 h-10 bg-yellow-100 rounded-full flex items-center justify-center">
+                                    <i class="fas fa-smile text-yellow-600"></i>
+                                </div>
+                                <span class="font-medium text-yellow-700">Joy</span>
+                            <% } else if (submission.type === 'concern') { %>
+                                <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+                                    <i class="fas fa-praying-hands text-blue-600"></i>
+                                </div>
+                                <span class="font-medium text-blue-700">Prayer Request</span>
+                            <% } else { %>
+                                <div class="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center">
+                                    <i class="fas fa-dove text-purple-600"></i>
+                                </div>
+                                <span class="font-medium text-purple-700">Testimony</span>
+                            <% } %>
+                        </div>
+                        
+                        <div class="flex items-center gap-4">
+                            <span class="text-sm text-gray-500">
+                                <%= new Date(submission.createdAt).toLocaleString() %>
+                            </span>
+                            
+                            <% if (submission.status === 'pending') { %>
+                                <span class="px-3 py-1 bg-yellow-100 text-yellow-700 rounded-full text-sm font-medium">
+                                    Pending
+                                </span>
+                            <% } else if (submission.status === 'approved') { %>
+                                <span class="px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm font-medium">
+                                    Approved
+                                </span>
+                            <% } else { %>
+                                <span class="px-3 py-1 bg-red-100 text-red-700 rounded-full text-sm font-medium">
+                                    Rejected
+                                </span>
+                            <% } %>
+                        </div>
+                    </div>
+                    
+                    <!-- Submission Content -->
+                    <div class="bg-gray-50 rounded-lg p-4 mb-4">
+                        <p class="text-gray-700 whitespace-pre-wrap"><%= submission.content %></p>
+                    </div>
+                    
+                    <!-- Metadata -->
+                    <div class="text-sm text-gray-500 mb-4">
+                        <% if (submission.ipHash) { %>
+                            <span class="mr-4"><i class="fas fa-fingerprint mr-1"></i>ID: <%= submission.ipHash.substring(0, 8) %>...</span>
+                        <% } %>
+                        <% if (submission.approvedAt) { %>
+                            <span class="mr-4"><i class="fas fa-check-circle mr-1"></i>Approved: <%= new Date(submission.approvedAt).toLocaleDateString() %></span>
+                        <% } %>
+                        <% if (submission.rejectedAt) { %>
+                            <span class="mr-4"><i class="fas fa-times-circle mr-1"></i>Rejected: <%= new Date(submission.rejectedAt).toLocaleDateString() %></span>
+                        <% } %>
+                    </div>
+                    
+                    <!-- Actions -->
+                    <% if (submission.status === 'pending') { %>
+                        <div class="flex gap-3">
+                            <button class="approve-btn flex-1 bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-lg transition" data-id="<%= submission.id %>">
+                                <i class="fas fa-check mr-2"></i>Approve
+                            </button>
+                            <button class="reject-btn flex-1 bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-lg transition" data-id="<%= submission.id %>">
+                                <i class="fas fa-times mr-2"></i>Reject
+                            </button>
+                        </div>
+                    <% } else if (submission.status === 'approved') { %>
+                        <div class="bg-green-50 border border-green-200 rounded-lg p-3 text-center">
+                            <i class="fas fa-check-circle text-green-600 mr-2"></i>
+                            <span class="text-green-700">This submission has been approved and is visible to the community</span>
+                        </div>
+                    <% } else { %>
+                        <div class="bg-red-50 border border-red-200 rounded-lg p-3">
+                            <i class="fas fa-times-circle text-red-600 mr-2"></i>
+                            <span class="text-red-700">This submission was rejected</span>
+                            <% if (submission.rejectionReason) { %>
+                                <p class="text-sm mt-1">Reason: <%= submission.rejectionReason %></p>
+                            <% } %>
+                        </div>
+                    <% } %>
+                </div>
+            <% }) %>
+        </div>
+    <% } %>
+</div>
+
+<!-- Rejection Modal -->
+<div id="rejectModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
+    <div class="bg-white rounded-lg p-6 max-w-md w-full mx-4">
+        <h3 class="text-xl font-semibold mb-4">Reject Submission</h3>
+        <p class="text-gray-600 mb-4">Please provide a reason for rejection (optional):</p>
+        <textarea id="rejectionReason" class="w-full p-3 border border-gray-300 rounded-lg resize-none" rows="3" placeholder="Enter reason..."></textarea>
+        <div class="flex gap-3 mt-4">
+            <button id="confirmReject" class="flex-1 bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-lg transition">
+                Confirm Rejection
+            </button>
+            <button id="cancelReject" class="flex-1 bg-gray-300 hover:bg-gray-400 text-gray-700 py-2 px-4 rounded-lg transition">
+                Cancel
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Filter handling
+    const applyFilters = document.getElementById('applyFilters');
+    const statusFilter = document.getElementById('statusFilter');
+    const typeFilter = document.getElementById('typeFilter');
+    
+    applyFilters.addEventListener('click', function() {
+        const status = statusFilter.value;
+        const type = typeFilter.value;
+        let url = '/admin/submissions?';
+        if (status && status !== 'all') url += `status=${status}&`;
+        if (type) url += `type=${type}&`;
+        window.location.href = url.slice(0, -1); // Remove trailing & or ?
+    });
+    
+    // Approval handling
+    document.querySelectorAll('.approve-btn').forEach(btn => {
+        btn.addEventListener('click', async function() {
+            if (!confirm('Are you sure you want to approve this submission?')) return;
+            
+            const id = this.dataset.id;
+            const item = this.closest('.submission-item');
+            
+            try {
+                const response = await fetch(`/admin/submissions/${id}/approve`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+                
+                if (response.ok) {
+                    // Update UI
+                    item.style.opacity = '0.5';
+                    this.innerHTML = '<i class="fas fa-check mr-2"></i>Approved!';
+                    this.disabled = true;
+                    
+                    // Reload after animation
+                    setTimeout(() => location.reload(), 1000);
+                } else {
+                    alert('Failed to approve submission');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An error occurred');
+            }
+        });
+    });
+    
+    // Rejection handling
+    const rejectModal = document.getElementById('rejectModal');
+    const rejectionReason = document.getElementById('rejectionReason');
+    const confirmReject = document.getElementById('confirmReject');
+    const cancelReject = document.getElementById('cancelReject');
+    let currentRejectId = null;
+    
+    document.querySelectorAll('.reject-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            currentRejectId = this.dataset.id;
+            rejectionReason.value = '';
+            rejectModal.classList.remove('hidden');
+        });
+    });
+    
+    cancelReject.addEventListener('click', function() {
+        rejectModal.classList.add('hidden');
+        currentRejectId = null;
+    });
+    
+    confirmReject.addEventListener('click', async function() {
+        if (!currentRejectId) return;
+        
+        const item = document.querySelector(`[data-id="${currentRejectId}"]`);
+        
+        try {
+            const response = await fetch(`/admin/submissions/${currentRejectId}/reject`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ reason: rejectionReason.value })
+            });
+            
+            if (response.ok) {
+                rejectModal.classList.add('hidden');
+                item.style.opacity = '0.5';
+                
+                // Reload after animation
+                setTimeout(() => location.reload(), 1000);
+            } else {
+                alert('Failed to reject submission');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('An error occurred');
+        }
+    });
+});
+</script>

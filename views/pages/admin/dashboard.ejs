@@ -1,0 +1,165 @@
+<div class="max-w-7xl mx-auto">
+    <!-- Admin Header -->
+    <div class="mb-8">
+        <h1 class="text-3xl font-bold mb-2" style="color: var(--text-primary);">Admin Dashboard</h1>
+        <p class="text-gray-600">Welcome back, <%= user.firstName %>!</p>
+    </div>
+    
+    <!-- Quick Stats Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+        <!-- Users Card -->
+        <div class="module-card">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm text-gray-600 mb-1">Total Users</p>
+                    <p class="text-3xl font-bold" style="color: var(--sky-blue);"><%= stats.totalUsers %></p>
+                    <p class="text-sm text-green-600 mt-1">
+                        <i class="fas fa-check-circle mr-1"></i><%= stats.activeUsers %> active
+                    </p>
+                </div>
+                <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center">
+                    <i class="fas fa-users text-2xl" style="color: var(--sky-blue);"></i>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Submissions Card -->
+        <div class="module-card">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm text-gray-600 mb-1">Submissions</p>
+                    <p class="text-3xl font-bold" style="color: var(--heaven-blue);"><%= stats.pendingSubmissions %></p>
+                    <p class="text-sm text-gray-600 mt-1">
+                        <i class="fas fa-history mr-1"></i>pending review
+                    </p>
+                </div>
+                <div class="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center">
+                    <i class="fas fa-inbox text-2xl text-yellow-600"></i>
+                </div>
+            </div>
+            <% if (stats.pendingSubmissions > 0) { %>
+                <a href="/admin/submissions" class="block mt-4 text-center py-2 bg-yellow-50 rounded-lg text-yellow-700 hover:bg-yellow-100 transition">
+                    Review Submissions <i class="fas fa-arrow-right ml-1"></i>
+                </a>
+            <% } %>
+        </div>
+        
+        <!-- Content Card -->
+        <div class="module-card">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm text-gray-600 mb-1">Daily Content</p>
+                    <p class="text-3xl font-bold" style="color: var(--text-primary);"><%= stats.totalContent %></p>
+                    <p class="text-sm text-gray-600 mt-1">
+                        <i class="fas fa-eye mr-1"></i><%= stats.publishedContent %> published
+                    </p>
+                </div>
+                <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center">
+                    <i class="fas fa-book-bible text-2xl text-green-600"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Quick Actions -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+        <!-- Admin Menu -->
+        <div class="module-card">
+            <h2 class="text-xl font-semibold mb-4">Quick Actions</h2>
+            <div class="space-y-3">
+                <a href="/admin/submissions" class="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition">
+                    <div class="flex items-center">
+                        <i class="fas fa-comments text-xl mr-3" style="color: var(--sky-blue);"></i>
+                        <span class="font-medium">Moderate Submissions</span>
+                    </div>
+                    <% if (stats.pendingSubmissions > 0) { %>
+                        <span class="bg-yellow-500 text-white text-xs px-2 py-1 rounded-full"><%= stats.pendingSubmissions %></span>
+                    <% } else { %>
+                        <i class="fas fa-chevron-right text-gray-400"></i>
+                    <% } %>
+                </a>
+                
+                <a href="/admin/content" class="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition">
+                    <div class="flex items-center">
+                        <i class="fas fa-calendar-day text-xl mr-3" style="color: var(--heaven-blue);"></i>
+                        <span class="font-medium">Manage Daily Content</span>
+                    </div>
+                    <i class="fas fa-chevron-right text-gray-400"></i>
+                </a>
+                
+                <a href="/admin/users" class="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition">
+                    <div class="flex items-center">
+                        <i class="fas fa-user-cog text-xl mr-3 text-purple-600"></i>
+                        <span class="font-medium">Manage Users</span>
+                    </div>
+                    <i class="fas fa-chevron-right text-gray-400"></i>
+                </a>
+                
+                <a href="/admin/settings" class="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition">
+                    <div class="flex items-center">
+                        <i class="fas fa-cog text-xl mr-3 text-gray-600"></i>
+                        <span class="font-medium">Site Settings</span>
+                    </div>
+                    <i class="fas fa-chevron-right text-gray-400"></i>
+                </a>
+            </div>
+        </div>
+        
+        <!-- Recent Submissions -->
+        <div class="module-card">
+            <h2 class="text-xl font-semibold mb-4">Recent Submissions</h2>
+            <% if (recentSubmissions.length > 0) { %>
+                <div class="space-y-3">
+                    <% recentSubmissions.forEach(sub => { %>
+                        <div class="p-3 bg-yellow-50 rounded-lg">
+                            <div class="flex items-center justify-between mb-1">
+                                <span class="text-sm font-medium capitalize"><%= sub.type %></span>
+                                <span class="text-xs text-gray-500"><%= new Date(sub.createdAt).toLocaleDateString() %></span>
+                            </div>
+                            <p class="text-sm text-gray-700 line-clamp-2"><%= sub.content.substring(0, 100) %>...</p>
+                        </div>
+                    <% }) %>
+                </div>
+                <a href="/admin/submissions" class="block mt-4 text-center text-sky-blue hover:underline">
+                    View all submissions <i class="fas fa-arrow-right ml-1"></i>
+                </a>
+            <% } else { %>
+                <p class="text-gray-500 text-center py-8">No pending submissions</p>
+            <% } %>
+        </div>
+    </div>
+    
+    <!-- System Info -->
+    <div class="module-card">
+        <h2 class="text-xl font-semibold mb-4">System Information</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+            <div>
+                <p class="text-gray-600">Environment</p>
+                <p class="font-medium"><%= process.env.NODE_ENV || 'development' %></p>
+            </div>
+            <div>
+                <p class="text-gray-600">Database Status</p>
+                <p class="font-medium text-green-600"><i class="fas fa-check-circle mr-1"></i>Connected</p>
+            </div>
+            <div>
+                <p class="text-gray-600">Email Service</p>
+                <p class="font-medium <%= process.env.SMTP_USER ? 'text-green-600' : 'text-yellow-600' %>">
+                    <% if (process.env.SMTP_USER) { %>
+                        <i class="fas fa-check-circle mr-1"></i>Configured
+                    <% } else { %>
+                        <i class="fas fa-exclamation-circle mr-1"></i>Not configured
+                    <% } %>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+</style>
