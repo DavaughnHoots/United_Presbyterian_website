@@ -20,7 +20,9 @@
       "Bash(git reset:*)",
       "Bash(touch:*)",
       "Bash(heroku run:*)",
-      "Bash(npx heroku run npm run migrate:*)"
+      "Bash(npx heroku run npm run migrate:*)",
+      "Bash(heroku pg:psql:*)",
+      "Bash(mv:*)"
     ],
     "deny": []
   }
