@@ -1,4 +1,6 @@
 module.exports = (sequelize, DataTypes) => {
+  const { Op } = sequelize.Sequelize;
+  
   const EventRegistration = sequelize.define('EventRegistration', {
   id: {
     type: DataTypes.UUID,
@@ -64,7 +66,7 @@ module.exports = (sequelize, DataTypes) => {
       fields: ['eventId', 'userId'],
       where: {
         userId: {
-          [sequelize.Op.ne]: null
+          [Op.ne]: null
         }
       }
     },
@@ -73,7 +75,7 @@ module.exports = (sequelize, DataTypes) => {
       fields: ['eventId', 'guestEmail'],
       where: {
         guestEmail: {
-          [sequelize.Op.ne]: null
+          [Op.ne]: null
         }
       }
     }
