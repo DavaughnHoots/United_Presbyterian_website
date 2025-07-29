@@ -146,28 +146,8 @@ async function exportUsers() {
     }
 }
 
-// Test API connectivity
-async function testAPI() {
-    console.log('Testing API connectivity...');
-    try {
-        const response = await fetch('/admin/api/users/test-id/toggle-admin', {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            credentials: 'same-origin'
-        });
-        console.log('Test response status:', response.status);
-        const text = await response.text();
-        console.log('Test response body:', text);
-    } catch (error) {
-        console.error('Test error:', error);
-    }
-}
-
-// Run test on page load
+// Run on page load
 document.addEventListener('DOMContentLoaded', () => {
     console.log('Admin users script loaded');
-    // Test API after a short delay
-    setTimeout(testAPI, 1000);
+    console.log('API endpoints ready for user management actions');
 });

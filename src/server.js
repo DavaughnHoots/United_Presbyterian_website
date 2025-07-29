@@ -30,6 +30,7 @@ app.use(helmet({
       defaultSrc: ["'self'"],
       styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com", "https://cdn.tailwindcss.com", "https://cdnjs.cloudflare.com"],
       scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'", "https://www.google.com", "https://www.gstatic.com", "https://cdn.tailwindcss.com", "https://cdnjs.cloudflare.com"],
+      scriptSrcAttr: ["'unsafe-inline'"],
       imgSrc: ["'self'", "data:", "https:", "http:", "https://images.unsplash.com"],
       fontSrc: ["'self'", "https://fonts.gstatic.com", "https://cdnjs.cloudflare.com"],
       frameSrc: ["'self'", "https://www.youtube.com", "https://www.google.com"],
