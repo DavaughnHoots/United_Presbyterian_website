@@ -5,14 +5,20 @@ const { requireAuth } = require('../middleware/auth');
 // Home page
 router.get('/', async (req, res) => {
   try {
+    const { Setting } = require('../models');
+    
+    // Get church settings
+    const settings = await Setting.getAll();
+    
     // Debug logging
     console.log('Home page - Session user:', req.session.user);
     console.log('Home page - res.locals.user:', res.locals.user);
     
     res.render('pages/home', {
-      title: 'United Presbyterian Church',
+      title: settings.churchName || 'United Presbyterian Church',
       user: req.session.user || res.locals.user,
-      welcomeMessage: res.locals.welcomeMessage
+      welcomeMessage: res.locals.welcomeMessage,
+      churchName: settings.churchName || 'United Presbyterian Church'
     });
   } catch (error) {
     console.error('Error rendering home page:', error);
@@ -84,9 +90,20 @@ router.get('/share', async (req, res) => {
 // About page
 router.get('/about', async (req, res) => {
   try {
+    const { Setting } = require('../models');
+    
+    // Get church settings
+    const settings = await Setting.getAll();
+    
     res.render('pages/about', {
       title: 'About United Presbyterian Church',
-      user: req.session.user
+      user: req.session.user,
+      churchName: settings.churchName || 'United Presbyterian Church',
+      churchAddress: settings.churchAddress || '',
+      phoneNumber: settings.phoneNumber || '',
+      contactEmail: settings.contactEmail || '',
+      serviceTimes: settings.serviceTimes || '',
+      welcomeMessage: settings.welcomeMessage || 'Welcome to our church family!'
     });
   } catch (error) {
     console.error('Error rendering about page:', error);
