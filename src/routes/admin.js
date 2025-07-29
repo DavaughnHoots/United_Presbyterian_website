@@ -17,8 +17,7 @@ router.get('/', requireAdmin, async (req, res) => {
       activeUsers: await User.count({ where: { isActive: true } }),
       pendingSubmissions: await Submission.count({ where: { status: 'pending' } }),
       approvedSubmissions: await Submission.count({ where: { status: 'approved' } }),
-      totalContent: await DailyContent.count(),
-      publishedContent: await DailyContent.count({ where: { isPublished: true } })
+      totalContent: await DailyContent.count()
     };
     
     // Get recent submissions
