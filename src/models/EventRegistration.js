@@ -3,12 +3,12 @@ const sequelize = require('../config/database');
 
 const EventRegistration = sequelize.define('EventRegistration', {
   id: {
-    type: DataTypes.INTEGER,
-    primaryKey: true,
-    autoIncrement: true
+    type: DataTypes.UUID,
+    defaultValue: DataTypes.UUIDV4,
+    primaryKey: true
   },
   eventId: {
-    type: DataTypes.INTEGER,
+    type: DataTypes.UUID,
     allowNull: false,
     references: {
       model: 'events',
@@ -16,7 +16,7 @@ const EventRegistration = sequelize.define('EventRegistration', {
     }
   },
   userId: {
-    type: DataTypes.INTEGER,
+    type: DataTypes.UUID,
     allowNull: true,
     references: {
       model: 'users',

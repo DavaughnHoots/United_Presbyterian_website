@@ -3,9 +3,9 @@ const sequelize = require('../config/database');
 
 const Event = sequelize.define('Event', {
   id: {
-    type: DataTypes.INTEGER,
-    primaryKey: true,
-    autoIncrement: true
+    type: DataTypes.UUID,
+    defaultValue: DataTypes.UUIDV4,
+    primaryKey: true
   },
   title: {
     type: DataTypes.STRING,
@@ -87,7 +87,7 @@ const Event = sequelize.define('Event', {
     allowNull: true
   },
   createdBy: {
-    type: DataTypes.INTEGER,
+    type: DataTypes.UUID,
     allowNull: false
   }
 }, {
