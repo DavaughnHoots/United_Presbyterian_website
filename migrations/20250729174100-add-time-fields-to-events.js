@@ -73,6 +73,18 @@ module.exports = {
         allowNull: true
       });
     }
+    
+    // Add guestPhone column to event_registrations
+    const guestPhoneExists = await queryInterface.sequelize.query(
+      `SELECT column_name FROM information_schema.columns WHERE table_name = 'event_registrations' AND column_name = 'guestPhone'`
+    );
+    
+    if (guestPhoneExists[0].length === 0) {
+      await queryInterface.addColumn('event_registrations', 'guestPhone', {
+        type: Sequelize.STRING,
+        allowNull: true
+      });
+    }
   },
 
   down: async (queryInterface, Sequelize) => {
@@ -82,5 +94,6 @@ module.exports = {
     await queryInterface.removeColumn('events', 'requireRegistration');
     await queryInterface.removeColumn('events', 'recurrencePattern');
     await queryInterface.removeColumn('events', 'recurrenceEnd');
+    await queryInterface.removeColumn('event_registrations', 'guestPhone');
   }
 };

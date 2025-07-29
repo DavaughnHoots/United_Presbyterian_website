@@ -34,6 +34,10 @@ module.exports = (sequelize, DataTypes) => {
       isEmail: true
     }
   },
+  guestPhone: {
+    type: DataTypes.STRING,
+    allowNull: true
+  },
   numberOfAttendees: {
     type: DataTypes.INTEGER,
     defaultValue: 1,
