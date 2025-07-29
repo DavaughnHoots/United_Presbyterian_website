@@ -32,6 +32,7 @@
     "bcryptjs": "^3.0.2",
     "connect-pg-simple": "^10.0.0",
     "cors": "^2.8.5",
+    "csv-parse": "^5.5.6",
     "dompurify": "^3.2.6",
     "dotenv": "^17.2.1",
     "ejs": "^3.1.10",

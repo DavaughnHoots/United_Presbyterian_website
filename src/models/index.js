@@ -10,6 +10,7 @@ const DailyContent = require('./DailyContent')(sequelize, DataTypes);
 const Event = require('./Event')(sequelize, DataTypes);
 const EventRegistration = require('./EventRegistration')(sequelize, DataTypes);
 const Setting = require('./Setting')(sequelize, DataTypes);
+const UserActivity = require('./UserActivity')(sequelize, DataTypes);
 
 // Define associations
 User.hasMany(Progress, { foreignKey: 'userId' });
@@ -31,6 +32,9 @@ EventRegistration.belongsTo(Event, { foreignKey: 'eventId' });
 User.hasMany(EventRegistration, { foreignKey: 'userId' });
 EventRegistration.belongsTo(User, { foreignKey: 'userId' });
 
+User.hasMany(UserActivity, { foreignKey: 'userId' });
+UserActivity.belongsTo(User, { foreignKey: 'userId' });
+
 module.exports = {
   sequelize,
   User,
@@ -40,5 +44,6 @@ module.exports = {
   DailyContent,
   Event,
   EventRegistration,
-  Setting
+  Setting,
+  UserActivity
 };

@@ -1,4 +1,4 @@
-const { User } = require('../models');
+const { User, UserActivity } = require('../models');
 const { Op } = require('sequelize');
 const bcrypt = require('bcryptjs');
 
@@ -135,6 +135,17 @@ class AuthService {
       
       // Update last active date for streak tracking
       await user.updateStreak();
+      
+      // Log login activity
+      try {
+        await UserActivity.create({
+          userId: user.id,
+          action: 'LOGIN',
+          details: user.isAdmin ? 'Admin login' : 'User login'
+        });
+      } catch (activityError) {
+        console.error('Failed to log activity:', activityError);
+      }
       
       return {
         success: true,

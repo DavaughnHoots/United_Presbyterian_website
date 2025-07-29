@@ -1,8 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const { requireAuth, requireAdmin } = require('../middleware/auth');
-const { Submission, DailyContent, User, Content, Setting, Event, EventRegistration } = require('../models');
+const { Submission, DailyContent, User, Content, Setting, Event, EventRegistration, UserActivity } = require('../models');
 const { Op } = require('sequelize');
+const multer = require('multer');
+const csv = require('csv-parse');
+const upload = multer({ storage: multer.memoryStorage() });
 
 // Admin dashboard
 router.get('/', requireAdmin, async (req, res) => {
@@ -295,7 +298,7 @@ router.get('/users', requireAdmin, async (req, res) => {
       thisMonth: users.filter(u => new Date(u.createdAt) >= thisMonth).length
     };
     
-    res.render('pages/admin/users', {
+    res.render('pages/admin/users-enhanced', {
       title: 'User Management',
       user: req.session.user,
       currentUserId: req.session.user.id,
@@ -723,5 +726,262 @@ router.delete('/api/registrations/:id', requireAdmin, async (req, res) => {
     res.status(500).json({ error: 'Failed to delete registration' });
   }
 });
+
+// ============= ENHANCED USER API ENDPOINTS =============
+
+// Create new user
+router.post('/api/users', requireAdmin, async (req, res) => {
+  try {
+    const { email, firstName, lastName, personalEmail, isActive, isAdmin, sendWelcome } = req.body;
+    
+    // Check if user already exists
+    const existingUser = await User.findOne({ where: { email } });
+    if (existingUser) {
+      return res.status(400).json({ error: 'User with this email already exists' });
+    }
+    
+    const newUser = await User.create({
+      email,
+      firstName,
+      lastName,
+      personalEmail,
+      isActive,
+      isAdmin,
+      currentStreak: 0,
+      longestStreak: 0
+    });
+    
+    // Log activity
+    await UserActivity.create({
+      userId: newUser.id,
+      action: 'USER_CREATED',
+      details: `Created by admin ${req.session.user.email}`
+    });
+    
+    // Send welcome email if requested
+    if (sendWelcome && process.env.SMTP_USER) {
+      const EmailService = require('../services/emailService');
+      await EmailService.sendWelcomeEmail(newUser);
+    }
+    
+    res.json({ success: true, user: newUser });
+  } catch (error) {
+    console.error('Error creating user:', error);
+    res.status(500).json({ error: 'Failed to create user' });
+  }
+});
+
+// Get user activity logs
+router.get('/api/users/:id/activity', requireAdmin, async (req, res) => {
+  try {
+    const { id } = req.params;
+    
+    const logs = await UserActivity.findAll({
+      where: { userId: id },
+      order: [['createdAt', 'DESC']],
+      limit: 50
+    });
+    
+    // Get total logins
+    const totalLogins = await UserActivity.count({
+      where: { 
+        userId: id,
+        action: 'LOGIN'
+      }
+    });
+    
+    res.json({ logs, totalLogins });
+  } catch (error) {
+    console.error('Error fetching user activity:', error);
+    res.status(500).json({ error: 'Failed to fetch activity' });
+  }
+});
+
+// Bulk activate users
+router.post('/api/users/bulk-activate', requireAdmin, async (req, res) => {
+  try {
+    const { userIds } = req.body;
+    
+    await User.update(
+      { isActive: true },
+      { where: { id: userIds } }
+    );
+    
+    // Log activity for each user
+    const activities = userIds.map(userId => ({
+      userId,
+      action: 'ACTIVATED',
+      details: `Bulk activated by admin ${req.session.user.email}`
+    }));
+    await UserActivity.bulkCreate(activities);
+    
+    res.json({ success: true });
+  } catch (error) {
+    console.error('Error activating users:', error);
+    res.status(500).json({ error: 'Failed to activate users' });
+  }
+});
+
+// Bulk deactivate users
+router.post('/api/users/bulk-deactivate', requireAdmin, async (req, res) => {
+  try {
+    const { userIds } = req.body;
+    
+    await User.update(
+      { isActive: false },
+      { where: { id: userIds } }
+    );
+    
+    // Log activity for each user
+    const activities = userIds.map(userId => ({
+      userId,
+      action: 'DEACTIVATED',
+      details: `Bulk deactivated by admin ${req.session.user.email}`
+    }));
+    await UserActivity.bulkCreate(activities);
+    
+    res.json({ success: true });
+  } catch (error) {
+    console.error('Error deactivating users:', error);
+    res.status(500).json({ error: 'Failed to deactivate users' });
+  }
+});
+
+// Bulk delete users
+router.post('/api/users/bulk-delete', requireAdmin, async (req, res) => {
+  try {
+    const { userIds } = req.body;
+    
+    // Don't allow deleting the current admin
+    const filteredIds = userIds.filter(id => id !== req.session.user.id);
+    
+    await User.destroy({
+      where: { id: filteredIds }
+    });
+    
+    res.json({ success: true, deleted: filteredIds.length });
+  } catch (error) {
+    console.error('Error deleting users:', error);
+    res.status(500).json({ error: 'Failed to delete users' });
+  }
+});
+
+// Send email to users
+router.post('/api/users/email', requireAdmin, async (req, res) => {
+  try {
+    const { recipients, subject, message, includePersonalEmail } = req.body;
+    
+    if (!process.env.SMTP_USER) {
+      return res.status(400).json({ error: 'Email service not configured' });
+    }
+    
+    const users = await User.findAll({
+      where: { id: recipients }
+    });
+    
+    const EmailService = require('../services/emailService');
+    let sent = 0;
+    
+    for (const user of users) {
+      try {
+        // Send to church email
+        await EmailService.sendEmail(user.email, subject, message);
+        sent++;
+        
+        // Send to personal email if requested and available
+        if (includePersonalEmail && user.personalEmail) {
+          await EmailService.sendEmail(user.personalEmail, subject, message);
+        }
+      } catch (error) {
+        console.error(`Failed to email ${user.email}:`, error);
+      }
+    }
+    
+    res.json({ success: true, sent });
+  } catch (error) {
+    console.error('Error sending emails:', error);
+    res.status(500).json({ error: 'Failed to send emails' });
+  }
+});
+
+// Import users from CSV
+router.post('/api/users/import', requireAdmin, upload.single('file'), async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ error: 'No file uploaded' });
+    }
+    
+    const sendWelcome = req.body.sendWelcome === 'true';
+    const results = [];
+    
+    // Parse CSV
+    const parser = csv.parse({
+      columns: true,
+      skip_empty_lines: true
+    });
+    
+    parser.on('readable', async function() {
+      let record;
+      while (record = parser.read()) {
+        try {
+          const userData = {
+            firstName: record.firstName,
+            lastName: record.lastName,
+            email: record.email,
+            personalEmail: record.personalEmail || null,
+            isAdmin: record.isAdmin === 'true' || record.isAdmin === '1',
+            isActive: record.isActive !== 'false' && record.isActive !== '0',
+            currentStreak: 0,
+            longestStreak: 0
+          };
+          
+          // Check if user exists
+          const existing = await User.findOne({ where: { email: userData.email } });
+          if (!existing) {
+            const user = await User.create(userData);
+            results.push({ success: true, email: userData.email });
+            
+            // Send welcome email if requested
+            if (sendWelcome && process.env.SMTP_USER) {
+              const EmailService = require('../services/emailService');
+              await EmailService.sendWelcomeEmail(user);
+            }
+          } else {
+            results.push({ success: false, email: userData.email, error: 'Already exists' });
+          }
+        } catch (error) {
+          results.push({ success: false, email: record.email, error: error.message });
+        }
+      }
+    });
+    
+    parser.on('end', () => {
+      const imported = results.filter(r => r.success).length;
+      res.json({ success: true, imported, total: results.length, results });
+    });
+    
+    parser.write(req.file.buffer);
+    parser.end();
+    
+  } catch (error) {
+    console.error('Error importing users:', error);
+    res.status(500).json({ error: 'Failed to import users' });
+  }
+});
+
+// Log user activity (helper function)
+async function logActivity(userId, action, details = null, req = null) {
+  try {
+    await UserActivity.create({
+      userId,
+      action,
+      details,
+      ipAddress: req ? req.ip : null,
+      userAgent: req ? req.headers['user-agent'] : null
+    });
+  } catch (error) {
+    console.error('Error logging activity:', error);
+  }
+}
 
 module.exports = router;
