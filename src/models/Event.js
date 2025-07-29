@@ -1,7 +1,5 @@
-const { DataTypes } = require('sequelize');
-const sequelize = require('../config/database');
-
-const Event = sequelize.define('Event', {
+module.exports = (sequelize, DataTypes) => {
+  const Event = sequelize.define('Event', {
   id: {
     type: DataTypes.UUID,
     defaultValue: DataTypes.UUIDV4,
@@ -95,6 +93,7 @@ const Event = sequelize.define('Event', {
   timestamps: true
 });
 
-// Model associations will be defined in associations.js
-
-module.exports = Event;
+  // Model associations will be defined in associations.js
+  
+  return Event;
+};

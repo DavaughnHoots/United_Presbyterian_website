@@ -7,8 +7,8 @@ const Content = require('./Content')(sequelize, DataTypes);
 const Submission = require('./Submission')(sequelize, DataTypes);
 const Progress = require('./Progress')(sequelize, DataTypes);
 const DailyContent = require('./DailyContent')(sequelize, DataTypes);
-const Event = require('./Event');
-const EventRegistration = require('./EventRegistration');
+const Event = require('./Event')(sequelize, DataTypes);
+const EventRegistration = require('./EventRegistration')(sequelize, DataTypes);
 
 // Define associations
 User.hasMany(Progress, { foreignKey: 'userId' });

@@ -1,7 +1,5 @@
-const { DataTypes } = require('sequelize');
-const sequelize = require('../config/database');
-
-const EventRegistration = sequelize.define('EventRegistration', {
+module.exports = (sequelize, DataTypes) => {
+  const EventRegistration = sequelize.define('EventRegistration', {
   id: {
     type: DataTypes.UUID,
     defaultValue: DataTypes.UUIDV4,
@@ -80,6 +78,7 @@ const EventRegistration = sequelize.define('EventRegistration', {
       }
     }
   ]
-});
-
-module.exports = EventRegistration;
+  });
+  
+  return EventRegistration;
+};
