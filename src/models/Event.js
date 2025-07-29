@@ -25,6 +25,10 @@ module.exports = (sequelize, DataTypes) => {
     type: DataTypes.DATE,
     allowNull: false
   },
+  startTime: {
+    type: DataTypes.TIME,
+    allowNull: true
+  },
   endDate: {
     type: DataTypes.DATE,
     allowNull: false,
@@ -36,6 +40,10 @@ module.exports = (sequelize, DataTypes) => {
       }
     }
   },
+  endTime: {
+    type: DataTypes.TIME,
+    allowNull: true
+  },
   allDay: {
     type: DataTypes.BOOLEAN,
     defaultValue: false
@@ -44,11 +52,23 @@ module.exports = (sequelize, DataTypes) => {
     type: DataTypes.BOOLEAN,
     defaultValue: false
   },
+  isRecurring: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: false
+  },
   recurringPattern: {
     type: DataTypes.ENUM('daily', 'weekly', 'monthly'),
     allowNull: true
   },
+  recurrencePattern: {
+    type: DataTypes.STRING,
+    allowNull: true
+  },
   recurringEndDate: {
+    type: DataTypes.DATE,
+    allowNull: true
+  },
+  recurrenceEnd: {
     type: DataTypes.DATE,
     allowNull: true
   },
@@ -73,6 +93,10 @@ module.exports = (sequelize, DataTypes) => {
     allowNull: true
   },
   registrationRequired: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: false
+  },
+  requireRegistration: {
     type: DataTypes.BOOLEAN,
     defaultValue: false
   },

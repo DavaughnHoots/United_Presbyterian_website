@@ -316,7 +316,7 @@ router.get('/events', requireAdmin, async (req, res) => {
         model: EventRegistration,
         include: [User]
       }],
-      order: [['startDate', 'ASC'], ['startTime', 'ASC']]
+      order: [['startDate', 'ASC']]
     });
     
     res.render('pages/admin/events', {
