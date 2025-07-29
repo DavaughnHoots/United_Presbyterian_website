@@ -298,7 +298,7 @@ router.get('/users', requireAdmin, async (req, res) => {
       thisMonth: users.filter(u => new Date(u.createdAt) >= thisMonth).length
     };
     
-    res.render('pages/admin/users-enhanced', {
+    res.render('pages/admin/users', {
       title: 'User Management',
       user: req.session.user,
       currentUserId: req.session.user.id,

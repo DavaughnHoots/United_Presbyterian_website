@@ -145,7 +145,7 @@
                                                 class="text-blue-600 hover:bg-blue-50 p-2 rounded" title="View Details">
                                             <i class="fas fa-eye"></i>
                                         </button>
-                                        <% if (!user.isAdmin || (user.isAdmin && user.id !== '<%= currentUserId %>')) { %>
+                                        <% if (!user.isAdmin || (user.isAdmin && user.id !== currentUserId)) { %>
                                             <button onclick="toggleAdmin('<%= user.id %>', <%= user.isAdmin %>)" 
                                                     class="<%= user.isAdmin ? 'text-yellow-600 hover:bg-yellow-50' : 'text-purple-600 hover:bg-purple-50' %> p-2 rounded" 
                                                     title="<%= user.isAdmin ? 'Remove Admin' : 'Make Admin' %>">
