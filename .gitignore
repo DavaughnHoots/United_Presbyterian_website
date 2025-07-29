@@ -161,3 +161,12 @@ uploads/
 # Build output
 build/
 dist/
+
+# Claude related files
+.claude/
+*.claude*
+*claude*
+CLAUDE.md
+.claude-code/
+.claude-config/
+settings.local.json
