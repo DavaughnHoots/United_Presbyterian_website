@@ -5,34 +5,42 @@ module.exports = {
     const transaction = await queryInterface.sequelize.transaction();
     
     try {
-      // Add approvedBy column
-      await queryInterface.addColumn('submissions', 'approvedBy', {
-        type: Sequelize.UUID,
-        allowNull: true,
-        references: {
-          model: 'users',
-          key: 'id'
-        }
-      }, { transaction });
+      // Get current table structure
+      const tableDescription = await queryInterface.describeTable('submissions');
       
-      // Add rejectedBy column
-      await queryInterface.addColumn('submissions', 'rejectedBy', {
-        type: Sequelize.UUID,
-        allowNull: true,
-        references: {
-          model: 'users',
-          key: 'id'
-        }
-      }, { transaction });
+      // Add approvedBy column if it doesn't exist
+      if (!tableDescription.approvedBy) {
+        await queryInterface.addColumn('submissions', 'approvedBy', {
+          type: Sequelize.UUID,
+          allowNull: true,
+          references: {
+            model: 'users',
+            key: 'id'
+          }
+        }, { transaction });
+      }
       
-      // Add rejectionReason column
-      await queryInterface.addColumn('submissions', 'rejectionReason', {
-        type: Sequelize.TEXT,
-        allowNull: true
-      }, { transaction });
+      // Add rejectedBy column if it doesn't exist
+      if (!tableDescription.rejectedBy) {
+        await queryInterface.addColumn('submissions', 'rejectedBy', {
+          type: Sequelize.UUID,
+          allowNull: true,
+          references: {
+            model: 'users',
+            key: 'id'
+          }
+        }, { transaction });
+      }
+      
+      // Add rejectionReason column if it doesn't exist
+      if (!tableDescription.rejectionReason) {
+        await queryInterface.addColumn('submissions', 'rejectionReason', {
+          type: Sequelize.TEXT,
+          allowNull: true
+        }, { transaction });
+      }
       
       // Add ipHash column if it doesn't exist
-      const tableDescription = await queryInterface.describeTable('submissions');
       if (!tableDescription.ipHash) {
         await queryInterface.addColumn('submissions', 'ipHash', {
           type: Sequelize.STRING,
