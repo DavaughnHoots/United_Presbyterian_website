@@ -22,7 +22,8 @@
       "Bash(heroku run:*)",
       "Bash(npx heroku run npm run migrate:*)",
       "Bash(heroku pg:psql:*)",
-      "Bash(mv:*)"
+      "Bash(mv:*)",
+      "Bash(rm:*)"
     ],
     "deny": []
   }

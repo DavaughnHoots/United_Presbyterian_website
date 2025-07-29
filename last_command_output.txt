@@ -1,0 +1,454 @@
+27216 |                 | u49hfanup1d9qr | <insufficient privilege>
+ 27209 |                 | u49hfanup1d9qr | <insufficient privilege>
+ 30973 |                 | uep3pjo480g0ip | <insufficient privilege>
+ 22183 |                 | u8tltga05eplff | <insufficient privilege>
+ 16754 |                 | u8tltga05eplff | <insufficient privilege>
+ 22182 |                 | u8tltga05eplff | <insufficient privilege>
+ 31145 |                 | udulef7tpoi0kp | <insufficient privilege>
+ 30955 |                 | u59si2c2o0nb31 | <insufficient privilege>
+ 30954 |                 | u59si2c2o0nb31 | <insufficient privilege>
+ 31068 |                 | u8fbd6cn8dqf1m | <insufficient privilege>
+ 16978 |                 | ufv9u0qt06d4ks | <insufficient privilege>
+ 17012 |                 | ufv9u0qt06d4ks | <insufficient privilege>
+ 16993 |                 | ufv9u0qt06d4ks | <insufficient privilege>
+ 16214 |                 | ubvd11tais07lc | <insufficient privilege>
+ 15234 |                 | ubvd11tais07lc | <insufficient privilege>
+ 15501 |                 | ubvd11tais07lc | <insufficient privilege>
+ 16620 |                 | ubvd11tais07lc | <insufficient privilege>
+ 17692 |                 | ubvd11tais07lc | <insufficient privilege>
+ 14027 |                 | ubvd11tais07lc | <insufficient privilege>
+ 15680 |                 | ubvd11tais07lc | <insufficient privilege>
+ 15422 |                 | ubvd11tais07lc | <insufficient privilege>
+ 15715 |                 | ubvd11tais07lc | <insufficient privilege>
+ 14687 |                 | ubvd11tais07lc | <insufficient privilege>
+ 30363 |                 | ub9jm42p2eu7ka | <insufficient privilege>
+ 29099 |                 | uiio3tf9rhu8b  | <insufficient privilege>
+ 29715 |                 | uiio3tf9rhu8b  | <insufficient privilege>
+  7653 |                 | uf5to61il2gok5 | <insufficient privilege>
+  7652 |                 | uf5to61il2gok5 | <insufficient privilege>
+ 13962 |                 | u69i8fbv8ocgjj | <insufficient privilege>
+ 21146 |                 | uf4b7j78k53htu | <insufficient privilege>
+  2817 |                 | uf4b7j78k53htu | <insufficient privilege>
+  9381 |                 | uf4b7j78k53htu | <insufficient privilege>
+ 19635 |                 | uf4b7j78k53htu | <insufficient privilege>
+  9380 |                 | uf4b7j78k53htu | <insufficient privilege>
+  7210 |                 | ue7ddp254lachq | <insufficient privilege>
+  5140 |                 | ue7ddp254lachq | <insufficient privilege>
+  4056 |                 | ue7ddp254lachq | <insufficient privilege>
+  5145 |                 | ue7ddp254lachq | <insufficient privilege>
+  7913 |                 | ue7ddp254lachq | <insufficient privilege>
+ 24271 |                 | unr1ubrdeo43j  | <insufficient privilege>
+ 22970 |                 | u7sbjok2gkpeu  | <insufficient privilege>
+  9385 |                 | u257tcq4i7itek | <insufficient privilege>
+ 28168 |                 | u9ski8m86uf7o1 | <insufficient privilege>
+ 23372 |                 | u9ski8m86uf7o1 | <insufficient privilege>
+ 25549 |                 | udtif6vbst0q1m | <insufficient privilege>
+ 25867 |                 | udtif6vbst0q1m | <insufficient privilege>
+ 30495 |                 | udtif6vbst0q1m | <insufficient privilege>
+ 25934 |                 | udtif6vbst0q1m | <insufficient privilege>
+ 29879 |                 | udtif6vbst0q1m | <insufficient privilege>
+ 22437 |                 | udtif6vbst0q1m | <insufficient privilege>
+ 26040 |                 | udtif6vbst0q1m | <insufficient privilege>
+ 24877 |                 | udtif6vbst0q1m | <insufficient privilege>
+ 22723 |                 | udtif6vbst0q1m | <insufficient privilege>
+ 24893 |                 | udtif6vbst0q1m | <insufficient privilege>
+ 30566 |                 | u4qh8885p61f9f | <insufficient privilege>
+   928 |                 | u64ihg7771b76t | <insufficient privilege>
+   948 |                 | u64ihg7771b76t | <insufficient privilege>
+ 26787 |                 | ua9i4e6go7rhlh | <insufficient privilege>
+ 18814 |                 | ua9i4e6go7rhlh | <insufficient privilege>
+ 31025 |                 | ub6iue2tu0u7vb | <insufficient privilege>
+ 31030 |                 | ub6iue2tu0u7vb | <insufficient privilege>
+ 23745 |                 | ub6iue2tu0u7vb | <insufficient privilege>
+ 13533 |                 | uqav1dberjn9v  | <insufficient privilege>
+ 13534 |                 | uqav1dberjn9v  | <insufficient privilege>
+ 13530 |                 | uqav1dberjn9v  | <insufficient privilege>
+ 13536 |                 | uqav1dberjn9v  | <insufficient privilege>
+ 13526 |                 | uqav1dberjn9v  | <insufficient privilege>
+ 13525 |                 | uqav1dberjn9v  | <insufficient privilege>
+ 13535 |                 | uqav1dberjn9v  | <insufficient privilege>
+ 13532 |                 | uqav1dberjn9v  | <insufficient privilege>
+ 13531 |                 | uqav1dberjn9v  | <insufficient privilege>
+ 13522 |                 | uqav1dberjn9v  | <insufficient privilege>
+ 30870 |                 | uepoatbdkimf62 | <insufficient privilege>
+ 29964 |                 | uepoatbdkimf62 | <insufficient privilege>
+ 30707 |                 | uepoatbdkimf62 | <insufficient privilege>
+ 30307 |                 | uepoatbdkimf62 | <insufficient privilege>
+ 30982 |                 | uepoatbdkimf62 | <insufficient privilege>
+ 30981 |                 | uepoatbdkimf62 | <insufficient privilege>
+ 15163 |                 | u44lgapi1hlr76 | <insufficient privilege>
+  6233 |                 | u6h19lts19vfek | <insufficient privilege>
+  6314 |                 | uer539rtb4a0b9 | <insufficient privilege>
+ 29332 |                 | ueq2objg7lk3cg | <insufficient privilege>
+ 30776 |                 | udbht1qgbuom87 | <insufficient privilege>
+ 20991 |                 | udbht1qgbuom87 | <insufficient privilege>
+ 23796 |                 | udbht1qgbuom87 | <insufficient privilege>
+ 23686 |                 | udbht1qgbuom87 | <insufficient privilege>
+ 20989 |                 | udbht1qgbuom87 | <insufficient privilege>
+ 31085 |                 | udbht1qgbuom87 | <insufficient privilege>
+ 20978 |                 | udbht1qgbuom87 | <insufficient privilege>
+ 20971 |                 | udbht1qgbuom87 | <insufficient privilege>
+ 20987 |                 | udbht1qgbuom87 | <insufficient privilege>
+ 20990 |                 | udbht1qgbuom87 | <insufficient privilege>
+ 30773 |                 | udbht1qgbuom87 | <insufficient privilege>
+ 31086 |                 | udbht1qgbuom87 | <insufficient privilege>
+ 20988 |                 | udbht1qgbuom87 | <insufficient privilege>
+ 30775 |                 | udbht1qgbuom87 | <insufficient privilege>
+ 20986 |                 | udbht1qgbuom87 | <insufficient privilege>
+ 22444 |                 | ubi6fp4ia1v8te | <insufficient privilege>
+ 24459 |                 | ubi6fp4ia1v8te | <insufficient privilege>
+ 23558 |                 | ubi6fp4ia1v8te | <insufficient privilege>
+ 24636 |                 | ubi6fp4ia1v8te | <insufficient privilege>
+ 24073 |                 | ubi6fp4ia1v8te | <insufficient privilege>
+ 23883 |                 | ubi6fp4ia1v8te | <insufficient privilege>
+ 24901 |                 | ubi6fp4ia1v8te | <insufficient privilege>
+ 24161 |                 | ubi6fp4ia1v8te | <insufficient privilege>
+ 24502 |                 | ubi6fp4ia1v8te | <insufficient privilege>
+ 23834 |                 | ubi6fp4ia1v8te | <insufficient privilege>
+ 30890 |                 | u4h3ievfemaq80 | <insufficient privilege>
+ 30812 |                 | u4h3ievfemaq80 | <insufficient privilege>
+ 30811 |                 | u4h3ievfemaq80 | <insufficient privilege>
+ 31022 |                 | u7vkh0d576c8   | <insufficient privilege>
+ 30971 |                 | ud83p0bcuhf4kb | <insufficient privilege>
+ 11998 |                 | ubb0oqa5ebkb6u | <insufficient privilege>
+ 12010 |                 | ubb0oqa5ebkb6u | <insufficient privilege>
+  9765 |                 | u99q7a3q9ng13g | <insufficient privilege>
+ 31009 |                 | ua4sh6fe49oqi8 | <insufficient privilege>
+ 31010 |                 | ua4sh6fe49oqi8 | <insufficient privilege>
+ 31011 |                 | ua4sh6fe49oqi8 | <insufficient privilege>
+ 31008 |                 | ua4sh6fe49oqi8 | <insufficient privilege>
+ 30061 |                 | ufb93k09ccdd0n | <insufficient privilege>
+ 30848 |                 | ufb93k09ccdd0n | <insufficient privilege>
+ 30903 |                 | u8gehorkfma7kr | <insufficient privilege>
+ 30851 |                 | u1cgojj022mr1l | <insufficient privilege>
+ 30680 |                 | u1cgojj022mr1l | <insufficient privilege>
+ 30697 |                 | u1cgojj022mr1l | <insufficient privilege>
+  7635 |                 | u44g4jmbl0afb9 | <insufficient privilege>
+  7634 |                 | u44g4jmbl0afb9 | <insufficient privilege>
+ 30597 |                 | ueq1vi8sueftg1 | <insufficient privilege>
+  4107 |                 | uk5q1ku2gj20l  | <insufficient privilege>
+ 19727 |                 | uk5q1ku2gj20l  | <insufficient privilege>
+  4108 |                 | uk5q1ku2gj20l  | <insufficient privilege>
+ 28194 |                 | uk5q1ku2gj20l  | <insufficient privilege>
+  4037 |                 | uk5q1ku2gj20l  | <insufficient privilege>
+ 19745 |                 | uk5q1ku2gj20l  | <insufficient privilege>
+ 30985 |                 | u14qhgo2mjr3t9 | <insufficient privilege>
+ 31035 |                 | u2b5jqg5a551pr | <insufficient privilege>
+ 27463 |                 | ub0mbhglqa2vot | <insufficient privilege>
+ 30818 |                 | u97o8mv2vd60q4 | <insufficient privilege>
+  5321 |                 | ua0vp8rnig1jl9 | <insufficient privilege>
+  5237 |                 | ua0vp8rnig1jl9 | <insufficient privilege>
+ 27825 |                 | uevm1mr62v15mc | <insufficient privilege>
+ 27842 |                 | uevm1mr62v15mc | <insufficient privilege>
+ 31119 |                 | u2qpongj1oi3o0 | <insufficient privilege>
+ 30867 |                 | udbedk6aj76rga | <insufficient privilege>
+ 29666 |                 | u6hufakec9jj7j | <insufficient privilege>
+ 29662 |                 | u6hufakec9jj7j | <insufficient privilege>
+ 26749 |                 | u6fjaf6t4ad1l5 | <insufficient privilege>
+ 29665 |                 | u6hufakec9jj7j | <insufficient privilege>
+ 29663 |                 | u6hufakec9jj7j | <insufficient privilege>
+ 29664 |                 | u6hufakec9jj7j | <insufficient privilege>
+ 29661 |                 | u6hufakec9jj7j | <insufficient privilege>
+ 29660 |                 | u6hufakec9jj7j | <insufficient privilege>
+ 29667 |                 | u6hufakec9jj7j | <insufficient privilege>
+ 26836 |                 | u5e4fbduqf4cqo | <insufficient privilege>
+ 29160 |                 | uer5f70lmptei1 | <insufficient privilege>
+ 21530 |                 | u51tvaqtb65co5 | <insufficient privilege>
+ 21734 |                 | u51tvaqtb65co5 | <insufficient privilege>
+ 16166 |                 | u51tvaqtb65co5 | <insufficient privilege>
+ 25267 |                 | udnjabdhg9vhem | <insufficient privilege>
+ 31006 |                 | udc0vknm4drc55 | <insufficient privilege>
+ 21598 |                 | ub7fitroe3dgmv | <insufficient privilege>
+ 12889 |                 | ub7fitroe3dgmv | <insufficient privilege>
+ 12887 |                 | ub7fitroe3dgmv | <insufficient privilege>
+ 21591 |                 | ub7fitroe3dgmv | <insufficient privilege>
+ 17168 |                 | u1ec52m7ell9lh | <insufficient privilege>
+  1887 |                 | u1ec52m7ell9lh | <insufficient privilege>
+  1890 |                 | u1ec52m7ell9lh | <insufficient privilege>
+ 29503 |                 | u1ec52m7ell9lh | <insufficient privilege>
+ 28062 |                 | u2eppvi4dsme3c | <insufficient privilege>
+ 30939 |                 | ub5sa149n0ptf6 | <insufficient privilege>
+ 30487 |                 | uaec0hftdg5ihk | <insufficient privilege>
+ 30783 |                 | uchm24ecvboh0j | <insufficient privilege>
+ 31097 |                 | uh1j4apst3ptv  | <insufficient privilege>
+ 31079 |                 | ufutrurdcu8tj8 | <insufficient privilege>
+ 31080 |                 | u4q2ia8n43n9d3 | <insufficient privilege>
+ 30703 |                 | u4q2ia8n43n9d3 | <insufficient privilege>
+ 31082 |                 | u4q2ia8n43n9d3 | <insufficient privilege>
+ 31083 |                 | u4q2ia8n43n9d3 | <insufficient privilege>
+ 31081 |                 | u4q2ia8n43n9d3 | <insufficient privilege>
+ 31047 |                 | u8sla7h3ea2jn2 | <insufficient privilege>
+ 29322 |                 | uaeee89n7m0eqi | <insufficient privilege>
+ 30892 |                 | uaeee89n7m0eqi | <insufficient privilege>
+ 30002 |                 | u61ku63r4fbdht | <insufficient privilege>
+ 31108 |                 | u61ku63r4fbdht | <insufficient privilege>
+ 30354 |                 | u61ku63r4fbdht | <insufficient privilege>
+ 30749 |                 | u61ku63r4fbdht | <insufficient privilege>
+ 31005 |                 | udvl73fvfe0u6b | <insufficient privilege>
+ 31013 |                 | uf24lmgsihaacp | <insufficient privilege>
+ 31105 |                 | u7mol5s3ks85jv | <insufficient privilege>
+ 31054 |                 | u88cioa1b65kbj | <insufficient privilege>
+ 30857 |                 | u88cioa1b65kbj | <insufficient privilege>
+ 31056 |                 | u88cioa1b65kbj | <insufficient privilege>
+ 31055 |                 | u88cioa1b65kbj | <insufficient privilege>
+ 30553 |                 | u9utlnuso645av | <insufficient privilege>
+ 30916 |                 | ufo2o1vebsrre1 | <insufficient privilege>
+ 30466 |                 | ufo2o1vebsrre1 | <insufficient privilege>
+ 30659 |                 | u6ni82lv7iu7ff | <insufficient privilege>
+ 29654 |                 | u6ni82lv7iu7ff | <insufficient privilege>
+ 31088 |                 | uebvs4eqsi087s | <insufficient privilege>
+ 30874 |                 | u5b49bfd6kutku | <insufficient privilege>
+ 31065 |                 | uc9477lerjmlo3 | <insufficient privilege>
+ 30895 |                 | u84a7o54a55k0k | <insufficient privilege>
+ 31116 |                 | uar7n25joqbi9u | <insufficient privilege>
+ 30542 |                 | u82qggrlb86di5 | <insufficient privilege>
+ 30861 |                 | u82qggrlb86di5 | <insufficient privilege>
+ 30541 |                 | u82qggrlb86di5 | <insufficient privilege>
+ 29931 |                 | u82qggrlb86di5 | <insufficient privilege>
+ 30830 |                 | u82qggrlb86di5 | <insufficient privilege>
+ 29528 |                 | u82qggrlb86di5 | <insufficient privilege>
+ 23057 |                 | u86c5h81b8mc0o | <insufficient privilege>
+ 30859 |                 | ufhijkikeklerc | <insufficient privilege>
+ 29816 |                 | u4ojpgef7tk2g7 | <insufficient privilege>
+ 18661 |                 | u4ojpgef7tk2g7 | <insufficient privilege>
+ 28861 |                 | u2n3e54ct1kjq  | <insufficient privilege>
+ 30869 |                 | uejhbgptjibk53 | <insufficient privilege>
+ 31052 |                 | u6aisefuaagujv | <insufficient privilege>
+ 31113 |                 | ubnhvifb0u1f5j | <insufficient privilege>
+ 31028 |                 | u49s07t0vn5scj | <insufficient privilege>
+ 30635 |                 | u72ifq4eaefth7 | <insufficient privilege>
+   589 |                 |                | <insufficient privilege>
+   586 |                 |                | <insufficient privilege>
+   583 |                 |                | <insufficient privilege>
+   584 |                 |                | <insufficient privilege>
+   566 |                 |                | <insufficient privilege>
+   587 |                 |                | <insufficient privilege>
+ 31050 |                 | ug7eaag28pb1q  | <insufficient privilege>
+ 30942 |                 | uf8af3hblvdu7o | <insufficient privilege>
+ 31101 |                 | ubfj2l9rv0j904 | <insufficient privilege>
+ 30863 |                 | uavag10oks7anq | <insufficient privilege>
+ 30864 |                 | uavag10oks7anq | <insufficient privilege>
+ 31062 |                 | u7o56qdmr170ui | <insufficient privilege>
+ 22034 |                 | u6kfrsfvijeq4o | <insufficient privilege>
+ 21177 |                 | u6kfrsfvijeq4o | <insufficient privilege>
+ 30995 |                 | u6iq5r35rm6f7r | <insufficient privilege>
+ 30993 |                 | u6iq5r35rm6f7r | <insufficient privilege>
+ 30996 |                 | u6iq5r35rm6f7r | <insufficient privilege>
+ 30991 |                 | u6iq5r35rm6f7r | <insufficient privilege>
+ 30994 |                 | u6iq5r35rm6f7r | <insufficient privilege>
+ 20902 |                 | u45h5naihs1gg4 | <insufficient privilege>
+ 10784 |                 | u45h5naihs1gg4 | <insufficient privilege>
+ 19329 |                 | u45h5naihs1gg4 | <insufficient privilege>
+  3915 |                 | u45h5naihs1gg4 | <insufficient privilege>
+  3918 |                 | u45h5naihs1gg4 | <insufficient privilege>
+ 29070 |                 | u60udj41njqo9j | <insufficient privilege>
+ 15036 |                 | ufpkv0me5mjsd0 | <insufficient privilege>
+ 15034 |                 | ufpkv0me5mjsd0 | <insufficient privilege>
+ 15033 |                 | ufpkv0me5mjsd0 | <insufficient privilege>
+  4839 |                 | ufpkv0me5mjsd0 | <insufficient privilege>
+ 20378 |                 | ufpkv0me5mjsd0 | <insufficient privilege>
+ 15035 |                 | ufpkv0me5mjsd0 | <insufficient privilege>
+ 20399 |                 | ufpkv0me5mjsd0 | <insufficient privilege>
+  4848 |                 | ufpkv0me5mjsd0 | <insufficient privilege>
+  4991 |                 | ufpkv0me5mjsd0 | <insufficient privilege>
+ 15037 |                 | ufpkv0me5mjsd0 | <insufficient privilege>
+ 20397 |                 | ufpkv0me5mjsd0 | <insufficient privilege>
+  3645 |                 | ufpkv0me5mjsd0 | <insufficient privilege>
+  4776 |                 | ufpkv0me5mjsd0 | <insufficient privilege>
+ 20402 |                 | ufpkv0me5mjsd0 | <insufficient privilege>
+ 20400 |                 | ufpkv0me5mjsd0 | <insufficient privilege>
+ 31057 |                 | u9kd2i9oa1djn  | <insufficient privilege>
+ 31059 |                 | u9kd2i9oa1djn  | <insufficient privilege>
+ 31060 |                 | u9kd2i9oa1djn  | <insufficient privilege>
+ 31058 |                 | u9kd2i9oa1djn  | <insufficient privilege>
+ 30626 |                 | u9kd2i9oa1djn  | <insufficient privilege>
+ 26909 |                 | u7ufi61gqhl0sq | <insufficient privilege>
+ 23926 |                 | u85nl410olt7n0 | <insufficient privilege>
+ 23924 |                 | u85nl410olt7n0 | <insufficient privilege>
+ 23925 |                 | u85nl410olt7n0 | <insufficient privilege>
+ 23927 |                 | u85nl410olt7n0 | <insufficient privilege>
+ 30882 |                 | udpmd42ku0s70f | <insufficient privilege>
+ 25744 |                 | ud68vrji1b5996 | <insufficient privilege>
+  6126 |                 | ud68vrji1b5996 | <insufficient privilege>
+  5764 |                 | ud68vrji1b5996 | <insufficient privilege>
+  5785 |                 | ud68vrji1b5996 | <insufficient privilege>
+ 18906 |                 | u3g1rcf1t8bgvt | <insufficient privilege>
+ 31074 |                 | u3cbrcpnmv9g9g | <insufficient privilege>
+ 31066 |                 | ubjuc9p43pfr0h | <insufficient privilege>
+ 22192 |                 | ueghe61ogu2ldu | <insufficient privilege>
+ 16193 |                 | ubsj0p0pr87bj1 | <insufficient privilege>
+ 29988 |                 | uftsoat9aqpjbq | <insufficient privilege>
+ 31026 |                 | u49s07t0vn5scj | <insufficient privilege>
+ 28457 | 00:03:22.37549  | u1pnoebh897pe4 | SELECT a.attname,                            
+                                                                                         
+                                                                                         
+                                                                                         
+                                                                                         
+                                                                                         
+                                                                                         
+                                                                                         
+                                                                                         
+                                                                                         
+                                                                                         
+                                                                                         
+                                                                                         
+                                                                                    +    
+       |                 |                |   pg_catalog.format_type(a.atttypid, a.atttypmod),                                                                                    
+                                                                                         
+                                                                                         
+                                                                                         
+                                                                                         
+                                                                                         
+                                                                                         
+                                                                                         
+                                                                                         
+                                                                                         
+                                                                                         
+                                                                                         
+                                                                                    +    
+       |                 |                |   (SELECT pg_catalog.pg_get_expr(d.adbin, d.adrelid, true)                                                                            
+                                                                                         
+                                                                                         
+                                                                                         
+                                                                                         
+                                                                                         
+                                                                                         
+                                                                                         
+                                                                                         
+                                                                                         
+                                                                                         
+                                                                                         
+                                                                                    +    
+       |                 |                |    FROM pg_catalog.pg_attrdef d              
+                                                                                         
+                                                                                         
+                                                                                         
+                                                                                         
+                                                                                         
+                                                                                         
+                                                                                         
+                                                                                         
+                                                                                         
+                                                                                         
+                                                                                         
+                                                                                         
+                                                                                    +    
+       |                 |                |    WHERE d.adrelid = a.attrelid AND d.adnum = a.attnum AND a.atthasdef),                                                              
+                                                                                         
+                                                                                         
+                                                                                         
+                                                                                         
+                                                                                         
+                                                                                         
+                                                                                         
+                                                                                         
+                                                                                         
+                                                                                         
+                                                                                         
+                                                                                    +    
+       |                 |                |   a.attnotnull,                              
+                                                                                         
+                                                                                         
+                                                                                         
+                                                                                         
+                                                                                         
+                                                                                         
+                                                                                         
+                                                                                         
+                                                                                         
+                                                                                         
+                                                                                         
+                                                                                         
+                                                                                    +    
+       |                 |                |   (SELECT c.collname FROM pg_catalog.pg_collation c, pg_catalog.pg_type t                                                             
+                                                                                         
+                                                                                         
+                                                                                         
+                                                                                         
+                                                                                         
+                                                                                         
+                                                                                         
+                                                                                         
+                                                                                         
+                                                                                         
+                                                                                         
+                                                                                    +    
+       |                 |                |    WHERE c.oid = a.attcollation AND t.oid = a.atttypid AND a.attcollation <> t.typcollation) AS attcollation,                         
+                                                                                         
+                                                                                         
+                                                                                         
+                                                                                         
+                                                                                         
+                                                                                         
+                                                                                         
+                                                                                         
+                                                                                         
+                                                                                         
+                                                                                         
+                                                                                    +    
+       |                 |                |   a.attidentity,                             
+                                                                                         
+                                                                                         
+                                                                                         
+                                                                                         
+                                                                                         
+                                                                                         
+                                                                                         
+                                                                                         
+                                                                                         
+                                                                                         
+                                                                                         
+                                                                                         
+                                                                                    +    
+       |                 |                |   a.attgenerated                             
+                                                                                         
+                                                                                         
+                                                                                         
+                                                                                         
+                                                                                         
+                                                                                         
+                                                                                         
+                                                                                         
+                                                                                         
+                                                                                         
+                                                                                         
+                                                                                         
+                                                                                    +    
+       |                 |                | FROM pg_catalog.pg_attribute a               
+                                                                                         
+                                                                                         
+                                                                                         
+                                                                                         
+                                                                                         
+                                                                                         
+                                                                                         
+                                                                                         
+                                                                                         
+                                                                                         
+                                                                                         
+                                                                                         
+                                                                                    +    
+       |                 |                | WHERE a.attrelid = '19227667' AND a.attnum > 0 AND NOT a.attisdropped                                                                 
+                                                                                         
+                                                                                         
+                                                                                         
+                                                                                         
+                                                                                         
+                                                                                         
+                                                                                         
+                                                                                         
+                                                                                         
+                                                                                         
+                                                                                         
+                                                                                    +    
+       |                 |                | ORDER BY a.attnum;
+ 25791 | 00:06:42.097056 | u1pnoebh897pe4 | SELECT pk.constraint_type as "Constraint",c.column_name as "Field", c.column_default as "Default",c.is_nullable as "Null", (CASE WHEN c.udt_name = 'hstore' THEN c.udt_name ELSE c.data_type END) || (CASE WHEN c.character_maximum_length IS NOT NULL THEN '(' || c.character_maximum_length || ')' ELSE '' END) as "Type", (SELECT array_agg(e.enumlabel) FROM pg_catalog.pg_type t JOIN pg_catalog.pg_enum e ON t.oid=e.enumtypid WHERE t.typname=c.udt_name) AS "special", (SELECT pgd.description FROM pg_catalog.pg_statio_all_tables AS st INNER JOIN pg_catalog.pg_description pgd on (pgd.objoid=st.relid) WHERE c.ordinal_position=pgd.objsubid AND c.table_name=st.relname) AS "Comment" FROM information_schema.columns c LEFT JOIN (SELECT tc.table_schema, tc.table_name, cu.column_name, tc.constraint_type FROM information_schema.TABLE_CONSTRAINTS tc JOIN information_schema.KEY_COLUMN_USAGE  cu ON tc.table_schema=cu.table_schema and tc.table_name=cu.table_name and tc.constraint_name=cu.ce='PRIMARY KEY') pk ON pk.table_schema=c.table_e='PRIMARYe='PRIMARY KEY') pk ON pk.table_schema=c.table_schema AND pk.table_name=c.table_name AND pk.column_name=c.column_name WHERE c.table_name = 'submissions' AND c.table_schema = 'public'
+ 25789 | 00:06:42.152377 | u1pnoebh897pe4 | START TRANSACTION;
+ 19473 | 00:14:39.147491 | u1pnoebh897pe4 | SELECT pk.constraint_type as "Constraint",c.column_name as "Field", c.column_default as "Default",c.is_nullable as "Null", (CASE WHEN c.udt_name = 'hstore' THEN c.udt_name ELSE c.data_type END) || (CASE WHEN c.character_maximum_length IS NOT NULL THEN '(' || c.character_maximum_length || ')' ELSE '' END) as "Type", (SELECT array_agg(e.enumlabel) FROM pg_catalog.pg_type t JOIN pg_catalog.pg_enum e ON t.oid=e.enumtypid WHERE t.typname=c.udt_name) AS "special", (SELECT pgd.description FROM pg_catalog.pg_statio_all_tables AS st INNER JOIN pg_catalog.pg_description pgd on (pgd.objoid=st.relid) WHERE c.ordinal_position=pgd.objsubid AND c.table_name=st.relname) AS "Comment" FROM information_schema.columns c LEFT JOIN (SELECT tc.table_schema, tc.table_name, cu.column_name, tc.constraint_type FROM information_schema.TABLE_CONSTRAINTS tc JOIN information_schema.KEY_COLUMN_USAGE  cu ON tc.table_schema=cu.table_schema and tc.table_name=cu.table_name and tc.constraint_name=cu.constraint_name and tc.constraint_type='PRIMARY KEY') pk ON pk.table_schema=c.table_schema AND pk.table_name=c.table_name AND pk.column_name=c.column_name WHERE c.table_name = 'submissions' AND c.table_schema = 'public'
+ 19470 | 00:14:39.214402 | u1pnoebh897pe4 | START TRANSACTION;
+  1335 | 12:06:17.888624 | u1pnoebh897pe4 | ALe_schema AND pk.table_name=c.table_name AND pk.column_name=c.column_name WHERE c.table_name = 'submissions' AND c.table_schema = 'public' 
+ 19470 | 00:14:39.214402 | u1pnoebh897pe4 | START TRANSACTION;
+  1335 | 12:06:17.888624 | u1pnoebh897pe4 | ALTER TABLE "public"."submissions" ADD COLUMN "approvedBy" UUID REFERENCES "users" ("id");    
+ 25405 | 12:18:08.990857 | u1pnoebh897pe4 | SELECT pk.constraint_type as "Constraint",c.column_name as "Field", c.column_default as "Default",c.is_nullable as "Null", (CASE WHEN c.udt_name = 'hstore' THEN c.udt_name ELSE c.data_type END) || (CASE WHEN c.character_maximum_length IS NOT NULL THEN '(' || c.character_maximum_length || ')' ELSE '' END) as "Type", (SELECT array_agg(e.enumlabel) FROM pg_catalog.pg_type t JOIN pg_catalog.pg_enum e ON t.oid=e.enumtypid WHERE t.typname=c.udt_name) AS "special", (SELECT pgd.description FROM pg_catalog.pg_statio_all_tables AS st INNER JOIN pg_catalog.pg_description pgd on (pgd.objoid=st.relid) WHERE c.ordinal_position=pgd.objsubid AND c.table_name=st.relname) AS "Comment" FROM information_schema.columns c LEFT JOIN (SELECT tc.table_schema, tc.table_name, cu.column_name, tc.constraint_type FROM information_schema.TABLE_CONSTRAINTS tc JOIN information_schema.KEY_COLUMN_USAGE  cu ON tc.table_schema=cu.table_schema and tc.table_name=cu.table_name and tc.constraint_name=cu.constraint_name and tc.constraint_type='PRIMARY KEY') pk ON pk.table_schema=c.table_schema AND pk.table_name=c.table_name AND pk.column_name=c.column_name WHERE c.table_name = 'submissions' AND c.table_schema = 'public' 
+ 25402 | 12:18:09.008293 | u1pnoebh897pe4 | ALTER TABLE "public"."submissions" ADD COLUMN "rejectionReason" TEXT;
+(568 rows)

@@ -2,73 +2,54 @@
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    const transaction = await queryInterface.sequelize.transaction();
+    console.log('Checking submissions table structure...');
     
     try {
-      // Get current table structure
-      const tableDescription = await queryInterface.describeTable('submissions');
+      // Get current columns
+      const tableInfo = await queryInterface.sequelize.query(
+        `SELECT column_name FROM information_schema.columns 
+         WHERE table_schema = 'public' AND table_name = 'submissions'`,
+        { type: queryInterface.sequelize.QueryTypes.SELECT }
+      );
       
-      // Add approvedBy column if it doesn't exist
-      if (!tableDescription.approvedBy) {
-        await queryInterface.addColumn('submissions', 'approvedBy', {
-          type: Sequelize.UUID,
-          allowNull: true,
-          references: {
-            model: 'users',
-            key: 'id'
-          }
-        }, { transaction });
+      const existingColumns = tableInfo.map(row => row.column_name);
+      console.log('Existing columns:', existingColumns);
+      
+      // Define columns to add
+      const columnsToAdd = [
+        { name: 'approvedBy', definition: { type: Sequelize.UUID, allowNull: true } },
+        { name: 'rejectedBy', definition: { type: Sequelize.UUID, allowNull: true } },
+        { name: 'rejectionReason', definition: { type: Sequelize.TEXT, allowNull: true } },
+        { name: 'ipHash', definition: { type: Sequelize.STRING, allowNull: true } }
+      ];
+      
+      // Add missing columns
+      for (const column of columnsToAdd) {
+        if (!existingColumns.includes(column.name)) {
+          console.log(`Adding column: ${column.name}`);
+          await queryInterface.addColumn('submissions', column.name, column.definition);
+        } else {
+          console.log(`Column ${column.name} already exists, skipping...`);
+        }
       }
       
-      // Add rejectedBy column if it doesn't exist
-      if (!tableDescription.rejectedBy) {
-        await queryInterface.addColumn('submissions', 'rejectedBy', {
-          type: Sequelize.UUID,
-          allowNull: true,
-          references: {
-            model: 'users',
-            key: 'id'
-          }
-        }, { transaction });
-      }
-      
-      // Add rejectionReason column if it doesn't exist
-      if (!tableDescription.rejectionReason) {
-        await queryInterface.addColumn('submissions', 'rejectionReason', {
-          type: Sequelize.TEXT,
-          allowNull: true
-        }, { transaction });
-      }
-      
-      // Add ipHash column if it doesn't exist
-      if (!tableDescription.ipHash) {
-        await queryInterface.addColumn('submissions', 'ipHash', {
-          type: Sequelize.STRING,
-          allowNull: true,
-          comment: 'Hashed IP address for rate limiting'
-        }, { transaction });
-      }
-      
-      await transaction.commit();
+      console.log('Migration completed successfully');
     } catch (error) {
-      await transaction.rollback();
+      console.error('Migration error:', error);
       throw error;
     }
   },
 
   down: async (queryInterface, Sequelize) => {
-    const transaction = await queryInterface.sequelize.transaction();
+    // Remove columns if they exist
+    const columnsToRemove = ['approvedBy', 'rejectedBy', 'rejectionReason', 'ipHash'];
     
-    try {
-      await queryInterface.removeColumn('submissions', 'approvedBy', { transaction });
-      await queryInterface.removeColumn('submissions', 'rejectedBy', { transaction });
-      await queryInterface.removeColumn('submissions', 'rejectionReason', { transaction });
-      await queryInterface.removeColumn('submissions', 'ipHash', { transaction });
-      
-      await transaction.commit();
-    } catch (error) {
-      await transaction.rollback();
-      throw error;
+    for (const columnName of columnsToRemove) {
+      try {
+        await queryInterface.removeColumn('submissions', columnName);
+      } catch (error) {
+        console.log(`Column ${columnName} might not exist, continuing...`);
+      }
     }
   }
 };
