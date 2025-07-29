@@ -1,0 +1,410 @@
+<div class="max-w-7xl mx-auto">
+    <!-- Users Header -->
+    <div class="mb-8 flex justify-between items-center">
+        <div>
+            <h1 class="text-3xl font-bold mb-2" style="color: var(--text-primary);">User Management</h1>
+            <p class="text-gray-600">Manage church members and administrators</p>
+        </div>
+        <button onclick="exportUsers()" class="btn-secondary">
+            <i class="fas fa-download mr-2"></i>Export Users
+        </button>
+    </div>
+    
+    <!-- Stats Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+        <div class="module-card bg-blue-50">
+            <div class="text-2xl font-bold text-blue-700"><%= stats.total %></div>
+            <div class="text-sm text-blue-600">Total Users</div>
+        </div>
+        <div class="module-card bg-green-50">
+            <div class="text-2xl font-bold text-green-700"><%= stats.active %></div>
+            <div class="text-sm text-green-600">Active Users</div>
+        </div>
+        <div class="module-card bg-purple-50">
+            <div class="text-2xl font-bold text-purple-700"><%= stats.admins %></div>
+            <div class="text-sm text-purple-600">Administrators</div>
+        </div>
+        <div class="module-card bg-yellow-50">
+            <div class="text-2xl font-bold text-yellow-700"><%= stats.thisMonth %></div>
+            <div class="text-sm text-yellow-600">New This Month</div>
+        </div>
+    </div>
+    
+    <!-- Filters -->
+    <div class="module-card mb-6">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div>
+                <label class="block text-sm font-medium mb-2">Search</label>
+                <input type="text" id="searchInput" placeholder="Name or email..." 
+                       onkeyup="filterUsers()" class="w-full px-3 py-2 border rounded-lg">
+            </div>
+            <div>
+                <label class="block text-sm font-medium mb-2">Status</label>
+                <select id="statusFilter" onchange="filterUsers()" class="w-full px-3 py-2 border rounded-lg">
+                    <option value="">All Users</option>
+                    <option value="active">Active Only</option>
+                    <option value="inactive">Inactive Only</option>
+                    <option value="admin">Admins Only</option>
+                </select>
+            </div>
+            <div>
+                <label class="block text-sm font-medium mb-2">Sort By</label>
+                <select id="sortBy" onchange="sortUsers()" class="w-full px-3 py-2 border rounded-lg">
+                    <option value="recent">Most Recent</option>
+                    <option value="name">Name</option>
+                    <option value="streak">Longest Streak</option>
+                    <option value="active">Last Active</option>
+                </select>
+            </div>
+            <div>
+                <label class="block text-sm font-medium mb-2">Per Page</label>
+                <select id="perPage" onchange="updatePagination()" class="w-full px-3 py-2 border rounded-lg">
+                    <option value="10">10</option>
+                    <option value="25" selected>25</option>
+                    <option value="50">50</option>
+                    <option value="100">100</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Users Table -->
+    <div class="module-card overflow-hidden">
+        <div class="overflow-x-auto">
+            <table class="w-full">
+                <thead class="bg-gray-50 border-b">
+                    <tr>
+                        <th class="text-left px-4 py-3 font-medium text-gray-700">User</th>
+                        <th class="text-left px-4 py-3 font-medium text-gray-700">Email</th>
+                        <th class="text-center px-4 py-3 font-medium text-gray-700">Status</th>
+                        <th class="text-center px-4 py-3 font-medium text-gray-700">Streak</th>
+                        <th class="text-left px-4 py-3 font-medium text-gray-700">Joined</th>
+                        <th class="text-left px-4 py-3 font-medium text-gray-700">Last Active</th>
+                        <th class="text-center px-4 py-3 font-medium text-gray-700">Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="usersTableBody">
+                    <% if (users && users.length > 0) { %>
+                        <% users.forEach(user => { %>
+                            <tr class="border-b hover:bg-gray-50 user-row" 
+                                data-name="<%= user.firstName %> <%= user.lastName %>"
+                                data-email="<%= user.email %>"
+                                data-status="<%= user.isActive ? 'active' : 'inactive' %>"
+                                data-admin="<%= user.isAdmin %>">
+                                <td class="px-4 py-3">
+                                    <div class="flex items-center">
+                                        <div class="w-10 h-10 bg-sky-100 rounded-full flex items-center justify-center mr-3">
+                                            <span class="text-sky-700 font-semibold">
+                                                <%= user.firstName.charAt(0) %><%= user.lastName.charAt(0) %>
+                                            </span>
+                                        </div>
+                                        <div>
+                                            <div class="font-medium">
+                                                <%= user.firstName %> <%= user.lastName %>
+                                                <% if (user.isAdmin) { %>
+                                                    <span class="ml-2 px-2 py-1 bg-purple-100 text-purple-700 text-xs rounded">Admin</span>
+                                                <% } %>
+                                            </div>
+                                            <% if (user.personalEmail) { %>
+                                                <div class="text-xs text-gray-500"><%= user.personalEmail %></div>
+                                            <% } %>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="px-4 py-3">
+                                    <a href="mailto:<%= user.email %>" class="text-blue-600 hover:underline">
+                                        <%= user.email %>
+                                    </a>
+                                </td>
+                                <td class="px-4 py-3 text-center">
+                                    <% if (user.isActive) { %>
+                                        <span class="px-2 py-1 bg-green-100 text-green-700 text-xs rounded-full">Active</span>
+                                    <% } else { %>
+                                        <span class="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded-full">Inactive</span>
+                                    <% } %>
+                                </td>
+                                <td class="px-4 py-3 text-center">
+                                    <div class="text-sm">
+                                        <div class="font-medium"><%= user.currentStreak %> days</div>
+                                        <div class="text-xs text-gray-500">Best: <%= user.longestStreak %></div>
+                                    </div>
+                                </td>
+                                <td class="px-4 py-3 text-sm text-gray-600">
+                                    <%= new Date(user.createdAt).toLocaleDateString() %>
+                                </td>
+                                <td class="px-4 py-3 text-sm text-gray-600">
+                                    <% if (user.lastActiveDate) { %>
+                                        <%= new Date(user.lastActiveDate).toLocaleDateString() %>
+                                    <% } else { %>
+                                        <span class="text-gray-400">Never</span>
+                                    <% } %>
+                                </td>
+                                <td class="px-4 py-3">
+                                    <div class="flex justify-center space-x-2">
+                                        <button onclick="viewUser('<%= user.id %>')" 
+                                                class="text-blue-600 hover:bg-blue-50 p-2 rounded" title="View Details">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        <% if (!user.isAdmin || (user.isAdmin && user.id !== '<%= currentUserId %>')) { %>
+                                            <button onclick="toggleAdmin('<%= user.id %>', <%= user.isAdmin %>)" 
+                                                    class="<%= user.isAdmin ? 'text-yellow-600 hover:bg-yellow-50' : 'text-purple-600 hover:bg-purple-50' %> p-2 rounded" 
+                                                    title="<%= user.isAdmin ? 'Remove Admin' : 'Make Admin' %>">
+                                                <i class="fas <%= user.isAdmin ? 'fa-user-times' : 'fa-user-shield' %>"></i>
+                                            </button>
+                                        <% } %>
+                                        <button onclick="toggleUserStatus('<%= user.id %>', <%= user.isActive %>)" 
+                                                class="<%= user.isActive ? 'text-red-600 hover:bg-red-50' : 'text-green-600 hover:bg-green-50' %> p-2 rounded" 
+                                                title="<%= user.isActive ? 'Deactivate' : 'Activate' %>">
+                                            <i class="fas <%= user.isActive ? 'fa-ban' : 'fa-check-circle' %>"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        <% }) %>
+                    <% } else { %>
+                        <tr>
+                            <td colspan="7" class="text-center py-8 text-gray-500">
+                                No users found
+                            </td>
+                        </tr>
+                    <% } %>
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- Pagination -->
+        <div class="px-4 py-3 bg-gray-50 border-t flex items-center justify-between">
+            <div class="text-sm text-gray-700">
+                Showing <span id="showingStart">1</span> to <span id="showingEnd"><%= Math.min(25, users.length) %></span> 
+                of <span id="totalUsers"><%= users.length %></span> users
+            </div>
+            <div class="flex space-x-2">
+                <button onclick="previousPage()" class="px-3 py-1 border rounded hover:bg-gray-100" id="prevBtn">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <span class="px-3 py-1">Page <span id="currentPage">1</span> of <span id="totalPages">1</span></span>
+                <button onclick="nextPage()" class="px-3 py-1 border rounded hover:bg-gray-100" id="nextBtn">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- User Details Modal -->
+<div id="userModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+    <div class="flex items-center justify-center min-h-screen p-4">
+        <div class="bg-white rounded-lg max-w-2xl w-full">
+            <div class="p-6">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-bold">User Details</h2>
+                    <button onclick="closeUserModal()" class="text-gray-500 hover:text-gray-700">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+                <div id="userDetails">
+                    <!-- User details will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+let allUsers = [];
+let currentPageNum = 1;
+let itemsPerPage = 25;
+
+// Store users data
+<% if (users) { %>
+    allUsers = <%- JSON.stringify(users) %>;
+<% } %>
+
+function filterUsers() {
+    const search = document.getElementById('searchInput').value.toLowerCase();
+    const status = document.getElementById('statusFilter').value;
+    
+    const rows = document.querySelectorAll('.user-row');
+    let visibleCount = 0;
+    
+    rows.forEach(row => {
+        const name = row.dataset.name.toLowerCase();
+        const email = row.dataset.email.toLowerCase();
+        const userStatus = row.dataset.status;
+        const isAdmin = row.dataset.admin === 'true';
+        
+        let show = true;
+        
+        if (search && !name.includes(search) && !email.includes(search)) show = false;
+        if (status === 'active' && userStatus !== 'active') show = false;
+        if (status === 'inactive' && userStatus !== 'inactive') show = false;
+        if (status === 'admin' && !isAdmin) show = false;
+        
+        row.style.display = show ? '' : 'none';
+        if (show) visibleCount++;
+    });
+    
+    updatePagination();
+}
+
+function sortUsers() {
+    const sortBy = document.getElementById('sortBy').value;
+    const tbody = document.getElementById('usersTableBody');
+    const rows = Array.from(tbody.querySelectorAll('.user-row'));
+    
+    // This would require additional data attributes or sorting logic
+    // For now, we'll keep the default order
+}
+
+function viewUser(userId) {
+    const user = allUsers.find(u => u.id === userId);
+    if (!user) return;
+    
+    const details = `
+        <div class="space-y-4">
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="text-sm font-medium text-gray-600">Name</label>
+                    <p class="font-medium">${user.firstName} ${user.lastName}</p>
+                </div>
+                <div>
+                    <label class="text-sm font-medium text-gray-600">Church Email</label>
+                    <p class="font-medium">${user.email}</p>
+                </div>
+                <div>
+                    <label class="text-sm font-medium text-gray-600">Personal Email</label>
+                    <p class="font-medium">${user.personalEmail || 'Not provided'}</p>
+                </div>
+                <div>
+                    <label class="text-sm font-medium text-gray-600">Status</label>
+                    <p class="font-medium">
+                        ${user.isActive ? '<span class="text-green-600">Active</span>' : '<span class="text-red-600">Inactive</span>'}
+                        ${user.isAdmin ? '<span class="ml-2 text-purple-600">(Admin)</span>' : ''}
+                    </p>
+                </div>
+                <div>
+                    <label class="text-sm font-medium text-gray-600">Joined</label>
+                    <p class="font-medium">${new Date(user.createdAt).toLocaleDateString()}</p>
+                </div>
+                <div>
+                    <label class="text-sm font-medium text-gray-600">Last Active</label>
+                    <p class="font-medium">${user.lastActiveDate ? new Date(user.lastActiveDate).toLocaleDateString() : 'Never'}</p>
+                </div>
+                <div>
+                    <label class="text-sm font-medium text-gray-600">Current Streak</label>
+                    <p class="font-medium">${user.currentStreak} days</p>
+                </div>
+                <div>
+                    <label class="text-sm font-medium text-gray-600">Longest Streak</label>
+                    <p class="font-medium">${user.longestStreak} days</p>
+                </div>
+            </div>
+            
+            <div>
+                <label class="text-sm font-medium text-gray-600">Email Preferences</label>
+                <div class="mt-1 space-y-1">
+                    <p class="text-sm">
+                        <i class="fas ${user.preferences?.emailNotifications ? 'fa-check text-green-600' : 'fa-times text-red-600'} mr-2"></i>
+                        Email notifications
+                    </p>
+                    <p class="text-sm">
+                        <i class="fas ${user.preferences?.dailyReminder ? 'fa-check text-green-600' : 'fa-times text-red-600'} mr-2"></i>
+                        Daily reminder (${user.preferences?.reminderTime || '08:00'})
+                    </p>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    document.getElementById('userDetails').innerHTML = details;
+    document.getElementById('userModal').classList.remove('hidden');
+}
+
+function closeUserModal() {
+    document.getElementById('userModal').classList.add('hidden');
+}
+
+async function toggleAdmin(userId, isCurrentlyAdmin) {
+    const action = isCurrentlyAdmin ? 'remove admin privileges from' : 'make';
+    if (!confirm(`Are you sure you want to ${action} this user ${isCurrentlyAdmin ? '' : 'an admin'}?`)) {
+        return;
+    }
+    
+    try {
+        const response = await fetch(`/admin/api/users/${userId}/toggle-admin`, {
+            method: 'PUT'
+        });
+        
+        if (response.ok) {
+            location.reload();
+        } else {
+            alert('Failed to update user admin status');
+        }
+    } catch (error) {
+        alert('Error: ' + error.message);
+    }
+}
+
+async function toggleUserStatus(userId, isCurrentlyActive) {
+    if (!confirm(`Are you sure you want to ${isCurrentlyActive ? 'deactivate' : 'activate'} this user?`)) {
+        return;
+    }
+    
+    try {
+        const response = await fetch(`/admin/api/users/${userId}/toggle-status`, {
+            method: 'PUT'
+        });
+        
+        if (response.ok) {
+            location.reload();
+        } else {
+            alert('Failed to update user status');
+        }
+    } catch (error) {
+        alert('Error: ' + error.message);
+    }
+}
+
+async function exportUsers() {
+    try {
+        const response = await fetch('/admin/api/users/export');
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `users_${new Date().toISOString().split('T')[0]}.csv`;
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+    } catch (error) {
+        alert('Error exporting users: ' + error.message);
+    }
+}
+
+function updatePagination() {
+    // Simple pagination logic
+    const visibleRows = document.querySelectorAll('.user-row[style=""]').length;
+    const totalPages = Math.ceil(visibleRows / itemsPerPage);
+    document.getElementById('totalPages').textContent = totalPages;
+}
+
+function previousPage() {
+    if (currentPageNum > 1) {
+        currentPageNum--;
+        updatePagination();
+    }
+}
+
+function nextPage() {
+    currentPageNum++;
+    updatePagination();
+}
+
+// Close modal when clicking outside
+document.getElementById('userModal').addEventListener('click', function(e) {
+    if (e.target === this) {
+        closeUserModal();
+    }
+});
+</script>

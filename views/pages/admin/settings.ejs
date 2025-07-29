@@ -1,0 +1,397 @@
+<div class="max-w-7xl mx-auto">
+    <!-- Settings Header -->
+    <div class="mb-8">
+        <h1 class="text-3xl font-bold mb-2" style="color: var(--text-primary);">Site Settings</h1>
+        <p class="text-gray-600">Configure your church website settings and preferences</p>
+    </div>
+    
+    <% if (typeof success !== 'undefined' && success) { %>
+        <div class="bg-green-50 border border-green-300 text-green-700 px-4 py-3 rounded-lg mb-6">
+            <i class="fas fa-check-circle mr-2"></i>
+            <%= success %>
+        </div>
+    <% } %>
+    
+    <% if (typeof error !== 'undefined' && error) { %>
+        <div class="bg-red-50 border border-red-300 text-red-700 px-4 py-3 rounded-lg mb-6">
+            <i class="fas fa-exclamation-circle mr-2"></i>
+            <%= error %>
+        </div>
+    <% } %>
+    
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- Settings Navigation -->
+        <div class="lg:col-span-1">
+            <div class="module-card">
+                <h3 class="font-semibold mb-4">Settings Categories</h3>
+                <nav class="space-y-2">
+                    <button onclick="showSection('general')" class="settings-nav-btn active" id="nav-general">
+                        <i class="fas fa-church mr-2"></i>General Information
+                    </button>
+                    <button onclick="showSection('email')" class="settings-nav-btn" id="nav-email">
+                        <i class="fas fa-envelope mr-2"></i>Email Configuration
+                    </button>
+                    <button onclick="showSection('content')" class="settings-nav-btn" id="nav-content">
+                        <i class="fas fa-calendar-day mr-2"></i>Content Settings
+                    </button>
+                    <button onclick="showSection('theme')" class="settings-nav-btn" id="nav-theme">
+                        <i class="fas fa-palette mr-2"></i>Theme & Appearance
+                    </button>
+                    <button onclick="showSection('backup')" class="settings-nav-btn" id="nav-backup">
+                        <i class="fas fa-database mr-2"></i>Backup & Restore
+                    </button>
+                </nav>
+            </div>
+        </div>
+        
+        <!-- Settings Content -->
+        <div class="lg:col-span-2">
+            <!-- General Information Section -->
+            <div id="section-general" class="settings-section">
+                <div class="module-card">
+                    <h2 class="text-xl font-semibold mb-6">General Information</h2>
+                    <form action="/admin/settings/general" method="POST">
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium mb-2">Church Name</label>
+                                <input type="text" name="churchName" value="<%= settings.churchName || 'United Presbyterian Church' %>" 
+                                       class="w-full px-3 py-2 border rounded-lg" required>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium mb-2">Church Address</label>
+                                <textarea name="churchAddress" rows="3" class="w-full px-3 py-2 border rounded-lg" required><%= settings.churchAddress || '' %></textarea>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium mb-2">Phone Number</label>
+                                    <input type="tel" name="phoneNumber" value="<%= settings.phoneNumber || '' %>" 
+                                           class="w-full px-3 py-2 border rounded-lg">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium mb-2">Contact Email</label>
+                                    <input type="email" name="contactEmail" value="<%= settings.contactEmail || '' %>" 
+                                           class="w-full px-3 py-2 border rounded-lg">
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium mb-2">Service Times</label>
+                                <textarea name="serviceTimes" rows="2" class="w-full px-3 py-2 border rounded-lg" 
+                                          placeholder="e.g., Sunday: 9:00 AM & 11:00 AM"><%= settings.serviceTimes || '' %></textarea>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium mb-2">Welcome Message</label>
+                                <textarea name="welcomeMessage" rows="3" class="w-full px-3 py-2 border rounded-lg"><%= settings.welcomeMessage || 'Welcome to our church family!' %></textarea>
+                            </div>
+                        </div>
+                        <div class="mt-6">
+                            <button type="submit" class="btn-primary">
+                                <i class="fas fa-save mr-2"></i>Save General Settings
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <!-- Email Configuration Section -->
+            <div id="section-email" class="settings-section hidden">
+                <div class="module-card">
+                    <h2 class="text-xl font-semibold mb-6">Email Configuration</h2>
+                    <form action="/admin/settings/email" method="POST">
+                        <div class="space-y-4">
+                            <div class="bg-yellow-50 border border-yellow-200 p-4 rounded-lg mb-4">
+                                <p class="text-sm text-yellow-800">
+                                    <i class="fas fa-info-circle mr-2"></i>
+                                    Email settings are configured through environment variables for security. 
+                                    Contact your system administrator to update SMTP settings.
+                                </p>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium mb-2">From Email Address</label>
+                                <input type="email" name="fromEmail" value="<%= settings.fromEmail || 'noreply@church.com' %>" 
+                                       class="w-full px-3 py-2 border rounded-lg" required>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium mb-2">From Name</label>
+                                <input type="text" name="fromName" value="<%= settings.fromName || 'United Presbyterian Church' %>" 
+                                       class="w-full px-3 py-2 border rounded-lg" required>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium mb-2">Reply-To Email</label>
+                                <input type="email" name="replyToEmail" value="<%= settings.replyToEmail || '' %>" 
+                                       class="w-full px-3 py-2 border rounded-lg">
+                            </div>
+                            
+                            <div class="border-t pt-4">
+                                <h3 class="font-medium mb-3">Email Templates</h3>
+                                <div class="space-y-3">
+                                    <label class="flex items-center">
+                                        <input type="checkbox" name="enableWelcomeEmail" <%= settings.enableWelcomeEmail !== false ? 'checked' : '' %> class="mr-2">
+                                        <span>Send welcome email to new registrations</span>
+                                    </label>
+                                    <label class="flex items-center">
+                                        <input type="checkbox" name="enableDailyReminder" <%= settings.enableDailyReminder !== false ? 'checked' : '' %> class="mr-2">
+                                        <span>Enable daily devotional reminders</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-6">
+                            <button type="submit" class="btn-primary">
+                                <i class="fas fa-save mr-2"></i>Save Email Settings
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <!-- Content Settings Section -->
+            <div id="section-content" class="settings-section hidden">
+                <div class="module-card">
+                    <h2 class="text-xl font-semibold mb-6">Content Settings</h2>
+                    <form action="/admin/settings/content" method="POST">
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium mb-2">Daily Content Generation Time</label>
+                                <input type="time" name="contentGenerationTime" value="<%= settings.contentGenerationTime || '00:00' %>" 
+                                       class="w-full px-3 py-2 border rounded-lg">
+                                <p class="text-xs text-gray-500 mt-1">Time when new daily content becomes available</p>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium mb-2">Default Reminder Time</label>
+                                <input type="time" name="defaultReminderTime" value="<%= settings.defaultReminderTime || '08:00' %>" 
+                                       class="w-full px-3 py-2 border rounded-lg">
+                                <p class="text-xs text-gray-500 mt-1">Default time for daily email reminders</p>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium mb-2">Content Rotation Period (days)</label>
+                                <input type="number" name="contentRotationDays" value="<%= settings.contentRotationDays || 30 %>" 
+                                       min="7" max="365" class="w-full px-3 py-2 border rounded-lg">
+                                <p class="text-xs text-gray-500 mt-1">Minimum days before content can be repeated</p>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium mb-2">Submission Moderation</label>
+                                <select name="submissionModeration" class="w-full px-3 py-2 border rounded-lg">
+                                    <option value="strict" <%= settings.submissionModeration === 'strict' ? 'selected' : '' %>>
+                                        Strict - All submissions require approval
+                                    </option>
+                                    <option value="auto" <%= settings.submissionModeration === 'auto' ? 'selected' : '' %>>
+                                        Auto - Approve if no flags detected
+                                    </option>
+                                    <option value="open" <%= settings.submissionModeration === 'open' ? 'selected' : '' %>>
+                                        Open - All submissions auto-approved
+                                    </option>
+                                </select>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium mb-2">Maximum Submission Length</label>
+                                <input type="number" name="maxSubmissionLength" value="<%= settings.maxSubmissionLength || 2000 %>" 
+                                       min="100" max="5000" class="w-full px-3 py-2 border rounded-lg">
+                            </div>
+                        </div>
+                        <div class="mt-6">
+                            <button type="submit" class="btn-primary">
+                                <i class="fas fa-save mr-2"></i>Save Content Settings
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <!-- Theme & Appearance Section -->
+            <div id="section-theme" class="settings-section hidden">
+                <div class="module-card">
+                    <h2 class="text-xl font-semibold mb-6">Theme & Appearance</h2>
+                    <form action="/admin/settings/theme" method="POST">
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium mb-2">Primary Color Theme</label>
+                                <div class="grid grid-cols-3 gap-4">
+                                    <label class="flex items-center p-3 border rounded-lg cursor-pointer hover:bg-gray-50">
+                                        <input type="radio" name="colorTheme" value="sky" <%= !settings.colorTheme || settings.colorTheme === 'sky' ? 'checked' : '' %> class="mr-2">
+                                        <div class="w-6 h-6 rounded mr-2" style="background-color: #87CEEB;"></div>
+                                        <span>Sky Blue</span>
+                                    </label>
+                                    <label class="flex items-center p-3 border rounded-lg cursor-pointer hover:bg-gray-50">
+                                        <input type="radio" name="colorTheme" value="purple" <%= settings.colorTheme === 'purple' ? 'checked' : '' %> class="mr-2">
+                                        <div class="w-6 h-6 rounded mr-2" style="background-color: #8B7DD8;"></div>
+                                        <span>Purple</span>
+                                    </label>
+                                    <label class="flex items-center p-3 border rounded-lg cursor-pointer hover:bg-gray-50">
+                                        <input type="radio" name="colorTheme" value="green" <%= settings.colorTheme === 'green' ? 'checked' : '' %> class="mr-2">
+                                        <div class="w-6 h-6 rounded mr-2" style="background-color: #10B981;"></div>
+                                        <span>Green</span>
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium mb-2">Site Logo URL</label>
+                                <input type="url" name="logoUrl" value="<%= settings.logoUrl || '' %>" 
+                                       placeholder="https://example.com/logo.png"
+                                       class="w-full px-3 py-2 border rounded-lg">
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium mb-2">Banner Image URL</label>
+                                <input type="url" name="bannerUrl" value="<%= settings.bannerUrl || '' %>" 
+                                       placeholder="https://example.com/banner.jpg"
+                                       class="w-full px-3 py-2 border rounded-lg">
+                            </div>
+                            
+                            <div>
+                                <label class="flex items-center">
+                                    <input type="checkbox" name="showHeroImage" <%= settings.showHeroImage !== false ? 'checked' : '' %> class="mr-2">
+                                    <span>Show hero image on homepage</span>
+                                </label>
+                            </div>
+                            
+                            <div>
+                                <label class="flex items-center">
+                                    <input type="checkbox" name="enableAnimations" <%= settings.enableAnimations !== false ? 'checked' : '' %> class="mr-2">
+                                    <span>Enable page animations</span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="mt-6">
+                            <button type="submit" class="btn-primary">
+                                <i class="fas fa-save mr-2"></i>Save Theme Settings
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <!-- Backup & Restore Section -->
+            <div id="section-backup" class="settings-section hidden">
+                <div class="module-card">
+                    <h2 class="text-xl font-semibold mb-6">Backup & Restore</h2>
+                    
+                    <div class="space-y-6">
+                        <div>
+                            <h3 class="font-medium mb-3">Export Data</h3>
+                            <p class="text-sm text-gray-600 mb-4">
+                                Download a backup of your church data. This includes all content, users, and settings.
+                            </p>
+                            <div class="flex space-x-3">
+                                <button onclick="exportData('all')" class="btn-secondary">
+                                    <i class="fas fa-download mr-2"></i>Export All Data
+                                </button>
+                                <button onclick="exportData('content')" class="btn-secondary">
+                                    <i class="fas fa-file-export mr-2"></i>Export Content Only
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="border-t pt-6">
+                            <h3 class="font-medium mb-3">Database Information</h3>
+                            <div class="bg-gray-50 rounded-lg p-4 space-y-2 text-sm">
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">Total Users:</span>
+                                    <span class="font-medium"><%= stats.totalUsers %></span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">Total Content Items:</span>
+                                    <span class="font-medium"><%= stats.totalContent %></span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">Total Submissions:</span>
+                                    <span class="font-medium"><%= stats.totalSubmissions %></span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">Database Size:</span>
+                                    <span class="font-medium"><%= stats.dbSize || 'N/A' %></span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="border-t pt-6">
+                            <h3 class="font-medium mb-3 text-red-600">Danger Zone</h3>
+                            <p class="text-sm text-gray-600 mb-4">
+                                These actions are irreversible. Please proceed with caution.
+                            </p>
+                            <button onclick="if(confirm('Are you sure you want to reset all settings to defaults?')) resetSettings()" 
+                                    class="btn-danger">
+                                <i class="fas fa-undo mr-2"></i>Reset All Settings
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.settings-nav-btn {
+    @apply w-full text-left px-4 py-2 rounded-lg transition-colors;
+}
+.settings-nav-btn:hover {
+    @apply bg-gray-100;
+}
+.settings-nav-btn.active {
+    @apply bg-sky-100 text-sky-700;
+}
+.settings-section {
+    @apply transition-opacity duration-300;
+}
+.btn-danger {
+    @apply px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition;
+}
+</style>
+
+<script>
+function showSection(section) {
+    // Hide all sections
+    document.querySelectorAll('.settings-section').forEach(el => {
+        el.classList.add('hidden');
+    });
+    
+    // Remove active class from all nav buttons
+    document.querySelectorAll('.settings-nav-btn').forEach(el => {
+        el.classList.remove('active');
+    });
+    
+    // Show selected section
+    document.getElementById(`section-${section}`).classList.remove('hidden');
+    document.getElementById(`nav-${section}`).classList.add('active');
+}
+
+async function exportData(type) {
+    try {
+        const response = await fetch(`/admin/api/export/${type}`);
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `church_data_${type}_${new Date().toISOString().split('T')[0]}.json`;
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+    } catch (error) {
+        alert('Error exporting data: ' + error.message);
+    }
+}
+
+async function resetSettings() {
+    try {
+        const response = await fetch('/admin/api/settings/reset', {
+            method: 'POST'
+        });
+        
+        if (response.ok) {
+            alert('Settings have been reset to defaults');
+            location.reload();
+        } else {
+            alert('Failed to reset settings');
+        }
+    } catch (error) {
+        alert('Error: ' + error.message);
+    }
+}
+</script>

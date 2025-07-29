@@ -1,0 +1,403 @@
+<div class="max-w-7xl mx-auto">
+    <!-- Content Header -->
+    <div class="mb-8 flex justify-between items-center">
+        <div>
+            <h1 class="text-3xl font-bold mb-2" style="color: var(--text-primary);">Content Management</h1>
+            <p class="text-gray-600">Manage daily devotional content for your congregation</p>
+        </div>
+        <button onclick="openAddContentModal()" class="btn-primary">
+            <i class="fas fa-plus mr-2"></i>Add New Content
+        </button>
+    </div>
+    
+    <!-- Filters -->
+    <div class="module-card mb-6">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div>
+                <label class="block text-sm font-medium mb-2">Content Type</label>
+                <select id="typeFilter" onchange="filterContent()" class="w-full px-3 py-2 border rounded-lg">
+                    <option value="">All Types</option>
+                    <option value="reading">Bible Reading</option>
+                    <option value="prayer">Prayer</option>
+                    <option value="music">Music</option>
+                    <option value="question">Reflection Question</option>
+                </select>
+            </div>
+            <div>
+                <label class="block text-sm font-medium mb-2">Theme</label>
+                <input type="text" id="themeFilter" placeholder="Filter by theme..." 
+                       onkeyup="filterContent()" class="w-full px-3 py-2 border rounded-lg">
+            </div>
+            <div>
+                <label class="block text-sm font-medium mb-2">Status</label>
+                <select id="statusFilter" onchange="filterContent()" class="w-full px-3 py-2 border rounded-lg">
+                    <option value="">All Status</option>
+                    <option value="active">Active</option>
+                    <option value="inactive">Inactive</option>
+                </select>
+            </div>
+            <div>
+                <label class="block text-sm font-medium mb-2">Sort By</label>
+                <select id="sortBy" onchange="filterContent()" class="w-full px-3 py-2 border rounded-lg">
+                    <option value="recent">Most Recent</option>
+                    <option value="usage">Usage Count</option>
+                    <option value="title">Title</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Content List -->
+    <div id="contentList" class="space-y-4">
+        <% if (content && content.length > 0) { %>
+            <% content.forEach(item => { %>
+                <div class="module-card content-item" data-type="<%= item.type %>" data-theme="<%= item.theme || '' %>" data-status="<%= item.isActive ? 'active' : 'inactive' %>">
+                    <div class="flex items-start justify-between">
+                        <div class="flex-1">
+                            <div class="flex items-center mb-2">
+                                <span class="content-type-badge <%= item.type %>">
+                                    <i class="fas <%= 
+                                        item.type === 'reading' ? 'fa-book-bible' : 
+                                        item.type === 'prayer' ? 'fa-praying-hands' : 
+                                        item.type === 'music' ? 'fa-music' : 
+                                        'fa-question-circle' 
+                                    %> mr-1"></i>
+                                    <%= item.type.charAt(0).toUpperCase() + item.type.slice(1) %>
+                                </span>
+                                <% if (item.theme) { %>
+                                    <span class="ml-2 text-sm text-gray-600">Theme: <%= item.theme %></span>
+                                <% } %>
+                                <% if (!item.isActive) { %>
+                                    <span class="ml-2 px-2 py-1 bg-red-100 text-red-700 text-xs rounded">Inactive</span>
+                                <% } %>
+                            </div>
+                            <h3 class="text-lg font-semibold mb-1"><%= item.title %></h3>
+                            <% if (item.biblePassage) { %>
+                                <p class="text-sm text-gray-600 mb-1">
+                                    <i class="fas fa-bible mr-1"></i><%= item.biblePassage %>
+                                </p>
+                            <% } %>
+                            <p class="text-gray-700 line-clamp-2"><%= item.content %></p>
+                            <div class="mt-2 flex items-center text-sm text-gray-500">
+                                <span class="mr-4">
+                                    <i class="fas fa-chart-bar mr-1"></i>Used <%= item.usageCount %> times
+                                </span>
+                                <% if (item.lastUsedDate) { %>
+                                    <span>
+                                        <i class="fas fa-calendar mr-1"></i>Last used: <%= new Date(item.lastUsedDate).toLocaleDateString() %>
+                                    </span>
+                                <% } %>
+                            </div>
+                        </div>
+                        <div class="ml-4 flex items-center space-x-2">
+                            <button onclick="editContent('<%= item.id %>')" class="text-blue-600 hover:bg-blue-50 p-2 rounded">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button onclick="toggleContentStatus('<%= item.id %>', <%= item.isActive %>)" 
+                                    class="<%= item.isActive ? 'text-yellow-600 hover:bg-yellow-50' : 'text-green-600 hover:bg-green-50' %> p-2 rounded">
+                                <i class="fas <%= item.isActive ? 'fa-pause' : 'fa-play' %>"></i>
+                            </button>
+                            <button onclick="deleteContent('<%= item.id %>')" class="text-red-600 hover:bg-red-50 p-2 rounded">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            <% }) %>
+        <% } else { %>
+            <div class="module-card text-center py-12">
+                <i class="fas fa-inbox text-4xl text-gray-400 mb-4"></i>
+                <p class="text-gray-500">No content found. Add your first content item to get started!</p>
+            </div>
+        <% } %>
+    </div>
+</div>
+
+<!-- Add/Edit Content Modal -->
+<div id="contentModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+    <div class="flex items-center justify-center min-h-screen p-4">
+        <div class="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div class="p-6">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 id="modalTitle" class="text-2xl font-bold">Add New Content</h2>
+                    <button onclick="closeContentModal()" class="text-gray-500 hover:text-gray-700">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+                
+                <form id="contentForm" onsubmit="saveContent(event)">
+                    <input type="hidden" id="contentId" name="id">
+                    
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium mb-2">Content Type*</label>
+                        <select id="contentType" name="type" required onchange="updateFormFields()" 
+                                class="w-full px-3 py-2 border rounded-lg">
+                            <option value="">Select Type</option>
+                            <option value="reading">Bible Reading</option>
+                            <option value="prayer">Prayer</option>
+                            <option value="music">Music</option>
+                            <option value="question">Reflection Question</option>
+                        </select>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium mb-2">Title*</label>
+                        <input type="text" id="contentTitle" name="title" required 
+                               class="w-full px-3 py-2 border rounded-lg">
+                    </div>
+                    
+                    <div id="biblePassageField" class="mb-4" style="display: none;">
+                        <label class="block text-sm font-medium mb-2">Bible Passage</label>
+                        <input type="text" id="biblePassage" name="biblePassage" 
+                               placeholder="e.g., John 3:16-17"
+                               class="w-full px-3 py-2 border rounded-lg">
+                    </div>
+                    
+                    <div id="youtubeField" class="mb-4" style="display: none;">
+                        <label class="block text-sm font-medium mb-2">YouTube Video ID</label>
+                        <input type="text" id="youtubeId" name="youtubeId" 
+                               placeholder="e.g., dQw4w9WgXcQ"
+                               class="w-full px-3 py-2 border rounded-lg">
+                        <p class="text-xs text-gray-500 mt-1">Enter only the video ID from the YouTube URL</p>
+                    </div>
+                    
+                    <div id="contentField" class="mb-4">
+                        <label class="block text-sm font-medium mb-2">Content*</label>
+                        <textarea id="contentText" name="content" rows="6" required
+                                  class="w-full px-3 py-2 border rounded-lg"></textarea>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <label class="block text-sm font-medium mb-2">Theme</label>
+                            <input type="text" id="contentTheme" name="theme" 
+                                   placeholder="e.g., Grace, Hope, Love"
+                                   class="w-full px-3 py-2 border rounded-lg">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-2">Season</label>
+                            <input type="text" id="contentSeason" name="season" 
+                                   placeholder="e.g., Advent, Lent, Easter"
+                                   class="w-full px-3 py-2 border rounded-lg">
+                        </div>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium mb-2">Tags (comma separated)</label>
+                        <input type="text" id="contentTags" name="tags" 
+                               placeholder="e.g., faith, worship, community"
+                               class="w-full px-3 py-2 border rounded-lg">
+                    </div>
+                    
+                    <div class="mb-6">
+                        <label class="flex items-center">
+                            <input type="checkbox" id="isActive" name="isActive" checked class="mr-2">
+                            <span class="text-sm">Active (available for daily content)</span>
+                        </label>
+                    </div>
+                    
+                    <div class="flex justify-end space-x-3">
+                        <button type="button" onclick="closeContentModal()" 
+                                class="px-4 py-2 border rounded-lg hover:bg-gray-50">
+                            Cancel
+                        </button>
+                        <button type="submit" class="btn-primary">
+                            <i class="fas fa-save mr-2"></i>Save Content
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.content-type-badge {
+    @apply px-3 py-1 rounded-full text-sm font-medium;
+}
+.content-type-badge.reading {
+    @apply bg-blue-100 text-blue-700;
+}
+.content-type-badge.prayer {
+    @apply bg-purple-100 text-purple-700;
+}
+.content-type-badge.music {
+    @apply bg-green-100 text-green-700;
+}
+.content-type-badge.question {
+    @apply bg-yellow-100 text-yellow-700;
+}
+.line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+</style>
+
+<script>
+let allContent = [];
+
+// Store content data for client-side operations
+<% if (content) { %>
+    allContent = <%- JSON.stringify(content) %>;
+<% } %>
+
+function filterContent() {
+    const typeFilter = document.getElementById('typeFilter').value;
+    const themeFilter = document.getElementById('themeFilter').value.toLowerCase();
+    const statusFilter = document.getElementById('statusFilter').value;
+    const sortBy = document.getElementById('sortBy').value;
+    
+    const contentItems = document.querySelectorAll('.content-item');
+    
+    contentItems.forEach(item => {
+        const type = item.dataset.type;
+        const theme = (item.dataset.theme || '').toLowerCase();
+        const status = item.dataset.status;
+        
+        let show = true;
+        
+        if (typeFilter && type !== typeFilter) show = false;
+        if (themeFilter && !theme.includes(themeFilter)) show = false;
+        if (statusFilter && status !== statusFilter) show = false;
+        
+        item.style.display = show ? 'block' : 'none';
+    });
+}
+
+function updateFormFields() {
+    const type = document.getElementById('contentType').value;
+    
+    // Show/hide fields based on type
+    document.getElementById('biblePassageField').style.display = type === 'reading' ? 'block' : 'none';
+    document.getElementById('youtubeField').style.display = type === 'music' ? 'block' : 'none';
+    
+    // Update content field requirement
+    const contentField = document.getElementById('contentText');
+    if (type === 'music') {
+        contentField.required = false;
+        contentField.placeholder = 'Optional lyrics or description';
+    } else {
+        contentField.required = true;
+        contentField.placeholder = '';
+    }
+}
+
+function openAddContentModal() {
+    document.getElementById('modalTitle').textContent = 'Add New Content';
+    document.getElementById('contentForm').reset();
+    document.getElementById('contentId').value = '';
+    document.getElementById('contentModal').classList.remove('hidden');
+    updateFormFields();
+}
+
+function closeContentModal() {
+    document.getElementById('contentModal').classList.add('hidden');
+}
+
+function editContent(id) {
+    const content = allContent.find(c => c.id === id);
+    if (!content) return;
+    
+    document.getElementById('modalTitle').textContent = 'Edit Content';
+    document.getElementById('contentId').value = content.id;
+    document.getElementById('contentType').value = content.type;
+    document.getElementById('contentTitle').value = content.title;
+    document.getElementById('contentText').value = content.content || '';
+    document.getElementById('biblePassage').value = content.biblePassage || '';
+    document.getElementById('youtubeId').value = content.youtubeId || '';
+    document.getElementById('contentTheme').value = content.theme || '';
+    document.getElementById('contentSeason').value = content.season || '';
+    document.getElementById('contentTags').value = content.tags ? content.tags.join(', ') : '';
+    document.getElementById('isActive').checked = content.isActive;
+    
+    updateFormFields();
+    document.getElementById('contentModal').classList.remove('hidden');
+}
+
+async function saveContent(event) {
+    event.preventDefault();
+    
+    const formData = new FormData(event.target);
+    const data = {
+        type: formData.get('type'),
+        title: formData.get('title'),
+        content: formData.get('content'),
+        biblePassage: formData.get('biblePassage'),
+        youtubeId: formData.get('youtubeId'),
+        theme: formData.get('theme'),
+        season: formData.get('season'),
+        tags: formData.get('tags').split(',').map(t => t.trim()).filter(t => t),
+        isActive: formData.has('isActive')
+    };
+    
+    const id = formData.get('id');
+    const url = id ? `/admin/api/content/${id}` : '/admin/api/content';
+    const method = id ? 'PUT' : 'POST';
+    
+    try {
+        const response = await fetch(url, {
+            method,
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        });
+        
+        if (response.ok) {
+            location.reload();
+        } else {
+            const error = await response.json();
+            alert('Error: ' + (error.message || 'Failed to save content'));
+        }
+    } catch (error) {
+        alert('Error: ' + error.message);
+    }
+}
+
+async function toggleContentStatus(id, currentStatus) {
+    if (!confirm(`Are you sure you want to ${currentStatus ? 'deactivate' : 'activate'} this content?`)) {
+        return;
+    }
+    
+    try {
+        const response = await fetch(`/admin/api/content/${id}/toggle`, {
+            method: 'PUT'
+        });
+        
+        if (response.ok) {
+            location.reload();
+        } else {
+            alert('Failed to update content status');
+        }
+    } catch (error) {
+        alert('Error: ' + error.message);
+    }
+}
+
+async function deleteContent(id) {
+    if (!confirm('Are you sure you want to delete this content? This action cannot be undone.')) {
+        return;
+    }
+    
+    try {
+        const response = await fetch(`/admin/api/content/${id}`, {
+            method: 'DELETE'
+        });
+        
+        if (response.ok) {
+            location.reload();
+        } else {
+            alert('Failed to delete content');
+        }
+    } catch (error) {
+        alert('Error: ' + error.message);
+    }
+}
+
+// Close modal when clicking outside
+document.getElementById('contentModal').addEventListener('click', function(e) {
+    if (e.target === this) {
+        closeContentModal();
+    }
+});
+</script>

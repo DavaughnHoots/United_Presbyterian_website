@@ -9,6 +9,7 @@ const Progress = require('./Progress')(sequelize, DataTypes);
 const DailyContent = require('./DailyContent')(sequelize, DataTypes);
 const Event = require('./Event')(sequelize, DataTypes);
 const EventRegistration = require('./EventRegistration')(sequelize, DataTypes);
+const Setting = require('./Setting')(sequelize, DataTypes);
 
 // Define associations
 User.hasMany(Progress, { foreignKey: 'userId' });
@@ -38,5 +39,6 @@ module.exports = {
   Progress,
   DailyContent,
   Event,
-  EventRegistration
+  EventRegistration,
+  Setting
 };
