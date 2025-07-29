@@ -206,7 +206,7 @@ router.get('/settings', requireAdmin, async (req, res) => {
 // Update general settings
 router.post('/settings/general', requireAdmin, async (req, res) => {
   try {
-    const { churchName, churchAddress, phoneNumber, contactEmail, serviceTimes, welcomeMessage } = req.body;
+    const { churchName, churchAddress, phoneNumber, contactEmail, serviceTimes, welcomeMessage, youtubeLiveLink } = req.body;
     
     await Setting.set('churchName', churchName, 'general');
     await Setting.set('churchAddress', churchAddress, 'general');
@@ -214,6 +214,7 @@ router.post('/settings/general', requireAdmin, async (req, res) => {
     await Setting.set('contactEmail', contactEmail, 'general');
     await Setting.set('serviceTimes', serviceTimes, 'general');
     await Setting.set('welcomeMessage', welcomeMessage, 'general');
+    await Setting.set('youtubeLiveLink', youtubeLiveLink, 'general');
     
     res.redirect('/admin/settings?success=General settings updated successfully');
   } catch (error) {

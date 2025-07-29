@@ -111,6 +111,27 @@ router.get('/about', async (req, res) => {
   }
 });
 
+// Live Service page
+router.get('/live', async (req, res) => {
+  try {
+    const { Setting } = require('../models');
+    
+    // Get church settings
+    const settings = await Setting.getAll();
+    
+    res.render('pages/live', {
+      title: 'Live Service - ' + (settings.churchName || 'United Presbyterian Church'),
+      user: req.session.user,
+      churchName: settings.churchName || 'United Presbyterian Church',
+      youtubeLiveLink: settings.youtubeLiveLink || '',
+      serviceTimes: settings.serviceTimes || ''
+    });
+  } catch (error) {
+    console.error('Error rendering live page:', error);
+    res.status(500).send('Internal server error');
+  }
+});
+
 // Profile page (requires authentication)
 router.get('/profile', requireAuth, async (req, res) => {
   try {

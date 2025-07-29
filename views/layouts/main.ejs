@@ -77,6 +77,9 @@
                 <div class="flex items-center space-x-6">
                     <a href="/" class="text-text-secondary hover:text-text-primary transition">Home</a>
                     <a href="/daily" class="text-text-secondary hover:text-text-primary transition">Daily Content</a>
+                    <a href="/live" class="text-text-secondary hover:text-text-primary transition flex items-center">
+                        <span class="text-red-600 mr-1">●</span> Live
+                    </a>
                     <a href="/share" class="text-text-secondary hover:text-text-primary transition">Share</a>
                     <a href="/about" class="text-text-secondary hover:text-text-primary transition">About</a>
                     
@@ -109,17 +112,18 @@
                 <i class="fas fa-book-bible text-xl mb-1"></i>
                 <span class="text-xs">Daily</span>
             </a>
+            <a href="/live" class="flex flex-col items-center py-2 text-text-secondary hover:text-sky-blue transition relative">
+                <i class="fas fa-video text-xl mb-1"></i>
+                <span class="text-xs">Live</span>
+                <span class="absolute -top-1 -right-1 text-red-600 text-xs">●</span>
+            </a>
             <a href="/share" class="flex flex-col items-center py-2 px-3 bg-gradient-to-br from-sky-blue to-heaven-blue text-white rounded-full shadow-lg">
                 <i class="fas fa-plus text-xl"></i>
             </a>
-            <a href="/events" class="flex flex-col items-center py-2 text-text-secondary hover:text-sky-blue transition">
-                <i class="fas fa-calendar text-xl mb-1"></i>
-                <span class="text-xs">Events</span>
-            </a>
             <% if (typeof user !== 'undefined' && user) { %>
-                <a href="/profile" class="flex flex-col items-center py-2 text-text-secondary hover:text-sky-blue transition">
-                    <i class="fas fa-user text-xl mb-1"></i>
-                    <span class="text-xs">Profile</span>
+                <a href="/events" class="flex flex-col items-center py-2 text-text-secondary hover:text-sky-blue transition">
+                    <i class="fas fa-calendar text-xl mb-1"></i>
+                    <span class="text-xs">Events</span>
                 </a>
             <% } else { %>
                 <a href="/auth/login" class="flex flex-col items-center py-2 text-text-secondary hover:text-sky-blue transition">

@@ -1,0 +1,150 @@
+<div class="max-w-6xl mx-auto">
+    <h1 class="text-3xl font-bold text-center mb-8">Live Service</h1>
+    
+    <% if (youtubeLiveLink) { %>
+        <!-- Live Stream Section -->
+        <div class="module-card mb-6">
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="text-2xl font-semibold">Join Us Live</h2>
+                <div class="flex items-center text-red-600">
+                    <span class="animate-pulse mr-2">●</span>
+                    <span class="font-medium">LIVE NOW</span>
+                </div>
+            </div>
+            
+            <!-- Embedded YouTube Player -->
+            <div class="relative pb-[56.25%] mb-4">
+                <iframe 
+                    class="absolute top-0 left-0 w-full h-full rounded-lg"
+                    src="<%= youtubeLiveLink.replace('/live', '/embed/live') %>?autoplay=1&mute=1"
+                    title="<%= churchName %> Live Service"
+                    frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen>
+                </iframe>
+            </div>
+            
+            <div class="bg-blue-50 p-4 rounded-lg">
+                <p class="text-sm text-gray-700 mb-2">
+                    <i class="fas fa-info-circle text-blue-600 mr-2"></i>
+                    Can't see the video? Try opening it directly on YouTube:
+                </p>
+                <a href="<%= youtubeLiveLink %>" target="_blank" rel="noopener noreferrer" 
+                   class="inline-flex items-center text-blue-600 hover:text-blue-700 font-medium">
+                    <i class="fab fa-youtube mr-2"></i>
+                    Watch on YouTube
+                    <i class="fas fa-external-link-alt ml-2 text-sm"></i>
+                </a>
+            </div>
+        </div>
+        
+        <!-- Service Times Card -->
+        <div class="grid md:grid-cols-2 gap-6 mb-6">
+            <div class="module-card">
+                <h3 class="text-xl font-semibold mb-4">Regular Service Times</h3>
+                <div class="space-y-2">
+                    <% if (serviceTimes) { %>
+                        <% serviceTimes.split('\n').forEach(time => { %>
+                            <p class="text-gray-700"><%= time %></p>
+                        <% }) %>
+                    <% } else { %>
+                        <p class="text-gray-500">Please contact us for service times.</p>
+                    <% } %>
+                </div>
+            </div>
+            
+            <div class="module-card">
+                <h3 class="text-xl font-semibold mb-4">Connect With Us</h3>
+                <div class="space-y-3">
+                    <a href="/share" class="flex items-center text-blue-600 hover:text-blue-700">
+                        <i class="fas fa-praying-hands mr-3"></i>
+                        <span>Submit a Prayer Request</span>
+                    </a>
+                    <a href="/about" class="flex items-center text-blue-600 hover:text-blue-700">
+                        <i class="fas fa-church mr-3"></i>
+                        <span>Visit Us In Person</span>
+                    </a>
+                    <a href="/events" class="flex items-center text-blue-600 hover:text-blue-700">
+                        <i class="fas fa-calendar-alt mr-3"></i>
+                        <span>View Upcoming Events</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Live Chat/Comments Section -->
+        <div class="module-card">
+            <h3 class="text-xl font-semibold mb-4">Join the Conversation</h3>
+            <div class="bg-gray-50 p-6 rounded-lg text-center">
+                <i class="fas fa-comments text-4xl text-gray-400 mb-4"></i>
+                <p class="text-gray-600 mb-4">
+                    Join the live chat on YouTube to connect with our church family during the service.
+                </p>
+                <a href="<%= youtubeLiveLink %>" target="_blank" rel="noopener noreferrer" 
+                   class="btn-primary">
+                    <i class="fab fa-youtube mr-2"></i>
+                    Open YouTube Chat
+                </a>
+            </div>
+        </div>
+    <% } else { %>
+        <!-- No Live Stream Available -->
+        <div class="module-card text-center py-12">
+            <i class="fas fa-video-slash text-6xl text-gray-400 mb-4"></i>
+            <h2 class="text-2xl font-semibold mb-2">No Live Service Currently</h2>
+            <p class="text-gray-600 mb-6">
+                We stream our services live on YouTube. Check back during service times!
+            </p>
+            
+            <% if (serviceTimes) { %>
+                <div class="bg-blue-50 p-6 rounded-lg mb-6 max-w-md mx-auto">
+                    <h3 class="font-semibold mb-2">Service Times:</h3>
+                    <% serviceTimes.split('\n').forEach(time => { %>
+                        <p class="text-gray-700"><%= time %></p>
+                    <% }) %>
+                </div>
+            <% } %>
+            
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="/events" class="btn-primary">
+                    <i class="fas fa-calendar-alt mr-2"></i>
+                    View Events
+                </a>
+                <a href="/about" class="btn-secondary">
+                    <i class="fas fa-info-circle mr-2"></i>
+                    Learn More
+                </a>
+            </div>
+        </div>
+    <% } %>
+    
+    <!-- Tips Section -->
+    <div class="mt-8 grid md:grid-cols-3 gap-4">
+        <div class="text-center p-4">
+            <i class="fas fa-wifi text-3xl text-blue-600 mb-2"></i>
+            <h4 class="font-semibold mb-1">Connection Issues?</h4>
+            <p class="text-sm text-gray-600">Try refreshing the page or lowering video quality in YouTube settings</p>
+        </div>
+        <div class="text-center p-4">
+            <i class="fas fa-mobile-alt text-3xl text-blue-600 mb-2"></i>
+            <h4 class="font-semibold mb-1">Mobile Viewing</h4>
+            <p class="text-sm text-gray-600">For best experience on mobile, use the YouTube app</p>
+        </div>
+        <div class="text-center p-4">
+            <i class="fas fa-tv text-3xl text-blue-600 mb-2"></i>
+            <h4 class="font-semibold mb-1">Watch on TV</h4>
+            <p class="text-sm text-gray-600">Cast to your TV using Chromecast or smart TV YouTube app</p>
+        </div>
+    </div>
+</div>
+
+<style>
+@keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.5; }
+    100% { opacity: 1; }
+}
+.animate-pulse {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+</style>
