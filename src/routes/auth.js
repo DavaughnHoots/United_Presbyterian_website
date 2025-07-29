@@ -96,6 +96,15 @@ router.post('/login', async (req, res) => {
     // Login user with AuthService
     const result = await AuthService.login(email, password);
     
+    if (result.requiresPasswordSetup) {
+      // Admin needs to set up password first
+      req.session.pendingPasswordSetup = {
+        userId: result.userId,
+        email: email
+      };
+      return res.redirect('/auth/setup-password');
+    }
+    
     if (result.requiresPassword) {
       // Store email in session for password form
       req.session.pendingEmail = email;
@@ -181,6 +190,66 @@ router.post('/admin-login', async (req, res) => {
   } catch (error) {
     console.error('Admin login error:', error);
     res.redirect('/auth/admin-login?error=login_failed');
+  }
+});
+
+// Password setup page (for admins without password)
+router.get('/setup-password', (req, res) => {
+  if (!req.session.pendingPasswordSetup) {
+    return res.redirect('/auth/login');
+  }
+  
+  res.render('pages/auth/setup-password', {
+    title: 'Set Up Admin Password',
+    user: null,
+    email: req.session.pendingPasswordSetup.email,
+    error: req.query.error
+  });
+});
+
+// Handle password setup
+router.post('/setup-password', async (req, res) => {
+  try {
+    if (!req.session.pendingPasswordSetup) {
+      return res.redirect('/auth/login');
+    }
+    
+    const { userId, email } = req.session.pendingPasswordSetup;
+    const { password, confirmPassword } = req.body;
+    
+    if (!password || password.length < 8) {
+      return res.redirect('/auth/setup-password?error=Password must be at least 8 characters');
+    }
+    
+    if (password !== confirmPassword) {
+      return res.redirect('/auth/setup-password?error=Passwords do not match');
+    }
+    
+    // Set the password
+    const result = await AuthService.setAdminPassword(userId, password);
+    
+    if (result.success) {
+      // Clear pending setup
+      delete req.session.pendingPasswordSetup;
+      
+      // Now log them in with the new password
+      const loginResult = await AuthService.login(email, password);
+      
+      if (loginResult.success) {
+        AuthService.createSession(req, loginResult.user);
+        req.session.save((err) => {
+          if (err) console.error('Session save error:', err);
+          res.redirect('/admin');
+        });
+      } else {
+        res.redirect('/auth/login?error=Login failed after password setup');
+      }
+    } else {
+      res.redirect('/auth/setup-password?error=' + encodeURIComponent(result.error));
+    }
+  } catch (error) {
+    console.error('Password setup error:', error);
+    res.redirect('/auth/setup-password?error=Failed to set password');
   }
 });
 

@@ -108,6 +108,16 @@ class AuthService {
       
       // Check if admin requires password
       if (user.isAdmin) {
+        // If admin doesn't have a password set, they need to set one first
+        if (!user.password) {
+          return {
+            success: false,
+            requiresPasswordSetup: true,
+            userId: user.id,
+            error: 'Admin account requires password setup'
+          };
+        }
+        
         if (!password) {
           return {
             success: false,
@@ -117,7 +127,7 @@ class AuthService {
         }
         
         // Verify password
-        const isValidPassword = await bcrypt.compare(password, user.password || '');
+        const isValidPassword = await bcrypt.compare(password, user.password);
         if (!isValidPassword) {
           throw new Error('Invalid password');
         }

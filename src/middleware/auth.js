@@ -14,7 +14,14 @@ const requireAuth = (req, res, next) => {
 /**
  * Middleware to require admin privileges
  */
-const requireAdmin = (req, res, next) => {
+const requireAdmin = async (req, res, next) => {
+  // First check if user is authenticated
+  if (!AuthService.isAuthenticated(req)) {
+    req.session.returnTo = req.originalUrl;
+    return res.redirect('/auth/login');
+  }
+  
+  // Then check if user is admin
   if (!AuthService.isAdmin(req)) {
     return res.status(403).render('pages/403', {
       title: '403 - Forbidden',
@@ -22,6 +29,20 @@ const requireAdmin = (req, res, next) => {
       message: 'You do not have permission to access this page.'
     });
   }
+  
+  // Check if admin has password set
+  const { User } = require('../models');
+  const admin = await User.findByPk(req.session.user.id);
+  
+  if (!admin.password) {
+    // Admin needs to set password first
+    req.session.pendingPasswordSetup = {
+      userId: admin.id,
+      email: admin.email
+    };
+    return res.redirect('/auth/setup-password');
+  }
+  
   next();
 };
 
