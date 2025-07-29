@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { requireAuth, requireAdmin } = require('../middleware/auth');
-const { Submission, DailyContent, User, Content, Setting } = require('../models');
+const { Submission, DailyContent, User, Content, Setting, Event, EventRegistration } = require('../models');
 const { Op } = require('sequelize');
 
 // Admin dashboard
@@ -308,6 +308,28 @@ router.get('/users', requireAdmin, async (req, res) => {
   }
 });
 
+// Events management
+router.get('/events', requireAdmin, async (req, res) => {
+  try {
+    const events = await Event.findAll({
+      include: [{
+        model: EventRegistration,
+        include: [User]
+      }],
+      order: [['startDate', 'ASC'], ['startTime', 'ASC']]
+    });
+    
+    res.render('pages/admin/events', {
+      title: 'Events Management',
+      user: req.session.user,
+      events
+    });
+  } catch (error) {
+    console.error('Error rendering events management:', error);
+    res.status(500).send('Internal server error');
+  }
+});
+
 // ============= API ENDPOINTS =============
 
 // Get all content
@@ -558,6 +580,147 @@ router.post('/api/settings/reset', requireAdmin, async (req, res) => {
   } catch (error) {
     console.error('Error resetting settings:', error);
     res.status(500).json({ error: 'Failed to reset settings' });
+  }
+});
+
+// ============= EVENT API ENDPOINTS =============
+
+// Get all events
+router.get('/api/events', requireAdmin, async (req, res) => {
+  try {
+    const events = await Event.findAll({
+      include: [EventRegistration],
+      order: [['startDate', 'ASC']]
+    });
+    res.json(events);
+  } catch (error) {
+    console.error('Error fetching events:', error);
+    res.status(500).json({ error: 'Failed to fetch events' });
+  }
+});
+
+// Create new event
+router.post('/api/events', requireAdmin, async (req, res) => {
+  try {
+    const eventData = req.body;
+    
+    const newEvent = await Event.create(eventData);
+    res.json({ success: true, event: newEvent });
+  } catch (error) {
+    console.error('Error creating event:', error);
+    res.status(500).json({ error: 'Failed to create event' });
+  }
+});
+
+// Update event
+router.put('/api/events/:id', requireAdmin, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const eventData = req.body;
+    
+    const event = await Event.findByPk(id);
+    if (!event) {
+      return res.status(404).json({ error: 'Event not found' });
+    }
+    
+    await event.update(eventData);
+    res.json({ success: true, event });
+  } catch (error) {
+    console.error('Error updating event:', error);
+    res.status(500).json({ error: 'Failed to update event' });
+  }
+});
+
+// Delete event
+router.delete('/api/events/:id', requireAdmin, async (req, res) => {
+  try {
+    const { id } = req.params;
+    
+    const event = await Event.findByPk(id);
+    if (!event) {
+      return res.status(404).json({ error: 'Event not found' });
+    }
+    
+    await event.destroy();
+    res.json({ success: true });
+  } catch (error) {
+    console.error('Error deleting event:', error);
+    res.status(500).json({ error: 'Failed to delete event' });
+  }
+});
+
+// Get event registrations
+router.get('/api/events/:id/registrations', requireAdmin, async (req, res) => {
+  try {
+    const { id } = req.params;
+    
+    const registrations = await EventRegistration.findAll({
+      where: { eventId: id },
+      include: [User],
+      order: [['createdAt', 'DESC']]
+    });
+    
+    res.json(registrations);
+  } catch (error) {
+    console.error('Error fetching registrations:', error);
+    res.status(500).json({ error: 'Failed to fetch registrations' });
+  }
+});
+
+// Export event registrations
+router.get('/api/events/:id/registrations/export', requireAdmin, async (req, res) => {
+  try {
+    const { id } = req.params;
+    
+    const event = await Event.findByPk(id);
+    const registrations = await EventRegistration.findAll({
+      where: { eventId: id },
+      include: [User],
+      order: [['createdAt', 'ASC']]
+    });
+    
+    // Create CSV
+    const csvHeaders = ['Name', 'Email', 'Phone', 'Registration Date', 'User Type'];
+    const csvRows = registrations.map(reg => [
+      reg.User ? `${reg.User.firstName} ${reg.User.lastName}` : reg.guestName,
+      reg.User ? reg.User.email : reg.guestEmail,
+      reg.guestPhone || '',
+      new Date(reg.createdAt).toLocaleDateString(),
+      reg.User ? 'Member' : 'Guest'
+    ]);
+    
+    const csvContent = [
+      `Event: ${event.title}`,
+      `Date: ${new Date(event.startDate).toLocaleDateString()}`,
+      '',
+      csvHeaders.join(','),
+      ...csvRows.map(row => row.map(cell => `"${cell}"`).join(','))
+    ].join('\n');
+    
+    res.setHeader('Content-Type', 'text/csv');
+    res.setHeader('Content-Disposition', `attachment; filename="${event.title.replace(/[^a-z0-9]/gi, '_')}_registrations.csv"`);
+    res.send(csvContent);
+  } catch (error) {
+    console.error('Error exporting registrations:', error);
+    res.status(500).json({ error: 'Failed to export registrations' });
+  }
+});
+
+// Delete registration
+router.delete('/api/registrations/:id', requireAdmin, async (req, res) => {
+  try {
+    const { id } = req.params;
+    
+    const registration = await EventRegistration.findByPk(id);
+    if (!registration) {
+      return res.status(404).json({ error: 'Registration not found' });
+    }
+    
+    await registration.destroy();
+    res.json({ success: true });
+  } catch (error) {
+    console.error('Error deleting registration:', error);
+    res.status(500).json({ error: 'Failed to delete registration' });
   }
 });
 
