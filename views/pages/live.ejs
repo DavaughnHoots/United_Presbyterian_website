@@ -2,6 +2,26 @@
     <h1 class="text-3xl font-bold text-center mb-8">Live Service</h1>
     
     <% if (youtubeLiveLink) { %>
+        <% 
+            // Extract channel ID from YouTube URL
+            let embedUrl = '';
+            const channelMatch = youtubeLiveLink.match(/\/channel\/([^\/]+)/);
+            const userMatch = youtubeLiveLink.match(/\/@([^\/]+)/);
+            
+            if (channelMatch) {
+                // Format: https://www.youtube.com/channel/CHANNEL_ID/live
+                const channelId = channelMatch[1];
+                embedUrl = `https://www.youtube.com/embed/live_stream?channel=${channelId}&autoplay=1&mute=1`;
+            } else if (userMatch) {
+                // Format: https://www.youtube.com/@username/live
+                // For custom URLs, we'll still try to extract if there's a channel ID in the URL
+                // Otherwise, fallback to direct link
+                embedUrl = youtubeLiveLink.replace('/live', '/embed/live') + '?autoplay=1&mute=1';
+            } else {
+                // Fallback for other formats
+                embedUrl = youtubeLiveLink.replace('/live', '/embed/live') + '?autoplay=1&mute=1';
+            }
+        %>
         <!-- Live Stream Section -->
         <div class="module-card mb-6">
             <div class="flex items-center justify-between mb-4">
@@ -16,7 +36,7 @@
             <div class="relative pb-[56.25%] mb-4">
                 <iframe 
                     class="absolute top-0 left-0 w-full h-full rounded-lg"
-                    src="<%= youtubeLiveLink.replace('/live', '/embed/live') %>?autoplay=1&mute=1"
+                    src="<%= embedUrl %>"
                     title="<%= churchName %> Live Service"
                     frameborder="0"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
