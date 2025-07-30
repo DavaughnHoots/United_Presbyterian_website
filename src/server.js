@@ -34,7 +34,7 @@ app.use(helmet({
       imgSrc: ["'self'", "data:", "https:", "http:", "https://images.unsplash.com"],
       fontSrc: ["'self'", "https://fonts.gstatic.com", "https://cdnjs.cloudflare.com"],
       frameSrc: ["'self'", "https://www.youtube.com", "https://www.google.com"],
-      connectSrc: ["'self'", "https://fonts.googleapis.com", "https://fonts.gstatic.com", "https://cdnjs.cloudflare.com"]
+      connectSrc: ["'self'", "https://fonts.googleapis.com", "https://fonts.gstatic.com", "https://cdnjs.cloudflare.com", "https://cdn.tailwindcss.com", "https://images.unsplash.com"]
     }
   }
 }));
