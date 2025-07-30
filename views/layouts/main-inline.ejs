@@ -72,7 +72,7 @@
     <header class="lg:hidden bg-white/80 backdrop-blur-md sticky top-0 z-40 shadow-sm">
         <div class="flex items-center justify-between px-4 py-3">
             <h1 class="text-xl font-bold" style="color: #2C5282;">UPC</h1>
-            <% if (typeof user !== 'undefined' && user) { %>
+            <% if (user) { %>
                 <a href="/profile" style="color: #2C5282;">
                     <i class="fas fa-user-circle text-2xl"></i>
                 </a>
@@ -105,7 +105,7 @@
                 <i class="fas fa-calendar text-xl mb-1"></i>
                 <span class="text-xs">Events</span>
             </a>
-            <% if (typeof user !== 'undefined' && user) { %>
+            <% if (user) { %>
                 <a href="/profile" class="flex flex-col items-center py-2">
                     <i class="fas fa-user text-xl mb-1"></i>
                     <span class="text-xs">Profile</span>

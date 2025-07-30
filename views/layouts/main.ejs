@@ -73,7 +73,7 @@
     <header class="lg:hidden bg-white/80 backdrop-blur-md sticky top-0 z-40 shadow-sm">
         <div class="flex items-center justify-between px-4 py-3">
             <h1 class="text-xl font-bold text-text-primary">UPC</h1>
-            <% if (typeof user !== 'undefined' && user) { %>
+            <% if (user) { %>
                 <a href="/profile" class="text-text-primary">
                     <i class="fas fa-user-circle text-2xl"></i>
                 </a>
@@ -96,7 +96,7 @@
                     <a href="/share" class="text-text-secondary hover:text-text-primary transition">Share</a>
                     <a href="/about" class="text-text-secondary hover:text-text-primary transition">About</a>
                     
-                    <% if (typeof user !== 'undefined' && user) { %>
+                    <% if (user) { %>
                         <a href="/profile" class="text-text-secondary hover:text-text-primary transition">Profile</a>
                         <a href="/auth/logout" class="btn-primary">Logout</a>
                     <% } else { %>
@@ -133,7 +133,7 @@
             <a href="/share" class="flex flex-col items-center py-2 px-3 bg-gradient-to-br from-sky-blue to-heaven-blue text-white rounded-full shadow-lg">
                 <i class="fas fa-plus text-xl"></i>
             </a>
-            <% if (typeof user !== 'undefined' && user) { %>
+            <% if (user) { %>
                 <a href="/events" class="flex flex-col items-center py-2 text-text-secondary hover:text-sky-blue transition">
                     <i class="fas fa-calendar text-xl mb-1"></i>
                     <span class="text-xs">Events</span>
