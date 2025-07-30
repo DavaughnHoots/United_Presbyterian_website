@@ -7,27 +7,40 @@
     <meta name="description" content="United Presbyterian Church - A welcoming community of faith">
     <meta name="theme-color" content="#87CEEB">
     
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        'sky-blue': '#87CEEB',
-                        'heaven-blue': '#B6E5F8',
-                        'cloud-white': '#F0F8FF',
-                        'soft-blue': '#E6F3FF',
-                        'text-primary': '#2C5282',
-                        'text-secondary': '#4A7C7E',
-                    }
-                }
-            }
-        }
-    </script>
+    <!-- Fallback CSS for when Tailwind CDN is blocked -->
+    <link rel="stylesheet" href="/css/fallback.css">
     
     <!-- Custom styles -->
     <link rel="stylesheet" href="/css/style.css">
+    
+    <!-- Tailwind CSS - Try to load but don't fail if blocked -->
+    <script>
+        // Only load Tailwind if not blocked by CSP
+        const script = document.createElement('script');
+        script.src = 'https://cdn.tailwindcss.com';
+        script.onerror = function() {
+            console.log('Tailwind CDN blocked, using fallback CSS');
+        };
+        script.onload = function() {
+            if (typeof tailwind !== 'undefined') {
+                tailwind.config = {
+                    theme: {
+                        extend: {
+                            colors: {
+                                'sky-blue': '#87CEEB',
+                                'heaven-blue': '#B6E5F8',
+                                'cloud-white': '#F0F8FF',
+                                'soft-blue': '#E6F3FF',
+                                'text-primary': '#2C5282',
+                                'text-secondary': '#4A7C7E',
+                            }
+                        }
+                    }
+                }
+            }
+        };
+        document.head.appendChild(script);
+    </script>
     
     <!-- PWA manifest -->
     <link rel="manifest" href="/manifest.json">

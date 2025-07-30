@@ -1,4 +1,4 @@
-const CACHE_NAME = 'upc-v2';
+const CACHE_NAME = 'upc-v3';
 const urlsToCache = [
   '/',
   '/css/style.css',
