@@ -16,7 +16,8 @@ router.get('/', async (req, res) => {
     
     res.render('pages/home', {
       title: settings.churchName || 'United Presbyterian Church',
-      churchName: settings.churchName || 'United Presbyterian Church'
+      churchName: settings.churchName || 'United Presbyterian Church',
+      welcomeMessage: res.locals.welcomeMessage
     });
   } catch (error) {
     console.error('Error rendering home page:', error);
