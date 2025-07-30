@@ -1,9 +1,9 @@
-const CACHE_NAME = 'upc-v3';
+const CACHE_NAME = 'upc-v4'; // Increment version to force cache update
 const urlsToCache = [
-  '/',
   '/css/style.css',
   '/js/main.js',
   '/offline.html'
+  // Removed '/' to prevent caching stale home page content
 ];
 
 // Install event - cache resources
@@ -46,6 +46,39 @@ self.addEventListener('fetch', event => {
   // Skip non-GET requests
   if (event.request.method !== 'GET') return;
 
+  // Use network-first strategy for HTML documents
+  if (event.request.destination === 'document') {
+    event.respondWith(
+      fetch(event.request)
+        .then(response => {
+          // Clone the response
+          const responseToCache = response.clone();
+          
+          // Don't cache API calls, admin pages, or auth pages
+          const url = new URL(event.request.url);
+          if (!url.pathname.startsWith('/api/') && 
+              !url.pathname.startsWith('/admin/') &&
+              !url.pathname.startsWith('/auth/')) {
+            caches.open(CACHE_NAME)
+              .then(cache => {
+                cache.put(event.request, responseToCache);
+              });
+          }
+          
+          return response;
+        })
+        .catch(() => {
+          // If network fails, try cache then offline page
+          return caches.match(event.request)
+            .then(cachedResponse => {
+              return cachedResponse || caches.match('/offline.html');
+            });
+        })
+    );
+    return;
+  }
+
+  // For non-document requests, use cache-first strategy
   event.respondWith(
     caches.match(event.request)
       .then(response => {
