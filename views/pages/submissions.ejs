@@ -35,7 +35,7 @@
                                 <i class="fas fa-praying-hands text-blue-600"></i>
                             </div>
                             <div>
-                                <span class="font-medium">Concern</span>
+                                <span class="font-medium">Prayer Request</span>
                                 <p class="text-sm text-gray-600">Request prayer for a situation</p>
                             </div>
                         </div>
@@ -52,6 +52,36 @@
                                 <p class="text-sm text-gray-600">Share how God is working in your life</p>
                             </div>
                         </div>
+                    </label>
+                </div>
+            </div>
+            
+            <!-- Prayer Request Options (shown when concern is selected) -->
+            <div id="prayerOptions" class="mb-6 hidden">
+                <!-- Subcategory Selection -->
+                <div class="mb-4">
+                    <label class="block text-gray-700 font-semibold mb-2">Prayer Category</label>
+                    <select name="subcategory" class="w-full p-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-sky-blue focus:border-transparent">
+                        <option value="">Select a category...</option>
+                        <option value="health">Health & Healing</option>
+                        <option value="family">Family</option>
+                        <option value="work">Work & Career</option>
+                        <option value="finances">Finances</option>
+                        <option value="relationships">Relationships</option>
+                        <option value="spiritual">Spiritual Growth</option>
+                        <option value="community">Community & World</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                
+                <!-- Urgent Prayer Checkbox -->
+                <div class="mb-4">
+                    <label class="flex items-center">
+                        <input type="checkbox" name="isUrgent" class="mr-3 h-4 w-4 text-sky-blue rounded focus:ring-sky-blue">
+                        <span class="font-semibold text-red-600">
+                            <i class="fas fa-exclamation-circle mr-1"></i>
+                            This is an urgent prayer request
+                        </span>
                     </label>
                 </div>
             </div>
@@ -73,6 +103,19 @@
                 </p>
             </div>
             
+            <!-- Attribution Option (for logged-in users) -->
+            <% if (user) { %>
+            <div class="mb-6">
+                <label class="flex items-center">
+                    <input type="checkbox" name="shareMyName" id="shareMyName" class="mr-3 h-4 w-4 text-sky-blue rounded focus:ring-sky-blue">
+                    <span class="text-gray-700">
+                        <span class="font-medium">Share my name with this submission</span>
+                        <span class="text-sm text-gray-600 ml-1">(Optional - helps others know who to pray for)</span>
+                    </span>
+                </label>
+            </div>
+            <% } %>
+            
             <!-- Privacy Notice -->
             <div class="bg-blue-50 rounded-lg p-4 mb-6">
                 <div class="flex items-start">
@@ -80,7 +123,11 @@
                     <div>
                         <p class="font-semibold text-gray-700 mb-1">Your Privacy is Protected</p>
                         <p class="text-sm text-gray-600">
-                            Your submission is completely anonymous. We do not collect or store any identifying information. 
+                            <% if (user) { %>
+                                Your submission will be anonymous unless you choose to share your name above.
+                            <% } else { %>
+                                Your submission is completely anonymous. We do not collect or store any identifying information.
+                            <% } %>
                             All submissions are reviewed by pastoral staff before sharing with the community.
                         </p>
                     </div>
@@ -103,20 +150,51 @@
         <h2 class="text-xl font-semibold mb-4">Recent Community Shares</h2>
         <p class="text-gray-600 mb-4">Here are some recent anonymous submissions from our church family:</p>
         
-        <!-- Filter Buttons -->
-        <div class="flex flex-wrap gap-2 mb-4">
-            <button class="filter-btn active" data-type="all">
-                <i class="fas fa-list mr-1"></i>All
-            </button>
-            <button class="filter-btn" data-type="joy">
-                <i class="fas fa-smile mr-1"></i>Joys
-            </button>
-            <button class="filter-btn" data-type="concern">
-                <i class="fas fa-praying-hands mr-1"></i>Prayers
-            </button>
-            <button class="filter-btn" data-type="testimony">
-                <i class="fas fa-dove mr-1"></i>Testimonies
-            </button>
+        <!-- Filter and Sort Options -->
+        <div class="mb-4">
+            <!-- Type Filter Buttons -->
+            <div class="flex flex-wrap gap-2 mb-3">
+                <button class="filter-btn active" data-type="all">
+                    <i class="fas fa-list mr-1"></i>All
+                </button>
+                <button class="filter-btn" data-type="joy">
+                    <i class="fas fa-smile mr-1"></i>Joys
+                </button>
+                <button class="filter-btn" data-type="concern">
+                    <i class="fas fa-praying-hands mr-1"></i>Prayers
+                </button>
+                <button class="filter-btn" data-type="testimony">
+                    <i class="fas fa-dove mr-1"></i>Testimonies
+                </button>
+            </div>
+            
+            <!-- Additional Filters and Sort -->
+            <div class="flex flex-wrap gap-2 items-center">
+                <!-- Prayer-specific filters -->
+                <div class="prayer-filters hidden">
+                    <button class="filter-special" data-filter="urgent">
+                        <i class="fas fa-exclamation-circle mr-1"></i>Urgent Only
+                    </button>
+                    <button class="filter-special" data-filter="answered">
+                        <i class="fas fa-check-circle mr-1"></i>Answered Prayers
+                    </button>
+                    <button class="filter-special" data-filter="unanswered">
+                        <i class="fas fa-clock mr-1"></i>Still Praying
+                    </button>
+                </div>
+                
+                <!-- Sort Options -->
+                <div class="ml-auto">
+                    <label class="text-sm text-gray-600 mr-2">Sort by:</label>
+                    <select id="sortSelect" class="px-3 py-1 border border-gray-300 rounded-md text-sm focus:ring-2 focus:ring-sky-blue focus:border-transparent">
+                        <option value="newest">Newest First</option>
+                        <option value="oldest">Oldest First</option>
+                        <option value="mostPrayers">Most Prayers</option>
+                        <option value="urgent">Urgent First</option>
+                        <option value="recentlyUpdated">Recently Updated</option>
+                    </select>
+                </div>
+            </div>
         </div>
         
         <!-- Submissions Container -->
@@ -146,6 +224,8 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Update radio button styling when selected
     const radioButtons = document.querySelectorAll('input[name="type"]');
+    const prayerOptions = document.getElementById('prayerOptions');
+    
     radioButtons.forEach(radio => {
         radio.addEventListener('change', function() {
             // Reset all labels
@@ -157,6 +237,16 @@ document.addEventListener('DOMContentLoaded', function() {
             if (this.checked) {
                 this.closest('label').classList.remove('border-gray-200');
                 this.closest('label').classList.add('border-sky-blue', 'bg-soft-blue');
+                
+                // Show/hide prayer options
+                if (this.value === 'concern') {
+                    prayerOptions.classList.remove('hidden');
+                } else {
+                    prayerOptions.classList.add('hidden');
+                    // Clear prayer-specific fields
+                    form.subcategory.value = '';
+                    form.isUrgent.checked = false;
+                }
             }
         });
     });
@@ -175,7 +265,10 @@ document.addEventListener('DOMContentLoaded', function() {
         
         const formData = {
             type: form.type.value,
-            content: content.value
+            content: content.value,
+            subcategory: form.subcategory ? form.subcategory.value : null,
+            isUrgent: form.isUrgent ? form.isUrgent.checked : false,
+            isAnonymous: <% if (user) { %>!form.shareMyName.checked<% } else { %>true<% } %>
         };
         
         try {
@@ -213,17 +306,23 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Load submissions functionality
     let currentFilter = 'all';
+    let specialFilter = null;
+    let currentSort = 'newest';
     let submissions = [];
+    let allSubmissions = []; // Store all submissions for client-side filtering
     let displayLimit = 10;
     
     const filterButtons = document.querySelectorAll('.filter-btn');
+    const specialFilterButtons = document.querySelectorAll('.filter-special');
+    const sortSelect = document.getElementById('sortSelect');
     const submissionsContainer = document.getElementById('submissionsContainer');
     const loadMoreBtn = document.getElementById('loadMoreBtn');
+    const prayerFilters = document.querySelector('.prayer-filters');
     
     // Add filter button styles
     const style = document.createElement('style');
     style.textContent = `
-        .filter-btn {
+        .filter-btn, .filter-special {
             padding: 0.5rem 1rem;
             border: 2px solid #e5e7eb;
             background: white;
@@ -232,7 +331,7 @@ document.addEventListener('DOMContentLoaded', function() {
             transition: all 0.2s;
             cursor: pointer;
         }
-        .filter-btn:hover {
+        .filter-btn:hover, .filter-special:hover {
             border-color: #87CEEB;
             background: #F0F8FF;
         }
@@ -240,6 +339,11 @@ document.addEventListener('DOMContentLoaded', function() {
             background: linear-gradient(135deg, #87CEEB 0%, #B6E5F8 100%);
             color: white;
             border-color: transparent;
+        }
+        .filter-special.active {
+            background: #87CEEB;
+            color: white;
+            border-color: #87CEEB;
         }
     `;
     document.head.appendChild(style);
@@ -250,8 +354,39 @@ document.addEventListener('DOMContentLoaded', function() {
             filterButtons.forEach(b => b.classList.remove('active'));
             this.classList.add('active');
             currentFilter = this.dataset.type;
+            
+            // Show/hide prayer-specific filters
+            if (currentFilter === 'concern') {
+                prayerFilters.classList.remove('hidden');
+            } else {
+                prayerFilters.classList.add('hidden');
+                specialFilter = null;
+                specialFilterButtons.forEach(b => b.classList.remove('active'));
+            }
+            
             loadSubmissions();
         });
+    });
+    
+    // Special filter button handlers
+    specialFilterButtons.forEach(btn => {
+        btn.addEventListener('click', function() {
+            if (this.classList.contains('active')) {
+                this.classList.remove('active');
+                specialFilter = null;
+            } else {
+                specialFilterButtons.forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                specialFilter = this.dataset.filter;
+            }
+            applyFiltersAndSort();
+        });
+    });
+    
+    // Sort select handler
+    sortSelect.addEventListener('change', function() {
+        currentSort = this.value;
+        applyFiltersAndSort();
     });
     
     // Load more button
@@ -263,14 +398,11 @@ document.addEventListener('DOMContentLoaded', function() {
     // Load submissions from API
     async function loadSubmissions() {
         try {
-            const url = currentFilter === 'all' 
-                ? '/api/submissions/approved' 
-                : `/api/submissions/approved?type=${currentFilter}`;
-                
-            const response = await fetch(url);
-            submissions = await response.json();
+            // Always load all submissions for client-side filtering
+            const response = await fetch('/api/submissions/approved?limit=100');
+            allSubmissions = await response.json();
             displayLimit = 10;
-            displaySubmissions();
+            applyFiltersAndSort();
         } catch (error) {
             console.error('Error loading submissions:', error);
             submissionsContainer.innerHTML = `
@@ -280,6 +412,70 @@ document.addEventListener('DOMContentLoaded', function() {
                 </div>
             `;
         }
+    }
+    
+    // Apply filters and sorting
+    function applyFiltersAndSort() {
+        // Start with all submissions
+        let filtered = [...allSubmissions];
+        
+        // Apply type filter
+        if (currentFilter !== 'all') {
+            filtered = filtered.filter(sub => sub.type === currentFilter);
+        }
+        
+        // Apply special filters
+        if (specialFilter) {
+            switch (specialFilter) {
+                case 'urgent':
+                    filtered = filtered.filter(sub => sub.isUrgent);
+                    break;
+                case 'answered':
+                    filtered = filtered.filter(sub => sub.isAnswered);
+                    break;
+                case 'unanswered':
+                    filtered = filtered.filter(sub => !sub.isAnswered);
+                    break;
+            }
+        }
+        
+        // Apply sorting
+        switch (currentSort) {
+            case 'newest':
+                // Already sorted by newest from API
+                break;
+            case 'oldest':
+                filtered.reverse();
+                break;
+            case 'mostPrayers':
+                filtered.sort((a, b) => (b.prayerCount || 0) - (a.prayerCount || 0));
+                break;
+            case 'urgent':
+                filtered.sort((a, b) => {
+                    if (a.isUrgent && !b.isUrgent) return -1;
+                    if (!a.isUrgent && b.isUrgent) return 1;
+                    return 0;
+                });
+                break;
+            case 'recentlyUpdated':
+                filtered.sort((a, b) => {
+                    const aHasUpdates = a.updates && a.updates.length > 0;
+                    const bHasUpdates = b.updates && b.updates.length > 0;
+                    if (aHasUpdates && !bHasUpdates) return -1;
+                    if (!aHasUpdates && bHasUpdates) return 1;
+                    if (aHasUpdates && bHasUpdates) {
+                        // Compare last update times
+                        const aLastUpdate = new Date(a.updates[0].createdAt);
+                        const bLastUpdate = new Date(b.updates[0].createdAt);
+                        return bLastUpdate - aLastUpdate;
+                    }
+                    return 0;
+                });
+                break;
+        }
+        
+        submissions = filtered;
+        displaySubmissions();
     }
     
     // Display submissions
@@ -307,13 +503,48 @@ document.addEventListener('DOMContentLoaded', function() {
                          sub.type === 'concern' ? 'Prayer Request' : 'Testimony';
             
             return `
-                <div class="${bgColor} rounded-lg p-4 fade-in">
-                    <div class="flex items-center mb-2">
-                        <i class="fas ${icon} ${iconColor} mr-2"></i>
-                        <span class="font-medium text-gray-700">${label}</span>
-                        <span class="text-sm text-gray-500 ml-auto">${sub.timeAgo}</span>
+                <div class="${bgColor} rounded-lg p-4 fade-in submission-card" data-id="${sub.id}">
+                    <div class="flex items-center justify-between mb-2">
+                        <div class="flex items-center">
+                            <i class="fas ${icon} ${iconColor} mr-2"></i>
+                            <span class="font-medium text-gray-700">${label}</span>
+                            ${sub.isUrgent ? '<span class="ml-2 px-2 py-1 bg-red-100 text-red-700 text-xs rounded-full"><i class="fas fa-exclamation-circle mr-1"></i>Urgent</span>' : ''}
+                            ${sub.subcategory ? `<span class="ml-2 text-sm text-gray-500">${formatSubcategory(sub.subcategory)}</span>` : ''}
+                        </div>
+                        <span class="text-sm text-gray-500">${sub.timeAgo}</span>
                     </div>
-                    <p class="text-gray-700">${sub.content}</p>
+                    <p class="text-gray-700 mb-3">${sub.content}</p>
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-4">
+                            ${sub.submitterName ? `<span class="text-sm text-gray-600"><i class="fas fa-user mr-1"></i>${sub.submitterName}</span>` : ''}
+                            ${sub.isAnswered ? '<span class="text-sm text-green-600"><i class="fas fa-check-circle mr-1"></i>Answered Prayer</span>' : ''}
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <button onclick="togglePrayer('${sub.id}')" class="prayer-btn text-sm px-3 py-1 rounded-full ${sub.isPrayingFor ? 'bg-sky-blue text-white' : 'bg-gray-200 text-gray-700'} hover:bg-sky-blue hover:text-white transition">
+                                <i class="fas fa-praying-hands mr-1"></i>
+                                <span class="prayer-count">${sub.prayerCount || 0}</span> ${sub.prayerCount === 1 ? 'Prayer' : 'Prayers'}
+                            </button>
+                            ${sub.canUpdate ? `<button onclick="showUpdateForm('${sub.id}')" class="text-sm text-sky-blue hover:underline"><i class="fas fa-edit mr-1"></i>Update</button>` : ''}
+                        </div>
+                    </div>
+                    ${sub.updates && sub.updates.length > 0 ? `
+                        <div class="mt-3 pt-3 border-t border-gray-200">
+                            <button onclick="toggleUpdates('${sub.id}')" class="text-sm text-sky-blue hover:underline">
+                                <i class="fas fa-history mr-1"></i>View Updates (${sub.updates.length})
+                            </button>
+                            <div id="updates-${sub.id}" class="hidden mt-2 space-y-2">
+                                ${sub.updates.map(update => `
+                                    <div class="bg-white rounded p-2 text-sm">
+                                        <div class="flex items-center justify-between mb-1">
+                                            <span class="font-medium ${update.updateType === 'answered' ? 'text-green-600' : 'text-gray-700'}">${update.typeLabel}</span>
+                                            <span class="text-xs text-gray-500">${update.timeAgo}</span>
+                                        </div>
+                                        <p class="text-gray-600">${update.content}</p>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    ` : ''}
                 </div>
             `;
         }).join('');
@@ -342,4 +573,193 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initial load
     loadSubmissions();
 });
+
+// Helper function to format subcategory
+function formatSubcategory(subcategory) {
+    const labels = {
+        'health': 'Health & Healing',
+        'family': 'Family',
+        'work': 'Work & Career',
+        'finances': 'Finances',
+        'relationships': 'Relationships',
+        'spiritual': 'Spiritual Growth',
+        'community': 'Community & World',
+        'other': 'Other'
+    };
+    return labels[subcategory] || subcategory;
+}
+
+// Toggle prayer support
+async function togglePrayer(submissionId) {
+    <% if (!user) { %>
+        alert('Please login to pray for submissions');
+        return;
+    <% } %>
+    
+    try {
+        const response = await fetch(`/api/submissions/${submissionId}/prayer`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        
+        const result = await response.json();
+        
+        if (response.ok) {
+            // Update the submission in our local data
+            const submission = allSubmissions.find(s => s.id === submissionId);
+            if (submission) {
+                if (result.action === 'added') {
+                    submission.isPrayingFor = true;
+                    submission.prayerCount = (submission.prayerCount || 0) + 1;
+                } else {
+                    submission.isPrayingFor = false;
+                    submission.prayerCount = Math.max(0, (submission.prayerCount || 1) - 1);
+                }
+            }
+            // Re-apply filters and sorting
+            applyFiltersAndSort();
+        } else {
+            alert(result.error || 'Failed to update prayer');
+        }
+    } catch (error) {
+        console.error('Error toggling prayer:', error);
+        alert('Failed to update prayer');
+    }
+}
+
+// Toggle updates visibility
+function toggleUpdates(submissionId) {
+    const updatesDiv = document.getElementById(`updates-${submissionId}`);
+    if (updatesDiv) {
+        updatesDiv.classList.toggle('hidden');
+    }
+}
+
+// Show update form modal
+function showUpdateForm(submissionId) {
+    // Create modal HTML
+    const modalHtml = `
+        <div id="updateModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
+            <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+                <div class="mt-3">
+                    <h3 class="text-lg leading-6 font-medium text-gray-900 mb-2">
+                        Add Update to Your Submission
+                    </h3>
+                    <form id="updateForm" class="mt-4">
+                        <input type="hidden" id="updateSubmissionId" value="${submissionId}">
+                        
+                        <!-- Update Type -->
+                        <div class="mb-4">
+                            <label class="block text-gray-700 text-sm font-bold mb-2">Update Type</label>
+                            <select id="updateType" class="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-sky-blue focus:border-transparent" required>
+                                <option value="update">General Update</option>
+                                <option value="answered">Prayer Answered!</option>
+                                <option value="need_continued_prayer">Need Continued Prayer</option>
+                            </select>
+                        </div>
+                        
+                        <!-- Update Content -->
+                        <div class="mb-4">
+                            <label class="block text-gray-700 text-sm font-bold mb-2">Your Update</label>
+                            <textarea 
+                                id="updateContent" 
+                                class="w-full p-2 border border-gray-300 rounded-md resize-none focus:ring-2 focus:ring-sky-blue focus:border-transparent" 
+                                rows="4" 
+                                maxlength="1000"
+                                placeholder="Share an update about your prayer request..."
+                                required
+                            ></textarea>
+                            <p class="text-sm text-gray-600 mt-1">
+                                <span id="updateCharCount">0</span> / 1000 characters
+                            </p>
+                        </div>
+                        
+                        <!-- Buttons -->
+                        <div class="flex justify-end space-x-3 mt-4">
+                            <button type="button" onclick="closeUpdateModal()" class="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 transition">
+                                Cancel
+                            </button>
+                            <button type="submit" class="px-4 py-2 bg-sky-blue text-white rounded-md hover:bg-blue-600 transition">
+                                <i class="fas fa-paper-plane mr-2"></i>Submit Update
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    // Add modal to page
+    document.body.insertAdjacentHTML('beforeend', modalHtml);
+    
+    // Add event listeners
+    const updateContent = document.getElementById('updateContent');
+    const updateCharCount = document.getElementById('updateCharCount');
+    const updateForm = document.getElementById('updateForm');
+    
+    // Character counter
+    updateContent.addEventListener('input', function() {
+        updateCharCount.textContent = updateContent.value.length;
+    });
+    
+    // Form submission
+    updateForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        await submitUpdate();
+    });
+}
+
+// Close update modal
+function closeUpdateModal() {
+    const modal = document.getElementById('updateModal');
+    if (modal) {
+        modal.remove();
+    }
+}
+
+// Submit update
+async function submitUpdate() {
+    const submissionId = document.getElementById('updateSubmissionId').value;
+    const updateType = document.getElementById('updateType').value;
+    const content = document.getElementById('updateContent').value;
+    
+    try {
+        const response = await fetch(`/api/submissions/${submissionId}/update`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                updateType,
+                content
+            })
+        });
+        
+        const result = await response.json();
+        
+        if (response.ok) {
+            closeUpdateModal();
+            // Show success message
+            const successDiv = document.createElement('div');
+            successDiv.className = 'fixed top-4 right-4 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded z-50';
+            successDiv.innerHTML = '<i class="fas fa-check-circle mr-2"></i>Update added successfully!';
+            document.body.appendChild(successDiv);
+            
+            // Remove success message after 3 seconds
+            setTimeout(() => successDiv.remove(), 3000);
+            
+            // Reload submissions to show the update
+            if (typeof loadSubmissions === 'function') {
+                loadSubmissions();
+            }
+        } else {
+            alert(result.error || 'Failed to add update. Please try again.');
+        }
+    } catch (error) {
+        console.error('Error submitting update:', error);
+        alert('Network error. Please try again.');
+    }
+}
 </script>

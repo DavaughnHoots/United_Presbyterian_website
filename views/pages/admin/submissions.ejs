@@ -33,6 +33,16 @@
                 </select>
             </div>
             
+            <div class="flex items-center gap-2">
+                <label class="font-medium text-gray-700">Special:</label>
+                <select id="specialFilter" class="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-transparent">
+                    <option value="">None</option>
+                    <option value="urgent" <%= currentSpecial === 'urgent' ? 'selected' : '' %>>Urgent Only</option>
+                    <option value="answered" <%= currentSpecial === 'answered' ? 'selected' : '' %>>Answered Prayers</option>
+                    <option value="attributed" <%= currentSpecial === 'attributed' ? 'selected' : '' %>>Non-Anonymous</option>
+                </select>
+            </div>
+            
             <button id="applyFilters" class="btn-primary">
                 <i class="fas fa-filter mr-2"></i>Apply Filters
             </button>
@@ -63,6 +73,14 @@
                                     <i class="fas fa-praying-hands text-blue-600"></i>
                                 </div>
                                 <span class="font-medium text-blue-700">Prayer Request</span>
+                                <% if (submission.isUrgent) { %>
+                                    <span class="ml-2 px-2 py-1 bg-red-100 text-red-700 text-xs rounded-full">
+                                        <i class="fas fa-exclamation-circle mr-1"></i>Urgent
+                                    </span>
+                                <% } %>
+                                <% if (submission.subcategory) { %>
+                                    <span class="ml-2 text-sm text-gray-500"><%= submission.subcategory %></span>
+                                <% } %>
                             <% } else { %>
                                 <div class="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center">
                                     <i class="fas fa-dove text-purple-600"></i>
@@ -102,11 +120,22 @@
                         <% if (submission.ipHash) { %>
                             <span class="mr-4"><i class="fas fa-fingerprint mr-1"></i>ID: <%= submission.ipHash.substring(0, 8) %>...</span>
                         <% } %>
+                        <% if (!submission.isAnonymous && submission.submitter) { %>
+                            <span class="mr-4"><i class="fas fa-user mr-1"></i>Submitted by: <%= submission.submitter.firstName %> <%= submission.submitter.lastName %></span>
+                        <% } else { %>
+                            <span class="mr-4"><i class="fas fa-user-secret mr-1"></i>Anonymous</span>
+                        <% } %>
                         <% if (submission.approvedAt) { %>
                             <span class="mr-4"><i class="fas fa-check-circle mr-1"></i>Approved: <%= new Date(submission.approvedAt).toLocaleDateString() %></span>
                         <% } %>
                         <% if (submission.rejectedAt) { %>
                             <span class="mr-4"><i class="fas fa-times-circle mr-1"></i>Rejected: <%= new Date(submission.rejectedAt).toLocaleDateString() %></span>
+                        <% } %>
+                        <% if (submission.prayerCount > 0) { %>
+                            <span class="mr-4"><i class="fas fa-praying-hands mr-1"></i><%= submission.prayerCount %> praying</span>
+                        <% } %>
+                        <% if (submission.isAnswered) { %>
+                            <span class="mr-4 text-green-600"><i class="fas fa-check-circle mr-1"></i>Answered prayer</span>
                         <% } %>
                     </div>
                     
@@ -164,12 +193,16 @@ document.addEventListener('DOMContentLoaded', function() {
     const statusFilter = document.getElementById('statusFilter');
     const typeFilter = document.getElementById('typeFilter');
     
+    const specialFilter = document.getElementById('specialFilter');
+    
     applyFilters.addEventListener('click', function() {
         const status = statusFilter.value;
         const type = typeFilter.value;
+        const special = specialFilter.value;
         let url = '/admin/submissions?';
         if (status && status !== 'all') url += `status=${status}&`;
         if (type) url += `type=${type}&`;
+        if (special) url += `special=${special}&`;
         window.location.href = url.slice(0, -1); // Remove trailing & or ?
     });
     

@@ -66,16 +66,30 @@ router.get('/content', requireAdmin, async (req, res) => {
 // Submission moderation
 router.get('/submissions', requireAdmin, async (req, res) => {
   try {
-    const { status = 'pending', type } = req.query;
+    const { status = 'pending', type, special } = req.query;
     
     // Build query
     const where = {};
-    if (status) where.status = status;
+    if (status !== 'all') where.status = status;
     if (type) where.type = type;
+    
+    // Apply special filters
+    if (special === 'urgent') {
+      where.isUrgent = true;
+    } else if (special === 'answered') {
+      where.isAnswered = true;
+    } else if (special === 'attributed') {
+      where.isAnonymous = false;
+    }
     
     const submissions = await Submission.findAll({
       where,
-      order: [['createdAt', 'DESC']]
+      order: [['createdAt', 'DESC']],
+      include: [{
+        model: User,
+        as: 'submitter',
+        attributes: ['id', 'firstName', 'lastName', 'email']
+      }]
     });
     
     res.render('pages/admin/submissions', {
@@ -83,7 +97,8 @@ router.get('/submissions', requireAdmin, async (req, res) => {
       user: req.session.user,
       submissions,
       currentStatus: status,
-      currentType: type
+      currentType: type,
+      currentSpecial: special || ''
     });
   } catch (error) {
     console.error('Error rendering submission moderation:', error);

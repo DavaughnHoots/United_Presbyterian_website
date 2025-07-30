@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const rateLimit = require('express-rate-limit');
 const { requireAuth } = require('../middleware/auth');
-const { UserProgress, DailyContent, User, Submission } = require('../models');
+const { UserProgress, DailyContent, User, Submission, PrayerSupport, SubmissionUpdate } = require('../models');
 
 // Rate limiter for anonymous submissions
 const submissionLimiter = rateLimit({
@@ -42,10 +42,10 @@ router.post('/progress/:contentId', requireAuth, async (req, res) => {
   }
 });
 
-// Submit anonymous content
+// Submit content (anonymous or attributed)
 router.post('/submissions', submissionLimiter, async (req, res) => {
   try {
-    const { type, content } = req.body;
+    const { type, content, subcategory, isUrgent, isAnonymous } = req.body;
     
     if (!type || !content) {
       return res.status(400).json({ error: 'Missing required fields' });
@@ -59,11 +59,18 @@ router.post('/submissions', submissionLimiter, async (req, res) => {
       return res.status(400).json({ error: 'Content too long (max 2000 characters)' });
     }
     
+    // Check if user wants to be anonymous or is not logged in
+    const userId = req.session.user && !isAnonymous ? req.session.user.id : null;
+    
     // Save submission to database with pending status
     const submission = await Submission.create({
       type,
       content: content.trim(),
       status: 'pending',
+      userId,
+      isAnonymous: isAnonymous !== false, // Default to true
+      subcategory: type === 'concern' ? subcategory : null,
+      isUrgent: type === 'concern' ? !!isUrgent : false,
       ipHash: req.ip ? require('crypto').createHash('sha256').update(req.ip).digest('hex').substring(0, 16) : null
     });
     
@@ -207,6 +214,7 @@ router.get('/user/stats', requireAuth, async (req, res) => {
 router.get('/submissions/approved', async (req, res) => {
   try {
     const { type, limit = 10 } = req.query;
+    const userId = req.session.user?.id;
     
     const where = { status: 'approved' };
     if (type && ['joy', 'concern', 'testimony'].includes(type)) {
@@ -215,18 +223,47 @@ router.get('/submissions/approved', async (req, res) => {
     
     const submissions = await Submission.findAll({
       where,
-      order: [['approvedAt', 'DESC']],
+      order: [['isUrgent', 'DESC'], ['approvedAt', 'DESC']],
       limit: parseInt(limit),
-      attributes: ['id', 'type', 'content', 'approvedAt']
+      include: [
+        {
+          model: User,
+          as: 'submitter',
+          attributes: ['id', 'firstName', 'lastName']
+        },
+        {
+          model: PrayerSupport,
+          as: 'prayerSupports',
+          attributes: ['userId']
+        },
+        {
+          model: SubmissionUpdate,
+          as: 'updates',
+          order: [['createdAt', 'DESC']]
+        }
+      ]
     });
     
     // Format submissions for display
-    const formattedSubmissions = submissions.map(sub => ({
-      id: sub.id,
-      type: sub.type,
-      content: sub.content,
-      timeAgo: getTimeAgo(sub.approvedAt)
-    }));
+    const formattedSubmissions = submissions.map(sub => {
+      const isPrayingFor = userId && sub.prayerSupports.some(ps => ps.userId === userId);
+      
+      return {
+        id: sub.id,
+        type: sub.type,
+        content: sub.content,
+        subcategory: sub.subcategory,
+        isUrgent: sub.isUrgent,
+        isAnswered: sub.isAnswered,
+        prayerCount: sub.prayerCount,
+        isPrayingFor,
+        submitterName: !sub.isAnonymous && sub.submitter ? 
+          `${sub.submitter.firstName} ${sub.submitter.lastName}` : null,
+        canUpdate: userId && sub.userId === userId,
+        timeAgo: getTimeAgo(sub.approvedAt),
+        updates: sub.updates.map(update => update.formatForDisplay())
+      };
+    });
     
     res.json(formattedSubmissions);
   } catch (error) {
@@ -260,5 +297,64 @@ function getTimeAgo(date) {
     return months === 1 ? '1 month ago' : `${months} months ago`;
   }
 }
+
+// Toggle prayer support for a submission
+router.post('/submissions/:id/prayer', requireAuth, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const userId = req.session.user.id;
+    
+    // Check if submission exists and is approved
+    const submission = await Submission.findOne({
+      where: { id, status: 'approved' }
+    });
+    
+    if (!submission) {
+      return res.status(404).json({ error: 'Submission not found' });
+    }
+    
+    // Check if user is already praying
+    const existingPrayer = await PrayerSupport.findOne({
+      where: { userId, submissionId: id }
+    });
+    
+    if (existingPrayer) {
+      // Remove prayer
+      const result = await PrayerSupport.removePrayer(userId, id);
+      res.json({ success: true, action: 'removed', ...result });
+    } else {
+      // Add prayer
+      const result = await PrayerSupport.addPrayer(userId, id);
+      res.json({ success: true, action: 'added', ...result });
+    }
+  } catch (error) {
+    console.error('Error toggling prayer:', error);
+    res.status(500).json({ error: 'Failed to update prayer support' });
+  }
+});
+
+// Add update to submission
+router.post('/submissions/:id/update', requireAuth, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { content, updateType } = req.body;
+    const userId = req.session.user.id;
+    
+    if (!content || !updateType) {
+      return res.status(400).json({ error: 'Missing required fields' });
+    }
+    
+    const result = await SubmissionUpdate.createUpdate(id, content, updateType, userId);
+    
+    if (!result.success) {
+      return res.status(400).json({ error: result.error });
+    }
+    
+    res.json(result);
+  } catch (error) {
+    console.error('Error adding update:', error);
+    res.status(500).json({ error: 'Failed to add update' });
+  }
+});
 
 module.exports = router;

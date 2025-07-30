@@ -23,6 +23,48 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.ENUM('pending', 'approved', 'rejected'),
       defaultValue: 'pending'
     },
+    // User attribution fields
+    userId: {
+      type: DataTypes.UUID,
+      allowNull: true,
+      references: {
+        model: 'users',
+        key: 'id'
+      }
+    },
+    isAnonymous: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: true,
+      allowNull: false
+    },
+    // Prayer-specific fields
+    isUrgent: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+      allowNull: false
+    },
+    subcategory: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      validate: {
+        isIn: [['health', 'family', 'work', 'finances', 'relationships', 'spiritual', 'community', 'other']]
+      }
+    },
+    isAnswered: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+      allowNull: false
+    },
+    answeredAt: {
+      type: DataTypes.DATE,
+      allowNull: true
+    },
+    prayerCount: {
+      type: DataTypes.INTEGER,
+      defaultValue: 0,
+      allowNull: false
+    },
+    // Existing fields
     contentHash: {
       type: DataTypes.STRING,
       allowNull: false
@@ -168,6 +210,24 @@ module.exports = (sequelize, DataTypes) => {
     });
     
     return existing !== null;
+  };
+
+  // Associations
+  Submission.associate = function(models) {
+    Submission.belongsTo(models.User, {
+      foreignKey: 'userId',
+      as: 'submitter'
+    });
+    
+    Submission.hasMany(models.PrayerSupport, {
+      foreignKey: 'submissionId',
+      as: 'prayerSupports'
+    });
+    
+    Submission.hasMany(models.SubmissionUpdate, {
+      foreignKey: 'submissionId',
+      as: 'updates'
+    });
   };
 
   return Submission;

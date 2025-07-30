@@ -11,6 +11,8 @@ const Event = require('./Event')(sequelize, DataTypes);
 const EventRegistration = require('./EventRegistration')(sequelize, DataTypes);
 const Setting = require('./Setting')(sequelize, DataTypes);
 const UserActivity = require('./UserActivity')(sequelize, DataTypes);
+const PrayerSupport = require('./PrayerSupport')(sequelize, DataTypes);
+const SubmissionUpdate = require('./SubmissionUpdate')(sequelize, DataTypes);
 
 // Define associations
 User.hasMany(Progress, { foreignKey: 'userId' });
@@ -35,8 +37,8 @@ EventRegistration.belongsTo(User, { foreignKey: 'userId' });
 User.hasMany(UserActivity, { foreignKey: 'userId' });
 UserActivity.belongsTo(User, { foreignKey: 'userId' });
 
-module.exports = {
-  sequelize,
+// Call associate methods if they exist
+const models = {
   User,
   Content,
   Submission,
@@ -45,5 +47,18 @@ module.exports = {
   Event,
   EventRegistration,
   Setting,
-  UserActivity
+  UserActivity,
+  PrayerSupport,
+  SubmissionUpdate
+};
+
+Object.keys(models).forEach(modelName => {
+  if (models[modelName].associate) {
+    models[modelName].associate(models);
+  }
+});
+
+module.exports = {
+  sequelize,
+  ...models
 };
