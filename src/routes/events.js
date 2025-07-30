@@ -5,6 +5,33 @@ const { Event, EventRegistration, User } = require('../models');
 const { requireAuth } = require('../middleware/auth');
 const { generateRecurringOccurrences, getNextOccurrence } = require('../utils/recurringEvents');
 
+// Helper function to format date for frontend without timezone issues
+function formatDateForFrontend(date, startTime = null) {
+  if (!date) return null;
+  
+  // Parse the date
+  let d;
+  if (typeof date === 'string') {
+    // If it looks like a date without time, add noon to avoid timezone issues
+    if (date.length === 10) { // YYYY-MM-DD format
+      d = new Date(date + 'T12:00:00');
+    } else {
+      d = new Date(date);
+    }
+  } else {
+    d = new Date(date);
+  }
+  
+  // If we have a specific time, use it
+  if (startTime) {
+    const [hours, minutes] = startTime.split(':');
+    d.setHours(parseInt(hours), parseInt(minutes), 0, 0);
+  }
+  
+  // Return ISO string without timezone
+  return d.toISOString().slice(0, 19);
+}
+
 // Events calendar page
 router.get('/', async (req, res) => {
   try {
@@ -50,13 +77,17 @@ router.get('/', async (req, res) => {
         if (nextOccurrence) {
           featuredEvents.push({
             ...eventData,
-            startDate: nextOccurrence.startDate,
-            endDate: nextOccurrence.endDate,
+            startDate: formatDateForFrontend(nextOccurrence.startDate),
+            endDate: formatDateForFrontend(nextOccurrence.endDate),
             isRecurringInstance: true
           });
         }
       } else if (event.startDate >= today) {
-        featuredEvents.push(eventData);
+        featuredEvents.push({
+          ...eventData,
+          startDate: formatDateForFrontend(eventData.startDate),
+          endDate: formatDateForFrontend(eventData.endDate)
+        });
       }
     }
     
@@ -120,7 +151,6 @@ router.get('/api/calendar', async (req, res) => {
     const events = await Event.findAll({
       where,
       attributes: ['id', 'title', 'startDate', 'endDate', 'allDay', 'category', 'color', 'location', 'link', 'isRecurring', 'recurrencePattern', 'recurrenceEnd', 'startTime', 'endTime'],
-      raw: true,
       order: [['startDate', 'ASC']]
     });
     
@@ -128,7 +158,7 @@ router.get('/api/calendar', async (req, res) => {
     const allEvents = [];
     
     events.forEach(event => {
-      const eventData = event;
+      const eventData = event.toJSON();
       
       if (event.isRecurring) {
         // Generate occurrences for recurring events
@@ -138,8 +168,8 @@ router.get('/api/calendar', async (req, res) => {
             id: `${occurrence.id}_${occurrence.startDate.getTime()}`, // Unique ID for each occurrence
             originalId: occurrence.id,
             title: occurrence.title,
-            start: occurrence.startDate,
-            end: occurrence.endDate,
+            start: formatDateForFrontend(occurrence.startDate),
+            end: formatDateForFrontend(occurrence.endDate),
             allDay: occurrence.allDay,
             color: occurrence.color,
             category: occurrence.category,
@@ -157,8 +187,8 @@ router.get('/api/calendar', async (req, res) => {
           allEvents.push({
             id: event.id,
             title: event.title,
-            start: event.startDate,
-            end: event.endDate,
+            start: formatDateForFrontend(event.startDate, event.startTime),
+            end: formatDateForFrontend(event.endDate, event.endTime),
             allDay: event.allDay,
             color: event.color,
             category: event.category,

@@ -22,8 +22,8 @@ function generateRecurringOccurrences(event, rangeStart, rangeEnd) {
   const duration = originalEnd - originalStart;
   
   // Store the original time components to preserve them
-  const originalHours = originalStart.getHours();
-  const originalMinutes = originalStart.getMinutes();
+  const originalHours = event.startTime ? parseInt(event.startTime.split(':')[0]) : originalStart.getHours();
+  const originalMinutes = event.startTime ? parseInt(event.startTime.split(':')[1]) : originalStart.getMinutes();
   
   // Set the recurrence end date (default to 1 year from start if not specified)
   const recurrenceEnd = event.recurrenceEnd 
