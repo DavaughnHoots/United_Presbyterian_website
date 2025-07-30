@@ -321,11 +321,17 @@ router.post('/submissions/:id/prayer', requireAuth, async (req, res) => {
     if (existingPrayer) {
       // Remove prayer
       const result = await PrayerSupport.removePrayer(userId, id);
-      res.json({ success: true, action: 'removed', ...result });
+      if (result.success === false) {
+        return res.status(400).json({ error: result.message });
+      }
+      res.json({ success: true, action: 'removed', prayerCount: result.prayerCount });
     } else {
       // Add prayer
       const result = await PrayerSupport.addPrayer(userId, id);
-      res.json({ success: true, action: 'added', ...result });
+      if (result.success === false) {
+        return res.status(400).json({ error: result.message });
+      }
+      res.json({ success: true, action: 'added', prayerCount: result.prayerCount });
     }
   } catch (error) {
     console.error('Error toggling prayer:', error);
