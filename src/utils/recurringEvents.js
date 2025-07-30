@@ -16,10 +16,14 @@ function generateRecurringOccurrences(event, rangeStart, rangeEnd) {
     return occurrences;
   }
   
-  // Parse the original event dates
+  // Parse the original event dates - ensure we maintain local time
   const originalStart = new Date(event.startDate);
   const originalEnd = new Date(event.endDate || event.startDate);
   const duration = originalEnd - originalStart;
+  
+  // Store the original time components to preserve them
+  const originalHours = originalStart.getHours();
+  const originalMinutes = originalStart.getMinutes();
   
   // Set the recurrence end date (default to 1 year from start if not specified)
   const recurrenceEnd = event.recurrenceEnd 
@@ -42,10 +46,16 @@ function generateRecurringOccurrences(event, rangeStart, rangeEnd) {
     
     // Check if this occurrence falls within our range
     if (occurrenceEnd >= rangeStart && currentDate <= rangeEnd) {
+      // Create dates preserving the original time
+      const occurrenceStart = new Date(currentDate);
+      occurrenceStart.setHours(originalHours, originalMinutes, 0, 0);
+      
+      const occurrenceEndDate = new Date(occurrenceStart.getTime() + duration);
+      
       occurrences.push({
         ...event,
-        startDate: new Date(currentDate),
-        endDate: new Date(occurrenceEnd),
+        startDate: occurrenceStart,
+        endDate: occurrenceEndDate,
         originalEventId: event.id,
         isRecurringInstance: true
       });
@@ -108,10 +118,17 @@ function getNextOccurrenceDate(currentDate, pattern) {
     case 'monthly':
       // Add one month, handling edge cases
       const day = next.getDate();
+      const originalMonth = next.getMonth();
       next.setMonth(next.getMonth() + 1);
-      // Handle months with fewer days
+      
+      // If the day changed (e.g., Jan 31 -> Feb 28), use the last valid day
       if (next.getDate() !== day) {
         next.setDate(0); // Go to last day of previous month
+      }
+      
+      // Ensure we actually moved to the next month
+      if (next.getMonth() === originalMonth) {
+        next.setMonth(next.getMonth() + 1);
       }
       break;
   }

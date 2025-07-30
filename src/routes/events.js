@@ -120,6 +120,7 @@ router.get('/api/calendar', async (req, res) => {
     const events = await Event.findAll({
       where,
       attributes: ['id', 'title', 'startDate', 'endDate', 'allDay', 'category', 'color', 'location', 'link', 'isRecurring', 'recurrencePattern', 'recurrenceEnd', 'startTime', 'endTime'],
+      raw: true,
       order: [['startDate', 'ASC']]
     });
     
@@ -127,7 +128,7 @@ router.get('/api/calendar', async (req, res) => {
     const allEvents = [];
     
     events.forEach(event => {
-      const eventData = event.toJSON();
+      const eventData = event;
       
       if (event.isRecurring) {
         // Generate occurrences for recurring events
