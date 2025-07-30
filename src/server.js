@@ -49,7 +49,7 @@ app.use(express.urlencoded({ extended: true }));
 // Static files - serve before routes
 app.use('/css', express.static(path.join(__dirname, '..', 'public', 'css')));
 app.use('/js', express.static(path.join(__dirname, '..', 'public', 'js')));
-app.use('/images', express.static(path.join(__dirname, '..', 'public', 'images')));
+app.use('/img', express.static(path.join(__dirname, '..', 'public', 'img')));
 app.use(express.static(path.join(__dirname, '..', 'public')));
 
 // Session configuration

@@ -1,9 +1,8 @@
-const CACHE_NAME = 'upc-v1';
+const CACHE_NAME = 'upc-v2';
 const urlsToCache = [
   '/',
   '/css/style.css',
   '/js/main.js',
-  '/img/church.jpg',
   '/offline.html'
 ];
 
