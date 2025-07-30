@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const rateLimit = require('express-rate-limit');
 const { requireAuth } = require('../middleware/auth');
-const { UserProgress, DailyContent, User, Submission, PrayerSupport, SubmissionUpdate } = require('../models');
+const { Progress: UserProgress, DailyContent, User, Submission, PrayerSupport, SubmissionUpdate } = require('../models');
 
 // Rate limiter for anonymous submissions
 const submissionLimiter = rateLimit({
