@@ -16,8 +16,6 @@ router.get('/', async (req, res) => {
     
     res.render('pages/home', {
       title: settings.churchName || 'United Presbyterian Church',
-      user: req.session.user || res.locals.user,
-      welcomeMessage: res.locals.welcomeMessage,
       churchName: settings.churchName || 'United Presbyterian Church'
     });
   } catch (error) {
@@ -63,7 +61,6 @@ router.get('/daily', async (req, res) => {
     
     res.render('pages/daily-content', {
       title: 'Daily Spiritual Content',
-      user: req.session.user,
       content: todayContent,
       userProgress: userProgress,
       today: today.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })
@@ -78,8 +75,7 @@ router.get('/daily', async (req, res) => {
 router.get('/share', async (req, res) => {
   try {
     res.render('pages/submissions', {
-      title: 'Share Your Heart',
-      user: req.session.user
+      title: 'Share Your Heart'
     });
   } catch (error) {
     console.error('Error rendering submissions page:', error);
@@ -97,7 +93,6 @@ router.get('/about', async (req, res) => {
     
     res.render('pages/about', {
       title: 'About United Presbyterian Church',
-      user: req.session.user,
       churchName: settings.churchName || 'United Presbyterian Church',
       churchAddress: settings.churchAddress || '',
       phoneNumber: settings.phoneNumber || '',
@@ -121,7 +116,6 @@ router.get('/live', async (req, res) => {
     
     res.render('pages/live', {
       title: 'Live Service - ' + (settings.churchName || 'United Presbyterian Church'),
-      user: req.session.user,
       churchName: settings.churchName || 'United Presbyterian Church',
       youtubeLiveLink: settings.youtubeLiveLink || '',
       serviceTimes: settings.serviceTimes || ''
@@ -136,8 +130,7 @@ router.get('/live', async (req, res) => {
 router.get('/profile', requireAuth, async (req, res) => {
   try {
     res.render('pages/profile', {
-      title: 'My Profile',
-      user: req.session.user
+      title: 'My Profile'
     });
   } catch (error) {
     console.error('Error rendering profile page:', error);
