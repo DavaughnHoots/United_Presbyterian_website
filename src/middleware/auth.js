@@ -53,10 +53,8 @@ const addUserToLocals = (req, res, next) => {
   res.locals.user = req.session.user || null;
   res.locals.welcomeMessage = req.session.welcomeMessage || null;
   
-  // Clear welcome message after displaying
-  if (req.session.welcomeMessage) {
-    delete req.session.welcomeMessage;
-  }
+  // Note: We don't delete welcomeMessage here to avoid session corruption
+  // The message will only display once per request since it's in res.locals
   
   next();
 };
