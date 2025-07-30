@@ -423,7 +423,11 @@ function renderMonthView(container) {
         
         dayEvents.slice(0, 3).forEach(event => {
             const eventColor = event.color || '#87CEEB';
-            html += `<div class="calendar-event" style="background: ${eventColor}; color: white;" onclick="showEventModal(${event.id})">`;
+            const eventId = typeof event.id === 'string' ? `'${event.id}'` : event.id;
+            html += `<div class="calendar-event" style="background: ${eventColor}; color: white;" onclick="showEventModal(${eventId})">`;
+            if (event.isRecurring) {
+                html += `<i class="fas fa-redo mr-1" style="font-size: 0.625rem;"></i>`;
+            }
             html += `${event.title}`;
             html += `</div>`;
         });
@@ -469,7 +473,11 @@ function renderListView(container) {
             html += `<div class="event-list-date-month">${date.toLocaleDateString('en-US', { month: 'short' })}</div>`;
             html += '</div>';
             html += '<div class="flex-1">';
-            html += `<h4 class="font-semibold mb-1">${event.title}</h4>`;
+            html += `<h4 class="font-semibold mb-1">`;
+            if (event.isRecurring) {
+                html += `<i class="fas fa-redo mr-2 text-sky-blue text-sm"></i>`;
+            }
+            html += `${event.title}</h4>`;
             html += '<div class="text-sm text-gray-600 space-y-1">';
             html += `<div><i class="fas fa-clock mr-2"></i>${new Date(event.start).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })}</div>`;
             if (event.location) {
@@ -477,7 +485,8 @@ function renderListView(container) {
             }
             html += '</div>';
             html += '</div>';
-            html += `<a href="/events/${event.id}" class="btn-primary btn-sm">Details</a>`;
+            const detailId = event.originalId || event.id;
+            html += `<a href="/events/${detailId}" class="btn-primary btn-sm">Details</a>`;
             html += '</div>';
         });
     });
@@ -506,7 +515,7 @@ function getEventsForDay(date) {
 }
 
 function showEventModal(eventId) {
-    const event = events.find(e => e.id === eventId);
+    const event = events.find(e => e.id == eventId);
     if (!event) return;
     
     document.getElementById('modalTitle').textContent = event.title;
@@ -521,12 +530,18 @@ function showEventModal(eventId) {
     
     content += `<div><i class="fas ${getCategoryIcon(event.category)} mr-2 text-sky-blue"></i>${event.category.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase())}</div>`;
     
+    if (event.isRecurring) {
+        content += `<div><i class="fas fa-redo mr-2 text-sky-blue"></i>Recurring Event</div>`;
+    }
+    
     if (event.link) {
         content += `<div class="mt-3"><a href="${event.link}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center text-sky-blue hover:underline"><i class="fas fa-external-link-alt mr-2"></i>Event Link</a></div>`;
     }
     
     document.getElementById('modalContent').innerHTML = content;
-    document.getElementById('modalViewBtn').href = `/events/${event.id}`;
+    // For recurring instances, use the original ID
+    const eventDetailId = event.originalId || event.id;
+    document.getElementById('modalViewBtn').href = `/events/${eventDetailId}`;
     document.getElementById('eventModal').classList.remove('hidden');
 }
 

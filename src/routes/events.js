@@ -3,29 +3,71 @@ const router = express.Router();
 const { Op } = require('sequelize');
 const { Event, EventRegistration, User } = require('../models');
 const { requireAuth } = require('../middleware/auth');
+const { generateRecurringOccurrences, getNextOccurrence } = require('../utils/recurringEvents');
 
 // Events calendar page
 router.get('/', async (req, res) => {
   try {
     const { view = 'month', date = new Date().toISOString() } = req.query;
     
-    // Get featured events
-    const featuredEvents = await Event.findAll({
+    // Get featured events (including recurring events)
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    
+    const featuredEventsQuery = await Event.findAll({
       where: {
         isPublished: true,
         isFeatured: true,
-        startDate: {
-          [Op.gte]: new Date()
-        }
+        [Op.or]: [
+          // Future non-recurring events
+          {
+            isRecurring: false,
+            startDate: {
+              [Op.gte]: today
+            }
+          },
+          // Active recurring events
+          {
+            isRecurring: true,
+            [Op.or]: [
+              { recurrenceEnd: null },
+              { recurrenceEnd: { [Op.gte]: today } }
+            ]
+          }
+        ]
       },
-      order: [['startDate', 'ASC']],
-      limit: 3
+      order: [['startDate', 'ASC']]
     });
+    
+    // Process featured events to get next occurrences
+    const featuredEvents = [];
+    
+    for (const event of featuredEventsQuery) {
+      const eventData = event.toJSON();
+      
+      if (event.isRecurring) {
+        const nextOccurrence = getNextOccurrence(eventData);
+        if (nextOccurrence) {
+          featuredEvents.push({
+            ...eventData,
+            startDate: nextOccurrence.startDate,
+            endDate: nextOccurrence.endDate,
+            isRecurringInstance: true
+          });
+        }
+      } else if (event.startDate >= today) {
+        featuredEvents.push(eventData);
+      }
+    }
+    
+    // Sort by next occurrence date and take top 3
+    featuredEvents.sort((a, b) => new Date(a.startDate) - new Date(b.startDate));
+    const topFeaturedEvents = featuredEvents.slice(0, 3);
     
     res.render('pages/events', {
       title: 'Events Calendar - United Presbyterian Church',
       user: req.session.user,
-      featuredEvents,
+      featuredEvents: topFeaturedEvents,
       currentView: view,
       currentDate: date
     });
@@ -39,19 +81,34 @@ router.get('/', async (req, res) => {
 router.get('/api/calendar', async (req, res) => {
   try {
     const { start, end, category } = req.query;
+    const rangeStart = new Date(start);
+    const rangeEnd = new Date(end);
     
+    // First, get all events that might be relevant (including recurring events)
     const where = {
       isPublished: true,
       [Op.or]: [
+        // Regular events in range
         {
           startDate: {
-            [Op.between]: [new Date(start), new Date(end)]
+            [Op.between]: [rangeStart, rangeEnd]
           }
         },
         {
           endDate: {
-            [Op.between]: [new Date(start), new Date(end)]
+            [Op.between]: [rangeStart, rangeEnd]
           }
+        },
+        // Recurring events that started before the range but might have occurrences
+        {
+          isRecurring: true,
+          startDate: {
+            [Op.lte]: rangeEnd
+          },
+          [Op.or]: [
+            { recurrenceEnd: null },
+            { recurrenceEnd: { [Op.gte]: rangeStart } }
+          ]
         }
       ]
     };
@@ -62,23 +119,60 @@ router.get('/api/calendar', async (req, res) => {
     
     const events = await Event.findAll({
       where,
-      attributes: ['id', 'title', 'startDate', 'endDate', 'allDay', 'category', 'color', 'location'],
+      attributes: ['id', 'title', 'startDate', 'endDate', 'allDay', 'category', 'color', 'location', 'link', 'isRecurring', 'recurrencePattern', 'recurrenceEnd', 'startTime', 'endTime'],
       order: [['startDate', 'ASC']]
     });
     
-    // Format for calendar display
-    const formattedEvents = events.map(event => ({
-      id: event.id,
-      title: event.title,
-      start: event.startDate,
-      end: event.endDate,
-      allDay: event.allDay,
-      color: event.color,
-      category: event.category,
-      location: event.location
-    }));
+    // Process events and generate recurring occurrences
+    const allEvents = [];
     
-    res.json(formattedEvents);
+    events.forEach(event => {
+      const eventData = event.toJSON();
+      
+      if (event.isRecurring) {
+        // Generate occurrences for recurring events
+        const occurrences = generateRecurringOccurrences(eventData, rangeStart, rangeEnd);
+        occurrences.forEach(occurrence => {
+          allEvents.push({
+            id: `${occurrence.id}_${occurrence.startDate.getTime()}`, // Unique ID for each occurrence
+            originalId: occurrence.id,
+            title: occurrence.title,
+            start: occurrence.startDate,
+            end: occurrence.endDate,
+            allDay: occurrence.allDay,
+            color: occurrence.color,
+            category: occurrence.category,
+            location: occurrence.location,
+            link: occurrence.link,
+            isRecurring: true,
+            isRecurringInstance: true
+          });
+        });
+      } else {
+        // Regular non-recurring event
+        if ((event.startDate >= rangeStart && event.startDate <= rangeEnd) ||
+            (event.endDate >= rangeStart && event.endDate <= rangeEnd) ||
+            (event.startDate <= rangeStart && event.endDate >= rangeEnd)) {
+          allEvents.push({
+            id: event.id,
+            title: event.title,
+            start: event.startDate,
+            end: event.endDate,
+            allDay: event.allDay,
+            color: event.color,
+            category: event.category,
+            location: event.location,
+            link: event.link,
+            isRecurring: false
+          });
+        }
+      }
+    });
+    
+    // Sort all events by start date
+    allEvents.sort((a, b) => new Date(a.start) - new Date(b.start));
+    
+    res.json(allEvents);
   } catch (error) {
     console.error('Error fetching calendar events:', error);
     res.status(500).json({ error: 'Failed to fetch events' });
