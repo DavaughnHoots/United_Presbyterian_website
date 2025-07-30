@@ -630,6 +630,11 @@ router.post('/api/events', requireAdmin, async (req, res) => {
       }
     });
     
+    // Convert empty string to null for link field
+    if (eventData.link === '') {
+      eventData.link = null;
+    }
+    
     // If endDate is not provided, use startDate (for single-day events)
     if (!eventData.endDate && eventData.startDate) {
       eventData.endDate = eventData.startDate;
@@ -682,6 +687,11 @@ router.put('/api/events/:id', requireAdmin, async (req, res) => {
         eventData[field] = null;
       }
     });
+    
+    // Convert empty string to null for link field
+    if (eventData.link === '') {
+      eventData.link = null;
+    }
     
     // If endDate is not provided, use startDate (for single-day events)
     if (!eventData.endDate && eventData.startDate) {

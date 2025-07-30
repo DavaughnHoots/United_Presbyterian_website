@@ -50,9 +50,17 @@
                                 <i class="fas <%= getCategoryIcon(event.category) %>"></i>
                             </div>
                         </div>
-                        <a href="/events/<%= event.id %>" class="inline-flex items-center text-sky-blue hover:underline">
-                            View Details <i class="fas fa-arrow-right ml-1"></i>
-                        </a>
+                        <div class="flex items-center gap-3">
+                            <a href="/events/<%= event.id %>" class="inline-flex items-center text-sky-blue hover:underline">
+                                View Details <i class="fas fa-arrow-right ml-1"></i>
+                            </a>
+                            <% if (event.link) { %>
+                                <a href="<%= event.link %>" target="_blank" rel="noopener noreferrer" 
+                                   class="inline-flex items-center text-sky-blue hover:underline">
+                                    <i class="fas fa-external-link-alt mr-1"></i> Link
+                                </a>
+                            <% } %>
+                        </div>
                     </div>
                 <% }) %>
             </div>
@@ -512,6 +520,10 @@ function showEventModal(eventId) {
     }
     
     content += `<div><i class="fas ${getCategoryIcon(event.category)} mr-2 text-sky-blue"></i>${event.category.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase())}</div>`;
+    
+    if (event.link) {
+        content += `<div class="mt-3"><a href="${event.link}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center text-sky-blue hover:underline"><i class="fas fa-external-link-alt mr-2"></i>Event Link</a></div>`;
+    }
     
     document.getElementById('modalContent').innerHTML = content;
     document.getElementById('modalViewBtn').href = `/events/${event.id}`;

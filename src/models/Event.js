@@ -57,7 +57,7 @@ module.exports = (sequelize, DataTypes) => {
     defaultValue: false
   },
   recurringPattern: {
-    type: DataTypes.ENUM('daily', 'weekly', 'monthly'),
+    type: DataTypes.ENUM('daily', 'weekly', 'biweekly', 'monthly'),
     allowNull: true
   },
   recurrencePattern: {
@@ -107,6 +107,13 @@ module.exports = (sequelize, DataTypes) => {
   imageUrl: {
     type: DataTypes.STRING,
     allowNull: true
+  },
+  link: {
+    type: DataTypes.STRING,
+    allowNull: true,
+    validate: {
+      isUrl: true
+    }
   },
   createdBy: {
     type: DataTypes.UUID,

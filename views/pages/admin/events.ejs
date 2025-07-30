@@ -104,6 +104,15 @@
                                 <p class="text-sm text-gray-700 mb-3"><%= event.description %></p>
                             <% } %>
                             
+                            <% if (event.link) { %>
+                                <div class="text-sm mb-3">
+                                    <a href="<%= event.link %>" target="_blank" rel="noopener noreferrer" 
+                                       class="text-blue-600 hover:underline">
+                                        <i class="fas fa-external-link-alt mr-1"></i>Event Link
+                                    </a>
+                                </div>
+                            <% } %>
+                            
                             <% if (event.maxAttendees && event.EventRegistrations) { %>
                                 <div class="flex items-center space-x-4 text-sm">
                                     <div>
@@ -203,6 +212,14 @@
                                       class="w-full px-3 py-2 border rounded-lg"></textarea>
                         </div>
                         
+                        <div>
+                            <label class="block text-sm font-medium mb-2">Link (URL)</label>
+                            <input type="url" id="eventLink" name="link" 
+                                   placeholder="https://example.com/registration" 
+                                   class="w-full px-3 py-2 border rounded-lg">
+                            <p class="text-xs text-gray-500 mt-1">Optional: Add a link for registration or more information</p>
+                        </div>
+                        
                         <div class="grid grid-cols-2 gap-4">
                             <div>
                                 <label class="block text-sm font-medium mb-2">Max Attendees</label>
@@ -229,6 +246,7 @@
                                 <label class="block text-sm font-medium mb-2">Recurrence Pattern</label>
                                 <select id="recurrencePattern" name="recurrencePattern" 
                                         class="w-full px-3 py-2 border rounded-lg">
+                                    <option value="daily">Daily</option>
                                     <option value="weekly">Weekly</option>
                                     <option value="biweekly">Bi-weekly</option>
                                     <option value="monthly">Monthly</option>
@@ -323,6 +341,7 @@ function editEvent(eventId) {
     document.getElementById('eventDescription').value = event.description || '';
     document.getElementById('eventMaxAttendees').value = event.maxAttendees || '';
     document.getElementById('eventDeadline').value = event.registrationDeadline || '';
+    document.getElementById('eventLink').value = event.link || '';
     document.getElementById('eventRecurring').checked = event.isRecurring;
     document.getElementById('eventRequireRegistration').checked = event.requireRegistration;
     

@@ -151,6 +151,18 @@
         </div>
     <% } %>
     
+    <!-- Event Link -->
+    <% if (event.link) { %>
+        <div class="module-card mb-6">
+            <h2 class="text-xl font-semibold mb-4">Additional Information</h2>
+            <a href="<%= event.link %>" target="_blank" rel="noopener noreferrer" 
+               class="inline-flex items-center text-sky-blue hover:underline text-lg">
+                <i class="fas fa-external-link-alt mr-2"></i>
+                Visit Event Page
+            </a>
+        </div>
+    <% } %>
+    
     <!-- Back to Calendar -->
     <div class="text-center">
         <a href="/events" class="inline-flex items-center text-sky-blue hover:underline">
