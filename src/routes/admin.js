@@ -622,6 +622,14 @@ router.post('/api/events', requireAdmin, async (req, res) => {
   try {
     const eventData = req.body;
     
+    // Convert empty strings to null for date/time fields
+    const dateTimeFields = ['startDate', 'endDate', 'startTime', 'endTime', 'registrationDeadline', 'recurrenceEnd'];
+    dateTimeFields.forEach(field => {
+      if (eventData[field] === '') {
+        eventData[field] = null;
+      }
+    });
+    
     // If endDate is not provided, use startDate (for single-day events)
     if (!eventData.endDate && eventData.startDate) {
       eventData.endDate = eventData.startDate;
@@ -635,7 +643,7 @@ router.post('/api/events', requireAdmin, async (req, res) => {
       eventData.recurringPattern = eventData.recurrencePattern;
     }
     if (eventData.hasOwnProperty('recurrenceEnd')) {
-      eventData.recurringEndDate = eventData.recurrenceEnd;
+      eventData.recurringEndDate = eventData.recurrenceEnd === '' ? null : eventData.recurrenceEnd;
     }
     if (eventData.hasOwnProperty('requireRegistration')) {
       eventData.registrationRequired = eventData.requireRegistration;
@@ -667,6 +675,14 @@ router.put('/api/events/:id', requireAdmin, async (req, res) => {
       return res.status(404).json({ error: 'Event not found' });
     }
     
+    // Convert empty strings to null for date/time fields
+    const dateTimeFields = ['startDate', 'endDate', 'startTime', 'endTime', 'registrationDeadline', 'recurrenceEnd'];
+    dateTimeFields.forEach(field => {
+      if (eventData[field] === '') {
+        eventData[field] = null;
+      }
+    });
+    
     // If endDate is not provided, use startDate (for single-day events)
     if (!eventData.endDate && eventData.startDate) {
       eventData.endDate = eventData.startDate;
@@ -680,7 +696,7 @@ router.put('/api/events/:id', requireAdmin, async (req, res) => {
       eventData.recurringPattern = eventData.recurrencePattern;
     }
     if (eventData.hasOwnProperty('recurrenceEnd')) {
-      eventData.recurringEndDate = eventData.recurrenceEnd;
+      eventData.recurringEndDate = eventData.recurrenceEnd === '' ? null : eventData.recurrenceEnd;
     }
     if (eventData.hasOwnProperty('requireRegistration')) {
       eventData.registrationRequired = eventData.requireRegistration;
