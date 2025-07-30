@@ -11,7 +11,7 @@
     
     <!-- Greeting Card -->
     <div class="greeting-card mb-6">
-        <p class="text-gray-500 text-sm">Hi <%= typeof user !== 'undefined' && user ? user.firstName : 'Friend' %></p>
+        <p class="text-gray-500 text-sm">Hi <%= user ? user.firstName : 'Friend' %></p>
         <h1 class="text-3xl font-bold text-gray-800" id="greeting">Good Morning</h1>
     </div>
     
@@ -105,7 +105,7 @@
         <a href="/daily" class="btn-primary w-full text-center mt-4">Explore Today's Content</a>
     </div>
     
-    <% if (typeof user !== 'undefined' && user) { %>
+    <% if (user) { %>
         <!-- User Progress Section -->
         <div class="module-card">
             <h3 class="text-xl font-semibold mb-4">Your Spiritual Progress</h3>

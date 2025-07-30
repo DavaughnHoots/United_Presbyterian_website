@@ -238,8 +238,7 @@ router.get('/submissions/approved', async (req, res) => {
         },
         {
           model: SubmissionUpdate,
-          as: 'updates',
-          order: [['createdAt', 'DESC']]
+          as: 'updates'
         }
       ]
     });
@@ -261,7 +260,7 @@ router.get('/submissions/approved', async (req, res) => {
           `${sub.submitter.firstName} ${sub.submitter.lastName}` : null,
         canUpdate: userId && sub.userId === userId,
         timeAgo: getTimeAgo(sub.approvedAt),
-        updates: sub.updates.map(update => update.formatForDisplay())
+        updates: sub.updates ? sub.updates.map(update => update.formatForDisplay()) : []
       };
     });
     
