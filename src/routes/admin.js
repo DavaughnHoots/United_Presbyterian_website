@@ -622,11 +622,37 @@ router.post('/api/events', requireAdmin, async (req, res) => {
   try {
     const eventData = req.body;
     
+    // If endDate is not provided, use startDate (for single-day events)
+    if (!eventData.endDate && eventData.startDate) {
+      eventData.endDate = eventData.startDate;
+    }
+    
+    // Handle recurring field duplicates (use the form field names)
+    if (eventData.hasOwnProperty('isRecurring')) {
+      eventData.recurring = eventData.isRecurring;
+    }
+    if (eventData.hasOwnProperty('recurrencePattern')) {
+      eventData.recurringPattern = eventData.recurrencePattern;
+    }
+    if (eventData.hasOwnProperty('recurrenceEnd')) {
+      eventData.recurringEndDate = eventData.recurrenceEnd;
+    }
+    if (eventData.hasOwnProperty('requireRegistration')) {
+      eventData.registrationRequired = eventData.requireRegistration;
+    }
+    
+    // Add createdBy field
+    eventData.createdBy = req.session.user.id;
+    
     const newEvent = await Event.create(eventData);
     res.json({ success: true, event: newEvent });
   } catch (error) {
     console.error('Error creating event:', error);
-    res.status(500).json({ error: 'Failed to create event' });
+    // Send more detailed error message
+    const errorMessage = error.errors && error.errors.length > 0 
+      ? error.errors[0].message 
+      : error.message || 'Failed to create event';
+    res.status(500).json({ error: errorMessage });
   }
 });
 
@@ -641,11 +667,34 @@ router.put('/api/events/:id', requireAdmin, async (req, res) => {
       return res.status(404).json({ error: 'Event not found' });
     }
     
+    // If endDate is not provided, use startDate (for single-day events)
+    if (!eventData.endDate && eventData.startDate) {
+      eventData.endDate = eventData.startDate;
+    }
+    
+    // Handle recurring field duplicates (use the form field names)
+    if (eventData.hasOwnProperty('isRecurring')) {
+      eventData.recurring = eventData.isRecurring;
+    }
+    if (eventData.hasOwnProperty('recurrencePattern')) {
+      eventData.recurringPattern = eventData.recurrencePattern;
+    }
+    if (eventData.hasOwnProperty('recurrenceEnd')) {
+      eventData.recurringEndDate = eventData.recurrenceEnd;
+    }
+    if (eventData.hasOwnProperty('requireRegistration')) {
+      eventData.registrationRequired = eventData.requireRegistration;
+    }
+    
     await event.update(eventData);
     res.json({ success: true, event });
   } catch (error) {
     console.error('Error updating event:', error);
-    res.status(500).json({ error: 'Failed to update event' });
+    // Send more detailed error message
+    const errorMessage = error.errors && error.errors.length > 0 
+      ? error.errors[0].message 
+      : error.message || 'Failed to update event';
+    res.status(500).json({ error: errorMessage });
   }
 });
 
