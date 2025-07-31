@@ -140,10 +140,10 @@ router.get('/api/calendar-all', async (req, res) => {
       endTime: event.endTime,
       allDay: event.allDay,
       category: event.category,
-      categories: event.categories || [],
+      categories: event.categories || [], // Will be undefined until migration runs
       color: event.color,
       link: event.link,
-      externalUrl: event.externalUrl,
+      externalUrl: event.externalUrl || null, // Will be undefined until migration runs
       isRecurring: event.isRecurring,
       recurringPattern: event.recurringPattern
     }));
