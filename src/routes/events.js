@@ -32,6 +32,19 @@ function formatDateForFrontend(date, startTime = null) {
   return d.toISOString().slice(0, 19);
 }
 
+// Calendar view page with FullCalendar
+router.get('/calendar', async (req, res) => {
+  try {
+    res.render('pages/events-calendar', {
+      title: 'Full Calendar View - United Presbyterian Church',
+      user: req.session.user
+    });
+  } catch (error) {
+    console.error('Error loading calendar view:', error);
+    res.status(500).send('Internal server error');
+  }
+});
+
 // Events calendar page
 router.get('/', async (req, res) => {
   try {
@@ -105,6 +118,40 @@ router.get('/', async (req, res) => {
   } catch (error) {
     console.error('Error loading events page:', error);
     res.status(500).send('Internal server error');
+  }
+});
+
+// Get all events for FullCalendar view
+router.get('/api/calendar-all', async (req, res) => {
+  try {
+    const events = await Event.findAll({
+      where: { isPublished: true },
+      order: [['startDate', 'ASC']]
+    });
+
+    const formattedEvents = events.map(event => ({
+      id: event.id,
+      title: event.title,
+      description: event.description,
+      location: event.location,
+      startDate: event.startDate,
+      endDate: event.endDate,
+      startTime: event.startTime,
+      endTime: event.endTime,
+      allDay: event.allDay,
+      category: event.category,
+      categories: event.categories || [],
+      color: event.color,
+      link: event.link,
+      externalUrl: event.externalUrl,
+      isRecurring: event.isRecurring,
+      recurringPattern: event.recurringPattern
+    }));
+
+    res.json({ success: true, events: formattedEvents });
+  } catch (error) {
+    console.error('Error fetching calendar events:', error);
+    res.status(500).json({ success: false, error: 'Failed to fetch events' });
   }
 });
 
@@ -370,6 +417,136 @@ router.post('/:id/cancel', requireAuth, async (req, res) => {
   } catch (error) {
     console.error('Error cancelling registration:', error);
     res.status(500).json({ error: 'Failed to cancel registration' });
+  }
+});
+
+// Event detail page
+router.get('/:id', async (req, res) => {
+  try {
+    const event = await Event.findByPk(req.params.id);
+    
+    if (!event) {
+      return res.status(404).render('pages/404', {
+        title: 'Event Not Found',
+        user: req.session.user
+      });
+    }
+
+    // Generate JSON-LD for SEO
+    const jsonLd = {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "name": event.title,
+      "description": event.description || '',
+      "startDate": event.startDate.toISOString(),
+      "endDate": event.endDate.toISOString(),
+      "eventAttendanceMode": "https://schema.org/OfflineEvent",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "location": {
+        "@type": "Place",
+        "name": event.location || "United Presbyterian Church",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "Church Address",
+          "addressLocality": "City",
+          "addressRegion": "State",
+          "postalCode": "ZIP"
+        }
+      },
+      "organizer": {
+        "@type": "Organization",
+        "name": "United Presbyterian Church",
+        "url": "https://unitedpresbyterian.org"
+      }
+    };
+
+    if (event.link || event.externalUrl) {
+      jsonLd.url = event.link || event.externalUrl;
+    }
+
+    res.render('pages/event-detail', {
+      title: `${event.title} - United Presbyterian Church`,
+      user: req.session.user,
+      event: event,
+      jsonLd: JSON.stringify(jsonLd)
+    });
+
+  } catch (error) {
+    console.error('Error loading event detail:', error);
+    res.status(500).render('pages/500', {
+      title: 'Server Error',
+      user: req.session.user
+    });
+  }
+});
+
+// Generate ICS file for individual event
+router.get('/:id/ics', async (req, res) => {
+  try {
+    const event = await Event.findByPk(req.params.id);
+    
+    if (!event) {
+      return res.status(404).send('Event not found');
+    }
+
+    // Helper function to escape ICS text
+    function escapeICS(str = '') {
+      return String(str)
+        .replace(/\\/g, '\\\\')
+        .replace(/\n/g, '\\n')
+        .replace(/,/g, '\\,')
+        .replace(/;/g, '\\;');
+    }
+
+    // Generate ICS content
+    const dtstamp = new Date().toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
+    const uid = `${event.id}@unitedpresbyterian.org`;
+    
+    // Format dates for ICS
+    let dtstart, dtend;
+    if (event.allDay) {
+      // For all-day events, use DATE format
+      dtstart = new Date(event.startDate).toISOString().slice(0, 10).replace(/-/g, '');
+      const endDate = new Date(event.endDate);
+      endDate.setDate(endDate.getDate() + 1); // ICS all-day events end date is exclusive
+      dtend = endDate.toISOString().slice(0, 10).replace(/-/g, '');
+    } else {
+      // For timed events, use DATE-TIME format
+      dtstart = new Date(event.startDate).toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
+      dtend = new Date(event.endDate).toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
+    }
+
+    const categories = event.categories && event.categories.length > 0 
+      ? event.categories.join(',') 
+      : event.category;
+
+    const icsContent = [
+      'BEGIN:VCALENDAR',
+      'VERSION:2.0',
+      'PRODID:-//United Presbyterian Church//Events//EN',
+      'BEGIN:VEVENT',
+      `UID:${uid}`,
+      `DTSTAMP:${dtstamp}`,
+      event.allDay ? `DTSTART;VALUE=DATE:${dtstart}` : `DTSTART:${dtstart}`,
+      event.allDay ? `DTEND;VALUE=DATE:${dtend}` : `DTEND:${dtend}`,
+      `SUMMARY:${escapeICS(event.title)}`,
+      `DESCRIPTION:${escapeICS(event.description || '')}`,
+      event.location ? `LOCATION:${escapeICS(event.location)}` : '',
+      categories ? `CATEGORIES:${escapeICS(categories)}` : '',
+      event.link || event.externalUrl ? `URL:${event.link || event.externalUrl}` : '',
+      'END:VEVENT',
+      'END:VCALENDAR'
+    ].filter(line => line).join('\r\n') + '\r\n';
+
+    // Set headers for ICS file download
+    const filename = event.slug || event.title.toLowerCase().replace(/[^a-z0-9]/g, '-');
+    res.setHeader('Content-Type', 'text/calendar; charset=utf-8');
+    res.setHeader('Content-Disposition', `attachment; filename="${filename}.ics"`);
+    res.send(icsContent);
+
+  } catch (error) {
+    console.error('Error generating ICS file:', error);
+    res.status(500).send('Error generating calendar file');
   }
 });
 

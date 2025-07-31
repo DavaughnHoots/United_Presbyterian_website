@@ -1,0 +1,270 @@
+<div class="max-w-7xl mx-auto">
+    <!-- Page Header -->
+    <div class="text-center mb-8">
+        <h1 class="text-3xl lg:text-4xl font-bold mb-4">Church Calendar</h1>
+        <p class="text-gray-600 text-lg">View all church events and observances</p>
+    </div>
+
+    <!-- Calendar Navigation -->
+    <div class="module-card mb-6">
+        <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+            <!-- Category Filters -->
+            <div class="flex flex-wrap gap-2" id="category-filters">
+                <span class="text-sm text-gray-600 mr-2">Filter by:</span>
+            </div>
+            
+            <!-- View Options -->
+            <div class="flex items-center gap-2">
+                <a href="/events" class="btn btn-secondary">
+                    <i class="fas fa-list mr-2"></i>List View
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- FullCalendar Container -->
+    <div class="module-card">
+        <div id="calendar" class="fc-custom"></div>
+    </div>
+</div>
+
+<!-- FullCalendar CSS -->
+<link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet"/>
+
+<!-- Custom Calendar Styles -->
+<style>
+    .fc-custom {
+        font-family: inherit;
+    }
+    
+    .fc-custom .fc-toolbar-title {
+        font-size: 1.5rem;
+        font-weight: 600;
+    }
+    
+    .fc-custom .fc-button {
+        background-color: #87CEEB;
+        border-color: #87CEEB;
+        font-weight: 500;
+        padding: 0.375rem 0.75rem;
+    }
+    
+    .fc-custom .fc-button:hover {
+        background-color: #6AB5E3;
+        border-color: #6AB5E3;
+    }
+    
+    .fc-custom .fc-button-active {
+        background-color: #4A90E2 !important;
+        border-color: #4A90E2 !important;
+    }
+    
+    .fc-custom .fc-event {
+        border: none;
+        padding: 2px 4px;
+        font-size: 0.875rem;
+    }
+    
+    .fc-custom .fc-daygrid-event-dot {
+        display: none;
+    }
+    
+    .fc-custom .fc-list-event:hover td {
+        background-color: #f3f4f6;
+    }
+    
+    .category-filter {
+        padding: 0.25rem 0.75rem;
+        border-radius: 9999px;
+        font-size: 0.875rem;
+        cursor: pointer;
+        transition: all 0.2s;
+        border: 2px solid transparent;
+    }
+    
+    .category-filter.active {
+        border-color: currentColor;
+        font-weight: 500;
+    }
+    
+    /* Category Colors */
+    .cat-Holiday { background-color: #1f78b4; color: white; }
+    .cat-Religious { background-color: #33a02c; color: white; }
+    .cat-Awareness { background-color: #e31a1c; color: white; }
+    .cat-Season { background-color: #ff7f00; color: white; }
+    .cat-Social-Justice { background-color: #6a3d9a; color: white; }
+    .cat-Commemoration { background-color: #b15928; color: white; }
+    .cat-Fellowship { background-color: #fb9a99; color: #333; }
+    .cat-Youth { background-color: #cab2d6; color: #333; }
+    .cat-Education { background-color: #ffff99; color: #333; }
+    .cat-Service { background-color: #b2df8a; color: #333; }
+    .cat-Mission { background-color: #a6cee3; color: #333; }
+    .cat-Campaign { background-color: #fdbf6f; color: #333; }
+    .cat-default { background-color: #636363; color: white; }
+    
+    /* Mobile responsiveness */
+    @media (max-width: 640px) {
+        .fc-custom .fc-toolbar {
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .fc-custom .fc-toolbar-chunk {
+            display: flex;
+            justify-content: center;
+        }
+        
+        .fc-custom .fc-toolbar-title {
+            font-size: 1.25rem;
+        }
+        
+        .fc-custom .fc-event {
+            font-size: 0.75rem;
+            padding: 1px 2px;
+        }
+    }
+</style>
+
+<!-- FullCalendar JS -->
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Category mappings
+    const categoryColors = {
+        'Holiday': '#1f78b4',
+        'Religious': '#33a02c',
+        'Awareness': '#e31a1c',
+        'Season': '#ff7f00',
+        'Social Justice': '#6a3d9a',
+        'Commemoration': '#b15928',
+        'Fellowship': '#fb9a99',
+        'Youth': '#cab2d6',
+        'Education': '#ffff99',
+        'Service': '#b2df8a',
+        'Mission': '#a6cee3',
+        'Campaign': '#fdbf6f',
+        'default': '#636363'
+    };
+
+    let activeCategories = new Set();
+    let calendar;
+
+    // Initialize calendar
+    const calendarEl = document.getElementById('calendar');
+    
+    // Fetch events and initialize
+    fetch('/events/api/calendar-all')
+        .then(response => response.json())
+        .then(data => {
+            // Extract unique categories
+            const allCategories = new Set();
+            data.events.forEach(event => {
+                if (event.categories && Array.isArray(event.categories)) {
+                    event.categories.forEach(cat => allCategories.add(cat));
+                }
+            });
+
+            // Create filter buttons
+            const filtersContainer = document.getElementById('category-filters');
+            allCategories.forEach(category => {
+                const catClass = category.replace(/[^a-zA-Z0-9]/g, '-');
+                const btn = document.createElement('button');
+                btn.className = `category-filter cat-${catClass} active`;
+                btn.textContent = category;
+                btn.dataset.category = category;
+                activeCategories.add(category);
+                
+                btn.addEventListener('click', function() {
+                    if (activeCategories.has(category)) {
+                        activeCategories.delete(category);
+                        btn.classList.remove('active');
+                    } else {
+                        activeCategories.add(category);
+                        btn.classList.add('active');
+                    }
+                    updateCalendarEvents();
+                });
+                
+                filtersContainer.appendChild(btn);
+            });
+
+            // Transform events for FullCalendar
+            const calendarEvents = data.events.map(event => {
+                const primaryCategory = event.categories && event.categories.length > 0 
+                    ? event.categories[0] 
+                    : 'default';
+                
+                return {
+                    id: event.id,
+                    title: event.title,
+                    start: event.allDay ? event.startDate.split('T')[0] : event.startDate,
+                    end: event.allDay ? event.endDate.split('T')[0] : event.endDate,
+                    allDay: event.allDay,
+                    backgroundColor: event.color || categoryColors[primaryCategory] || categoryColors.default,
+                    borderColor: event.color || categoryColors[primaryCategory] || categoryColors.default,
+                    extendedProps: {
+                        description: event.description,
+                        location: event.location,
+                        categories: event.categories || [],
+                        link: event.link,
+                        externalUrl: event.externalUrl
+                    }
+                };
+            });
+
+            // Initialize FullCalendar
+            calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                height: 'auto',
+                headerToolbar: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'dayGridMonth,timeGridWeek,listMonth'
+                },
+                events: calendarEvents,
+                eventClick: function(info) {
+                    if (info.event.extendedProps.link) {
+                        window.open(info.event.extendedProps.link, '_blank');
+                    } else if (info.event.extendedProps.externalUrl) {
+                        window.open(info.event.extendedProps.externalUrl, '_blank');
+                    } else {
+                        window.location.href = `/events/${info.event.id}`;
+                    }
+                },
+                eventDidMount: function(info) {
+                    // Add tooltip
+                    if (info.event.extendedProps.description) {
+                        info.el.setAttribute('title', info.event.extendedProps.description);
+                    }
+                },
+                eventDisplay: 'block',
+                dayMaxEvents: 3,
+                moreLinkClick: 'popover'
+            });
+
+            calendar.render();
+
+            // Store all events for filtering
+            window.allCalendarEvents = calendarEvents;
+        })
+        .catch(error => {
+            console.error('Error loading calendar events:', error);
+        });
+
+    // Update calendar events based on active filters
+    function updateCalendarEvents() {
+        if (!calendar || !window.allCalendarEvents) return;
+
+        const filteredEvents = window.allCalendarEvents.filter(event => {
+            if (!event.extendedProps.categories || event.extendedProps.categories.length === 0) {
+                return activeCategories.size === 0;
+            }
+            return event.extendedProps.categories.some(cat => activeCategories.has(cat));
+        });
+
+        calendar.removeAllEvents();
+        calendar.addEventSource(filteredEvents);
+    }
+});
+</script>
