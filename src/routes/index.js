@@ -14,6 +14,13 @@ router.get('/', async (req, res) => {
     
     // Get current time
     const now = new Date();
+    
+    // Get Eastern Time offset (EST = -5, EDT = -4)
+    const easternOffset = new Date().toLocaleString("en-US", {timeZone: "America/New_York", timeZoneName: "short"}).includes("EDT") ? -4 : -5;
+    const utcOffset = now.getTimezoneOffset() / 60; // in hours
+    const hoursDiff = utcOffset + easternOffset; // difference between server time and Eastern
+    
+    // Get today's date range in server timezone
     const today = new Date(now);
     today.setHours(0, 0, 0, 0);
     const endOfDay = new Date(today);
@@ -60,14 +67,14 @@ router.get('/', async (req, res) => {
           const eventStart = new Date(occurrence.startDate);
           const eventEnd = new Date(occurrence.endDate);
           
-          // If event has specific times, use them
+          // If event has specific times, adjust for Eastern Time
           if (event.startTime) {
             const [hours, minutes] = event.startTime.split(':');
-            eventStart.setHours(parseInt(hours), parseInt(minutes), 0, 0);
+            eventStart.setHours(parseInt(hours) - hoursDiff, parseInt(minutes), 0, 0);
           }
           if (event.endTime) {
             const [hours, minutes] = event.endTime.split(':');
-            eventEnd.setHours(parseInt(hours), parseInt(minutes), 0, 0);
+            eventEnd.setHours(parseInt(hours) - hoursDiff, parseInt(minutes), 0, 0);
           }
           
           // Check if event is currently active
@@ -92,13 +99,14 @@ router.get('/', async (req, res) => {
         const eventStart = new Date(event.startDate);
         const eventEnd = new Date(event.endDate);
         
+        // If event has specific times, adjust for Eastern Time
         if (event.startTime) {
           const [hours, minutes] = event.startTime.split(':');
-          eventStart.setHours(parseInt(hours), parseInt(minutes), 0, 0);
+          eventStart.setHours(parseInt(hours) - hoursDiff, parseInt(minutes), 0, 0);
         }
         if (event.endTime) {
           const [hours, minutes] = event.endTime.split(':');
-          eventEnd.setHours(parseInt(hours), parseInt(minutes), 0, 0);
+          eventEnd.setHours(parseInt(hours) - hoursDiff, parseInt(minutes), 0, 0);
         }
         
         if (now >= eventStart && now <= eventEnd) {
