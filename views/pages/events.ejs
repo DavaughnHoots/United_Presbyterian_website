@@ -224,8 +224,8 @@
 }
 
 .calendar-event-dot {
-    width: 1.25rem;
-    height: 1.25rem;
+    width: 1.5rem;
+    height: 1.5rem;
     border-radius: 50%;
     cursor: pointer;
     display: inline-flex;
@@ -238,6 +238,10 @@
 .calendar-event-dot:hover {
     transform: scale(1.1);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.calendar-event-dot.recurring {
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.8), 0 0 0 3px rgba(0, 0, 0, 0.2);
 }
 
 .calendar-event-more {
@@ -306,8 +310,12 @@
     }
     
     .calendar-event-dot {
-        width: 1rem;
-        height: 1rem;
+        width: 1.25rem;
+        height: 1.25rem;
+    }
+    
+    .calendar-event-dot i {
+        font-size: 0.5rem;
     }
     
     .calendar-event-dots {
@@ -343,8 +351,12 @@
     }
     
     .calendar-event-dot {
-        width: 0.75rem;
-        height: 0.75rem;
+        width: 1rem;
+        height: 1rem;
+    }
+    
+    .calendar-event-dot i {
+        font-size: 0.375rem;
     }
     
     .calendar-event-dots {
@@ -525,10 +537,10 @@ function renderMonthView(container) {
             dayEvents.slice(0, 5).forEach(event => {
                 const eventColor = event.color || '#87CEEB';
                 const eventId = typeof event.id === 'string' ? `'${event.id}'` : event.id;
-                html += `<span class="calendar-event-dot" style="background: ${eventColor};" onclick="showEventModal(${eventId})" title="${event.title}">`;
-                if (event.isRecurring) {
-                    html += `<i class="fas fa-redo" style="font-size: 0.5rem;"></i>`;
-                }
+                const categoryIcon = getCategoryIcon(event.category);
+                const recurringClass = event.isRecurring ? 'recurring' : '';
+                html += `<span class="calendar-event-dot ${recurringClass}" style="background: ${eventColor};" onclick="showEventModal(${eventId})" title="${event.title}${event.isRecurring ? ' (Recurring)' : ''}">`;
+                html += `<i class="fas ${categoryIcon}" style="font-size: 0.625rem; color: white;"></i>`;
                 html += `</span>`;
             });
             if (dayEvents.length > 5) {
