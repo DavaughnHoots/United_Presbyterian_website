@@ -1,0 +1,1605 @@
+[
+  {
+    "id": "new-years-day-2025",
+    "name": "New Year’s Day",
+    "start": "2025-01-01",
+    "end": "2025-01-01",
+    "allDay": true,
+    "categories": [
+      "Holiday"
+    ],
+    "description": "Start of the civil new year.",
+    "slug": "new-years-day",
+    "url": "https://example.org/observances/new-years-day"
+  },
+  {
+    "id": "epiphany-of-the-lord-2025",
+    "name": "Epiphany of the Lord",
+    "start": "2025-01-06",
+    "end": "2025-01-06",
+    "allDay": true,
+    "categories": [
+      "Religious"
+    ],
+    "description": "Epiphany of the Lord.",
+    "slug": "epiphany-of-the-lord",
+    "url": "https://example.org/observances/epiphany-of-the-lord"
+  },
+  {
+    "id": "human-trafficking-awareness-day-2025",
+    "name": "Human Trafficking Awareness Day",
+    "start": "2025-01-11",
+    "end": "2025-01-11",
+    "allDay": true,
+    "categories": [
+      "Awareness"
+    ],
+    "description": "Awareness around human trafficking.",
+    "slug": "human-trafficking-awareness-day",
+    "url": "https://example.org/observances/human-trafficking-awareness-day"
+  },
+  {
+    "id": "baptism-of-the-lord-2025",
+    "name": "Baptism of the Lord",
+    "start": "2025-01-12",
+    "end": "2025-01-12",
+    "allDay": true,
+    "categories": [
+      "Religious"
+    ],
+    "description": "Baptism of the Lord.",
+    "slug": "baptism-of-the-lord",
+    "url": "https://example.org/observances/baptism-of-the-lord"
+  },
+  {
+    "id": "ecumenical-week-of-prayer-for-christian-unity-begins-2025",
+    "name": "Ecumenical Week of Prayer for Christian Unity begins",
+    "start": "2025-01-18",
+    "end": "2025-01-18",
+    "allDay": true,
+    "categories": [
+      "Religious",
+      "Ecumenical"
+    ],
+    "description": "Beginning of the Ecumenical Week of Prayer for Christian Unity.",
+    "slug": "ecumenical-week-of-prayer-for-christian-unity-begins",
+    "url": "https://example.org/observances/ecumenical-week-of-prayer-for-christian-unity-begins"
+  },
+  {
+    "id": "per-capita-sunday-2025",
+    "name": "Per Capita Sunday",
+    "start": "2025-01-19",
+    "end": "2025-01-19",
+    "allDay": true,
+    "categories": [
+      "Religious"
+    ],
+    "description": "Per Capita Sunday.",
+    "slug": "per-capita-sunday",
+    "url": "https://example.org/observances/per-capita-sunday"
+  },
+  {
+    "id": "matthew-25:-dismantle-structural-racism-sunday-2025",
+    "name": "Matthew 25: Dismantle Structural Racism Sunday",
+    "start": "2025-01-19",
+    "end": "2025-01-19",
+    "allDay": true,
+    "categories": [
+      "Religious",
+      "Social Justice"
+    ],
+    "description": "Matthew 25: Dismantle Structural Racism Sunday.",
+    "slug": "matthew-25:-dismantle-structural-racism-sunday",
+    "url": "https://example.org/observances/matthew-25:-dismantle-structural-racism-sunday"
+  },
+  {
+    "id": "racial-&-intercultural-justice-presbyterians-affirm-black-lives-matter-2025",
+    "name": "Racial & Intercultural Justice / Presbyterians Affirm Black Lives Matter",
+    "start": "2025-01-19",
+    "end": "2025-01-19",
+    "allDay": true,
+    "categories": [
+      "Religious",
+      "Social Justice"
+    ],
+    "description": "Racial & Intercultural Justice and affirmation of Black Lives Matter.",
+    "slug": "racial-&-intercultural-justice-presbyterians-affirm-black-lives-matter",
+    "url": "https://example.org/observances/racial-&-intercultural-justice-presbyterians-affirm-black-lives-matter"
+  },
+  {
+    "id": "martin-luther-king-jr.-day-2025",
+    "name": "Martin Luther King Jr. Day",
+    "start": "2025-01-20",
+    "end": "2025-01-20",
+    "allDay": true,
+    "categories": [
+      "Holiday",
+      "Commemoration",
+      "Civil Rights"
+    ],
+    "description": "Martin Luther King Jr. Day.",
+    "slug": "martin-luther-king-jr.-day",
+    "url": "https://example.org/observances/martin-luther-king-jr.-day"
+  },
+  {
+    "id": "world-interfaith-harmony-week-begins-2025",
+    "name": "World Interfaith Harmony Week Begins",
+    "start": "2025-02-01",
+    "end": "2025-02-01",
+    "allDay": true,
+    "categories": [
+      "Awareness",
+      "Religious"
+    ],
+    "description": "World Interfaith Harmony Week begins.",
+    "slug": "world-interfaith-harmony-week-begins",
+    "url": "https://example.org/observances/world-interfaith-harmony-week-begins"
+  },
+  {
+    "id": "remember-our-chaplains---presbyterian-federal-chaplaincies-2025",
+    "name": "Remember our Chaplains - Presbyterian Federal Chaplaincies",
+    "start": "2025-02-02",
+    "end": "2025-02-02",
+    "allDay": true,
+    "categories": [
+      "Religious",
+      "Observance"
+    ],
+    "description": "Remember our Chaplains - Presbyterian Federal Chaplaincies.",
+    "slug": "remember-our-chaplains---presbyterian-federal-chaplaincies",
+    "url": "https://example.org/observances/remember-our-chaplains---presbyterian-federal-chaplaincies"
+  },
+  {
+    "id": "thursdays-in-black-2025",
+    "name": "Thursdays in Black",
+    "start": "2025-02-06",
+    "end": "2025-02-06",
+    "allDay": true,
+    "categories": [
+      "Awareness",
+      "Campaign"
+    ],
+    "description": "Thursdays in Black campaign.",
+    "slug": "thursdays-in-black",
+    "url": "https://example.org/observances/thursdays-in-black"
+  },
+  {
+    "id": "presbyterian-media-sunday-2025",
+    "name": "Presbyterian Media Sunday",
+    "start": "2025-02-09",
+    "end": "2025-02-09",
+    "allDay": true,
+    "categories": [
+      "Religious",
+      "Media"
+    ],
+    "description": "Presbyterian Media Sunday.",
+    "slug": "presbyterian-media-sunday",
+    "url": "https://example.org/observances/presbyterian-media-sunday"
+  },
+  {
+    "id": "camp-and-retreat-sunday-2025",
+    "name": "Camp and Retreat Sunday",
+    "start": "2025-02-09",
+    "end": "2025-02-09",
+    "allDay": true,
+    "categories": [
+      "Religious",
+      "Fellowship"
+    ],
+    "description": "Camp and Retreat Sunday.",
+    "slug": "camp-and-retreat-sunday",
+    "url": "https://example.org/observances/camp-and-retreat-sunday"
+  },
+  {
+    "id": "souper-bowl-of-caring-2025",
+    "name": "Souper Bowl of Caring",
+    "start": "2025-02-09",
+    "end": "2025-02-09",
+    "allDay": true,
+    "categories": [
+      "Charity",
+      "Awareness"
+    ],
+    "description": "Souper Bowl of Caring.",
+    "slug": "souper-bowl-of-caring",
+    "url": "https://example.org/observances/souper-bowl-of-caring"
+  },
+  {
+    "id": "presidents-day-2025",
+    "name": "Presidents’ Day",
+    "start": "2025-02-17",
+    "end": "2025-02-17",
+    "allDay": true,
+    "categories": [
+      "Holiday",
+      "Commemoration"
+    ],
+    "description": "Presidents’ Day.",
+    "slug": "presidents-day",
+    "url": "https://example.org/observances/presidents-day"
+  },
+  {
+    "id": "fasting-season-of-ramadan-begins-2025",
+    "name": "Fasting Season of Ramadan begins",
+    "start": "2025-03-01",
+    "end": "2025-03-01",
+    "allDay": true,
+    "categories": [
+      "Religious"
+    ],
+    "description": "Beginning of the fasting season of Ramadan.",
+    "slug": "fasting-season-of-ramadan-begins",
+    "url": "https://example.org/observances/fasting-season-of-ramadan-begins"
+  },
+  {
+    "id": "forgiveness-sunday-2025",
+    "name": "Forgiveness Sunday",
+    "start": "2025-03-02",
+    "end": "2025-03-02",
+    "allDay": true,
+    "categories": [
+      "Religious",
+      "Spiritual"
+    ],
+    "description": "Forgiveness Sunday.",
+    "slug": "forgiveness-sunday",
+    "url": "https://example.org/observances/forgiveness-sunday"
+  },
+  {
+    "id": "transfiguration-of-the-lord-2025",
+    "name": "Transfiguration of the Lord",
+    "start": "2025-03-02",
+    "end": "2025-03-02",
+    "allDay": true,
+    "categories": [
+      "Religious"
+    ],
+    "description": "Transfiguration of the Lord.",
+    "slug": "transfiguration-of-the-lord",
+    "url": "https://example.org/observances/transfiguration-of-the-lord"
+  },
+  {
+    "id": "ash-wednesday-lent-season-begins-2025",
+    "name": "Ash Wednesday / Lent Season begins",
+    "start": "2025-03-05",
+    "end": "2025-03-05",
+    "allDay": true,
+    "categories": [
+      "Religious",
+      "Season"
+    ],
+    "description": "Ash Wednesday and beginning of Lent Season.",
+    "slug": "ash-wednesday-lent-season-begins",
+    "url": "https://example.org/observances/ash-wednesday-lent-season-begins"
+  },
+  {
+    "id": "world-day-of-prayer-2025",
+    "name": "World Day of Prayer",
+    "start": "2025-03-07",
+    "end": "2025-03-07",
+    "allDay": true,
+    "categories": [
+      "Religious",
+      "Awareness"
+    ],
+    "description": "World Day of Prayer.",
+    "slug": "world-day-of-prayer",
+    "url": "https://example.org/observances/world-day-of-prayer"
+  },
+  {
+    "id": "international-womens-day-2025",
+    "name": "International Women’s Day",
+    "start": "2025-03-08",
+    "end": "2025-03-08",
+    "allDay": true,
+    "categories": [
+      "Awareness",
+      "Social"
+    ],
+    "description": "International Women’s Day.",
+    "slug": "international-womens-day",
+    "url": "https://example.org/observances/international-womens-day"
+  },
+  {
+    "id": "pda-blue-t-shirt-sunday-2025",
+    "name": "PDA Blue T-Shirt Sunday",
+    "start": "2025-03-09",
+    "end": "2025-03-09",
+    "allDay": true,
+    "categories": [
+      "Religious",
+      "Awareness"
+    ],
+    "description": "PDA Blue T-Shirt Sunday.",
+    "slug": "pda-blue-t-shirt-sunday",
+    "url": "https://example.org/observances/pda-blue-t-shirt-sunday"
+  },
+  {
+    "id": "celebrate-the-gifts-of-women-2025",
+    "name": "Celebrate the Gifts of Women",
+    "start": "2025-03-16",
+    "end": "2025-03-16",
+    "allDay": true,
+    "categories": [
+      "Religious",
+      "Social Justice"
+    ],
+    "description": "Celebrate the Gifts of Women.",
+    "slug": "celebrate-the-gifts-of-women",
+    "url": "https://example.org/observances/celebrate-the-gifts-of-women"
+  },
+  {
+    "id": "self-development-of-people-2025",
+    "name": "Self-Development of People",
+    "start": "2025-03-16",
+    "end": "2025-03-16",
+    "allDay": true,
+    "categories": [
+      "Religious",
+      "Economic Justice"
+    ],
+    "description": "Self-Development of People.",
+    "slug": "self-development-of-people",
+    "url": "https://example.org/observances/self-development-of-people"
+  },
+  {
+    "id": "mr.-rogers-day-2025",
+    "name": "Mr. Rogers Day",
+    "start": "2025-03-20",
+    "end": "2025-03-20",
+    "allDay": true,
+    "categories": [
+      "Commemoration",
+      "Cultural"
+    ],
+    "description": "Mr. Rogers Day.",
+    "slug": "mr.-rogers-day",
+    "url": "https://example.org/observances/mr.-rogers-day"
+  },
+  {
+    "id": "matthew-25:-building-vital-congregations-sunday-2025",
+    "name": "Matthew 25: Building Vital Congregations Sunday",
+    "start": "2025-04-06",
+    "end": "2025-04-06",
+    "allDay": true,
+    "categories": [
+      "Religious",
+      "Development"
+    ],
+    "description": "Matthew 25: Building Vital Congregations Sunday.",
+    "slug": "matthew-25:-building-vital-congregations-sunday",
+    "url": "https://example.org/observances/matthew-25:-building-vital-congregations-sunday"
+  },
+  {
+    "id": "international-roma-day-2025",
+    "name": "International Roma Day",
+    "start": "2025-04-08",
+    "end": "2025-04-08",
+    "allDay": true,
+    "categories": [
+      "Awareness",
+      "Human Rights"
+    ],
+    "description": "International Roma Day.",
+    "slug": "international-roma-day",
+    "url": "https://example.org/observances/international-roma-day"
+  },
+  {
+    "id": "black-maternalbirthing-health-week-2025",
+    "name": "Black Maternal/Birthing Health Week",
+    "start": "2025-04-11",
+    "end": "2025-04-17",
+    "allDay": true,
+    "categories": [
+      "Awareness",
+      "Health",
+      "Social Justice"
+    ],
+    "description": "Black Maternal/Birthing Health Week.",
+    "slug": "black-maternalbirthing-health-week",
+    "url": "https://example.org/observances/black-maternalbirthing-health-week"
+  },
+  {
+    "id": "palmpassion-sunday-2025",
+    "name": "Palm/Passion Sunday",
+    "start": "2025-04-13",
+    "end": "2025-04-13",
+    "allDay": true,
+    "categories": [
+      "Religious"
+    ],
+    "description": "Palm/Passion Sunday.",
+    "slug": "palmpassion-sunday",
+    "url": "https://example.org/observances/palmpassion-sunday"
+  },
+  {
+    "id": "international-day-of-farmers-struggles-2025",
+    "name": "International Day of Farmers’ Struggles",
+    "start": "2025-04-17",
+    "end": "2025-04-17",
+    "allDay": true,
+    "categories": [
+      "Awareness",
+      "Social Justice"
+    ],
+    "description": "International Day of Farmers’ Struggles.",
+    "slug": "international-day-of-farmers-struggles",
+    "url": "https://example.org/observances/international-day-of-farmers-struggles"
+  },
+  {
+    "id": "maundy-thursday-2025",
+    "name": "Maundy Thursday",
+    "start": "2025-04-17",
+    "end": "2025-04-17",
+    "allDay": true,
+    "categories": [
+      "Religious"
+    ],
+    "description": "Maundy Thursday.",
+    "slug": "maundy-thursday",
+    "url": "https://example.org/observances/maundy-thursday"
+  },
+  {
+    "id": "good-friday-2025",
+    "name": "Good Friday",
+    "start": "2025-04-18",
+    "end": "2025-04-18",
+    "allDay": true,
+    "categories": [
+      "Religious"
+    ],
+    "description": "Good Friday.",
+    "slug": "good-friday",
+    "url": "https://example.org/observances/good-friday"
+  },
+  {
+    "id": "easter-vigil-2025",
+    "name": "Easter Vigil",
+    "start": "2025-04-19",
+    "end": "2025-04-19",
+    "allDay": true,
+    "categories": [
+      "Religious"
+    ],
+    "description": "Easter Vigil.",
+    "slug": "easter-vigil",
+    "url": "https://example.org/observances/easter-vigil"
+  },
+  {
+    "id": "easter-day-resurrection-2025",
+    "name": "Easter Day / Resurrection",
+    "start": "2025-04-20",
+    "end": "2025-04-20",
+    "allDay": true,
+    "categories": [
+      "Religious",
+      "Holiday"
+    ],
+    "description": "Easter Day / Resurrection.",
+    "slug": "easter-day-resurrection",
+    "url": "https://example.org/observances/easter-day-resurrection"
+  },
+  {
+    "id": "easter-season-begins-2025",
+    "name": "Easter Season begins",
+    "start": "2025-04-20",
+    "end": "2025-04-20",
+    "allDay": true,
+    "categories": [
+      "Religious",
+      "Season"
+    ],
+    "description": "Beginning of the Easter Season.",
+    "slug": "easter-season-begins",
+    "url": "https://example.org/observances/easter-season-begins"
+  },
+  {
+    "id": "earth-day-2025",
+    "name": "Earth Day",
+    "start": "2025-04-22",
+    "end": "2025-04-22",
+    "allDay": true,
+    "categories": [
+      "Awareness",
+      "Environmental"
+    ],
+    "description": "Earth Day.",
+    "slug": "earth-day",
+    "url": "https://example.org/observances/earth-day"
+  },
+  {
+    "id": "armenian-genocide-remembrance-day-2025",
+    "name": "Armenian Genocide Remembrance Day",
+    "start": "2025-04-24",
+    "end": "2025-04-24",
+    "allDay": true,
+    "categories": [
+      "Commemoration",
+      "Historical"
+    ],
+    "description": "Armenian Genocide Remembrance Day.",
+    "slug": "armenian-genocide-remembrance-day",
+    "url": "https://example.org/observances/armenian-genocide-remembrance-day"
+  },
+  {
+    "id": "mental-health-awareness-month-begins-2025",
+    "name": "Mental Health Awareness Month begins",
+    "start": "2025-05-01",
+    "end": "2025-05-01",
+    "allDay": true,
+    "categories": [
+      "Awareness",
+      "Health"
+    ],
+    "description": "Mental Health Awareness Month begins.",
+    "slug": "mental-health-awareness-month-begins",
+    "url": "https://example.org/observances/mental-health-awareness-month-begins"
+  },
+  {
+    "id": "foster-care-month-begins-2025",
+    "name": "Foster Care Month begins",
+    "start": "2025-05-01",
+    "end": "2025-05-01",
+    "allDay": true,
+    "categories": [
+      "Awareness",
+      "Social Services"
+    ],
+    "description": "Foster Care Month begins.",
+    "slug": "foster-care-month-begins",
+    "url": "https://example.org/observances/foster-care-month-begins"
+  },
+  {
+    "id": "national-day-of-prayer-2025",
+    "name": "National Day of Prayer",
+    "start": "2025-05-01",
+    "end": "2025-05-01",
+    "allDay": true,
+    "categories": [
+      "Religious"
+    ],
+    "description": "National Day of Prayer.",
+    "slug": "national-day-of-prayer",
+    "url": "https://example.org/observances/national-day-of-prayer"
+  },
+  {
+    "id": "may-friendship-day-2025",
+    "name": "May Friendship Day",
+    "start": "2025-05-02",
+    "end": "2025-05-02",
+    "allDay": true,
+    "categories": [
+      "Community",
+      "Social"
+    ],
+    "description": "May Friendship Day.",
+    "slug": "may-friendship-day",
+    "url": "https://example.org/observances/may-friendship-day"
+  },
+  {
+    "id": "older-adult-week-begins-2025",
+    "name": "Older Adult Week begins",
+    "start": "2025-05-04",
+    "end": "2025-05-04",
+    "allDay": true,
+    "categories": [
+      "Awareness",
+      "Elder Care"
+    ],
+    "description": "Older Adult Week begins.",
+    "slug": "older-adult-week-begins",
+    "url": "https://example.org/observances/older-adult-week-begins"
+  },
+  {
+    "id": "legacy-giving-sunday-2025",
+    "name": "Legacy Giving Sunday",
+    "start": "2025-05-04",
+    "end": "2025-05-04",
+    "allDay": true,
+    "categories": [
+      "Religious",
+      "Stewardship"
+    ],
+    "description": "Legacy Giving Sunday.",
+    "slug": "legacy-giving-sunday",
+    "url": "https://example.org/observances/legacy-giving-sunday"
+  },
+  {
+    "id": "national-day-of-awareness-and-action-for-missing-and-murdered-indigenous-women-girls-and-two-spirit-people-2025",
+    "name": "National Day of Awareness and Action for Missing and Murdered Indigenous Women, Girls, and Two-Spirit People",
+    "start": "2025-05-05",
+    "end": "2025-05-05",
+    "allDay": true,
+    "categories": [
+      "Awareness",
+      "Social Justice"
+    ],
+    "description": "National Day of Awareness and Action for Missing and Murdered Indigenous Women, Girls, and Two-Spirit People.",
+    "slug": "national-day-of-awareness-and-action-for-missing-and-murdered-indigenous-women-girls-and-two-spirit-people",
+    "url": "https://example.org/observances/national-day-of-awareness-and-action-for-missing-and-murdered-indigenous-women-girls-and-two-spirit-people"
+  },
+  {
+    "id": "holocaust-remembrance-day-2025",
+    "name": "Holocaust Remembrance Day",
+    "start": "2025-05-06",
+    "end": "2025-05-06",
+    "allDay": true,
+    "categories": [
+      "Commemoration",
+      "Historical"
+    ],
+    "description": "Holocaust Remembrance Day.",
+    "slug": "holocaust-remembrance-day",
+    "url": "https://example.org/observances/holocaust-remembrance-day"
+  },
+  {
+    "id": "fair-trade-day-2025",
+    "name": "Fair Trade Day",
+    "start": "2025-05-10",
+    "end": "2025-05-10",
+    "allDay": true,
+    "categories": [
+      "Awareness",
+      "Economic Justice"
+    ],
+    "description": "Fair Trade Day.",
+    "slug": "fair-trade-day",
+    "url": "https://example.org/observances/fair-trade-day"
+  },
+  {
+    "id": "mothers-day-2025",
+    "name": "Mother’s Day",
+    "start": "2025-05-11",
+    "end": "2025-05-11",
+    "allDay": true,
+    "categories": [
+      "Celebration",
+      "Holiday"
+    ],
+    "description": "Mother’s Day.",
+    "slug": "mothers-day",
+    "url": "https://example.org/observances/mothers-day"
+  },
+  {
+    "id": "palestinian-nakba-remembrance-day-2025",
+    "name": "Palestinian Nakba Remembrance Day",
+    "start": "2025-05-15",
+    "end": "2025-05-15",
+    "allDay": true,
+    "categories": [
+      "Commemoration",
+      "Historical",
+      "Political"
+    ],
+    "description": "Palestinian Nakba Remembrance Day.",
+    "slug": "palestinian-nakba-remembrance-day",
+    "url": "https://example.org/observances/palestinian-nakba-remembrance-day"
+  },
+  {
+    "id": "mission-worker-sunday-2025",
+    "name": "Mission Worker Sunday",
+    "start": "2025-05-18",
+    "end": "2025-05-18",
+    "allDay": true,
+    "categories": [
+      "Religious",
+      "Mission"
+    ],
+    "description": "Mission Worker Sunday.",
+    "slug": "mission-worker-sunday",
+    "url": "https://example.org/observances/mission-worker-sunday"
+  },
+  {
+    "id": "presbyterian-heritage-sunday-2025",
+    "name": "Presbyterian Heritage Sunday",
+    "start": "2025-05-18",
+    "end": "2025-05-18",
+    "allDay": true,
+    "categories": [
+      "Religious",
+      "Heritage"
+    ],
+    "description": "Presbyterian Heritage Sunday.",
+    "slug": "presbyterian-heritage-sunday",
+    "url": "https://example.org/observances/presbyterian-heritage-sunday"
+  },
+  {
+    "id": "africa-day-2025",
+    "name": "Africa Day",
+    "start": "2025-05-25",
+    "end": "2025-05-25",
+    "allDay": true,
+    "categories": [
+      "Commemoration",
+      "Cultural"
+    ],
+    "description": "Africa Day.",
+    "slug": "africa-day",
+    "url": "https://example.org/observances/africa-day"
+  },
+  {
+    "id": "ascension-of-the-lord-2025",
+    "name": "Ascension of the Lord",
+    "start": "2025-05-29",
+    "end": "2025-05-29",
+    "allDay": true,
+    "categories": [
+      "Religious"
+    ],
+    "description": "Ascension of the Lord.",
+    "slug": "ascension-of-the-lord",
+    "url": "https://example.org/observances/ascension-of-the-lord"
+  },
+  {
+    "id": "intercultural-church-sunday-2025",
+    "name": "Intercultural Church Sunday",
+    "start": "2025-06-01",
+    "end": "2025-06-01",
+    "allDay": true,
+    "categories": [
+      "Religious",
+      "Diversity"
+    ],
+    "description": "Intercultural Church Sunday.",
+    "slug": "intercultural-church-sunday",
+    "url": "https://example.org/observances/intercultural-church-sunday"
+  },
+  {
+    "id": "1001-new-worshiping-communities-2025",
+    "name": "1001 New Worshiping Communities",
+    "start": "2025-06-01",
+    "end": "2025-06-01",
+    "allDay": true,
+    "categories": [
+      "Religious",
+      "Development"
+    ],
+    "description": "1001 New Worshiping Communities.",
+    "slug": "1001-new-worshiping-communities",
+    "url": "https://example.org/observances/1001-new-worshiping-communities"
+  },
+  {
+    "id": "national-gun-violence-awareness-day-2025",
+    "name": "National Gun Violence Awareness Day",
+    "start": "2025-06-06",
+    "end": "2025-06-06",
+    "allDay": true,
+    "categories": [
+      "Awareness",
+      "Safety"
+    ],
+    "description": "National Gun Violence Awareness Day.",
+    "slug": "national-gun-violence-awareness-day",
+    "url": "https://example.org/observances/national-gun-violence-awareness-day"
+  },
+  {
+    "id": "pentecost-2025",
+    "name": "Pentecost",
+    "start": "2025-06-08",
+    "end": "2025-06-08",
+    "allDay": true,
+    "categories": [
+      "Religious"
+    ],
+    "description": "Pentecost.",
+    "slug": "pentecost",
+    "url": "https://example.org/observances/pentecost"
+  },
+  {
+    "id": "trinity-sunday-2025",
+    "name": "Trinity Sunday",
+    "start": "2025-06-15",
+    "end": "2025-06-15",
+    "allDay": true,
+    "categories": [
+      "Religious"
+    ],
+    "description": "Trinity Sunday.",
+    "slug": "trinity-sunday",
+    "url": "https://example.org/observances/trinity-sunday"
+  },
+  {
+    "id": "fathers-day-presbyterian-men-2025",
+    "name": "Father’s Day / Presbyterian Men",
+    "start": "2025-06-15",
+    "end": "2025-06-15",
+    "allDay": true,
+    "categories": [
+      "Celebration",
+      "Religious"
+    ],
+    "description": "Father’s Day; Presbyterian Men.",
+    "slug": "fathers-day-presbyterian-men",
+    "url": "https://example.org/observances/fathers-day-presbyterian-men"
+  },
+  {
+    "id": "juneteenth-2025",
+    "name": "Juneteenth",
+    "start": "2025-06-19",
+    "end": "2025-06-19",
+    "allDay": true,
+    "categories": [
+      "Commemoration",
+      "Civil Rights"
+    ],
+    "description": "Juneteenth.",
+    "slug": "juneteenth",
+    "url": "https://example.org/observances/juneteenth"
+  },
+  {
+    "id": "world-refugee-day-2025",
+    "name": "World Refugee Day",
+    "start": "2025-06-20",
+    "end": "2025-06-20",
+    "allDay": true,
+    "categories": [
+      "Awareness",
+      "Human Rights"
+    ],
+    "description": "World Refugee Day.",
+    "slug": "world-refugee-day",
+    "url": "https://example.org/observances/world-refugee-day"
+  },
+  {
+    "id": "season-of-prayer-and-reflection-in-the-korean-peninsula-begins-2025",
+    "name": "Season of Prayer and Reflection in the Korean Peninsula begins",
+    "start": "2025-06-25",
+    "end": "2025-08-15",
+    "allDay": true,
+    "categories": [
+      "Religious",
+      "Peace",
+      "Season"
+    ],
+    "description": "Season of Prayer and Reflection in the Korean Peninsula begins.",
+    "slug": "season-of-prayer-and-reflection-in-the-korean-peninsula-begins",
+    "url": "https://example.org/observances/season-of-prayer-and-reflection-in-the-korean-peninsula-begins"
+  },
+  {
+    "id": "independence-day-2025",
+    "name": "Independence Day",
+    "start": "2025-07-04",
+    "end": "2025-07-04",
+    "allDay": true,
+    "categories": [
+      "Holiday",
+      "National"
+    ],
+    "description": "Independence Day.",
+    "slug": "independence-day",
+    "url": "https://example.org/observances/independence-day"
+  },
+  {
+    "id": "immigration-sunday-2025",
+    "name": "Immigration Sunday",
+    "start": "2025-07-06",
+    "end": "2025-07-06",
+    "allDay": true,
+    "categories": [
+      "Religious",
+      "Social Justice"
+    ],
+    "description": "Immigration Sunday.",
+    "slug": "immigration-sunday",
+    "url": "https://example.org/observances/immigration-sunday"
+  },
+  {
+    "id": "kenya-mission-2025",
+    "name": "Kenya Mission",
+    "start": "2025-07-21",
+    "end": "2025-07-21",
+    "allDay": true,
+    "categories": [
+      "Religious",
+      "Mission"
+    ],
+    "description": "Kenya Mission.",
+    "slug": "kenya-mission",
+    "url": "https://example.org/observances/kenya-mission"
+  },
+  {
+    "id": "presbyterian-youth-triennium-2025",
+    "name": "Presbyterian Youth Triennium",
+    "start": "2025-07-28",
+    "end": "2025-07-31",
+    "allDay": true,
+    "categories": [
+      "Religious",
+      "Youth",
+      "Gathering"
+    ],
+    "description": "Presbyterian Youth Triennium.",
+    "slug": "presbyterian-youth-triennium",
+    "url": "https://example.org/observances/presbyterian-youth-triennium"
+  },
+  {
+    "id": "world-day-against-trafficking-in-persons-2025",
+    "name": "World Day Against Trafficking in Persons",
+    "start": "2025-07-30",
+    "end": "2025-07-30",
+    "allDay": true,
+    "categories": [
+      "Awareness",
+      "Human Rights"
+    ],
+    "description": "World Day Against Trafficking in Persons.",
+    "slug": "world-day-against-trafficking-in-persons",
+    "url": "https://example.org/observances/world-day-against-trafficking-in-persons"
+  },
+  {
+    "id": "college-and-young-adult-sunday-2025",
+    "name": "College and Young Adult Sunday",
+    "start": "2025-08-03",
+    "end": "2025-08-03",
+    "allDay": true,
+    "categories": [
+      "Religious",
+      "Youth"
+    ],
+    "description": "College and Young Adult Sunday.",
+    "slug": "college-and-young-adult-sunday",
+    "url": "https://example.org/observances/college-and-young-adult-sunday"
+  },
+  {
+    "id": "hiroshima-day-2025",
+    "name": "Hiroshima Day",
+    "start": "2025-08-06",
+    "end": "2025-08-06",
+    "allDay": true,
+    "categories": [
+      "Commemoration",
+      "Historical",
+      "Peace"
+    ],
+    "description": "Hiroshima Day.",
+    "slug": "hiroshima-day",
+    "url": "https://example.org/observances/hiroshima-day"
+  },
+  {
+    "id": "international-day-of-the-worlds-indigenous-peoples-2025",
+    "name": "International Day of the World's Indigenous Peoples",
+    "start": "2025-08-09",
+    "end": "2025-08-09",
+    "allDay": true,
+    "categories": [
+      "Awareness",
+      "Cultural"
+    ],
+    "description": "International Day of the World's Indigenous Peoples.",
+    "slug": "international-day-of-the-worlds-indigenous-peoples",
+    "url": "https://example.org/observances/international-day-of-the-worlds-indigenous-peoples"
+  },
+  {
+    "id": "youth-in-the-church-and-the-world-sunday-2025",
+    "name": "Youth in the Church and the World Sunday",
+    "start": "2025-08-10",
+    "end": "2025-08-10",
+    "allDay": true,
+    "categories": [
+      "Religious",
+      "Youth"
+    ],
+    "description": "Youth in the Church and the World Sunday.",
+    "slug": "youth-in-the-church-and-the-world-sunday",
+    "url": "https://example.org/observances/youth-in-the-church-and-the-world-sunday"
+  },
+  {
+    "id": "day-of-prayer-for-the-peaceful-reunification-of-the-korean-peninsula-2025",
+    "name": "Day of Prayer for the Peaceful Reunification of the Korean Peninsula",
+    "start": "2025-08-10",
+    "end": "2025-08-10",
+    "allDay": true,
+    "categories": [
+      "Religious",
+      "Peace"
+    ],
+    "description": "Day of Prayer for the Peaceful Reunification of the Korean Peninsula.",
+    "slug": "day-of-prayer-for-the-peaceful-reunification-of-the-korean-peninsula",
+    "url": "https://example.org/observances/day-of-prayer-for-the-peaceful-reunification-of-the-korean-peninsula"
+  },
+  {
+    "id": "young-adult-volunteer-commissioning-sunday-2025",
+    "name": "Young Adult Volunteer Commissioning Sunday",
+    "start": "2025-08-17",
+    "end": "2025-08-17",
+    "allDay": true,
+    "categories": [
+      "Religious",
+      "Service",
+      "Youth"
+    ],
+    "description": "Young Adult Volunteer Commissioning Sunday.",
+    "slug": "young-adult-volunteer-commissioning-sunday",
+    "url": "https://example.org/observances/young-adult-volunteer-commissioning-sunday"
+  },
+  {
+    "id": "public-education-day-2025",
+    "name": "Public Education Day",
+    "start": "2025-08-20",
+    "end": "2025-08-20",
+    "allDay": true,
+    "categories": [
+      "Awareness",
+      "Education"
+    ],
+    "description": "Public Education Day.",
+    "slug": "public-education-day",
+    "url": "https://example.org/observances/public-education-day"
+  },
+  {
+    "id": "international-day-for-the-remembrance-of-the-slave-trade-abolition-2025",
+    "name": "International Day for the Remembrance of the Slave Trade Abolition",
+    "start": "2025-08-23",
+    "end": "2025-08-23",
+    "allDay": true,
+    "categories": [
+      "Commemoration",
+      "Historical"
+    ],
+    "description": "International Day for the Remembrance of the Slave Trade Abolition.",
+    "slug": "international-day-for-the-remembrance-of-the-slave-trade-abolition",
+    "url": "https://example.org/observances/international-day-for-the-remembrance-of-the-slave-trade-abolition"
+  },
+  {
+    "id": "presbyterian-higher-education-2025",
+    "name": "Presbyterian Higher Education",
+    "start": "2025-08-31",
+    "end": "2025-08-31",
+    "allDay": true,
+    "categories": [
+      "Religious",
+      "Education"
+    ],
+    "description": "Presbyterian Higher Education.",
+    "slug": "presbyterian-higher-education",
+    "url": "https://example.org/observances/presbyterian-higher-education"
+  },
+  {
+    "id": "world-day-of-prayer-for-the-care-of-creation-2025",
+    "name": "World Day of Prayer for the Care of Creation",
+    "start": "2025-09-01",
+    "end": "2025-09-01",
+    "allDay": true,
+    "categories": [
+      "Religious",
+      "Environmental"
+    ],
+    "description": "World Day of Prayer for the Care of Creation.",
+    "slug": "world-day-of-prayer-for-the-care-of-creation",
+    "url": "https://example.org/observances/world-day-of-prayer-for-the-care-of-creation"
+  },
+  {
+    "id": "labor-day-and-social-creed-for-the-21st-century-2025",
+    "name": "Labor Day and Social Creed for the 21st Century",
+    "start": "2025-09-01",
+    "end": "2025-09-01",
+    "allDay": true,
+    "categories": [
+      "Holiday",
+      "Social Justice"
+    ],
+    "description": "Labor Day and Social Creed for the 21st Century.",
+    "slug": "labor-day-and-social-creed-for-the-21st-century",
+    "url": "https://example.org/observances/labor-day-and-social-creed-for-the-21st-century"
+  },
+  {
+    "id": "national-suicide-prevention-month-begins-2025",
+    "name": "National Suicide Prevention Month begins",
+    "start": "2025-09-01",
+    "end": "2025-09-01",
+    "allDay": true,
+    "categories": [
+      "Awareness",
+      "Health"
+    ],
+    "description": "National Suicide Prevention Month begins.",
+    "slug": "national-suicide-prevention-month-begins",
+    "url": "https://example.org/observances/national-suicide-prevention-month-begins"
+  },
+  {
+    "id": "disaster-preparedness-month-begins-2025",
+    "name": "Disaster Preparedness Month begins",
+    "start": "2025-09-01",
+    "end": "2025-09-01",
+    "allDay": true,
+    "categories": [
+      "Awareness",
+      "Safety"
+    ],
+    "description": "Disaster Preparedness Month begins.",
+    "slug": "disaster-preparedness-month-begins",
+    "url": "https://example.org/observances/disaster-preparedness-month-begins"
+  },
+  {
+    "id": "season-of-peace-begins-2025",
+    "name": "Season of Peace begins",
+    "start": "2025-09-07",
+    "end": "2025-10-05",
+    "allDay": true,
+    "categories": [
+      "Religious",
+      "Peace",
+      "Season"
+    ],
+    "description": "Season of Peace begins.",
+    "slug": "season-of-peace-begins",
+    "url": "https://example.org/observances/season-of-peace-begins"
+  },
+  {
+    "id": "christian-formation-week-begins-christian-formation-celebration-2025",
+    "name": "Christian Formation Week begins; Christian Formation Celebration",
+    "start": "2025-09-07",
+    "end": "2025-09-07",
+    "allDay": true,
+    "categories": [
+      "Religious",
+      "Education"
+    ],
+    "description": "Christian Formation Week begins; Christian Formation Celebration.",
+    "slug": "christian-formation-week-begins-christian-formation-celebration",
+    "url": "https://example.org/observances/christian-formation-week-begins-christian-formation-celebration"
+  },
+  {
+    "id": "september-11-anniversary-2025",
+    "name": "September 11 Anniversary",
+    "start": "2025-09-11",
+    "end": "2025-09-11",
+    "allDay": true,
+    "categories": [
+      "Commemoration",
+      "Historical"
+    ],
+    "description": "September 11 Anniversary.",
+    "slug": "september-11-anniversary",
+    "url": "https://example.org/observances/september-11-anniversary"
+  },
+  {
+    "id": "disability-inclusion-sunday-2025",
+    "name": "Disability Inclusion Sunday",
+    "start": "2025-09-14",
+    "end": "2025-09-14",
+    "allDay": true,
+    "categories": [
+      "Religious",
+      "Inclusion"
+    ],
+    "description": "Disability Inclusion Sunday.",
+    "slug": "disability-inclusion-sunday",
+    "url": "https://example.org/observances/disability-inclusion-sunday"
+  },
+  {
+    "id": "evangelism-sunday-2025",
+    "name": "Evangelism Sunday",
+    "start": "2025-09-21",
+    "end": "2025-09-21",
+    "allDay": true,
+    "categories": [
+      "Religious"
+    ],
+    "description": "Evangelism Sunday.",
+    "slug": "evangelism-sunday",
+    "url": "https://example.org/observances/evangelism-sunday"
+  },
+  {
+    "id": "international-day-of-peace-2025",
+    "name": "International Day of Peace",
+    "start": "2025-09-21",
+    "end": "2025-09-21",
+    "allDay": true,
+    "categories": [
+      "Awareness",
+      "Peace"
+    ],
+    "description": "International Day of Peace.",
+    "slug": "international-day-of-peace",
+    "url": "https://example.org/observances/international-day-of-peace"
+  },
+  {
+    "id": "gifts-of-new-immigrants-2025",
+    "name": "Gifts of New Immigrants",
+    "start": "2025-09-21",
+    "end": "2025-09-21",
+    "allDay": true,
+    "categories": [
+      "Religious",
+      "Cultural",
+      "Inclusion"
+    ],
+    "description": "Gifts of New Immigrants.",
+    "slug": "gifts-of-new-immigrants",
+    "url": "https://example.org/observances/gifts-of-new-immigrants"
+  },
+  {
+    "id": "theological-education-seminaries-sunday-2025",
+    "name": "Theological Education / Seminaries Sunday",
+    "start": "2025-09-21",
+    "end": "2025-09-21",
+    "allDay": true,
+    "categories": [
+      "Religious",
+      "Education"
+    ],
+    "description": "Theological Education / Seminaries Sunday.",
+    "slug": "theological-education-seminaries-sunday",
+    "url": "https://example.org/observances/theological-education-seminaries-sunday"
+  },
+  {
+    "id": "native-american-day-2025",
+    "name": "Native American Day",
+    "start": "2025-09-26",
+    "end": "2025-09-26",
+    "allDay": true,
+    "categories": [
+      "Commemoration",
+      "Cultural"
+    ],
+    "description": "Native American Day.",
+    "slug": "native-american-day",
+    "url": "https://example.org/observances/native-american-day"
+  },
+  {
+    "id": "mental-illness-awareness-week-begins-2025",
+    "name": "Mental Illness Awareness Week begins",
+    "start": "2025-10-01",
+    "end": "2025-10-01",
+    "allDay": true,
+    "categories": [
+      "Awareness",
+      "Health"
+    ],
+    "description": "Mental Illness Awareness Week begins.",
+    "slug": "mental-illness-awareness-week-begins",
+    "url": "https://example.org/observances/mental-illness-awareness-week-begins"
+  },
+  {
+    "id": "peace-&-global-witness-offering-2025",
+    "name": "Peace & Global Witness Offering",
+    "start": "2025-10-05",
+    "end": "2025-10-05",
+    "allDay": true,
+    "categories": [
+      "Religious",
+      "Peace"
+    ],
+    "description": "Peace & Global Witness Offering.",
+    "slug": "peace-&-global-witness-offering",
+    "url": "https://example.org/observances/peace-&-global-witness-offering"
+  },
+  {
+    "id": "world-communion-sunday-2025",
+    "name": "World Communion Sunday",
+    "start": "2025-10-05",
+    "end": "2025-10-05",
+    "allDay": true,
+    "categories": [
+      "Religious"
+    ],
+    "description": "World Communion Sunday.",
+    "slug": "world-communion-sunday",
+    "url": "https://example.org/observances/world-communion-sunday"
+  },
+  {
+    "id": "indigenous-peoples-day-2025",
+    "name": "Indigenous Peoples Day",
+    "start": "2025-10-13",
+    "end": "2025-10-13",
+    "allDay": true,
+    "categories": [
+      "Commemoration",
+      "Cultural"
+    ],
+    "description": "Indigenous Peoples Day.",
+    "slug": "indigenous-peoples-day",
+    "url": "https://example.org/observances/indigenous-peoples-day"
+  },
+  {
+    "id": "world-food-day-2025",
+    "name": "World Food Day",
+    "start": "2025-10-16",
+    "end": "2025-10-16",
+    "allDay": true,
+    "categories": [
+      "Awareness",
+      "Global"
+    ],
+    "description": "World Food Day.",
+    "slug": "world-food-day",
+    "url": "https://example.org/observances/world-food-day"
+  },
+  {
+    "id": "childrens-sabbath-educate-a-child-transform-the-world-2025",
+    "name": "Children’s Sabbath; Educate a Child, Transform the World",
+    "start": "2025-10-19",
+    "end": "2025-10-19",
+    "allDay": true,
+    "categories": [
+      "Religious",
+      "Advocacy",
+      "Education"
+    ],
+    "description": "Children’s Sabbath; Educate a Child, Transform the World.",
+    "slug": "childrens-sabbath-educate-a-child-transform-the-world",
+    "url": "https://example.org/observances/childrens-sabbath-educate-a-child-transform-the-world"
+  },
+  {
+    "id": "young-adult-volunteer-program-2025",
+    "name": "Young Adult Volunteer Program",
+    "start": "2025-10-20",
+    "end": "2025-10-20",
+    "allDay": true,
+    "categories": [
+      "Religious",
+      "Service"
+    ],
+    "description": "Young Adult Volunteer Program.",
+    "slug": "young-adult-volunteer-program",
+    "url": "https://example.org/observances/young-adult-volunteer-program"
+  },
+  {
+    "id": "united-nations-day-2025",
+    "name": "United Nations Day",
+    "start": "2025-10-24",
+    "end": "2025-10-24",
+    "allDay": true,
+    "categories": [
+      "Commemoration",
+      "International"
+    ],
+    "description": "United Nations Day.",
+    "slug": "united-nations-day",
+    "url": "https://example.org/observances/united-nations-day"
+  },
+  {
+    "id": "reformation-sunday-2025",
+    "name": "Reformation Sunday",
+    "start": "2025-10-26",
+    "end": "2025-10-26",
+    "allDay": true,
+    "categories": [
+      "Religious",
+      "Historical"
+    ],
+    "description": "Reformation Sunday.",
+    "slug": "reformation-sunday",
+    "url": "https://example.org/observances/reformation-sunday"
+  },
+  {
+    "id": "all-saints-day-2025",
+    "name": "All Saints’ Day",
+    "start": "2025-11-01",
+    "end": "2025-11-01",
+    "allDay": true,
+    "categories": [
+      "Religious",
+      "Commemoration"
+    ],
+    "description": "All Saints’ Day.",
+    "slug": "all-saints-day",
+    "url": "https://example.org/observances/all-saints-day"
+  },
+  {
+    "id": "election-day-honest-patriotism-for-christian-citizens-2025",
+    "name": "Election Day; Honest Patriotism for Christian Citizens",
+    "start": "2025-11-04",
+    "end": "2025-11-04",
+    "allDay": true,
+    "categories": [
+      "Civic",
+      "Civic Engagement"
+    ],
+    "description": "Election Day; Honest Patriotism for Christian Citizens.",
+    "slug": "election-day-honest-patriotism-for-christian-citizens",
+    "url": "https://example.org/observances/election-day-honest-patriotism-for-christian-citizens"
+  },
+  {
+    "id": "world-community-day-2025",
+    "name": "World Community Day",
+    "start": "2025-11-07",
+    "end": "2025-11-07",
+    "allDay": true,
+    "categories": [
+      "Religious",
+      "Community"
+    ],
+    "description": "World Community Day.",
+    "slug": "world-community-day",
+    "url": "https://example.org/observances/world-community-day"
+  },
+  {
+    "id": "veterans-day-2025",
+    "name": "Veterans Day",
+    "start": "2025-11-11",
+    "end": "2025-11-11",
+    "allDay": true,
+    "categories": [
+      "Commemoration",
+      "Military"
+    ],
+    "description": "Veterans Day.",
+    "slug": "veterans-day",
+    "url": "https://example.org/observances/veterans-day"
+  },
+  {
+    "id": "hunger-and-homelessness-2025",
+    "name": "Hunger and Homelessness",
+    "start": "2025-11-16",
+    "end": "2025-11-16",
+    "allDay": true,
+    "categories": [
+      "Awareness",
+      "Social Justice"
+    ],
+    "description": "Hunger and Homelessness.",
+    "slug": "hunger-and-homelessness",
+    "url": "https://example.org/observances/hunger-and-homelessness"
+  },
+  {
+    "id": "transgender-day-of-remembrance-2025",
+    "name": "Transgender Day of Remembrance",
+    "start": "2025-11-20",
+    "end": "2025-11-20",
+    "allDay": true,
+    "categories": [
+      "Commemoration",
+      "LGBTQ+",
+      "Awareness"
+    ],
+    "description": "Transgender Day of Remembrance.",
+    "slug": "transgender-day-of-remembrance",
+    "url": "https://example.org/observances/transgender-day-of-remembrance"
+  },
+  {
+    "id": "christ-the-king-reign-of-christ-2025",
+    "name": "Christ the King / Reign of Christ",
+    "start": "2025-11-23",
+    "end": "2025-11-23",
+    "allDay": true,
+    "categories": [
+      "Religious"
+    ],
+    "description": "Christ the King / Reign of Christ.",
+    "slug": "christ-the-king-reign-of-christ",
+    "url": "https://example.org/observances/christ-the-king-reign-of-christ"
+  },
+  {
+    "id": "matthew-25:-eradicating-systemic-poverty-sunday-2025",
+    "name": "Matthew 25: Eradicating Systemic Poverty Sunday",
+    "start": "2025-11-23",
+    "end": "2025-11-23",
+    "allDay": true,
+    "categories": [
+      "Religious",
+      "Social Justice"
+    ],
+    "description": "Matthew 25: Eradicating Systemic Poverty Sunday.",
+    "slug": "matthew-25:-eradicating-systemic-poverty-sunday",
+    "url": "https://example.org/observances/matthew-25:-eradicating-systemic-poverty-sunday"
+  },
+  {
+    "id": "thanksgiving-day-nativity-fast-2025",
+    "name": "Thanksgiving Day; Nativity Fast",
+    "start": "2025-11-27",
+    "end": "2025-11-27",
+    "allDay": true,
+    "categories": [
+      "Holiday",
+      "Religious"
+    ],
+    "description": "Thanksgiving Day; Nativity Fast.",
+    "slug": "thanksgiving-day-nativity-fast",
+    "url": "https://example.org/observances/thanksgiving-day-nativity-fast"
+  },
+  {
+    "id": "advent-season-begins-2025",
+    "name": "Advent Season begins",
+    "start": "2025-11-30",
+    "end": "2025-11-30",
+    "allDay": true,
+    "categories": [
+      "Religious",
+      "Season"
+    ],
+    "description": "Beginning of the Advent Season.",
+    "slug": "advent-season-begins",
+    "url": "https://example.org/observances/advent-season-begins"
+  },
+  {
+    "id": "world-aids-day-presbyterian-hivaids-awareness-2025",
+    "name": "World AIDS Day; Presbyterian HIV/AIDS Awareness",
+    "start": "2025-12-01",
+    "end": "2025-12-01",
+    "allDay": true,
+    "categories": [
+      "Awareness",
+      "Health"
+    ],
+    "description": "World AIDS Day; Presbyterian HIV/AIDS Awareness.",
+    "slug": "world-aids-day-presbyterian-hivaids-awareness",
+    "url": "https://example.org/observances/world-aids-day-presbyterian-hivaids-awareness"
+  },
+  {
+    "id": "giving-tuesday-2025",
+    "name": "Giving Tuesday",
+    "start": "2025-12-02",
+    "end": "2025-12-02",
+    "allDay": true,
+    "categories": [
+      "Campaign",
+      "Philanthropy"
+    ],
+    "description": "Giving Tuesday.",
+    "slug": "giving-tuesday",
+    "url": "https://example.org/observances/giving-tuesday"
+  },
+  {
+    "id": "human-rights-day-2025",
+    "name": "Human Rights Day",
+    "start": "2025-12-10",
+    "end": "2025-12-10",
+    "allDay": true,
+    "categories": [
+      "Awareness",
+      "Human Rights"
+    ],
+    "description": "Human Rights Day.",
+    "slug": "human-rights-day",
+    "url": "https://example.org/observances/human-rights-day"
+  },
+  {
+    "id": "christmas-joy-offering-2025",
+    "name": "Christmas Joy Offering",
+    "start": "2025-12-21",
+    "end": "2025-12-21",
+    "allDay": true,
+    "categories": [
+      "Religious",
+      "Philanthropy"
+    ],
+    "description": "Christmas Joy Offering.",
+    "slug": "christmas-joy-offering",
+    "url": "https://example.org/observances/christmas-joy-offering"
+  },
+  {
+    "id": "christmas-eve-nativity-2025",
+    "name": "Christmas Eve / Nativity",
+    "start": "2025-12-24",
+    "end": "2025-12-24",
+    "allDay": true,
+    "categories": [
+      "Religious",
+      "Holiday"
+    ],
+    "description": "Christmas Eve / Nativity.",
+    "slug": "christmas-eve-nativity",
+    "url": "https://example.org/observances/christmas-eve-nativity"
+  },
+  {
+    "id": "christmas-season-begins-2025",
+    "name": "Christmas Season begins",
+    "start": "2025-12-24",
+    "end": "2025-12-24",
+    "allDay": true,
+    "categories": [
+      "Religious",
+      "Season"
+    ],
+    "description": "Beginning of the Christmas Season.",
+    "slug": "christmas-season-begins",
+    "url": "https://example.org/observances/christmas-season-begins"
+  },
+  {
+    "id": "christmas-day-nativity-2025",
+    "name": "Christmas Day / Nativity",
+    "start": "2025-12-25",
+    "end": "2025-12-25",
+    "allDay": true,
+    "categories": [
+      "Religious",
+      "Holiday"
+    ],
+    "description": "Christmas Day / Nativity.",
+    "slug": "christmas-day-nativity",
+    "url": "https://example.org/observances/christmas-day-nativity"
+  }
+]

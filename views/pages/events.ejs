@@ -34,7 +34,14 @@
                                     <div>
                                         <i class="fas fa-clock mr-2"></i>
                                         <% if (event.startTime) { %>
-                                            <%= event.startTime %>
+                                            <% 
+                                                // Convert 24-hour time to 12-hour format with AM/PM
+                                                const [hours, minutes] = event.startTime.split(':');
+                                                const hour = parseInt(hours);
+                                                const period = hour >= 12 ? 'PM' : 'AM';
+                                                const displayHour = hour === 0 ? 12 : (hour > 12 ? hour - 12 : hour);
+                                            %>
+                                            <%= displayHour %>:<%= minutes %> <%= period %>
                                         <% } else { %>
                                             <%= new Date(event.startDate).toLocaleTimeString('en-US', { 
                                                 hour: 'numeric', 

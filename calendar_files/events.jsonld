@@ -1,0 +1,1730 @@
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Event",
+      "name": "New Year’s Day",
+      "startDate": "2025-01-01",
+      "endDate": "2025-01-01",
+      "description": "Start of the civil new year.",
+      "eventAttendanceMode": "https://schema.org/OfflineEvent",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "location": {
+        "@type": "Place",
+        "name": "Global"
+      },
+      "url": "https://example.org/observances/new-years-day",
+      "identifier": "new-years-day-2025"
+    },
+    {
+      "@type": "Event",
+      "name": "Epiphany of the Lord",
+      "startDate": "2025-01-06",
+      "endDate": "2025-01-06",
+      "description": "Epiphany of the Lord.",
+      "eventAttendanceMode": "https://schema.org/OfflineEvent",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "location": {
+        "@type": "Place",
+        "name": "Global"
+      },
+      "url": "https://example.org/observances/epiphany-of-the-lord",
+      "identifier": "epiphany-of-the-lord-2025"
+    },
+    {
+      "@type": "Event",
+      "name": "Human Trafficking Awareness Day",
+      "startDate": "2025-01-11",
+      "endDate": "2025-01-11",
+      "description": "Awareness around human trafficking.",
+      "eventAttendanceMode": "https://schema.org/OfflineEvent",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "location": {
+        "@type": "Place",
+        "name": "Global"
+      },
+      "url": "https://example.org/observances/human-trafficking-awareness-day",
+      "identifier": "human-trafficking-awareness-day-2025"
+    },
+    {
+      "@type": "Event",
+      "name": "Baptism of the Lord",
+      "startDate": "2025-01-12",
+      "endDate": "2025-01-12",
+      "description": "Baptism of the Lord.",
+      "eventAttendanceMode": "https://schema.org/OfflineEvent",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "location": {
+        "@type": "Place",
+        "name": "Global"
+      },
+      "url": "https://example.org/observances/baptism-of-the-lord",
+      "identifier": "baptism-of-the-lord-2025"
+    },
+    {
+      "@type": "Event",
+      "name": "Ecumenical Week of Prayer for Christian Unity begins",
+      "startDate": "2025-01-18",
+      "endDate": "2025-01-18",
+      "description": "Beginning of the Ecumenical Week of Prayer for Christian Unity.",
+      "eventAttendanceMode": "https://schema.org/OfflineEvent",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "location": {
+        "@type": "Place",
+        "name": "Global"
+      },
+      "url": "https://example.org/observances/ecumenical-week-of-prayer-for-christian-unity-begins",
+      "identifier": "ecumenical-week-of-prayer-for-christian-unity-begins-2025"
+    },
+    {
+      "@type": "Event",
+      "name": "Per Capita Sunday",
+      "startDate": "2025-01-19",
+      "endDate": "2025-01-19",
+      "description": "Per Capita Sunday.",
+      "eventAttendanceMode": "https://schema.org/OfflineEvent",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "location": {
+        "@type": "Place",
+        "name": "Global"
+      },
+      "url": "https://example.org/observances/per-capita-sunday",
+      "identifier": "per-capita-sunday-2025"
+    },
+    {
+      "@type": "Event",
+      "name": "Matthew 25: Dismantle Structural Racism Sunday",
+      "startDate": "2025-01-19",
+      "endDate": "2025-01-19",
+      "description": "Matthew 25: Dismantle Structural Racism Sunday.",
+      "eventAttendanceMode": "https://schema.org/OfflineEvent",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "location": {
+        "@type": "Place",
+        "name": "Global"
+      },
+      "url": "https://example.org/observances/matthew-25:-dismantle-structural-racism-sunday",
+      "identifier": "matthew-25:-dismantle-structural-racism-sunday-2025"
+    },
+    {
+      "@type": "Event",
+      "name": "Racial & Intercultural Justice / Presbyterians Affirm Black Lives Matter",
+      "startDate": "2025-01-19",
+      "endDate": "2025-01-19",
+      "description": "Racial & Intercultural Justice and affirmation of Black Lives Matter.",
+      "eventAttendanceMode": "https://schema.org/OfflineEvent",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "location": {
+        "@type": "Place",
+        "name": "Global"
+      },
+      "url": "https://example.org/observances/racial-&-intercultural-justice-presbyterians-affirm-black-lives-matter",
+      "identifier": "racial-&-intercultural-justice-presbyterians-affirm-black-lives-matter-2025"
+    },
+    {
+      "@type": "Event",
+      "name": "Martin Luther King Jr. Day",
+      "startDate": "2025-01-20",
+      "endDate": "2025-01-20",
+      "description": "Martin Luther King Jr. Day.",
+      "eventAttendanceMode": "https://schema.org/OfflineEvent",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "location": {
+        "@type": "Place",
+        "name": "Global"
+      },
+      "url": "https://example.org/observances/martin-luther-king-jr.-day",
+      "identifier": "martin-luther-king-jr.-day-2025"
+    },
+    {
+      "@type": "Event",
+      "name": "World Interfaith Harmony Week Begins",
+      "startDate": "2025-02-01",
+      "endDate": "2025-02-01",
+      "description": "World Interfaith Harmony Week begins.",
+      "eventAttendanceMode": "https://schema.org/OfflineEvent",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "location": {
+        "@type": "Place",
+        "name": "Global"
+      },
+      "url": "https://example.org/observances/world-interfaith-harmony-week-begins",
+      "identifier": "world-interfaith-harmony-week-begins-2025"
+    },
+    {
+      "@type": "Event",
+      "name": "Remember our Chaplains - Presbyterian Federal Chaplaincies",
+      "startDate": "2025-02-02",
+      "endDate": "2025-02-02",
+      "description": "Remember our Chaplains - Presbyterian Federal Chaplaincies.",
+      "eventAttendanceMode": "https://schema.org/OfflineEvent",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "location": {
+        "@type": "Place",
+        "name": "Global"
+      },
+      "url": "https://example.org/observances/remember-our-chaplains---presbyterian-federal-chaplaincies",
+      "identifier": "remember-our-chaplains---presbyterian-federal-chaplaincies-2025"
+    },
+    {
+      "@type": "Event",
+      "name": "Thursdays in Black",
+      "startDate": "2025-02-06",
+      "endDate": "2025-02-06",
+      "description": "Thursdays in Black campaign.",
+      "eventAttendanceMode": "https://schema.org/OfflineEvent",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "location": {
+        "@type": "Place",
+        "name": "Global"
+      },
+      "url": "https://example.org/observances/thursdays-in-black",
+      "identifier": "thursdays-in-black-2025"
+    },
+    {
+      "@type": "Event",
+      "name": "Presbyterian Media Sunday",
+      "startDate": "2025-02-09",
+      "endDate": "2025-02-09",
+      "description": "Presbyterian Media Sunday.",
+      "eventAttendanceMode": "https://schema.org/OfflineEvent",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "location": {
+        "@type": "Place",
+        "name": "Global"
+      },
+      "url": "https://example.org/observances/presbyterian-media-sunday",
+      "identifier": "presbyterian-media-sunday-2025"
+    },
+    {
+      "@type": "Event",
+      "name": "Camp and Retreat Sunday",
+      "startDate": "2025-02-09",
+      "endDate": "2025-02-09",
+      "description": "Camp and Retreat Sunday.",
+      "eventAttendanceMode": "https://schema.org/OfflineEvent",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "location": {
+        "@type": "Place",
+        "name": "Global"
+      },
+      "url": "https://example.org/observances/camp-and-retreat-sunday",
+      "identifier": "camp-and-retreat-sunday-2025"
+    },
+    {
+      "@type": "Event",
+      "name": "Souper Bowl of Caring",
+      "startDate": "2025-02-09",
+      "endDate": "2025-02-09",
+      "description": "Souper Bowl of Caring.",
+      "eventAttendanceMode": "https://schema.org/OfflineEvent",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "location": {
+        "@type": "Place",
+        "name": "Global"
+      },
+      "url": "https://example.org/observances/souper-bowl-of-caring",
+      "identifier": "souper-bowl-of-caring-2025"
+    },
+    {
+      "@type": "Event",
+      "name": "Presidents’ Day",
+      "startDate": "2025-02-17",
+      "endDate": "2025-02-17",
+      "description": "Presidents’ Day.",
+      "eventAttendanceMode": "https://schema.org/OfflineEvent",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "location": {
+        "@type": "Place",
+        "name": "Global"
+      },
+      "url": "https://example.org/observances/presidents-day",
+      "identifier": "presidents-day-2025"
+    },
+    {
+      "@type": "Event",
+      "name": "Fasting Season of Ramadan begins",
+      "startDate": "2025-03-01",
+      "endDate": "2025-03-01",
+      "description": "Beginning of the fasting season of Ramadan.",
+      "eventAttendanceMode": "https://schema.org/OfflineEvent",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "location": {
+        "@type": "Place",
+        "name": "Global"
+      },
+      "url": "https://example.org/observances/fasting-season-of-ramadan-begins",
+      "identifier": "fasting-season-of-ramadan-begins-2025"
+    },
+    {
+      "@type": "Event",
+      "name": "Forgiveness Sunday",
+      "startDate": "2025-03-02",
+      "endDate": "2025-03-02",
+      "description": "Forgiveness Sunday.",
+      "eventAttendanceMode": "https://schema.org/OfflineEvent",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "location": {
+        "@type": "Place",
+        "name": "Global"
+      },
+      "url": "https://example.org/observances/forgiveness-sunday",
+      "identifier": "forgiveness-sunday-2025"
+    },
+    {
+      "@type": "Event",
+      "name": "Transfiguration of the Lord",
+      "startDate": "2025-03-02",
+      "endDate": "2025-03-02",
+      "description": "Transfiguration of the Lord.",
+      "eventAttendanceMode": "https://schema.org/OfflineEvent",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "location": {
+        "@type": "Place",
+        "name": "Global"
+      },
+      "url": "https://example.org/observances/transfiguration-of-the-lord",
+      "identifier": "transfiguration-of-the-lord-2025"
+    },
+    {
+      "@type": "Event",
+      "name": "Ash Wednesday / Lent Season begins",
+      "startDate": "2025-03-05",
+      "endDate": "2025-03-05",
+      "description": "Ash Wednesday and beginning of Lent Season.",
+      "eventAttendanceMode": "https://schema.org/OfflineEvent",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "location": {
+        "@type": "Place",
+        "name": "Global"
+      },
+      "url": "https://example.org/observances/ash-wednesday-lent-season-begins",
+      "identifier": "ash-wednesday-lent-season-begins-2025"
+    },
+    {
+      "@type": "Event",
+      "name": "World Day of Prayer",
+      "startDate": "2025-03-07",
+      "endDate": "2025-03-07",
+      "description": "World Day of Prayer.",
+      "eventAttendanceMode": "https://schema.org/OfflineEvent",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "location": {
+        "@type": "Place",
+        "name": "Global"
+      },
+      "url": "https://example.org/observances/world-day-of-prayer",
+      "identifier": "world-day-of-prayer-2025"
+    },
+    {
+      "@type": "Event",
+      "name": "International Women’s Day",
+      "startDate": "2025-03-08",
+      "endDate": "2025-03-08",
+      "description": "International Women’s Day.",
+      "eventAttendanceMode": "https://schema.org/OfflineEvent",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "location": {
+        "@type": "Place",
+        "name": "Global"
+      },
+      "url": "https://example.org/observances/international-womens-day",
+      "identifier": "international-womens-day-2025"
+    },
+    {
+      "@type": "Event",
+      "name": "PDA Blue T-Shirt Sunday",
+      "startDate": "2025-03-09",
+      "endDate": "2025-03-09",
+      "description": "PDA Blue T-Shirt Sunday.",
+      "eventAttendanceMode": "https://schema.org/OfflineEvent",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "location": {
+        "@type": "Place",
+        "name": "Global"
+      },
+      "url": "https://example.org/observances/pda-blue-t-shirt-sunday",
+      "identifier": "pda-blue-t-shirt-sunday-2025"
+    },
+    {
+      "@type": "Event",
+      "name": "Celebrate the Gifts of Women",
+      "startDate": "2025-03-16",
+      "endDate": "2025-03-16",
+      "description": "Celebrate the Gifts of Women.",
+      "eventAttendanceMode": "https://schema.org/OfflineEvent",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "location": {
+        "@type": "Place",
+        "name": "Global"
+      },
+      "url": "https://example.org/observances/celebrate-the-gifts-of-women",
+      "identifier": "celebrate-the-gifts-of-women-2025"
+    },
+    {
+      "@type": "Event",
+      "name": "Self-Development of People",
+      "startDate": "2025-03-16",
+      "endDate": "2025-03-16",
+      "description": "Self-Development of People.",
+      "eventAttendanceMode": "https://schema.org/OfflineEvent",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "location": {
+        "@type": "Place",
+        "name": "Global"
+      },
+      "url": "https://example.org/observances/self-development-of-people",
+      "identifier": "self-development-of-people-2025"
+    },
+    {
+      "@type": "Event",
+      "name": "Mr. Rogers Day",
+      "startDate": "2025-03-20",
+      "endDate": "2025-03-20",
+      "description": "Mr. Rogers Day.",
+      "eventAttendanceMode": "https://schema.org/OfflineEvent",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "location": {
+        "@type": "Place",
+        "name": "Global"
+      },
+      "url": "https://example.org/observances/mr.-rogers-day",
+      "identifier": "mr.-rogers-day-2025"
+    },
+    {
+      "@type": "Event",
+      "name": "Matthew 25: Building Vital Congregations Sunday",
+      "startDate": "2025-04-06",
+      "endDate": "2025-04-06",
+      "description": "Matthew 25: Building Vital Congregations Sunday.",
+      "eventAttendanceMode": "https://schema.org/OfflineEvent",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "location": {
+        "@type": "Place",
+        "name": "Global"
+      },
+      "url": "https://example.org/observances/matthew-25:-building-vital-congregations-sunday",
+      "identifier": "matthew-25:-building-vital-congregations-sunday-2025"
+    },
+    {
+      "@type": "Event",
+      "name": "International Roma Day",
+      "startDate": "2025-04-08",
+      "endDate": "2025-04-08",
+      "description": "International Roma Day.",
+      "eventAttendanceMode": "https://schema.org/OfflineEvent",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "location": {
+        "@type": "Place",
+        "name": "Global"
+      },
+      "url": "https://example.org/observances/international-roma-day",
+      "identifier": "international-roma-day-2025"
+    },
+    {
+      "@type": "Event",
+      "name": "Black Maternal/Birthing Health Week",
+      "startDate": "2025-04-11",
+      "endDate": "2025-04-17",
+      "description": "Black Maternal/Birthing Health Week.",
+      "eventAttendanceMode": "https://schema.org/OfflineEvent",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "location": {
+        "@type": "Place",
+        "name": "Global"
+      },
+      "url": "https://example.org/observances/black-maternalbirthing-health-week",
+      "identifier": "black-maternalbirthing-health-week-2025"
+    },
+    {
+      "@type": "Event",
+      "name": "Palm/Passion Sunday",
+      "startDate": "2025-04-13",
+      "endDate": "2025-04-13",
+      "description": "Palm/Passion Sunday.",
+      "eventAttendanceMode": "https://schema.org/OfflineEvent",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "location": {
+        "@type": "Place",
+        "name": "Global"
+      },
+      "url": "https://example.org/observances/palmpassion-sunday",
+      "identifier": "palmpassion-sunday-2025"
+    },
+    {
+      "@type": "Event",
+      "name": "International Day of Farmers’ Struggles",
+      "startDate": "2025-04-17",
+      "endDate": "2025-04-17",
+      "description": "International Day of Farmers’ Struggles.",
+      "eventAttendanceMode": "https://schema.org/OfflineEvent",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "location": {
+        "@type": "Place",
+        "name": "Global"
+      },
+      "url": "https://example.org/observances/international-day-of-farmers-struggles",
+      "identifier": "international-day-of-farmers-struggles-2025"
+    },
+    {
+      "@type": "Event",
+      "name": "Maundy Thursday",
+      "startDate": "2025-04-17",
+      "endDate": "2025-04-17",
+      "description": "Maundy Thursday.",
+      "eventAttendanceMode": "https://schema.org/OfflineEvent",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "location": {
+        "@type": "Place",
+        "name": "Global"
+      },
+      "url": "https://example.org/observances/maundy-thursday",
+      "identifier": "maundy-thursday-2025"
+    },
+    {
+      "@type": "Event",
+      "name": "Good Friday",
+      "startDate": "2025-04-18",
+      "endDate": "2025-04-18",
+      "description": "Good Friday.",
+      "eventAttendanceMode": "https://schema.org/OfflineEvent",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "location": {
+        "@type": "Place",
+        "name": "Global"
+      },
+      "url": "https://example.org/observances/good-friday",
+      "identifier": "good-friday-2025"
+    },
+    {
+      "@type": "Event",
+      "name": "Easter Vigil",
+      "startDate": "2025-04-19",
+      "endDate": "2025-04-19",
+      "description": "Easter Vigil.",
+      "eventAttendanceMode": "https://schema.org/OfflineEvent",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "location": {
+        "@type": "Place",
+        "name": "Global"
+      },
+      "url": "https://example.org/observances/easter-vigil",
+      "identifier": "easter-vigil-2025"
+    },
+    {
+      "@type": "Event",
+      "name": "Easter Day / Resurrection",
+      "startDate": "2025-04-20",
+      "endDate": "2025-04-20",
+      "description": "Easter Day / Resurrection.",
+      "eventAttendanceMode": "https://schema.org/OfflineEvent",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "location": {
+        "@type": "Place",
+        "name": "Global"
+      },
+      "url": "https://example.org/observances/easter-day-resurrection",
+      "identifier": "easter-day-resurrection-2025"
+    },
+    {
+      "@type": "Event",
+      "name": "Easter Season begins",
+      "startDate": "2025-04-20",
+      "endDate": "2025-04-20",
+      "description": "Beginning of the Easter Season.",
+      "eventAttendanceMode": "https://schema.org/OfflineEvent",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "location": {
+        "@type": "Place",
+        "name": "Global"
+      },
+      "url": "https://example.org/observances/easter-season-begins",
+      "identifier": "easter-season-begins-2025"
+    },
+    {
+      "@type": "Event",
+      "name": "Earth Day",
+      "startDate": "2025-04-22",
+      "endDate": "2025-04-22",
+      "description": "Earth Day.",
+      "eventAttendanceMode": "https://schema.org/OfflineEvent",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "location": {
+        "@type": "Place",
+        "name": "Global"
+      },
+      "url": "https://example.org/observances/earth-day",
+      "identifier": "earth-day-2025"
+    },
+    {
+      "@type": "Event",
+      "name": "Armenian Genocide Remembrance Day",
+      "startDate": "2025-04-24",
+      "endDate": "2025-04-24",
+      "description": "Armenian Genocide Remembrance Day.",
+      "eventAttendanceMode": "https://schema.org/OfflineEvent",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "location": {
+        "@type": "Place",
+        "name": "Global"
+      },
+      "url": "https://example.org/observances/armenian-genocide-remembrance-day",
+      "identifier": "armenian-genocide-remembrance-day-2025"
+    },
+    {
+      "@type": "Event",
+      "name": "Mental Health Awareness Month begins",
+      "startDate": "2025-05-01",
+      "endDate": "2025-05-01",
+      "description": "Mental Health Awareness Month begins.",
+      "eventAttendanceMode": "https://schema.org/OfflineEvent",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "location": {
+        "@type": "Place",
+        "name": "Global"
+      },
+      "url": "https://example.org/observances/mental-health-awareness-month-begins",
+      "identifier": "mental-health-awareness-month-begins-2025"
+    },
+    {
+      "@type": "Event",
+      "name": "Foster Care Month begins",
+      "startDate": "2025-05-01",
+      "endDate": "2025-05-01",
+      "description": "Foster Care Month begins.",
+      "eventAttendanceMode": "https://schema.org/OfflineEvent",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "location": {
+        "@type": "Place",
+        "name": "Global"
+      },
+      "url": "https://example.org/observances/foster-care-month-begins",
+      "identifier": "foster-care-month-begins-2025"
+    },
+    {
+      "@type": "Event",
+      "name": "National Day of Prayer",
+      "startDate": "2025-05-01",
+      "endDate": "2025-05-01",
+      "description": "National Day of Prayer.",
+      "eventAttendanceMode": "https://schema.org/OfflineEvent",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "location": {
+        "@type": "Place",
+        "name": "Global"
+      },
+      "url": "https://example.org/observances/national-day-of-prayer",
+      "identifier": "national-day-of-prayer-2025"
+    },
+    {
+      "@type": "Event",
+      "name": "May Friendship Day",
+      "startDate": "2025-05-02",
+      "endDate": "2025-05-02",
+      "description": "May Friendship Day.",
+      "eventAttendanceMode": "https://schema.org/OfflineEvent",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "location": {
+        "@type": "Place",
+        "name": "Global"
+      },
+      "url": "https://example.org/observances/may-friendship-day",
+      "identifier": "may-friendship-day-2025"
+    },
+    {
+      "@type": "Event",
+      "name": "Older Adult Week begins",
+      "startDate": "2025-05-04",
+      "endDate": "2025-05-04",
+      "description": "Older Adult Week begins.",
+      "eventAttendanceMode": "https://schema.org/OfflineEvent",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "location": {
+        "@type": "Place",
+        "name": "Global"
+      },
+      "url": "https://example.org/observances/older-adult-week-begins",
+      "identifier": "older-adult-week-begins-2025"
+    },
+    {
+      "@type": "Event",
+      "name": "Legacy Giving Sunday",
+      "startDate": "2025-05-04",
+      "endDate": "2025-05-04",
+      "description": "Legacy Giving Sunday.",
+      "eventAttendanceMode": "https://schema.org/OfflineEvent",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "location": {
+        "@type": "Place",
+        "name": "Global"
+      },
+      "url": "https://example.org/observances/legacy-giving-sunday",
+      "identifier": "legacy-giving-sunday-2025"
+    },
+    {
+      "@type": "Event",
+      "name": "National Day of Awareness and Action for Missing and Murdered Indigenous Women, Girls, and Two-Spirit People",
+      "startDate": "2025-05-05",
+      "endDate": "2025-05-05",
+      "description": "National Day of Awareness and Action for Missing and Murdered Indigenous Women, Girls, and Two-Spirit People.",
+      "eventAttendanceMode": "https://schema.org/OfflineEvent",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "location": {
+        "@type": "Place",
+        "name": "Global"
+      },
+      "url": "https://example.org/observances/national-day-of-awareness-and-action-for-missing-and-murdered-indigenous-women-girls-and-two-spirit-people",
+      "identifier": "national-day-of-awareness-and-action-for-missing-and-murdered-indigenous-women-girls-and-two-spirit-people-2025"
+    },
+    {
+      "@type": "Event",
+      "name": "Holocaust Remembrance Day",
+      "startDate": "2025-05-06",
+      "endDate": "2025-05-06",
+      "description": "Holocaust Remembrance Day.",
+      "eventAttendanceMode": "https://schema.org/OfflineEvent",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "location": {
+        "@type": "Place",
+        "name": "Global"
+      },
+      "url": "https://example.org/observances/holocaust-remembrance-day",
+      "identifier": "holocaust-remembrance-day-2025"
+    },
+    {
+      "@type": "Event",
+      "name": "Fair Trade Day",
+      "startDate": "2025-05-10",
+      "endDate": "2025-05-10",
+      "description": "Fair Trade Day.",
+      "eventAttendanceMode": "https://schema.org/OfflineEvent",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "location": {
+        "@type": "Place",
+        "name": "Global"
+      },
+      "url": "https://example.org/observances/fair-trade-day",
+      "identifier": "fair-trade-day-2025"
+    },
+    {
+      "@type": "Event",
+      "name": "Mother’s Day",
+      "startDate": "2025-05-11",
+      "endDate": "2025-05-11",
+      "description": "Mother’s Day.",
+      "eventAttendanceMode": "https://schema.org/OfflineEvent",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "location": {
+        "@type": "Place",
+        "name": "Global"
+      },
+      "url": "https://example.org/observances/mothers-day",
+      "identifier": "mothers-day-2025"
+    },
+    {
+      "@type": "Event",
+      "name": "Palestinian Nakba Remembrance Day",
+      "startDate": "2025-05-15",
+      "endDate": "2025-05-15",
+      "description": "Palestinian Nakba Remembrance Day.",
+      "eventAttendanceMode": "https://schema.org/OfflineEvent",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "location": {
+        "@type": "Place",
+        "name": "Global"
+      },
+      "url": "https://example.org/observances/palestinian-nakba-remembrance-day",
+      "identifier": "palestinian-nakba-remembrance-day-2025"
+    },
+    {
+      "@type": "Event",
+      "name": "Mission Worker Sunday",
+      "startDate": "2025-05-18",
+      "endDate": "2025-05-18",
+      "description": "Mission Worker Sunday.",
+      "eventAttendanceMode": "https://schema.org/OfflineEvent",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "location": {
+        "@type": "Place",
+        "name": "Global"
+      },
+      "url": "https://example.org/observances/mission-worker-sunday",
+      "identifier": "mission-worker-sunday-2025"
+    },
+    {
+      "@type": "Event",
+      "name": "Presbyterian Heritage Sunday",
+      "startDate": "2025-05-18",
+      "endDate": "2025-05-18",
+      "description": "Presbyterian Heritage Sunday.",
+      "eventAttendanceMode": "https://schema.org/OfflineEvent",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "location": {
+        "@type": "Place",
+        "name": "Global"
+      },
+      "url": "https://example.org/observances/presbyterian-heritage-sunday",
+      "identifier": "presbyterian-heritage-sunday-2025"
+    },
+    {
+      "@type": "Event",
+      "name": "Africa Day",
+      "startDate": "2025-05-25",
+      "endDate": "2025-05-25",
+      "description": "Africa Day.",
+      "eventAttendanceMode": "https://schema.org/OfflineEvent",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "location": {
+        "@type": "Place",
+        "name": "Global"
+      },
+      "url": "https://example.org/observances/africa-day",
+      "identifier": "africa-day-2025"
+    },
+    {
+      "@type": "Event",
+      "name": "Ascension of the Lord",
+      "startDate": "2025-05-29",
+      "endDate": "2025-05-29",
+      "description": "Ascension of the Lord.",
+      "eventAttendanceMode": "https://schema.org/OfflineEvent",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "location": {
+        "@type": "Place",
+        "name": "Global"
+      },
+      "url": "https://example.org/observances/ascension-of-the-lord",
+      "identifier": "ascension-of-the-lord-2025"
+    },
+    {
+      "@type": "Event",
+      "name": "Intercultural Church Sunday",
+      "startDate": "2025-06-01",
+      "endDate": "2025-06-01",
+      "description": "Intercultural Church Sunday.",
+      "eventAttendanceMode": "https://schema.org/OfflineEvent",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "location": {
+        "@type": "Place",
+        "name": "Global"
+      },
+      "url": "https://example.org/observances/intercultural-church-sunday",
+      "identifier": "intercultural-church-sunday-2025"
+    },
+    {
+      "@type": "Event",
+      "name": "1001 New Worshiping Communities",
+      "startDate": "2025-06-01",
+      "endDate": "2025-06-01",
+      "description": "1001 New Worshiping Communities.",
+      "eventAttendanceMode": "https://schema.org/OfflineEvent",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "location": {
+        "@type": "Place",
+        "name": "Global"
+      },
+      "url": "https://example.org/observances/1001-new-worshiping-communities",
+      "identifier": "1001-new-worshiping-communities-2025"
+    },
+    {
+      "@type": "Event",
+      "name": "National Gun Violence Awareness Day",
+      "startDate": "2025-06-06",
+      "endDate": "2025-06-06",
+      "description": "National Gun Violence Awareness Day.",
+      "eventAttendanceMode": "https://schema.org/OfflineEvent",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "location": {
+        "@type": "Place",
+        "name": "Global"
+      },
+      "url": "https://example.org/observances/national-gun-violence-awareness-day",
+      "identifier": "national-gun-violence-awareness-day-2025"
+    },
+    {
+      "@type": "Event",
+      "name": "Pentecost",
+      "startDate": "2025-06-08",
+      "endDate": "2025-06-08",
+      "description": "Pentecost.",
+      "eventAttendanceMode": "https://schema.org/OfflineEvent",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "location": {
+        "@type": "Place",
+        "name": "Global"
+      },
+      "url": "https://example.org/observances/pentecost",
+      "identifier": "pentecost-2025"
+    },
+    {
+      "@type": "Event",
+      "name": "Trinity Sunday",
+      "startDate": "2025-06-15",
+      "endDate": "2025-06-15",
+      "description": "Trinity Sunday.",
+      "eventAttendanceMode": "https://schema.org/OfflineEvent",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "location": {
+        "@type": "Place",
+        "name": "Global"
+      },
+      "url": "https://example.org/observances/trinity-sunday",
+      "identifier": "trinity-sunday-2025"
+    },
+    {
+      "@type": "Event",
+      "name": "Father’s Day / Presbyterian Men",
+      "startDate": "2025-06-15",
+      "endDate": "2025-06-15",
+      "description": "Father’s Day; Presbyterian Men.",
+      "eventAttendanceMode": "https://schema.org/OfflineEvent",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "location": {
+        "@type": "Place",
+        "name": "Global"
+      },
+      "url": "https://example.org/observances/fathers-day-presbyterian-men",
+      "identifier": "fathers-day-presbyterian-men-2025"
+    },
+    {
+      "@type": "Event",
+      "name": "Juneteenth",
+      "startDate": "2025-06-19",
+      "endDate": "2025-06-19",
+      "description": "Juneteenth.",
+      "eventAttendanceMode": "https://schema.org/OfflineEvent",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "location": {
+        "@type": "Place",
+        "name": "Global"
+      },
+      "url": "https://example.org/observances/juneteenth",
+      "identifier": "juneteenth-2025"
+    },
+    {
+      "@type": "Event",
+      "name": "World Refugee Day",
+      "startDate": "2025-06-20",
+      "endDate": "2025-06-20",
+      "description": "World Refugee Day.",
+      "eventAttendanceMode": "https://schema.org/OfflineEvent",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "location": {
+        "@type": "Place",
+        "name": "Global"
+      },
+      "url": "https://example.org/observances/world-refugee-day",
+      "identifier": "world-refugee-day-2025"
+    },
+    {
+      "@type": "Event",
+      "name": "Season of Prayer and Reflection in the Korean Peninsula begins",
+      "startDate": "2025-06-25",
+      "endDate": "2025-08-15",
+      "description": "Season of Prayer and Reflection in the Korean Peninsula begins.",
+      "eventAttendanceMode": "https://schema.org/OfflineEvent",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "location": {
+        "@type": "Place",
+        "name": "Global"
+      },
+      "url": "https://example.org/observances/season-of-prayer-and-reflection-in-the-korean-peninsula-begins",
+      "identifier": "season-of-prayer-and-reflection-in-the-korean-peninsula-begins-2025"
+    },
+    {
+      "@type": "Event",
+      "name": "Independence Day",
+      "startDate": "2025-07-04",
+      "endDate": "2025-07-04",
+      "description": "Independence Day.",
+      "eventAttendanceMode": "https://schema.org/OfflineEvent",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "location": {
+        "@type": "Place",
+        "name": "Global"
+      },
+      "url": "https://example.org/observances/independence-day",
+      "identifier": "independence-day-2025"
+    },
+    {
+      "@type": "Event",
+      "name": "Immigration Sunday",
+      "startDate": "2025-07-06",
+      "endDate": "2025-07-06",
+      "description": "Immigration Sunday.",
+      "eventAttendanceMode": "https://schema.org/OfflineEvent",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "location": {
+        "@type": "Place",
+        "name": "Global"
+      },
+      "url": "https://example.org/observances/immigration-sunday",
+      "identifier": "immigration-sunday-2025"
+    },
+    {
+      "@type": "Event",
+      "name": "Kenya Mission",
+      "startDate": "2025-07-21",
+      "endDate": "2025-07-21",
+      "description": "Kenya Mission.",
+      "eventAttendanceMode": "https://schema.org/OfflineEvent",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "location": {
+        "@type": "Place",
+        "name": "Global"
+      },
+      "url": "https://example.org/observances/kenya-mission",
+      "identifier": "kenya-mission-2025"
+    },
+    {
+      "@type": "Event",
+      "name": "Presbyterian Youth Triennium",
+      "startDate": "2025-07-28",
+      "endDate": "2025-07-31",
+      "description": "Presbyterian Youth Triennium.",
+      "eventAttendanceMode": "https://schema.org/OfflineEvent",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "location": {
+        "@type": "Place",
+        "name": "Global"
+      },
+      "url": "https://example.org/observances/presbyterian-youth-triennium",
+      "identifier": "presbyterian-youth-triennium-2025"
+    },
+    {
+      "@type": "Event",
+      "name": "World Day Against Trafficking in Persons",
+      "startDate": "2025-07-30",
+      "endDate": "2025-07-30",
+      "description": "World Day Against Trafficking in Persons.",
+      "eventAttendanceMode": "https://schema.org/OfflineEvent",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "location": {
+        "@type": "Place",
+        "name": "Global"
+      },
+      "url": "https://example.org/observances/world-day-against-trafficking-in-persons",
+      "identifier": "world-day-against-trafficking-in-persons-2025"
+    },
+    {
+      "@type": "Event",
+      "name": "College and Young Adult Sunday",
+      "startDate": "2025-08-03",
+      "endDate": "2025-08-03",
+      "description": "College and Young Adult Sunday.",
+      "eventAttendanceMode": "https://schema.org/OfflineEvent",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "location": {
+        "@type": "Place",
+        "name": "Global"
+      },
+      "url": "https://example.org/observances/college-and-young-adult-sunday",
+      "identifier": "college-and-young-adult-sunday-2025"
+    },
+    {
+      "@type": "Event",
+      "name": "Hiroshima Day",
+      "startDate": "2025-08-06",
+      "endDate": "2025-08-06",
+      "description": "Hiroshima Day.",
+      "eventAttendanceMode": "https://schema.org/OfflineEvent",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "location": {
+        "@type": "Place",
+        "name": "Global"
+      },
+      "url": "https://example.org/observances/hiroshima-day",
+      "identifier": "hiroshima-day-2025"
+    },
+    {
+      "@type": "Event",
+      "name": "International Day of the World's Indigenous Peoples",
+      "startDate": "2025-08-09",
+      "endDate": "2025-08-09",
+      "description": "International Day of the World's Indigenous Peoples.",
+      "eventAttendanceMode": "https://schema.org/OfflineEvent",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "location": {
+        "@type": "Place",
+        "name": "Global"
+      },
+      "url": "https://example.org/observances/international-day-of-the-worlds-indigenous-peoples",
+      "identifier": "international-day-of-the-worlds-indigenous-peoples-2025"
+    },
+    {
+      "@type": "Event",
+      "name": "Youth in the Church and the World Sunday",
+      "startDate": "2025-08-10",
+      "endDate": "2025-08-10",
+      "description": "Youth in the Church and the World Sunday.",
+      "eventAttendanceMode": "https://schema.org/OfflineEvent",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "location": {
+        "@type": "Place",
+        "name": "Global"
+      },
+      "url": "https://example.org/observances/youth-in-the-church-and-the-world-sunday",
+      "identifier": "youth-in-the-church-and-the-world-sunday-2025"
+    },
+    {
+      "@type": "Event",
+      "name": "Day of Prayer for the Peaceful Reunification of the Korean Peninsula",
+      "startDate": "2025-08-10",
+      "endDate": "2025-08-10",
+      "description": "Day of Prayer for the Peaceful Reunification of the Korean Peninsula.",
+      "eventAttendanceMode": "https://schema.org/OfflineEvent",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "location": {
+        "@type": "Place",
+        "name": "Global"
+      },
+      "url": "https://example.org/observances/day-of-prayer-for-the-peaceful-reunification-of-the-korean-peninsula",
+      "identifier": "day-of-prayer-for-the-peaceful-reunification-of-the-korean-peninsula-2025"
+    },
+    {
+      "@type": "Event",
+      "name": "Young Adult Volunteer Commissioning Sunday",
+      "startDate": "2025-08-17",
+      "endDate": "2025-08-17",
+      "description": "Young Adult Volunteer Commissioning Sunday.",
+      "eventAttendanceMode": "https://schema.org/OfflineEvent",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "location": {
+        "@type": "Place",
+        "name": "Global"
+      },
+      "url": "https://example.org/observances/young-adult-volunteer-commissioning-sunday",
+      "identifier": "young-adult-volunteer-commissioning-sunday-2025"
+    },
+    {
+      "@type": "Event",
+      "name": "Public Education Day",
+      "startDate": "2025-08-20",
+      "endDate": "2025-08-20",
+      "description": "Public Education Day.",
+      "eventAttendanceMode": "https://schema.org/OfflineEvent",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "location": {
+        "@type": "Place",
+        "name": "Global"
+      },
+      "url": "https://example.org/observances/public-education-day",
+      "identifier": "public-education-day-2025"
+    },
+    {
+      "@type": "Event",
+      "name": "International Day for the Remembrance of the Slave Trade Abolition",
+      "startDate": "2025-08-23",
+      "endDate": "2025-08-23",
+      "description": "International Day for the Remembrance of the Slave Trade Abolition.",
+      "eventAttendanceMode": "https://schema.org/OfflineEvent",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "location": {
+        "@type": "Place",
+        "name": "Global"
+      },
+      "url": "https://example.org/observances/international-day-for-the-remembrance-of-the-slave-trade-abolition",
+      "identifier": "international-day-for-the-remembrance-of-the-slave-trade-abolition-2025"
+    },
+    {
+      "@type": "Event",
+      "name": "Presbyterian Higher Education",
+      "startDate": "2025-08-31",
+      "endDate": "2025-08-31",
+      "description": "Presbyterian Higher Education.",
+      "eventAttendanceMode": "https://schema.org/OfflineEvent",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "location": {
+        "@type": "Place",
+        "name": "Global"
+      },
+      "url": "https://example.org/observances/presbyterian-higher-education",
+      "identifier": "presbyterian-higher-education-2025"
+    },
+    {
+      "@type": "Event",
+      "name": "World Day of Prayer for the Care of Creation",
+      "startDate": "2025-09-01",
+      "endDate": "2025-09-01",
+      "description": "World Day of Prayer for the Care of Creation.",
+      "eventAttendanceMode": "https://schema.org/OfflineEvent",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "location": {
+        "@type": "Place",
+        "name": "Global"
+      },
+      "url": "https://example.org/observances/world-day-of-prayer-for-the-care-of-creation",
+      "identifier": "world-day-of-prayer-for-the-care-of-creation-2025"
+    },
+    {
+      "@type": "Event",
+      "name": "Labor Day and Social Creed for the 21st Century",
+      "startDate": "2025-09-01",
+      "endDate": "2025-09-01",
+      "description": "Labor Day and Social Creed for the 21st Century.",
+      "eventAttendanceMode": "https://schema.org/OfflineEvent",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "location": {
+        "@type": "Place",
+        "name": "Global"
+      },
+      "url": "https://example.org/observances/labor-day-and-social-creed-for-the-21st-century",
+      "identifier": "labor-day-and-social-creed-for-the-21st-century-2025"
+    },
+    {
+      "@type": "Event",
+      "name": "National Suicide Prevention Month begins",
+      "startDate": "2025-09-01",
+      "endDate": "2025-09-01",
+      "description": "National Suicide Prevention Month begins.",
+      "eventAttendanceMode": "https://schema.org/OfflineEvent",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "location": {
+        "@type": "Place",
+        "name": "Global"
+      },
+      "url": "https://example.org/observances/national-suicide-prevention-month-begins",
+      "identifier": "national-suicide-prevention-month-begins-2025"
+    },
+    {
+      "@type": "Event",
+      "name": "Disaster Preparedness Month begins",
+      "startDate": "2025-09-01",
+      "endDate": "2025-09-01",
+      "description": "Disaster Preparedness Month begins.",
+      "eventAttendanceMode": "https://schema.org/OfflineEvent",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "location": {
+        "@type": "Place",
+        "name": "Global"
+      },
+      "url": "https://example.org/observances/disaster-preparedness-month-begins",
+      "identifier": "disaster-preparedness-month-begins-2025"
+    },
+    {
+      "@type": "Event",
+      "name": "Season of Peace begins",
+      "startDate": "2025-09-07",
+      "endDate": "2025-10-05",
+      "description": "Season of Peace begins.",
+      "eventAttendanceMode": "https://schema.org/OfflineEvent",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "location": {
+        "@type": "Place",
+        "name": "Global"
+      },
+      "url": "https://example.org/observances/season-of-peace-begins",
+      "identifier": "season-of-peace-begins-2025"
+    },
+    {
+      "@type": "Event",
+      "name": "Christian Formation Week begins; Christian Formation Celebration",
+      "startDate": "2025-09-07",
+      "endDate": "2025-09-07",
+      "description": "Christian Formation Week begins; Christian Formation Celebration.",
+      "eventAttendanceMode": "https://schema.org/OfflineEvent",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "location": {
+        "@type": "Place",
+        "name": "Global"
+      },
+      "url": "https://example.org/observances/christian-formation-week-begins-christian-formation-celebration",
+      "identifier": "christian-formation-week-begins-christian-formation-celebration-2025"
+    },
+    {
+      "@type": "Event",
+      "name": "September 11 Anniversary",
+      "startDate": "2025-09-11",
+      "endDate": "2025-09-11",
+      "description": "September 11 Anniversary.",
+      "eventAttendanceMode": "https://schema.org/OfflineEvent",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "location": {
+        "@type": "Place",
+        "name": "Global"
+      },
+      "url": "https://example.org/observances/september-11-anniversary",
+      "identifier": "september-11-anniversary-2025"
+    },
+    {
+      "@type": "Event",
+      "name": "Disability Inclusion Sunday",
+      "startDate": "2025-09-14",
+      "endDate": "2025-09-14",
+      "description": "Disability Inclusion Sunday.",
+      "eventAttendanceMode": "https://schema.org/OfflineEvent",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "location": {
+        "@type": "Place",
+        "name": "Global"
+      },
+      "url": "https://example.org/observances/disability-inclusion-sunday",
+      "identifier": "disability-inclusion-sunday-2025"
+    },
+    {
+      "@type": "Event",
+      "name": "Evangelism Sunday",
+      "startDate": "2025-09-21",
+      "endDate": "2025-09-21",
+      "description": "Evangelism Sunday.",
+      "eventAttendanceMode": "https://schema.org/OfflineEvent",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "location": {
+        "@type": "Place",
+        "name": "Global"
+      },
+      "url": "https://example.org/observances/evangelism-sunday",
+      "identifier": "evangelism-sunday-2025"
+    },
+    {
+      "@type": "Event",
+      "name": "International Day of Peace",
+      "startDate": "2025-09-21",
+      "endDate": "2025-09-21",
+      "description": "International Day of Peace.",
+      "eventAttendanceMode": "https://schema.org/OfflineEvent",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "location": {
+        "@type": "Place",
+        "name": "Global"
+      },
+      "url": "https://example.org/observances/international-day-of-peace",
+      "identifier": "international-day-of-peace-2025"
+    },
+    {
+      "@type": "Event",
+      "name": "Gifts of New Immigrants",
+      "startDate": "2025-09-21",
+      "endDate": "2025-09-21",
+      "description": "Gifts of New Immigrants.",
+      "eventAttendanceMode": "https://schema.org/OfflineEvent",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "location": {
+        "@type": "Place",
+        "name": "Global"
+      },
+      "url": "https://example.org/observances/gifts-of-new-immigrants",
+      "identifier": "gifts-of-new-immigrants-2025"
+    },
+    {
+      "@type": "Event",
+      "name": "Theological Education / Seminaries Sunday",
+      "startDate": "2025-09-21",
+      "endDate": "2025-09-21",
+      "description": "Theological Education / Seminaries Sunday.",
+      "eventAttendanceMode": "https://schema.org/OfflineEvent",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "location": {
+        "@type": "Place",
+        "name": "Global"
+      },
+      "url": "https://example.org/observances/theological-education-seminaries-sunday",
+      "identifier": "theological-education-seminaries-sunday-2025"
+    },
+    {
+      "@type": "Event",
+      "name": "Native American Day",
+      "startDate": "2025-09-26",
+      "endDate": "2025-09-26",
+      "description": "Native American Day.",
+      "eventAttendanceMode": "https://schema.org/OfflineEvent",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "location": {
+        "@type": "Place",
+        "name": "Global"
+      },
+      "url": "https://example.org/observances/native-american-day",
+      "identifier": "native-american-day-2025"
+    },
+    {
+      "@type": "Event",
+      "name": "Mental Illness Awareness Week begins",
+      "startDate": "2025-10-01",
+      "endDate": "2025-10-01",
+      "description": "Mental Illness Awareness Week begins.",
+      "eventAttendanceMode": "https://schema.org/OfflineEvent",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "location": {
+        "@type": "Place",
+        "name": "Global"
+      },
+      "url": "https://example.org/observances/mental-illness-awareness-week-begins",
+      "identifier": "mental-illness-awareness-week-begins-2025"
+    },
+    {
+      "@type": "Event",
+      "name": "Peace & Global Witness Offering",
+      "startDate": "2025-10-05",
+      "endDate": "2025-10-05",
+      "description": "Peace & Global Witness Offering.",
+      "eventAttendanceMode": "https://schema.org/OfflineEvent",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "location": {
+        "@type": "Place",
+        "name": "Global"
+      },
+      "url": "https://example.org/observances/peace-&-global-witness-offering",
+      "identifier": "peace-&-global-witness-offering-2025"
+    },
+    {
+      "@type": "Event",
+      "name": "World Communion Sunday",
+      "startDate": "2025-10-05",
+      "endDate": "2025-10-05",
+      "description": "World Communion Sunday.",
+      "eventAttendanceMode": "https://schema.org/OfflineEvent",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "location": {
+        "@type": "Place",
+        "name": "Global"
+      },
+      "url": "https://example.org/observances/world-communion-sunday",
+      "identifier": "world-communion-sunday-2025"
+    },
+    {
+      "@type": "Event",
+      "name": "Indigenous Peoples Day",
+      "startDate": "2025-10-13",
+      "endDate": "2025-10-13",
+      "description": "Indigenous Peoples Day.",
+      "eventAttendanceMode": "https://schema.org/OfflineEvent",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "location": {
+        "@type": "Place",
+        "name": "Global"
+      },
+      "url": "https://example.org/observances/indigenous-peoples-day",
+      "identifier": "indigenous-peoples-day-2025"
+    },
+    {
+      "@type": "Event",
+      "name": "World Food Day",
+      "startDate": "2025-10-16",
+      "endDate": "2025-10-16",
+      "description": "World Food Day.",
+      "eventAttendanceMode": "https://schema.org/OfflineEvent",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "location": {
+        "@type": "Place",
+        "name": "Global"
+      },
+      "url": "https://example.org/observances/world-food-day",
+      "identifier": "world-food-day-2025"
+    },
+    {
+      "@type": "Event",
+      "name": "Children’s Sabbath; Educate a Child, Transform the World",
+      "startDate": "2025-10-19",
+      "endDate": "2025-10-19",
+      "description": "Children’s Sabbath; Educate a Child, Transform the World.",
+      "eventAttendanceMode": "https://schema.org/OfflineEvent",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "location": {
+        "@type": "Place",
+        "name": "Global"
+      },
+      "url": "https://example.org/observances/childrens-sabbath-educate-a-child-transform-the-world",
+      "identifier": "childrens-sabbath-educate-a-child-transform-the-world-2025"
+    },
+    {
+      "@type": "Event",
+      "name": "Young Adult Volunteer Program",
+      "startDate": "2025-10-20",
+      "endDate": "2025-10-20",
+      "description": "Young Adult Volunteer Program.",
+      "eventAttendanceMode": "https://schema.org/OfflineEvent",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "location": {
+        "@type": "Place",
+        "name": "Global"
+      },
+      "url": "https://example.org/observances/young-adult-volunteer-program",
+      "identifier": "young-adult-volunteer-program-2025"
+    },
+    {
+      "@type": "Event",
+      "name": "United Nations Day",
+      "startDate": "2025-10-24",
+      "endDate": "2025-10-24",
+      "description": "United Nations Day.",
+      "eventAttendanceMode": "https://schema.org/OfflineEvent",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "location": {
+        "@type": "Place",
+        "name": "Global"
+      },
+      "url": "https://example.org/observances/united-nations-day",
+      "identifier": "united-nations-day-2025"
+    },
+    {
+      "@type": "Event",
+      "name": "Reformation Sunday",
+      "startDate": "2025-10-26",
+      "endDate": "2025-10-26",
+      "description": "Reformation Sunday.",
+      "eventAttendanceMode": "https://schema.org/OfflineEvent",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "location": {
+        "@type": "Place",
+        "name": "Global"
+      },
+      "url": "https://example.org/observances/reformation-sunday",
+      "identifier": "reformation-sunday-2025"
+    },
+    {
+      "@type": "Event",
+      "name": "All Saints’ Day",
+      "startDate": "2025-11-01",
+      "endDate": "2025-11-01",
+      "description": "All Saints’ Day.",
+      "eventAttendanceMode": "https://schema.org/OfflineEvent",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "location": {
+        "@type": "Place",
+        "name": "Global"
+      },
+      "url": "https://example.org/observances/all-saints-day",
+      "identifier": "all-saints-day-2025"
+    },
+    {
+      "@type": "Event",
+      "name": "Election Day; Honest Patriotism for Christian Citizens",
+      "startDate": "2025-11-04",
+      "endDate": "2025-11-04",
+      "description": "Election Day; Honest Patriotism for Christian Citizens.",
+      "eventAttendanceMode": "https://schema.org/OfflineEvent",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "location": {
+        "@type": "Place",
+        "name": "Global"
+      },
+      "url": "https://example.org/observances/election-day-honest-patriotism-for-christian-citizens",
+      "identifier": "election-day-honest-patriotism-for-christian-citizens-2025"
+    },
+    {
+      "@type": "Event",
+      "name": "World Community Day",
+      "startDate": "2025-11-07",
+      "endDate": "2025-11-07",
+      "description": "World Community Day.",
+      "eventAttendanceMode": "https://schema.org/OfflineEvent",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "location": {
+        "@type": "Place",
+        "name": "Global"
+      },
+      "url": "https://example.org/observances/world-community-day",
+      "identifier": "world-community-day-2025"
+    },
+    {
+      "@type": "Event",
+      "name": "Veterans Day",
+      "startDate": "2025-11-11",
+      "endDate": "2025-11-11",
+      "description": "Veterans Day.",
+      "eventAttendanceMode": "https://schema.org/OfflineEvent",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "location": {
+        "@type": "Place",
+        "name": "Global"
+      },
+      "url": "https://example.org/observances/veterans-day",
+      "identifier": "veterans-day-2025"
+    },
+    {
+      "@type": "Event",
+      "name": "Hunger and Homelessness",
+      "startDate": "2025-11-16",
+      "endDate": "2025-11-16",
+      "description": "Hunger and Homelessness.",
+      "eventAttendanceMode": "https://schema.org/OfflineEvent",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "location": {
+        "@type": "Place",
+        "name": "Global"
+      },
+      "url": "https://example.org/observances/hunger-and-homelessness",
+      "identifier": "hunger-and-homelessness-2025"
+    },
+    {
+      "@type": "Event",
+      "name": "Transgender Day of Remembrance",
+      "startDate": "2025-11-20",
+      "endDate": "2025-11-20",
+      "description": "Transgender Day of Remembrance.",
+      "eventAttendanceMode": "https://schema.org/OfflineEvent",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "location": {
+        "@type": "Place",
+        "name": "Global"
+      },
+      "url": "https://example.org/observances/transgender-day-of-remembrance",
+      "identifier": "transgender-day-of-remembrance-2025"
+    },
+    {
+      "@type": "Event",
+      "name": "Christ the King / Reign of Christ",
+      "startDate": "2025-11-23",
+      "endDate": "2025-11-23",
+      "description": "Christ the King / Reign of Christ.",
+      "eventAttendanceMode": "https://schema.org/OfflineEvent",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "location": {
+        "@type": "Place",
+        "name": "Global"
+      },
+      "url": "https://example.org/observances/christ-the-king-reign-of-christ",
+      "identifier": "christ-the-king-reign-of-christ-2025"
+    },
+    {
+      "@type": "Event",
+      "name": "Matthew 25: Eradicating Systemic Poverty Sunday",
+      "startDate": "2025-11-23",
+      "endDate": "2025-11-23",
+      "description": "Matthew 25: Eradicating Systemic Poverty Sunday.",
+      "eventAttendanceMode": "https://schema.org/OfflineEvent",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "location": {
+        "@type": "Place",
+        "name": "Global"
+      },
+      "url": "https://example.org/observances/matthew-25:-eradicating-systemic-poverty-sunday",
+      "identifier": "matthew-25:-eradicating-systemic-poverty-sunday-2025"
+    },
+    {
+      "@type": "Event",
+      "name": "Thanksgiving Day; Nativity Fast",
+      "startDate": "2025-11-27",
+      "endDate": "2025-11-27",
+      "description": "Thanksgiving Day; Nativity Fast.",
+      "eventAttendanceMode": "https://schema.org/OfflineEvent",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "location": {
+        "@type": "Place",
+        "name": "Global"
+      },
+      "url": "https://example.org/observances/thanksgiving-day-nativity-fast",
+      "identifier": "thanksgiving-day-nativity-fast-2025"
+    },
+    {
+      "@type": "Event",
+      "name": "Advent Season begins",
+      "startDate": "2025-11-30",
+      "endDate": "2025-11-30",
+      "description": "Beginning of the Advent Season.",
+      "eventAttendanceMode": "https://schema.org/OfflineEvent",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "location": {
+        "@type": "Place",
+        "name": "Global"
+      },
+      "url": "https://example.org/observances/advent-season-begins",
+      "identifier": "advent-season-begins-2025"
+    },
+    {
+      "@type": "Event",
+      "name": "World AIDS Day; Presbyterian HIV/AIDS Awareness",
+      "startDate": "2025-12-01",
+      "endDate": "2025-12-01",
+      "description": "World AIDS Day; Presbyterian HIV/AIDS Awareness.",
+      "eventAttendanceMode": "https://schema.org/OfflineEvent",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "location": {
+        "@type": "Place",
+        "name": "Global"
+      },
+      "url": "https://example.org/observances/world-aids-day-presbyterian-hivaids-awareness",
+      "identifier": "world-aids-day-presbyterian-hivaids-awareness-2025"
+    },
+    {
+      "@type": "Event",
+      "name": "Giving Tuesday",
+      "startDate": "2025-12-02",
+      "endDate": "2025-12-02",
+      "description": "Giving Tuesday.",
+      "eventAttendanceMode": "https://schema.org/OfflineEvent",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "location": {
+        "@type": "Place",
+        "name": "Global"
+      },
+      "url": "https://example.org/observances/giving-tuesday",
+      "identifier": "giving-tuesday-2025"
+    },
+    {
+      "@type": "Event",
+      "name": "Human Rights Day",
+      "startDate": "2025-12-10",
+      "endDate": "2025-12-10",
+      "description": "Human Rights Day.",
+      "eventAttendanceMode": "https://schema.org/OfflineEvent",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "location": {
+        "@type": "Place",
+        "name": "Global"
+      },
+      "url": "https://example.org/observances/human-rights-day",
+      "identifier": "human-rights-day-2025"
+    },
+    {
+      "@type": "Event",
+      "name": "Christmas Joy Offering",
+      "startDate": "2025-12-21",
+      "endDate": "2025-12-21",
+      "description": "Christmas Joy Offering.",
+      "eventAttendanceMode": "https://schema.org/OfflineEvent",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "location": {
+        "@type": "Place",
+        "name": "Global"
+      },
+      "url": "https://example.org/observances/christmas-joy-offering",
+      "identifier": "christmas-joy-offering-2025"
+    },
+    {
+      "@type": "Event",
+      "name": "Christmas Eve / Nativity",
+      "startDate": "2025-12-24",
+      "endDate": "2025-12-24",
+      "description": "Christmas Eve / Nativity.",
+      "eventAttendanceMode": "https://schema.org/OfflineEvent",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "location": {
+        "@type": "Place",
+        "name": "Global"
+      },
+      "url": "https://example.org/observances/christmas-eve-nativity",
+      "identifier": "christmas-eve-nativity-2025"
+    },
+    {
+      "@type": "Event",
+      "name": "Christmas Season begins",
+      "startDate": "2025-12-24",
+      "endDate": "2025-12-24",
+      "description": "Beginning of the Christmas Season.",
+      "eventAttendanceMode": "https://schema.org/OfflineEvent",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "location": {
+        "@type": "Place",
+        "name": "Global"
+      },
+      "url": "https://example.org/observances/christmas-season-begins",
+      "identifier": "christmas-season-begins-2025"
+    },
+    {
+      "@type": "Event",
+      "name": "Christmas Day / Nativity",
+      "startDate": "2025-12-25",
+      "endDate": "2025-12-25",
+      "description": "Christmas Day / Nativity.",
+      "eventAttendanceMode": "https://schema.org/OfflineEvent",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "location": {
+        "@type": "Place",
+        "name": "Global"
+      },
+      "url": "https://example.org/observances/christmas-day-nativity",
+      "identifier": "christmas-day-nativity-2025"
+    }
+  ]
+}

@@ -1,0 +1,1154 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Example.org//Observances2025//EN
+BEGIN:VEVENT
+UID:new-years-day-2025@example.org
+DTSTAMP:20250731T120000Z
+DTSTART;VALUE=DATE:20250101
+DTEND;VALUE=DATE:20250102
+SUMMARY:New Year’s Day
+DESCRIPTION:Start of the civil new year.
+CATEGORIES:Holiday
+URL:https://example.org/observances/new-years-day
+END:VEVENT
+BEGIN:VEVENT
+UID:epiphany-of-the-lord-2025@example.org
+DTSTAMP:20250731T120000Z
+DTSTART;VALUE=DATE:20250106
+DTEND;VALUE=DATE:20250107
+SUMMARY:Epiphany of the Lord
+DESCRIPTION:Epiphany of the Lord.
+CATEGORIES:Religious
+URL:https://example.org/observances/epiphany-of-the-lord
+END:VEVENT
+BEGIN:VEVENT
+UID:human-trafficking-awareness-day-2025@example.org
+DTSTAMP:20250731T120000Z
+DTSTART;VALUE=DATE:20250111
+DTEND;VALUE=DATE:20250112
+SUMMARY:Human Trafficking Awareness Day
+DESCRIPTION:Awareness around human trafficking.
+CATEGORIES:Awareness
+URL:https://example.org/observances/human-trafficking-awareness-day
+END:VEVENT
+BEGIN:VEVENT
+UID:baptism-of-the-lord-2025@example.org
+DTSTAMP:20250731T120000Z
+DTSTART;VALUE=DATE:20250112
+DTEND;VALUE=DATE:20250113
+SUMMARY:Baptism of the Lord
+DESCRIPTION:Baptism of the Lord.
+CATEGORIES:Religious
+URL:https://example.org/observances/baptism-of-the-lord
+END:VEVENT
+BEGIN:VEVENT
+UID:ecumenical-week-of-prayer-for-christian-unity-begins-2025@example.org
+DTSTAMP:20250731T120000Z
+DTSTART;VALUE=DATE:20250118
+DTEND;VALUE=DATE:20250119
+SUMMARY:Ecumenical Week of Prayer for Christian Unity begins
+DESCRIPTION:Beginning of the Ecumenical Week of Prayer for Christian Unity.
+CATEGORIES:Religious\,Ecumenical
+URL:https://example.org/observances/ecumenical-week-of-prayer-for-christian-unity-begins
+END:VEVENT
+BEGIN:VEVENT
+UID:per-capita-sunday-2025@example.org
+DTSTAMP:20250731T120000Z
+DTSTART;VALUE=DATE:20250119
+DTEND;VALUE=DATE:20250120
+SUMMARY:Per Capita Sunday
+DESCRIPTION:Per Capita Sunday.
+CATEGORIES:Religious
+URL:https://example.org/observances/per-capita-sunday
+END:VEVENT
+BEGIN:VEVENT
+UID:matthew-25:-dismantle-structural-racism-sunday-2025@example.org
+DTSTAMP:20250731T120000Z
+DTSTART;VALUE=DATE:20250119
+DTEND;VALUE=DATE:20250120
+SUMMARY:Matthew 25: Dismantle Structural Racism Sunday
+DESCRIPTION:Matthew 25: Dismantle Structural Racism Sunday.
+CATEGORIES:Religious\,Social Justice
+URL:https://example.org/observances/matthew-25:-dismantle-structural-racism-sunday
+END:VEVENT
+BEGIN:VEVENT
+UID:racial-&-intercultural-justice-presbyterians-affirm-black-lives-matter-2025@example.org
+DTSTAMP:20250731T120000Z
+DTSTART;VALUE=DATE:20250119
+DTEND;VALUE=DATE:20250120
+SUMMARY:Racial & Intercultural Justice / Presbyterians Affirm Black Lives Matter
+DESCRIPTION:Racial & Intercultural Justice and affirmation of Black Lives Matter.
+CATEGORIES:Religious\,Social Justice
+URL:https://example.org/observances/racial-&-intercultural-justice-presbyterians-affirm-black-lives-matter
+END:VEVENT
+BEGIN:VEVENT
+UID:martin-luther-king-jr.-day-2025@example.org
+DTSTAMP:20250731T120000Z
+DTSTART;VALUE=DATE:20250120
+DTEND;VALUE=DATE:20250121
+SUMMARY:Martin Luther King Jr. Day
+DESCRIPTION:Martin Luther King Jr. Day.
+CATEGORIES:Holiday\,Commemoration\,Civil Rights
+URL:https://example.org/observances/martin-luther-king-jr.-day
+END:VEVENT
+BEGIN:VEVENT
+UID:world-interfaith-harmony-week-begins-2025@example.org
+DTSTAMP:20250731T120000Z
+DTSTART;VALUE=DATE:20250201
+DTEND;VALUE=DATE:20250202
+SUMMARY:World Interfaith Harmony Week Begins
+DESCRIPTION:World Interfaith Harmony Week begins.
+CATEGORIES:Awareness\,Religious
+URL:https://example.org/observances/world-interfaith-harmony-week-begins
+END:VEVENT
+BEGIN:VEVENT
+UID:remember-our-chaplains---presbyterian-federal-chaplaincies-2025@example.org
+DTSTAMP:20250731T120000Z
+DTSTART;VALUE=DATE:20250202
+DTEND;VALUE=DATE:20250203
+SUMMARY:Remember our Chaplains - Presbyterian Federal Chaplaincies
+DESCRIPTION:Remember our Chaplains - Presbyterian Federal Chaplaincies.
+CATEGORIES:Religious\,Observance
+URL:https://example.org/observances/remember-our-chaplains---presbyterian-federal-chaplaincies
+END:VEVENT
+BEGIN:VEVENT
+UID:thursdays-in-black-2025@example.org
+DTSTAMP:20250731T120000Z
+DTSTART;VALUE=DATE:20250206
+DTEND;VALUE=DATE:20250207
+SUMMARY:Thursdays in Black
+DESCRIPTION:Thursdays in Black campaign.
+CATEGORIES:Awareness\,Campaign
+URL:https://example.org/observances/thursdays-in-black
+END:VEVENT
+BEGIN:VEVENT
+UID:presbyterian-media-sunday-2025@example.org
+DTSTAMP:20250731T120000Z
+DTSTART;VALUE=DATE:20250209
+DTEND;VALUE=DATE:20250210
+SUMMARY:Presbyterian Media Sunday
+DESCRIPTION:Presbyterian Media Sunday.
+CATEGORIES:Religious\,Media
+URL:https://example.org/observances/presbyterian-media-sunday
+END:VEVENT
+BEGIN:VEVENT
+UID:camp-and-retreat-sunday-2025@example.org
+DTSTAMP:20250731T120000Z
+DTSTART;VALUE=DATE:20250209
+DTEND;VALUE=DATE:20250210
+SUMMARY:Camp and Retreat Sunday
+DESCRIPTION:Camp and Retreat Sunday.
+CATEGORIES:Religious\,Fellowship
+URL:https://example.org/observances/camp-and-retreat-sunday
+END:VEVENT
+BEGIN:VEVENT
+UID:souper-bowl-of-caring-2025@example.org
+DTSTAMP:20250731T120000Z
+DTSTART;VALUE=DATE:20250209
+DTEND;VALUE=DATE:20250210
+SUMMARY:Souper Bowl of Caring
+DESCRIPTION:Souper Bowl of Caring.
+CATEGORIES:Charity\,Awareness
+URL:https://example.org/observances/souper-bowl-of-caring
+END:VEVENT
+BEGIN:VEVENT
+UID:presidents-day-2025@example.org
+DTSTAMP:20250731T120000Z
+DTSTART;VALUE=DATE:20250217
+DTEND;VALUE=DATE:20250218
+SUMMARY:Presidents’ Day
+DESCRIPTION:Presidents’ Day.
+CATEGORIES:Holiday\,Commemoration
+URL:https://example.org/observances/presidents-day
+END:VEVENT
+BEGIN:VEVENT
+UID:fasting-season-of-ramadan-begins-2025@example.org
+DTSTAMP:20250731T120000Z
+DTSTART;VALUE=DATE:20250301
+DTEND;VALUE=DATE:20250302
+SUMMARY:Fasting Season of Ramadan begins
+DESCRIPTION:Beginning of the fasting season of Ramadan.
+CATEGORIES:Religious
+URL:https://example.org/observances/fasting-season-of-ramadan-begins
+END:VEVENT
+BEGIN:VEVENT
+UID:forgiveness-sunday-2025@example.org
+DTSTAMP:20250731T120000Z
+DTSTART;VALUE=DATE:20250302
+DTEND;VALUE=DATE:20250303
+SUMMARY:Forgiveness Sunday
+DESCRIPTION:Forgiveness Sunday.
+CATEGORIES:Religious\,Spiritual
+URL:https://example.org/observances/forgiveness-sunday
+END:VEVENT
+BEGIN:VEVENT
+UID:transfiguration-of-the-lord-2025@example.org
+DTSTAMP:20250731T120000Z
+DTSTART;VALUE=DATE:20250302
+DTEND;VALUE=DATE:20250303
+SUMMARY:Transfiguration of the Lord
+DESCRIPTION:Transfiguration of the Lord.
+CATEGORIES:Religious
+URL:https://example.org/observances/transfiguration-of-the-lord
+END:VEVENT
+BEGIN:VEVENT
+UID:ash-wednesday-lent-season-begins-2025@example.org
+DTSTAMP:20250731T120000Z
+DTSTART;VALUE=DATE:20250305
+DTEND;VALUE=DATE:20250306
+SUMMARY:Ash Wednesday / Lent Season begins
+DESCRIPTION:Ash Wednesday and beginning of Lent Season.
+CATEGORIES:Religious\,Season
+URL:https://example.org/observances/ash-wednesday-lent-season-begins
+END:VEVENT
+BEGIN:VEVENT
+UID:world-day-of-prayer-2025@example.org
+DTSTAMP:20250731T120000Z
+DTSTART;VALUE=DATE:20250307
+DTEND;VALUE=DATE:20250308
+SUMMARY:World Day of Prayer
+DESCRIPTION:World Day of Prayer.
+CATEGORIES:Religious\,Awareness
+URL:https://example.org/observances/world-day-of-prayer
+END:VEVENT
+BEGIN:VEVENT
+UID:international-womens-day-2025@example.org
+DTSTAMP:20250731T120000Z
+DTSTART;VALUE=DATE:20250308
+DTEND;VALUE=DATE:20250309
+SUMMARY:International Women’s Day
+DESCRIPTION:International Women’s Day.
+CATEGORIES:Awareness\,Social
+URL:https://example.org/observances/international-womens-day
+END:VEVENT
+BEGIN:VEVENT
+UID:pda-blue-t-shirt-sunday-2025@example.org
+DTSTAMP:20250731T120000Z
+DTSTART;VALUE=DATE:20250309
+DTEND;VALUE=DATE:20250310
+SUMMARY:PDA Blue T-Shirt Sunday
+DESCRIPTION:PDA Blue T-Shirt Sunday.
+CATEGORIES:Religious\,Awareness
+URL:https://example.org/observances/pda-blue-t-shirt-sunday
+END:VEVENT
+BEGIN:VEVENT
+UID:celebrate-the-gifts-of-women-2025@example.org
+DTSTAMP:20250731T120000Z
+DTSTART;VALUE=DATE:20250316
+DTEND;VALUE=DATE:20250317
+SUMMARY:Celebrate the Gifts of Women
+DESCRIPTION:Celebrate the Gifts of Women.
+CATEGORIES:Religious\,Social Justice
+URL:https://example.org/observances/celebrate-the-gifts-of-women
+END:VEVENT
+BEGIN:VEVENT
+UID:self-development-of-people-2025@example.org
+DTSTAMP:20250731T120000Z
+DTSTART;VALUE=DATE:20250316
+DTEND;VALUE=DATE:20250317
+SUMMARY:Self-Development of People
+DESCRIPTION:Self-Development of People.
+CATEGORIES:Religious\,Economic Justice
+URL:https://example.org/observances/self-development-of-people
+END:VEVENT
+BEGIN:VEVENT
+UID:mr.-rogers-day-2025@example.org
+DTSTAMP:20250731T120000Z
+DTSTART;VALUE=DATE:20250320
+DTEND;VALUE=DATE:20250321
+SUMMARY:Mr. Rogers Day
+DESCRIPTION:Mr. Rogers Day.
+CATEGORIES:Commemoration\,Cultural
+URL:https://example.org/observances/mr.-rogers-day
+END:VEVENT
+BEGIN:VEVENT
+UID:matthew-25:-building-vital-congregations-sunday-2025@example.org
+DTSTAMP:20250731T120000Z
+DTSTART;VALUE=DATE:20250406
+DTEND;VALUE=DATE:20250407
+SUMMARY:Matthew 25: Building Vital Congregations Sunday
+DESCRIPTION:Matthew 25: Building Vital Congregations Sunday.
+CATEGORIES:Religious\,Development
+URL:https://example.org/observances/matthew-25:-building-vital-congregations-sunday
+END:VEVENT
+BEGIN:VEVENT
+UID:international-roma-day-2025@example.org
+DTSTAMP:20250731T120000Z
+DTSTART;VALUE=DATE:20250408
+DTEND;VALUE=DATE:20250409
+SUMMARY:International Roma Day
+DESCRIPTION:International Roma Day.
+CATEGORIES:Awareness\,Human Rights
+URL:https://example.org/observances/international-roma-day
+END:VEVENT
+BEGIN:VEVENT
+UID:black-maternalbirthing-health-week-2025@example.org
+DTSTAMP:20250731T120000Z
+DTSTART;VALUE=DATE:20250411
+DTEND;VALUE=DATE:20250418
+SUMMARY:Black Maternal/Birthing Health Week
+DESCRIPTION:Black Maternal/Birthing Health Week.
+CATEGORIES:Awareness\,Health\,Social Justice
+URL:https://example.org/observances/black-maternalbirthing-health-week
+END:VEVENT
+BEGIN:VEVENT
+UID:palmpassion-sunday-2025@example.org
+DTSTAMP:20250731T120000Z
+DTSTART;VALUE=DATE:20250413
+DTEND;VALUE=DATE:20250414
+SUMMARY:Palm/Passion Sunday
+DESCRIPTION:Palm/Passion Sunday.
+CATEGORIES:Religious
+URL:https://example.org/observances/palmpassion-sunday
+END:VEVENT
+BEGIN:VEVENT
+UID:international-day-of-farmers-struggles-2025@example.org
+DTSTAMP:20250731T120000Z
+DTSTART;VALUE=DATE:20250417
+DTEND;VALUE=DATE:20250418
+SUMMARY:International Day of Farmers’ Struggles
+DESCRIPTION:International Day of Farmers’ Struggles.
+CATEGORIES:Awareness\,Social Justice
+URL:https://example.org/observances/international-day-of-farmers-struggles
+END:VEVENT
+BEGIN:VEVENT
+UID:maundy-thursday-2025@example.org
+DTSTAMP:20250731T120000Z
+DTSTART;VALUE=DATE:20250417
+DTEND;VALUE=DATE:20250418
+SUMMARY:Maundy Thursday
+DESCRIPTION:Maundy Thursday.
+CATEGORIES:Religious
+URL:https://example.org/observances/maundy-thursday
+END:VEVENT
+BEGIN:VEVENT
+UID:good-friday-2025@example.org
+DTSTAMP:20250731T120000Z
+DTSTART;VALUE=DATE:20250418
+DTEND;VALUE=DATE:20250419
+SUMMARY:Good Friday
+DESCRIPTION:Good Friday.
+CATEGORIES:Religious
+URL:https://example.org/observances/good-friday
+END:VEVENT
+BEGIN:VEVENT
+UID:easter-vigil-2025@example.org
+DTSTAMP:20250731T120000Z
+DTSTART;VALUE=DATE:20250419
+DTEND;VALUE=DATE:20250420
+SUMMARY:Easter Vigil
+DESCRIPTION:Easter Vigil.
+CATEGORIES:Religious
+URL:https://example.org/observances/easter-vigil
+END:VEVENT
+BEGIN:VEVENT
+UID:easter-day-resurrection-2025@example.org
+DTSTAMP:20250731T120000Z
+DTSTART;VALUE=DATE:20250420
+DTEND;VALUE=DATE:20250421
+SUMMARY:Easter Day / Resurrection
+DESCRIPTION:Easter Day / Resurrection.
+CATEGORIES:Religious\,Holiday
+URL:https://example.org/observances/easter-day-resurrection
+END:VEVENT
+BEGIN:VEVENT
+UID:easter-season-begins-2025@example.org
+DTSTAMP:20250731T120000Z
+DTSTART;VALUE=DATE:20250420
+DTEND;VALUE=DATE:20250421
+SUMMARY:Easter Season begins
+DESCRIPTION:Beginning of the Easter Season.
+CATEGORIES:Religious\,Season
+URL:https://example.org/observances/easter-season-begins
+END:VEVENT
+BEGIN:VEVENT
+UID:earth-day-2025@example.org
+DTSTAMP:20250731T120000Z
+DTSTART;VALUE=DATE:20250422
+DTEND;VALUE=DATE:20250423
+SUMMARY:Earth Day
+DESCRIPTION:Earth Day.
+CATEGORIES:Awareness\,Environmental
+URL:https://example.org/observances/earth-day
+END:VEVENT
+BEGIN:VEVENT
+UID:armenian-genocide-remembrance-day-2025@example.org
+DTSTAMP:20250731T120000Z
+DTSTART;VALUE=DATE:20250424
+DTEND;VALUE=DATE:20250425
+SUMMARY:Armenian Genocide Remembrance Day
+DESCRIPTION:Armenian Genocide Remembrance Day.
+CATEGORIES:Commemoration\,Historical
+URL:https://example.org/observances/armenian-genocide-remembrance-day
+END:VEVENT
+BEGIN:VEVENT
+UID:mental-health-awareness-month-begins-2025@example.org
+DTSTAMP:20250731T120000Z
+DTSTART;VALUE=DATE:20250501
+DTEND;VALUE=DATE:20250502
+SUMMARY:Mental Health Awareness Month begins
+DESCRIPTION:Mental Health Awareness Month begins.
+CATEGORIES:Awareness\,Health
+URL:https://example.org/observances/mental-health-awareness-month-begins
+END:VEVENT
+BEGIN:VEVENT
+UID:foster-care-month-begins-2025@example.org
+DTSTAMP:20250731T120000Z
+DTSTART;VALUE=DATE:20250501
+DTEND;VALUE=DATE:20250502
+SUMMARY:Foster Care Month begins
+DESCRIPTION:Foster Care Month begins.
+CATEGORIES:Awareness\,Social Services
+URL:https://example.org/observances/foster-care-month-begins
+END:VEVENT
+BEGIN:VEVENT
+UID:national-day-of-prayer-2025@example.org
+DTSTAMP:20250731T120000Z
+DTSTART;VALUE=DATE:20250501
+DTEND;VALUE=DATE:20250502
+SUMMARY:National Day of Prayer
+DESCRIPTION:National Day of Prayer.
+CATEGORIES:Religious
+URL:https://example.org/observances/national-day-of-prayer
+END:VEVENT
+BEGIN:VEVENT
+UID:may-friendship-day-2025@example.org
+DTSTAMP:20250731T120000Z
+DTSTART;VALUE=DATE:20250502
+DTEND;VALUE=DATE:20250503
+SUMMARY:May Friendship Day
+DESCRIPTION:May Friendship Day.
+CATEGORIES:Community\,Social
+URL:https://example.org/observances/may-friendship-day
+END:VEVENT
+BEGIN:VEVENT
+UID:older-adult-week-begins-2025@example.org
+DTSTAMP:20250731T120000Z
+DTSTART;VALUE=DATE:20250504
+DTEND;VALUE=DATE:20250505
+SUMMARY:Older Adult Week begins
+DESCRIPTION:Older Adult Week begins.
+CATEGORIES:Awareness\,Elder Care
+URL:https://example.org/observances/older-adult-week-begins
+END:VEVENT
+BEGIN:VEVENT
+UID:legacy-giving-sunday-2025@example.org
+DTSTAMP:20250731T120000Z
+DTSTART;VALUE=DATE:20250504
+DTEND;VALUE=DATE:20250505
+SUMMARY:Legacy Giving Sunday
+DESCRIPTION:Legacy Giving Sunday.
+CATEGORIES:Religious\,Stewardship
+URL:https://example.org/observances/legacy-giving-sunday
+END:VEVENT
+BEGIN:VEVENT
+UID:national-day-of-awareness-and-action-for-missing-and-murdered-indigenous-women-girls-and-two-spirit-people-2025@example.org
+DTSTAMP:20250731T120000Z
+DTSTART;VALUE=DATE:20250505
+DTEND;VALUE=DATE:20250506
+SUMMARY:National Day of Awareness and Action for Missing and Murdered Indigenous Women\, Girls\, and Two-Spirit People
+DESCRIPTION:National Day of Awareness and Action for Missing and Murdered Indigenous Women\, Girls\, and Two-Spirit People.
+CATEGORIES:Awareness\,Social Justice
+URL:https://example.org/observances/national-day-of-awareness-and-action-for-missing-and-murdered-indigenous-women-girls-and-two-spirit-people
+END:VEVENT
+BEGIN:VEVENT
+UID:holocaust-remembrance-day-2025@example.org
+DTSTAMP:20250731T120000Z
+DTSTART;VALUE=DATE:20250506
+DTEND;VALUE=DATE:20250507
+SUMMARY:Holocaust Remembrance Day
+DESCRIPTION:Holocaust Remembrance Day.
+CATEGORIES:Commemoration\,Historical
+URL:https://example.org/observances/holocaust-remembrance-day
+END:VEVENT
+BEGIN:VEVENT
+UID:fair-trade-day-2025@example.org
+DTSTAMP:20250731T120000Z
+DTSTART;VALUE=DATE:20250510
+DTEND;VALUE=DATE:20250511
+SUMMARY:Fair Trade Day
+DESCRIPTION:Fair Trade Day.
+CATEGORIES:Awareness\,Economic Justice
+URL:https://example.org/observances/fair-trade-day
+END:VEVENT
+BEGIN:VEVENT
+UID:mothers-day-2025@example.org
+DTSTAMP:20250731T120000Z
+DTSTART;VALUE=DATE:20250511
+DTEND;VALUE=DATE:20250512
+SUMMARY:Mother’s Day
+DESCRIPTION:Mother’s Day.
+CATEGORIES:Celebration\,Holiday
+URL:https://example.org/observances/mothers-day
+END:VEVENT
+BEGIN:VEVENT
+UID:palestinian-nakba-remembrance-day-2025@example.org
+DTSTAMP:20250731T120000Z
+DTSTART;VALUE=DATE:20250515
+DTEND;VALUE=DATE:20250516
+SUMMARY:Palestinian Nakba Remembrance Day
+DESCRIPTION:Palestinian Nakba Remembrance Day.
+CATEGORIES:Commemoration\,Historical\,Political
+URL:https://example.org/observances/palestinian-nakba-remembrance-day
+END:VEVENT
+BEGIN:VEVENT
+UID:mission-worker-sunday-2025@example.org
+DTSTAMP:20250731T120000Z
+DTSTART;VALUE=DATE:20250518
+DTEND;VALUE=DATE:20250519
+SUMMARY:Mission Worker Sunday
+DESCRIPTION:Mission Worker Sunday.
+CATEGORIES:Religious\,Mission
+URL:https://example.org/observances/mission-worker-sunday
+END:VEVENT
+BEGIN:VEVENT
+UID:presbyterian-heritage-sunday-2025@example.org
+DTSTAMP:20250731T120000Z
+DTSTART;VALUE=DATE:20250518
+DTEND;VALUE=DATE:20250519
+SUMMARY:Presbyterian Heritage Sunday
+DESCRIPTION:Presbyterian Heritage Sunday.
+CATEGORIES:Religious\,Heritage
+URL:https://example.org/observances/presbyterian-heritage-sunday
+END:VEVENT
+BEGIN:VEVENT
+UID:africa-day-2025@example.org
+DTSTAMP:20250731T120000Z
+DTSTART;VALUE=DATE:20250525
+DTEND;VALUE=DATE:20250526
+SUMMARY:Africa Day
+DESCRIPTION:Africa Day.
+CATEGORIES:Commemoration\,Cultural
+URL:https://example.org/observances/africa-day
+END:VEVENT
+BEGIN:VEVENT
+UID:ascension-of-the-lord-2025@example.org
+DTSTAMP:20250731T120000Z
+DTSTART;VALUE=DATE:20250529
+DTEND;VALUE=DATE:20250530
+SUMMARY:Ascension of the Lord
+DESCRIPTION:Ascension of the Lord.
+CATEGORIES:Religious
+URL:https://example.org/observances/ascension-of-the-lord
+END:VEVENT
+BEGIN:VEVENT
+UID:intercultural-church-sunday-2025@example.org
+DTSTAMP:20250731T120000Z
+DTSTART;VALUE=DATE:20250601
+DTEND;VALUE=DATE:20250602
+SUMMARY:Intercultural Church Sunday
+DESCRIPTION:Intercultural Church Sunday.
+CATEGORIES:Religious\,Diversity
+URL:https://example.org/observances/intercultural-church-sunday
+END:VEVENT
+BEGIN:VEVENT
+UID:1001-new-worshiping-communities-2025@example.org
+DTSTAMP:20250731T120000Z
+DTSTART;VALUE=DATE:20250601
+DTEND;VALUE=DATE:20250602
+SUMMARY:1001 New Worshiping Communities
+DESCRIPTION:1001 New Worshiping Communities.
+CATEGORIES:Religious\,Development
+URL:https://example.org/observances/1001-new-worshiping-communities
+END:VEVENT
+BEGIN:VEVENT
+UID:national-gun-violence-awareness-day-2025@example.org
+DTSTAMP:20250731T120000Z
+DTSTART;VALUE=DATE:20250606
+DTEND;VALUE=DATE:20250607
+SUMMARY:National Gun Violence Awareness Day
+DESCRIPTION:National Gun Violence Awareness Day.
+CATEGORIES:Awareness\,Safety
+URL:https://example.org/observances/national-gun-violence-awareness-day
+END:VEVENT
+BEGIN:VEVENT
+UID:pentecost-2025@example.org
+DTSTAMP:20250731T120000Z
+DTSTART;VALUE=DATE:20250608
+DTEND;VALUE=DATE:20250609
+SUMMARY:Pentecost
+DESCRIPTION:Pentecost.
+CATEGORIES:Religious
+URL:https://example.org/observances/pentecost
+END:VEVENT
+BEGIN:VEVENT
+UID:trinity-sunday-2025@example.org
+DTSTAMP:20250731T120000Z
+DTSTART;VALUE=DATE:20250615
+DTEND;VALUE=DATE:20250616
+SUMMARY:Trinity Sunday
+DESCRIPTION:Trinity Sunday.
+CATEGORIES:Religious
+URL:https://example.org/observances/trinity-sunday
+END:VEVENT
+BEGIN:VEVENT
+UID:fathers-day-presbyterian-men-2025@example.org
+DTSTAMP:20250731T120000Z
+DTSTART;VALUE=DATE:20250615
+DTEND;VALUE=DATE:20250616
+SUMMARY:Father’s Day / Presbyterian Men
+DESCRIPTION:Father’s Day\; Presbyterian Men.
+CATEGORIES:Celebration\,Religious
+URL:https://example.org/observances/fathers-day-presbyterian-men
+END:VEVENT
+BEGIN:VEVENT
+UID:juneteenth-2025@example.org
+DTSTAMP:20250731T120000Z
+DTSTART;VALUE=DATE:20250619
+DTEND;VALUE=DATE:20250620
+SUMMARY:Juneteenth
+DESCRIPTION:Juneteenth.
+CATEGORIES:Commemoration\,Civil Rights
+URL:https://example.org/observances/juneteenth
+END:VEVENT
+BEGIN:VEVENT
+UID:world-refugee-day-2025@example.org
+DTSTAMP:20250731T120000Z
+DTSTART;VALUE=DATE:20250620
+DTEND;VALUE=DATE:20250621
+SUMMARY:World Refugee Day
+DESCRIPTION:World Refugee Day.
+CATEGORIES:Awareness\,Human Rights
+URL:https://example.org/observances/world-refugee-day
+END:VEVENT
+BEGIN:VEVENT
+UID:season-of-prayer-and-reflection-in-the-korean-peninsula-begins-2025@example.org
+DTSTAMP:20250731T120000Z
+DTSTART;VALUE=DATE:20250625
+DTEND;VALUE=DATE:20250816
+SUMMARY:Season of Prayer and Reflection in the Korean Peninsula begins
+DESCRIPTION:Season of Prayer and Reflection in the Korean Peninsula begins.
+CATEGORIES:Religious\,Peace\,Season
+URL:https://example.org/observances/season-of-prayer-and-reflection-in-the-korean-peninsula-begins
+END:VEVENT
+BEGIN:VEVENT
+UID:independence-day-2025@example.org
+DTSTAMP:20250731T120000Z
+DTSTART;VALUE=DATE:20250704
+DTEND;VALUE=DATE:20250705
+SUMMARY:Independence Day
+DESCRIPTION:Independence Day.
+CATEGORIES:Holiday\,National
+URL:https://example.org/observances/independence-day
+END:VEVENT
+BEGIN:VEVENT
+UID:immigration-sunday-2025@example.org
+DTSTAMP:20250731T120000Z
+DTSTART;VALUE=DATE:20250706
+DTEND;VALUE=DATE:20250707
+SUMMARY:Immigration Sunday
+DESCRIPTION:Immigration Sunday.
+CATEGORIES:Religious\,Social Justice
+URL:https://example.org/observances/immigration-sunday
+END:VEVENT
+BEGIN:VEVENT
+UID:kenya-mission-2025@example.org
+DTSTAMP:20250731T120000Z
+DTSTART;VALUE=DATE:20250721
+DTEND;VALUE=DATE:20250722
+SUMMARY:Kenya Mission
+DESCRIPTION:Kenya Mission.
+CATEGORIES:Religious\,Mission
+URL:https://example.org/observances/kenya-mission
+END:VEVENT
+BEGIN:VEVENT
+UID:presbyterian-youth-triennium-2025@example.org
+DTSTAMP:20250731T120000Z
+DTSTART;VALUE=DATE:20250728
+DTEND;VALUE=DATE:20250801
+SUMMARY:Presbyterian Youth Triennium
+DESCRIPTION:Presbyterian Youth Triennium.
+CATEGORIES:Religious\,Youth\,Gathering
+URL:https://example.org/observances/presbyterian-youth-triennium
+END:VEVENT
+BEGIN:VEVENT
+UID:world-day-against-trafficking-in-persons-2025@example.org
+DTSTAMP:20250731T120000Z
+DTSTART;VALUE=DATE:20250730
+DTEND;VALUE=DATE:20250731
+SUMMARY:World Day Against Trafficking in Persons
+DESCRIPTION:World Day Against Trafficking in Persons.
+CATEGORIES:Awareness\,Human Rights
+URL:https://example.org/observances/world-day-against-trafficking-in-persons
+END:VEVENT
+BEGIN:VEVENT
+UID:college-and-young-adult-sunday-2025@example.org
+DTSTAMP:20250731T120000Z
+DTSTART;VALUE=DATE:20250803
+DTEND;VALUE=DATE:20250804
+SUMMARY:College and Young Adult Sunday
+DESCRIPTION:College and Young Adult Sunday.
+CATEGORIES:Religious\,Youth
+URL:https://example.org/observances/college-and-young-adult-sunday
+END:VEVENT
+BEGIN:VEVENT
+UID:hiroshima-day-2025@example.org
+DTSTAMP:20250731T120000Z
+DTSTART;VALUE=DATE:20250806
+DTEND;VALUE=DATE:20250807
+SUMMARY:Hiroshima Day
+DESCRIPTION:Hiroshima Day.
+CATEGORIES:Commemoration\,Historical\,Peace
+URL:https://example.org/observances/hiroshima-day
+END:VEVENT
+BEGIN:VEVENT
+UID:international-day-of-the-worlds-indigenous-peoples-2025@example.org
+DTSTAMP:20250731T120000Z
+DTSTART;VALUE=DATE:20250809
+DTEND;VALUE=DATE:20250810
+SUMMARY:International Day of the World's Indigenous Peoples
+DESCRIPTION:International Day of the World's Indigenous Peoples.
+CATEGORIES:Awareness\,Cultural
+URL:https://example.org/observances/international-day-of-the-worlds-indigenous-peoples
+END:VEVENT
+BEGIN:VEVENT
+UID:youth-in-the-church-and-the-world-sunday-2025@example.org
+DTSTAMP:20250731T120000Z
+DTSTART;VALUE=DATE:20250810
+DTEND;VALUE=DATE:20250811
+SUMMARY:Youth in the Church and the World Sunday
+DESCRIPTION:Youth in the Church and the World Sunday.
+CATEGORIES:Religious\,Youth
+URL:https://example.org/observances/youth-in-the-church-and-the-world-sunday
+END:VEVENT
+BEGIN:VEVENT
+UID:day-of-prayer-for-the-peaceful-reunification-of-the-korean-peninsula-2025@example.org
+DTSTAMP:20250731T120000Z
+DTSTART;VALUE=DATE:20250810
+DTEND;VALUE=DATE:20250811
+SUMMARY:Day of Prayer for the Peaceful Reunification of the Korean Peninsula
+DESCRIPTION:Day of Prayer for the Peaceful Reunification of the Korean Peninsula.
+CATEGORIES:Religious\,Peace
+URL:https://example.org/observances/day-of-prayer-for-the-peaceful-reunification-of-the-korean-peninsula
+END:VEVENT
+BEGIN:VEVENT
+UID:young-adult-volunteer-commissioning-sunday-2025@example.org
+DTSTAMP:20250731T120000Z
+DTSTART;VALUE=DATE:20250817
+DTEND;VALUE=DATE:20250818
+SUMMARY:Young Adult Volunteer Commissioning Sunday
+DESCRIPTION:Young Adult Volunteer Commissioning Sunday.
+CATEGORIES:Religious\,Service\,Youth
+URL:https://example.org/observances/young-adult-volunteer-commissioning-sunday
+END:VEVENT
+BEGIN:VEVENT
+UID:public-education-day-2025@example.org
+DTSTAMP:20250731T120000Z
+DTSTART;VALUE=DATE:20250820
+DTEND;VALUE=DATE:20250821
+SUMMARY:Public Education Day
+DESCRIPTION:Public Education Day.
+CATEGORIES:Awareness\,Education
+URL:https://example.org/observances/public-education-day
+END:VEVENT
+BEGIN:VEVENT
+UID:international-day-for-the-remembrance-of-the-slave-trade-abolition-2025@example.org
+DTSTAMP:20250731T120000Z
+DTSTART;VALUE=DATE:20250823
+DTEND;VALUE=DATE:20250824
+SUMMARY:International Day for the Remembrance of the Slave Trade Abolition
+DESCRIPTION:International Day for the Remembrance of the Slave Trade Abolition.
+CATEGORIES:Commemoration\,Historical
+URL:https://example.org/observances/international-day-for-the-remembrance-of-the-slave-trade-abolition
+END:VEVENT
+BEGIN:VEVENT
+UID:presbyterian-higher-education-2025@example.org
+DTSTAMP:20250731T120000Z
+DTSTART;VALUE=DATE:20250831
+DTEND;VALUE=DATE:20250901
+SUMMARY:Presbyterian Higher Education
+DESCRIPTION:Presbyterian Higher Education.
+CATEGORIES:Religious\,Education
+URL:https://example.org/observances/presbyterian-higher-education
+END:VEVENT
+BEGIN:VEVENT
+UID:world-day-of-prayer-for-the-care-of-creation-2025@example.org
+DTSTAMP:20250731T120000Z
+DTSTART;VALUE=DATE:20250901
+DTEND;VALUE=DATE:20250902
+SUMMARY:World Day of Prayer for the Care of Creation
+DESCRIPTION:World Day of Prayer for the Care of Creation.
+CATEGORIES:Religious\,Environmental
+URL:https://example.org/observances/world-day-of-prayer-for-the-care-of-creation
+END:VEVENT
+BEGIN:VEVENT
+UID:labor-day-and-social-creed-for-the-21st-century-2025@example.org
+DTSTAMP:20250731T120000Z
+DTSTART;VALUE=DATE:20250901
+DTEND;VALUE=DATE:20250902
+SUMMARY:Labor Day and Social Creed for the 21st Century
+DESCRIPTION:Labor Day and Social Creed for the 21st Century.
+CATEGORIES:Holiday\,Social Justice
+URL:https://example.org/observances/labor-day-and-social-creed-for-the-21st-century
+END:VEVENT
+BEGIN:VEVENT
+UID:national-suicide-prevention-month-begins-2025@example.org
+DTSTAMP:20250731T120000Z
+DTSTART;VALUE=DATE:20250901
+DTEND;VALUE=DATE:20250902
+SUMMARY:National Suicide Prevention Month begins
+DESCRIPTION:National Suicide Prevention Month begins.
+CATEGORIES:Awareness\,Health
+URL:https://example.org/observances/national-suicide-prevention-month-begins
+END:VEVENT
+BEGIN:VEVENT
+UID:disaster-preparedness-month-begins-2025@example.org
+DTSTAMP:20250731T120000Z
+DTSTART;VALUE=DATE:20250901
+DTEND;VALUE=DATE:20250902
+SUMMARY:Disaster Preparedness Month begins
+DESCRIPTION:Disaster Preparedness Month begins.
+CATEGORIES:Awareness\,Safety
+URL:https://example.org/observances/disaster-preparedness-month-begins
+END:VEVENT
+BEGIN:VEVENT
+UID:season-of-peace-begins-2025@example.org
+DTSTAMP:20250731T120000Z
+DTSTART;VALUE=DATE:20250907
+DTEND;VALUE=DATE:20251006
+SUMMARY:Season of Peace begins
+DESCRIPTION:Season of Peace begins.
+CATEGORIES:Religious\,Peace\,Season
+URL:https://example.org/observances/season-of-peace-begins
+END:VEVENT
+BEGIN:VEVENT
+UID:christian-formation-week-begins-christian-formation-celebration-2025@example.org
+DTSTAMP:20250731T120000Z
+DTSTART;VALUE=DATE:20250907
+DTEND;VALUE=DATE:20250908
+SUMMARY:Christian Formation Week begins\; Christian Formation Celebration
+DESCRIPTION:Christian Formation Week begins\; Christian Formation Celebration.
+CATEGORIES:Religious\,Education
+URL:https://example.org/observances/christian-formation-week-begins-christian-formation-celebration
+END:VEVENT
+BEGIN:VEVENT
+UID:september-11-anniversary-2025@example.org
+DTSTAMP:20250731T120000Z
+DTSTART;VALUE=DATE:20250911
+DTEND;VALUE=DATE:20250912
+SUMMARY:September 11 Anniversary
+DESCRIPTION:September 11 Anniversary.
+CATEGORIES:Commemoration\,Historical
+URL:https://example.org/observances/september-11-anniversary
+END:VEVENT
+BEGIN:VEVENT
+UID:disability-inclusion-sunday-2025@example.org
+DTSTAMP:20250731T120000Z
+DTSTART;VALUE=DATE:20250914
+DTEND;VALUE=DATE:20250915
+SUMMARY:Disability Inclusion Sunday
+DESCRIPTION:Disability Inclusion Sunday.
+CATEGORIES:Religious\,Inclusion
+URL:https://example.org/observances/disability-inclusion-sunday
+END:VEVENT
+BEGIN:VEVENT
+UID:evangelism-sunday-2025@example.org
+DTSTAMP:20250731T120000Z
+DTSTART;VALUE=DATE:20250921
+DTEND;VALUE=DATE:20250922
+SUMMARY:Evangelism Sunday
+DESCRIPTION:Evangelism Sunday.
+CATEGORIES:Religious
+URL:https://example.org/observances/evangelism-sunday
+END:VEVENT
+BEGIN:VEVENT
+UID:international-day-of-peace-2025@example.org
+DTSTAMP:20250731T120000Z
+DTSTART;VALUE=DATE:20250921
+DTEND;VALUE=DATE:20250922
+SUMMARY:International Day of Peace
+DESCRIPTION:International Day of Peace.
+CATEGORIES:Awareness\,Peace
+URL:https://example.org/observances/international-day-of-peace
+END:VEVENT
+BEGIN:VEVENT
+UID:gifts-of-new-immigrants-2025@example.org
+DTSTAMP:20250731T120000Z
+DTSTART;VALUE=DATE:20250921
+DTEND;VALUE=DATE:20250922
+SUMMARY:Gifts of New Immigrants
+DESCRIPTION:Gifts of New Immigrants.
+CATEGORIES:Religious\,Cultural\,Inclusion
+URL:https://example.org/observances/gifts-of-new-immigrants
+END:VEVENT
+BEGIN:VEVENT
+UID:theological-education-seminaries-sunday-2025@example.org
+DTSTAMP:20250731T120000Z
+DTSTART;VALUE=DATE:20250921
+DTEND;VALUE=DATE:20250922
+SUMMARY:Theological Education / Seminaries Sunday
+DESCRIPTION:Theological Education / Seminaries Sunday.
+CATEGORIES:Religious\,Education
+URL:https://example.org/observances/theological-education-seminaries-sunday
+END:VEVENT
+BEGIN:VEVENT
+UID:native-american-day-2025@example.org
+DTSTAMP:20250731T120000Z
+DTSTART;VALUE=DATE:20250926
+DTEND;VALUE=DATE:20250927
+SUMMARY:Native American Day
+DESCRIPTION:Native American Day.
+CATEGORIES:Commemoration\,Cultural
+URL:https://example.org/observances/native-american-day
+END:VEVENT
+BEGIN:VEVENT
+UID:mental-illness-awareness-week-begins-2025@example.org
+DTSTAMP:20250731T120000Z
+DTSTART;VALUE=DATE:20251001
+DTEND;VALUE=DATE:20251002
+SUMMARY:Mental Illness Awareness Week begins
+DESCRIPTION:Mental Illness Awareness Week begins.
+CATEGORIES:Awareness\,Health
+URL:https://example.org/observances/mental-illness-awareness-week-begins
+END:VEVENT
+BEGIN:VEVENT
+UID:peace-&-global-witness-offering-2025@example.org
+DTSTAMP:20250731T120000Z
+DTSTART;VALUE=DATE:20251005
+DTEND;VALUE=DATE:20251006
+SUMMARY:Peace & Global Witness Offering
+DESCRIPTION:Peace & Global Witness Offering.
+CATEGORIES:Religious\,Peace
+URL:https://example.org/observances/peace-&-global-witness-offering
+END:VEVENT
+BEGIN:VEVENT
+UID:world-communion-sunday-2025@example.org
+DTSTAMP:20250731T120000Z
+DTSTART;VALUE=DATE:20251005
+DTEND;VALUE=DATE:20251006
+SUMMARY:World Communion Sunday
+DESCRIPTION:World Communion Sunday.
+CATEGORIES:Religious
+URL:https://example.org/observances/world-communion-sunday
+END:VEVENT
+BEGIN:VEVENT
+UID:indigenous-peoples-day-2025@example.org
+DTSTAMP:20250731T120000Z
+DTSTART;VALUE=DATE:20251013
+DTEND;VALUE=DATE:20251014
+SUMMARY:Indigenous Peoples Day
+DESCRIPTION:Indigenous Peoples Day.
+CATEGORIES:Commemoration\,Cultural
+URL:https://example.org/observances/indigenous-peoples-day
+END:VEVENT
+BEGIN:VEVENT
+UID:world-food-day-2025@example.org
+DTSTAMP:20250731T120000Z
+DTSTART;VALUE=DATE:20251016
+DTEND;VALUE=DATE:20251017
+SUMMARY:World Food Day
+DESCRIPTION:World Food Day.
+CATEGORIES:Awareness\,Global
+URL:https://example.org/observances/world-food-day
+END:VEVENT
+BEGIN:VEVENT
+UID:childrens-sabbath-educate-a-child-transform-the-world-2025@example.org
+DTSTAMP:20250731T120000Z
+DTSTART;VALUE=DATE:20251019
+DTEND;VALUE=DATE:20251020
+SUMMARY:Children’s Sabbath\; Educate a Child\, Transform the World
+DESCRIPTION:Children’s Sabbath\; Educate a Child\, Transform the World.
+CATEGORIES:Religious\,Advocacy\,Education
+URL:https://example.org/observances/childrens-sabbath-educate-a-child-transform-the-world
+END:VEVENT
+BEGIN:VEVENT
+UID:young-adult-volunteer-program-2025@example.org
+DTSTAMP:20250731T120000Z
+DTSTART;VALUE=DATE:20251020
+DTEND;VALUE=DATE:20251021
+SUMMARY:Young Adult Volunteer Program
+DESCRIPTION:Young Adult Volunteer Program.
+CATEGORIES:Religious\,Service
+URL:https://example.org/observances/young-adult-volunteer-program
+END:VEVENT
+BEGIN:VEVENT
+UID:united-nations-day-2025@example.org
+DTSTAMP:20250731T120000Z
+DTSTART;VALUE=DATE:20251024
+DTEND;VALUE=DATE:20251025
+SUMMARY:United Nations Day
+DESCRIPTION:United Nations Day.
+CATEGORIES:Commemoration\,International
+URL:https://example.org/observances/united-nations-day
+END:VEVENT
+BEGIN:VEVENT
+UID:reformation-sunday-2025@example.org
+DTSTAMP:20250731T120000Z
+DTSTART;VALUE=DATE:20251026
+DTEND;VALUE=DATE:20251027
+SUMMARY:Reformation Sunday
+DESCRIPTION:Reformation Sunday.
+CATEGORIES:Religious\,Historical
+URL:https://example.org/observances/reformation-sunday
+END:VEVENT
+BEGIN:VEVENT
+UID:all-saints-day-2025@example.org
+DTSTAMP:20250731T120000Z
+DTSTART;VALUE=DATE:20251101
+DTEND;VALUE=DATE:20251102
+SUMMARY:All Saints’ Day
+DESCRIPTION:All Saints’ Day.
+CATEGORIES:Religious\,Commemoration
+URL:https://example.org/observances/all-saints-day
+END:VEVENT
+BEGIN:VEVENT
+UID:election-day-honest-patriotism-for-christian-citizens-2025@example.org
+DTSTAMP:20250731T120000Z
+DTSTART;VALUE=DATE:20251104
+DTEND;VALUE=DATE:20251105
+SUMMARY:Election Day\; Honest Patriotism for Christian Citizens
+DESCRIPTION:Election Day\; Honest Patriotism for Christian Citizens.
+CATEGORIES:Civic\,Civic Engagement
+URL:https://example.org/observances/election-day-honest-patriotism-for-christian-citizens
+END:VEVENT
+BEGIN:VEVENT
+UID:world-community-day-2025@example.org
+DTSTAMP:20250731T120000Z
+DTSTART;VALUE=DATE:20251107
+DTEND;VALUE=DATE:20251108
+SUMMARY:World Community Day
+DESCRIPTION:World Community Day.
+CATEGORIES:Religious\,Community
+URL:https://example.org/observances/world-community-day
+END:VEVENT
+BEGIN:VEVENT
+UID:veterans-day-2025@example.org
+DTSTAMP:20250731T120000Z
+DTSTART;VALUE=DATE:20251111
+DTEND;VALUE=DATE:20251112
+SUMMARY:Veterans Day
+DESCRIPTION:Veterans Day.
+CATEGORIES:Commemoration\,Military
+URL:https://example.org/observances/veterans-day
+END:VEVENT
+BEGIN:VEVENT
+UID:hunger-and-homelessness-2025@example.org
+DTSTAMP:20250731T120000Z
+DTSTART;VALUE=DATE:20251116
+DTEND;VALUE=DATE:20251117
+SUMMARY:Hunger and Homelessness
+DESCRIPTION:Hunger and Homelessness.
+CATEGORIES:Awareness\,Social Justice
+URL:https://example.org/observances/hunger-and-homelessness
+END:VEVENT
+BEGIN:VEVENT
+UID:transgender-day-of-remembrance-2025@example.org
+DTSTAMP:20250731T120000Z
+DTSTART;VALUE=DATE:20251120
+DTEND;VALUE=DATE:20251121
+SUMMARY:Transgender Day of Remembrance
+DESCRIPTION:Transgender Day of Remembrance.
+CATEGORIES:Commemoration\,LGBTQ+\,Awareness
+URL:https://example.org/observances/transgender-day-of-remembrance
+END:VEVENT
+BEGIN:VEVENT
+UID:christ-the-king-reign-of-christ-2025@example.org
+DTSTAMP:20250731T120000Z
+DTSTART;VALUE=DATE:20251123
+DTEND;VALUE=DATE:20251124
+SUMMARY:Christ the King / Reign of Christ
+DESCRIPTION:Christ the King / Reign of Christ.
+CATEGORIES:Religious
+URL:https://example.org/observances/christ-the-king-reign-of-christ
+END:VEVENT
+BEGIN:VEVENT
+UID:matthew-25:-eradicating-systemic-poverty-sunday-2025@example.org
+DTSTAMP:20250731T120000Z
+DTSTART;VALUE=DATE:20251123
+DTEND;VALUE=DATE:20251124
+SUMMARY:Matthew 25: Eradicating Systemic Poverty Sunday
+DESCRIPTION:Matthew 25: Eradicating Systemic Poverty Sunday.
+CATEGORIES:Religious\,Social Justice
+URL:https://example.org/observances/matthew-25:-eradicating-systemic-poverty-sunday
+END:VEVENT
+BEGIN:VEVENT
+UID:thanksgiving-day-nativity-fast-2025@example.org
+DTSTAMP:20250731T120000Z
+DTSTART;VALUE=DATE:20251127
+DTEND;VALUE=DATE:20251128
+SUMMARY:Thanksgiving Day\; Nativity Fast
+DESCRIPTION:Thanksgiving Day\; Nativity Fast.
+CATEGORIES:Holiday\,Religious
+URL:https://example.org/observances/thanksgiving-day-nativity-fast
+END:VEVENT
+BEGIN:VEVENT
+UID:advent-season-begins-2025@example.org
+DTSTAMP:20250731T120000Z
+DTSTART;VALUE=DATE:20251130
+DTEND;VALUE=DATE:20251201
+SUMMARY:Advent Season begins
+DESCRIPTION:Beginning of the Advent Season.
+CATEGORIES:Religious\,Season
+URL:https://example.org/observances/advent-season-begins
+END:VEVENT
+BEGIN:VEVENT
+UID:world-aids-day-presbyterian-hivaids-awareness-2025@example.org
+DTSTAMP:20250731T120000Z
+DTSTART;VALUE=DATE:20251201
+DTEND;VALUE=DATE:20251202
+SUMMARY:World AIDS Day\; Presbyterian HIV/AIDS Awareness
+DESCRIPTION:World AIDS Day\; Presbyterian HIV/AIDS Awareness.
+CATEGORIES:Awareness\,Health
+URL:https://example.org/observances/world-aids-day-presbyterian-hivaids-awareness
+END:VEVENT
+BEGIN:VEVENT
+UID:giving-tuesday-2025@example.org
+DTSTAMP:20250731T120000Z
+DTSTART;VALUE=DATE:20251202
+DTEND;VALUE=DATE:20251203
+SUMMARY:Giving Tuesday
+DESCRIPTION:Giving Tuesday.
+CATEGORIES:Campaign\,Philanthropy
+URL:https://example.org/observances/giving-tuesday
+END:VEVENT
+BEGIN:VEVENT
+UID:human-rights-day-2025@example.org
+DTSTAMP:20250731T120000Z
+DTSTART;VALUE=DATE:20251210
+DTEND;VALUE=DATE:20251211
+SUMMARY:Human Rights Day
+DESCRIPTION:Human Rights Day.
+CATEGORIES:Awareness\,Human Rights
+URL:https://example.org/observances/human-rights-day
+END:VEVENT
+BEGIN:VEVENT
+UID:christmas-joy-offering-2025@example.org
+DTSTAMP:20250731T120000Z
+DTSTART;VALUE=DATE:20251221
+DTEND;VALUE=DATE:20251222
+SUMMARY:Christmas Joy Offering
+DESCRIPTION:Christmas Joy Offering.
+CATEGORIES:Religious\,Philanthropy
+URL:https://example.org/observances/christmas-joy-offering
+END:VEVENT
+BEGIN:VEVENT
+UID:christmas-eve-nativity-2025@example.org
+DTSTAMP:20250731T120000Z
+DTSTART;VALUE=DATE:20251224
+DTEND;VALUE=DATE:20251225
+SUMMARY:Christmas Eve / Nativity
+DESCRIPTION:Christmas Eve / Nativity.
+CATEGORIES:Religious\,Holiday
+URL:https://example.org/observances/christmas-eve-nativity
+END:VEVENT
+BEGIN:VEVENT
+UID:christmas-season-begins-2025@example.org
+DTSTAMP:20250731T120000Z
+DTSTART;VALUE=DATE:20251224
+DTEND;VALUE=DATE:20251225
+SUMMARY:Christmas Season begins
+DESCRIPTION:Beginning of the Christmas Season.
+CATEGORIES:Religious\,Season
+URL:https://example.org/observances/christmas-season-begins
+END:VEVENT
+BEGIN:VEVENT
+UID:christmas-day-nativity-2025@example.org
+DTSTAMP:20250731T120000Z
+DTSTART;VALUE=DATE:20251225
+DTEND;VALUE=DATE:20251226
+SUMMARY:Christmas Day / Nativity
+DESCRIPTION:Christmas Day / Nativity.
+CATEGORIES:Religious\,Holiday
+URL:https://example.org/observances/christmas-day-nativity
+END:VEVENT
+END:VCALENDAR
