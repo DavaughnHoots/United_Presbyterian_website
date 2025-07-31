@@ -362,4 +362,7 @@ router.post('/submissions/:id/update', requireAuth, async (req, res) => {
   }
 });
 
+// Journey routes
+router.use('/journeys', require('./api/journeys'));
+
 module.exports = router;

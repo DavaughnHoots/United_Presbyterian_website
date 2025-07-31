@@ -13,6 +13,13 @@ const Setting = require('./Setting')(sequelize, DataTypes);
 const UserActivity = require('./UserActivity')(sequelize, DataTypes);
 const PrayerSupport = require('./PrayerSupport')(sequelize, DataTypes);
 const SubmissionUpdate = require('./SubmissionUpdate')(sequelize, DataTypes);
+const BibleBook = require('./BibleBook')(sequelize, DataTypes);
+const BibleVerse = require('./BibleVerse')(sequelize, DataTypes);
+const Journey = require('./Journey')(sequelize, DataTypes);
+const JourneyDay = require('./JourneyDay')(sequelize, DataTypes);
+const JourneyContent = require('./JourneyContent')(sequelize, DataTypes);
+const UserJourney = require('./UserJourney')(sequelize, DataTypes);
+const UserJourneyProgress = require('./UserJourneyProgress')(sequelize, DataTypes);
 
 // Define associations
 User.hasMany(Progress, { foreignKey: 'userId' });
@@ -49,7 +56,14 @@ const models = {
   Setting,
   UserActivity,
   PrayerSupport,
-  SubmissionUpdate
+  SubmissionUpdate,
+  BibleBook,
+  BibleVerse,
+  Journey,
+  JourneyDay,
+  JourneyContent,
+  UserJourney,
+  UserJourneyProgress
 };
 
 Object.keys(models).forEach(modelName => {

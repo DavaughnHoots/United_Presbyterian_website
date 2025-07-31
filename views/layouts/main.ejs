@@ -90,6 +90,7 @@
                 <div class="flex items-center space-x-6">
                     <a href="/" class="text-text-secondary hover:text-text-primary transition">Home</a>
                     <a href="/daily" class="text-text-secondary hover:text-text-primary transition">Daily Content</a>
+                    <a href="/journeys" class="text-text-secondary hover:text-text-primary transition">Journeys</a>
                     <a href="/live" class="text-text-secondary hover:text-text-primary transition flex items-center">
                         <span class="text-red-600 mr-1">●</span> Live
                     </a>
@@ -115,32 +116,31 @@
     </main>
     
     <!-- Mobile Bottom Navigation -->
-    <nav class="mobile-nav lg:hidden px-6 py-2">
+    <nav class="mobile-nav lg:hidden px-4 py-2">
         <div class="flex justify-around items-center">
             <a href="/" class="flex flex-col items-center py-2 text-text-secondary hover:text-sky-blue transition">
-                <i class="fas fa-home text-xl mb-1"></i>
+                <i class="fas fa-home text-lg mb-1"></i>
                 <span class="text-xs">Home</span>
             </a>
             <a href="/daily" class="flex flex-col items-center py-2 text-text-secondary hover:text-sky-blue transition">
-                <i class="fas fa-book-bible text-xl mb-1"></i>
+                <i class="fas fa-book-bible text-lg mb-1"></i>
                 <span class="text-xs">Daily</span>
             </a>
-            <a href="/live" class="flex flex-col items-center py-2 text-text-secondary hover:text-sky-blue transition relative">
-                <i class="fas fa-video text-xl mb-1"></i>
-                <span class="text-xs">Live</span>
-                <span class="absolute -top-1 -right-1 text-red-600 text-xs">●</span>
+            <a href="/journeys" class="flex flex-col items-center py-2 text-text-secondary hover:text-sky-blue transition">
+                <i class="fas fa-route text-lg mb-1"></i>
+                <span class="text-xs">Journeys</span>
             </a>
             <a href="/share" class="flex flex-col items-center py-2 px-3 bg-gradient-to-br from-sky-blue to-heaven-blue text-white rounded-full shadow-lg">
-                <i class="fas fa-plus text-xl"></i>
+                <i class="fas fa-plus text-lg"></i>
             </a>
             <% if (user) { %>
                 <a href="/events" class="flex flex-col items-center py-2 text-text-secondary hover:text-sky-blue transition">
-                    <i class="fas fa-calendar text-xl mb-1"></i>
+                    <i class="fas fa-calendar text-lg mb-1"></i>
                     <span class="text-xs">Events</span>
                 </a>
             <% } else { %>
                 <a href="/auth/login" class="flex flex-col items-center py-2 text-text-secondary hover:text-sky-blue transition">
-                    <i class="fas fa-sign-in-alt text-xl mb-1"></i>
+                    <i class="fas fa-sign-in-alt text-lg mb-1"></i>
                     <span class="text-xs">Login</span>
                 </a>
             <% } %>

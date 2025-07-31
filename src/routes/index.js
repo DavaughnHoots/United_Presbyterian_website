@@ -143,42 +143,129 @@ router.get('/', async (req, res) => {
 // Daily content page
 router.get('/daily', async (req, res) => {
   try {
-    const { DailyContent, UserProgress } = require('../models');
+    const { DailyContent, UserProgress, UserJourney, JourneyDay, JourneyContent, UserJourneyProgress } = require('../models');
     const { Op } = require('sequelize');
     
     // Get today's date (start of day)
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     
-    // Fetch today's content
-    let todayContent = await DailyContent.findOne({
-      where: {
-        date: today
-      }
-    });
+    let userJourney = null;
+    let journeyDay = null;
+    let journeyContent = [];
+    let allContentCompleted = false;
     
-    // If no content for today, get the most recent content
-    if (!todayContent) {
-      todayContent = await DailyContent.findOne({
-        order: [['date', 'DESC']]
+    // Check if user has an active journey
+    if (req.session.user) {
+      userJourney = await UserJourney.findOne({
+        where: {
+          user_id: req.session.user.id,
+          is_active: true
+        },
+        include: [{
+          model: require('../models').Journey,
+          as: 'journey'
+        }]
       });
+      
+      if (userJourney) {
+        // Calculate current day based on start date
+        const daysSinceStart = Math.floor((today - userJourney.start_date) / (1000 * 60 * 60 * 24));
+        const currentDay = Math.min(daysSinceStart + 1, userJourney.journey.duration_days);
+        
+        // Allow viewing specific day if requested
+        const requestedDay = req.query.day ? parseInt(req.query.day) : currentDay;
+        const dayToShow = Math.max(1, Math.min(requestedDay, currentDay));
+        
+        // Get the journey day content
+        journeyDay = await JourneyDay.findOne({
+          where: {
+            journey_id: userJourney.journey_id,
+            day_number: dayToShow
+          }
+        });
+        
+        if (journeyDay) {
+          // Get all content for this day
+          const dayContent = await JourneyContent.findAll({
+            where: {
+              journey_day_id: journeyDay.id
+            },
+            order: [['order_index', 'ASC']]
+          });
+          
+          // Get user's progress for each content
+          const userProgressMap = {};
+          if (dayContent.length > 0) {
+            const progress = await UserJourneyProgress.findAll({
+              where: {
+                user_journey_id: userJourney.id,
+                journey_content_id: {
+                  [Op.in]: dayContent.map(c => c.id)
+                }
+              }
+            });
+            progress.forEach(p => {
+              userProgressMap[p.journey_content_id] = p;
+            });
+          }
+          
+          // Load actual content for each item
+          for (const content of dayContent) {
+            const contentWithData = content.toJSON();
+            contentWithData.actualContent = await content.getContent();
+            contentWithData.isCompleted = !!userProgressMap[content.id];
+            journeyContent.push(contentWithData);
+          }
+          
+          // Check if all content is completed
+          allContentCompleted = journeyContent.length > 0 && journeyContent.every(c => c.isCompleted);
+        }
+        
+        // Update current day in user journey
+        userJourney.current_day = currentDay;
+        await userJourney.save();
+      }
     }
     
-    // Check user's progress for today if logged in
+    // Fallback to legacy daily content if no journey
+    let todayContent = null;
     let userProgress = null;
-    if (req.session.user && todayContent) {
-      userProgress = await UserProgress.findOne({
+    
+    if (!userJourney) {
+      // Fetch today's content
+      todayContent = await DailyContent.findOne({
         where: {
-          userId: req.session.user.id,
-          contentId: todayContent.id
+          date: today
         }
       });
+      
+      // If no content for today, get the most recent content
+      if (!todayContent) {
+        todayContent = await DailyContent.findOne({
+          order: [['date', 'DESC']]
+        });
+      }
+      
+      // Check user's progress for today if logged in
+      if (req.session.user && todayContent) {
+        userProgress = await UserProgress.findOne({
+          where: {
+            userId: req.session.user.id,
+            contentId: todayContent.id
+          }
+        });
+      }
     }
     
     res.render('pages/daily-content', {
-      title: 'Daily Spiritual Content',
+      title: 'Daily Spiritual Journey',
       content: todayContent,
       userProgress: userProgress,
+      userJourney: userJourney,
+      journeyDay: journeyDay,
+      journeyContent: journeyContent,
+      allContentCompleted: allContentCompleted,
       today: today.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })
     });
   } catch (error) {
@@ -250,6 +337,43 @@ router.get('/profile', requireAuth, async (req, res) => {
     });
   } catch (error) {
     console.error('Error rendering profile page:', error);
+    res.status(500).send('Internal server error');
+  }
+});
+
+// Journeys page
+router.get('/journeys', async (req, res) => {
+  try {
+    const { Journey, UserJourney } = require('../models');
+    
+    // Get all active journeys
+    const journeys = await Journey.findAll({
+      where: { is_active: true },
+      order: [['created_at', 'DESC']]
+    });
+    
+    // Get user's active journey if logged in
+    let activeJourney = null;
+    if (req.session.user) {
+      activeJourney = await UserJourney.findOne({
+        where: {
+          user_id: req.session.user.id,
+          is_active: true
+        },
+        include: [{
+          model: Journey,
+          as: 'journey'
+        }]
+      });
+    }
+    
+    res.render('pages/journeys', {
+      title: 'Spiritual Journeys',
+      journeys,
+      activeJourney
+    });
+  } catch (error) {
+    console.error('Error rendering journeys page:', error);
     res.status(500).send('Internal server error');
   }
 });

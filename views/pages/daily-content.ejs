@@ -4,7 +4,19 @@
         <h1 class="text-3xl font-bold mb-2" style="color: var(--text-primary);">Daily Spiritual Journey</h1>
         <p class="text-gray-600"><%= today %></p>
         
-        <% if (user && userProgress && userProgress.completed) { %>
+        <% if (userJourney && journeyDay) { %>
+            <div class="mt-4">
+                <p class="text-lg font-semibold text-gray-700"><%= userJourney.journey.title %></p>
+                <p class="text-gray-600">Day <%= userJourney.current_day %> of <%= userJourney.journey.duration_days %></p>
+            </div>
+        <% } %>
+        
+        <% if (user && allContentCompleted) { %>
+            <div class="inline-flex items-center gap-2 mt-3 px-4 py-2 bg-green-100 text-green-700 rounded-full">
+                <i class="fas fa-check-circle"></i>
+                <span>Today's Journey Completed</span>
+            </div>
+        <% } else if (user && userProgress && userProgress.completed) { %>
             <div class="inline-flex items-center gap-2 mt-3 px-4 py-2 bg-green-100 text-green-700 rounded-full">
                 <i class="fas fa-check-circle"></i>
                 <span>Completed</span>
@@ -12,14 +24,195 @@
         <% } %>
     </div>
     
-    <% if (!content) { %>
+    <% if (userJourney && journeyDay) { %>
+        <!-- Journey Content -->
+        <% if (journeyDay.title) { %>
+            <div class="module-card mb-6">
+                <h2 class="text-2xl font-bold mb-2"><%= journeyDay.title %></h2>
+                <% if (journeyDay.description) { %>
+                    <p class="text-gray-700 mb-4"><%= journeyDay.description %></p>
+                <% } %>
+                <% if (journeyDay.theme) { %>
+                    <div class="inline-flex items-center gap-2 px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm">
+                        <i class="fas fa-tag"></i>
+                        <span><%= journeyDay.theme %></span>
+                    </div>
+                <% } %>
+            </div>
+        <% } %>
+        
+        <% if (journeyContent && journeyContent.length > 0) { %>
+            <% journeyContent.forEach((content, index) => { %>
+                <% if (content.type === 'bible_verse' && content.actualContent) { %>
+                    <!-- Bible Verse Card -->
+                    <div class="module-card mb-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="flex items-center gap-3">
+                                <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
+                                    <i class="fas fa-book-bible text-xl" style="color: var(--sky-blue);"></i>
+                                </div>
+                                <div>
+                                    <h3 class="text-xl font-semibold">Scripture Reading</h3>
+                                    <p class="text-sm text-gray-600">
+                                        <%= content.actualContent.book.name %> 
+                                        <%= content.actualContent.chapter %>:<%= content.actualContent.verse %>
+                                    </p>
+                                </div>
+                            </div>
+                            <% if (user && content.isCompleted) { %>
+                                <i class="fas fa-check-circle text-green-500 text-xl"></i>
+                            <% } %>
+                        </div>
+                        
+                        <div class="bg-gradient-to-r from-sky-50 to-blue-50 rounded-lg p-6">
+                            <p class="text-gray-700 leading-relaxed text-lg">
+                                <%= content.actualContent.text %>
+                            </p>
+                        </div>
+                        
+                        <% if (user && !content.isCompleted) { %>
+                            <div class="mt-4 text-right">
+                                <button class="btn-secondary btn-sm mark-complete" data-content-id="<%= content.id %>">
+                                    <i class="fas fa-check mr-2"></i>Mark as Read
+                                </button>
+                            </div>
+                        <% } %>
+                    </div>
+                <% } else if (content.type === 'prayer' && content.reference_data) { %>
+                    <!-- Prayer Card -->
+                    <div class="module-card mb-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="flex items-center gap-3">
+                                <div class="w-12 h-12 rounded-full flex items-center justify-center" style="background-color: var(--cloud-white);">
+                                    <i class="fas fa-praying-hands text-xl" style="color: var(--heaven-blue);"></i>
+                                </div>
+                                <h3 class="text-xl font-semibold">Prayer</h3>
+                            </div>
+                            <% if (user && content.isCompleted) { %>
+                                <i class="fas fa-check-circle text-green-500 text-xl"></i>
+                            <% } %>
+                        </div>
+                        
+                        <div class="rounded-lg p-6" style="background-color: var(--soft-blue);">
+                            <% if (content.reference_data.title) { %>
+                                <h4 class="font-semibold mb-2 text-gray-800"><%= content.reference_data.title %></h4>
+                            <% } %>
+                            <p class="text-gray-700 leading-relaxed italic whitespace-pre-line">
+                                <%= content.reference_data.content %>
+                            </p>
+                        </div>
+                        
+                        <% if (user && !content.isCompleted) { %>
+                            <div class="mt-4 text-right">
+                                <button class="btn-secondary btn-sm mark-complete" data-content-id="<%= content.id %>">
+                                    <i class="fas fa-check mr-2"></i>Mark as Prayed
+                                </button>
+                            </div>
+                        <% } %>
+                    </div>
+                <% } else if (content.type === 'hymn' && content.reference_data) { %>
+                    <!-- Hymn Card -->
+                    <div class="module-card mb-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="flex items-center gap-3">
+                                <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
+                                    <i class="fas fa-music text-green-600 text-xl"></i>
+                                </div>
+                                <h3 class="text-xl font-semibold">Hymn</h3>
+                            </div>
+                            <% if (user && content.isCompleted) { %>
+                                <i class="fas fa-check-circle text-green-500 text-xl"></i>
+                            <% } %>
+                        </div>
+                        
+                        <div class="bg-green-50 rounded-lg p-6">
+                            <% if (content.reference_data.title) { %>
+                                <h4 class="font-bold mb-3 text-lg text-gray-800"><%= content.reference_data.title %></h4>
+                            <% } %>
+                            <p class="text-gray-700 leading-relaxed whitespace-pre-line">
+                                <%= content.reference_data.content %>
+                            </p>
+                            
+                            <% if (content.reference_data.videoUrl) { %>
+                                <div class="mt-4">
+                                    <a href="<%= content.reference_data.videoUrl %>" target="_blank" 
+                                       class="inline-flex items-center gap-2 text-green-600 hover:text-green-700">
+                                        <i class="fas fa-play-circle"></i>
+                                        <span>Listen on YouTube</span>
+                                    </a>
+                                </div>
+                            <% } %>
+                        </div>
+                        
+                        <% if (user && !content.isCompleted) { %>
+                            <div class="mt-4 text-right">
+                                <button class="btn-secondary btn-sm mark-complete" data-content-id="<%= content.id %>">
+                                    <i class="fas fa-check mr-2"></i>Mark as Sung
+                                </button>
+                            </div>
+                        <% } %>
+                    </div>
+                <% } else if (content.type === 'reflection' && content.reference_data) { %>
+                    <!-- Reflection Card -->
+                    <div class="module-card mb-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="flex items-center gap-3">
+                                <div class="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center">
+                                    <i class="fas fa-lightbulb text-yellow-600 text-xl"></i>
+                                </div>
+                                <h3 class="text-xl font-semibold">Reflection</h3>
+                            </div>
+                            <% if (user && content.isCompleted) { %>
+                                <i class="fas fa-check-circle text-green-500 text-xl"></i>
+                            <% } %>
+                        </div>
+                        
+                        <div class="bg-yellow-50 rounded-lg p-6">
+                            <p class="text-lg text-gray-700"><%= content.reference_data.question %></p>
+                        </div>
+                        
+                        <% if (user && !content.isCompleted) { %>
+                            <div class="mt-4">
+                                <textarea 
+                                    id="reflection-<%= content.id %>"
+                                    class="w-full p-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-transparent resize-none" 
+                                    rows="4" 
+                                    placeholder="Share your thoughts (private - only you can see this)..."
+                                ></textarea>
+                                <button class="btn-primary mt-3 w-full save-reflection" data-content-id="<%= content.id %>">
+                                    <i class="fas fa-save mr-2"></i>Save Reflection
+                                </button>
+                            </div>
+                        <% } %>
+                    </div>
+                <% } %>
+            <% }); %>
+        <% } else if (!content) { %>
+            <!-- No Journey Content -->
+            <div class="module-card text-center py-12">
+                <i class="fas fa-map-signs text-6xl mb-4" style="color: var(--sky-blue);"></i>
+                <h2 class="text-2xl font-semibold mb-2">No Content for Today</h2>
+                <p class="text-gray-600">Check back tomorrow for your next spiritual journey content!</p>
+            </div>
+        <% } %>
+        
+    <% } else if (!content) { %>
         <!-- No Content Available -->
         <div class="module-card text-center py-12">
             <i class="fas fa-seedling text-6xl mb-4" style="color: var(--sky-blue);"></i>
-            <h2 class="text-2xl font-semibold mb-2">Content Coming Soon</h2>
-            <p class="text-gray-600">We're preparing today's spiritual content. Please check back later!</p>
+            <h2 class="text-2xl font-semibold mb-2">Start Your Spiritual Journey</h2>
+            <p class="text-gray-600 mb-6">Join a spiritual journey to receive daily scripture, prayers, and reflections.</p>
+            <% if (user) { %>
+                <a href="/journeys" class="btn-primary">
+                    <i class="fas fa-route mr-2"></i>Browse Journeys
+                </a>
+            <% } else { %>
+                <p class="text-gray-600 mb-4">Login to start your spiritual journey</p>
+                <a href="/auth/login" class="btn-primary">Login</a>
+            <% } %>
         </div>
     <% } else { %>
+        <!-- Legacy Daily Content -->
         <!-- Bible Reading Card -->
         <% if (content.bibleReading) { %>
             <div class="module-card mb-6">
@@ -138,7 +331,97 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Handle reflection form
+    // Handle mark complete buttons for journey content
+    const markCompleteButtons = document.querySelectorAll('.mark-complete');
+    markCompleteButtons.forEach(button => {
+        button.addEventListener('click', async function() {
+            const contentId = this.getAttribute('data-content-id');
+            
+            try {
+                const response = await fetch(`/api/journeys/content/${contentId}/complete`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                });
+                
+                if (response.ok) {
+                    const result = await response.json();
+                    if (result.allCompleted) {
+                        location.reload();
+                    } else {
+                        // Update UI to show completed
+                        const card = this.closest('.module-card');
+                        const header = card.querySelector('.flex.items-center.justify-between');
+                        if (header && !header.querySelector('.fa-check-circle')) {
+                            const checkIcon = document.createElement('i');
+                            checkIcon.className = 'fas fa-check-circle text-green-500 text-xl';
+                            header.appendChild(checkIcon);
+                        }
+                        this.closest('.text-right').remove();
+                    }
+                } else {
+                    alert('Failed to mark as complete. Please try again.');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An error occurred. Please try again.');
+            }
+        });
+    });
+    
+    // Handle save reflection buttons
+    const saveReflectionButtons = document.querySelectorAll('.save-reflection');
+    saveReflectionButtons.forEach(button => {
+        button.addEventListener('click', async function() {
+            const contentId = this.getAttribute('data-content-id');
+            const textarea = document.getElementById(`reflection-${contentId}`);
+            const reflection = textarea.value.trim();
+            
+            if (!reflection) {
+                alert('Please write a reflection before saving.');
+                return;
+            }
+            
+            // First save the reflection
+            // Then mark as complete
+            try {
+                const response = await fetch(`/api/journeys/content/${contentId}/complete`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        reflection: reflection
+                    })
+                });
+                
+                if (response.ok) {
+                    const result = await response.json();
+                    if (result.allCompleted) {
+                        location.reload();
+                    } else {
+                        // Update UI to show completed
+                        const card = this.closest('.module-card');
+                        const header = card.querySelector('.flex.items-center.justify-between');
+                        if (header && !header.querySelector('.fa-check-circle')) {
+                            const checkIcon = document.createElement('i');
+                            checkIcon.className = 'fas fa-check-circle text-green-500 text-xl';
+                            header.appendChild(checkIcon);
+                        }
+                        this.closest('.mt-4').innerHTML = '<p class="text-green-600"><i class="fas fa-check-circle mr-2"></i>Reflection saved!</p>';
+                    }
+                } else {
+                    alert('Failed to save reflection. Please try again.');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An error occurred. Please try again.');
+            }
+        });
+    });
+    
+    // Handle reflection form for legacy content
     const reflectionForm = document.getElementById('reflectionForm');
     if (reflectionForm) {
         reflectionForm.addEventListener('submit', async function(e) {
@@ -174,7 +457,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    // Handle complete day button
+    // Handle complete day button for legacy content
     const completeBtn = document.getElementById('completeDay');
     if (completeBtn) {
         completeBtn.addEventListener('click', async function() {
