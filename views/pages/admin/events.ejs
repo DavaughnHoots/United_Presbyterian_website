@@ -364,6 +364,11 @@ async function saveEvent(e) {
     const formData = new FormData(document.getElementById('eventForm'));
     const eventData = Object.fromEntries(formData);
     
+    // Remove empty id field to allow UUID auto-generation
+    if (!eventData.id) {
+        delete eventData.id;
+    }
+    
     // Convert checkboxes
     eventData.isRecurring = !!eventData.isRecurring;
     eventData.requireRegistration = !!eventData.requireRegistration;
