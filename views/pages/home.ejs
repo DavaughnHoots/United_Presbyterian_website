@@ -15,6 +15,89 @@
         <h1 class="text-3xl font-bold text-gray-800" id="greeting">Good Morning</h1>
     </div>
     
+    <% if (currentEvent) { %>
+        <!-- Happening Now Section -->
+        <div class="module-card mb-6 border-2 border-red-500 bg-red-50 relative overflow-hidden">
+            <div class="absolute top-0 right-0 bg-red-500 text-white px-3 py-1 rounded-bl-lg text-sm font-bold flex items-center gap-2">
+                <span class="animate-pulse">●</span> HAPPENING NOW
+            </div>
+            <div class="pt-8">
+                <div class="flex items-start justify-between">
+                    <div class="flex-1">
+                        <h3 class="text-xl font-bold text-gray-800 mb-2">
+                            <%= currentEvent.title %>
+                        </h3>
+                        <div class="space-y-2 text-sm">
+                            <% if (currentEvent.location) { %>
+                                <div class="flex items-center gap-2 text-gray-600">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    <span><%= currentEvent.location %></span>
+                                </div>
+                            <% } %>
+                            <div class="flex items-center gap-2 text-gray-600">
+                                <i class="fas fa-clock"></i>
+                                <span>
+                                    <% if (currentEvent.timeRemaining > 60) { %>
+                                        Ends in <%= Math.floor(currentEvent.timeRemaining / 60) %> hours <%= currentEvent.timeRemaining % 60 %> minutes
+                                    <% } else { %>
+                                        Ends in <%= currentEvent.timeRemaining %> minutes
+                                    <% } %>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="event-category-badge <%= currentEvent.category %> text-2xl">
+                        <i class="fas <%= getCategoryIcon(currentEvent.category) %>"></i>
+                    </div>
+                </div>
+                <% if (currentEvent.link) { %>
+                    <div class="mt-4">
+                        <a href="<%= currentEvent.link %>" target="_blank" rel="noopener noreferrer" 
+                           class="inline-flex items-center gap-2 px-6 py-3 bg-red-500 text-white rounded-lg hover:bg-red-600 transition font-medium">
+                            <i class="fas fa-video"></i>
+                            Join Now
+                        </a>
+                    </div>
+                <% } %>
+            </div>
+        </div>
+    <% } %>
+    
+    <% if (!currentEvent && upcomingEvents && upcomingEvents.length > 0) { %>
+        <!-- Upcoming Today Section -->
+        <div class="module-card mb-6 bg-blue-50 border border-blue-200">
+            <h3 class="text-lg font-semibold mb-3 text-blue-900">Coming Up Today</h3>
+            <div class="space-y-3">
+                <% upcomingEvents.forEach(event => { %>
+                    <div class="flex items-center gap-3">
+                        <div class="event-category-badge <%= event.category %> flex-shrink-0">
+                            <i class="fas <%= getCategoryIcon(event.category) %>"></i>
+                        </div>
+                        <div class="flex-1">
+                            <p class="font-medium"><%= event.title %></p>
+                            <p class="text-sm text-gray-600">
+                                <% if (event.timeUntil < 60) { %>
+                                    Starts in <%= event.timeUntil %> minutes
+                                <% } else { %>
+                                    Starts at <%= event.startDateTime.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' }) %>
+                                <% } %>
+                                <% if (event.location) { %>
+                                    • <%= event.location %>
+                                <% } %>
+                            </p>
+                        </div>
+                        <% if (event.link) { %>
+                            <a href="<%= event.link %>" target="_blank" rel="noopener noreferrer" 
+                               class="text-sky-blue hover:text-blue-700">
+                                <i class="fas fa-external-link-alt"></i>
+                            </a>
+                        <% } %>
+                    </div>
+                <% }) %>
+            </div>
+        </div>
+    <% } %>
+    
     <% if (user && user.isAdmin) { %>
         <!-- Admin Quick Access -->
         <div class="mb-6 text-center">
@@ -136,3 +219,18 @@
         </div>
     <% } %>
 </div>
+
+<%
+// Helper function embedded in template
+function getCategoryIcon(category) {
+    const icons = {
+        'worship': 'fa-pray',
+        'bible-study': 'fa-book-bible',
+        'fellowship': 'fa-users',
+        'service': 'fa-hands-helping',
+        'meeting': 'fa-comments',
+        'special': 'fa-star'
+    };
+    return icons[category] || 'fa-calendar';
+}
+%>

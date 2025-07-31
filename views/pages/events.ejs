@@ -575,7 +575,9 @@ function renderListView(container) {
     
     let html = '<div class="divide-y">';
     
-    Object.keys(groupedEvents).sort().forEach(dateStr => {
+    Object.keys(groupedEvents)
+        .sort((a, b) => new Date(a) - new Date(b))
+        .forEach(dateStr => {
         const date = new Date(dateStr);
         const dayEvents = groupedEvents[dateStr];
         
