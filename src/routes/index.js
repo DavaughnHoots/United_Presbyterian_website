@@ -348,8 +348,8 @@ router.get('/journeys', async (req, res) => {
     
     // Get all active journeys
     const journeys = await Journey.findAll({
-      where: { is_active: true },
-      order: [['created_at', 'DESC']]
+      where: { is_published: true },
+      order: [['createdAt', 'DESC']]
     });
     
     // Get user's active journey if logged in

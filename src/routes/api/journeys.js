@@ -16,8 +16,8 @@ const { Op } = require('sequelize');
 router.get('/', async (req, res) => {
   try {
     const journeys = await Journey.findAll({
-      where: { is_active: true },
-      order: [['created_at', 'DESC']]
+      where: { is_published: true },
+      order: [['createdAt', 'DESC']]
     });
     
     res.json(journeys);
@@ -183,7 +183,7 @@ router.post('/content/:contentId/complete', requireAuth, async (req, res) => {
 // Create a new journey
 router.post('/', requireAdmin, async (req, res) => {
   try {
-    const { title, description, duration_days, is_active = true } = req.body;
+    const { title, description, duration_days, is_published = true } = req.body;
     
     if (!title || !duration_days) {
       return res.status(400).json({ error: 'Title and duration are required' });
@@ -193,7 +193,7 @@ router.post('/', requireAdmin, async (req, res) => {
       title,
       description,
       duration_days,
-      is_active,
+      is_published,
       created_by: req.session.user.id
     });
     
@@ -332,7 +332,7 @@ router.delete('/:journeyId', requireAdmin, async (req, res) => {
       return res.status(404).json({ error: 'Journey not found' });
     }
     
-    await journey.update({ is_active: false });
+    await journey.update({ is_published: false });
     res.json({ success: true, message: 'Journey deactivated' });
   } catch (error) {
     console.error('Error deleting journey:', error);

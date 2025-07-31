@@ -77,16 +77,16 @@ router.get('/', async (req, res) => {
         if (nextOccurrence) {
           featuredEvents.push({
             ...eventData,
-            startDate: formatDateForFrontend(nextOccurrence.startDate),
-            endDate: formatDateForFrontend(nextOccurrence.endDate),
+            startDate: formatDateForFrontend(nextOccurrence.startDate, eventData.startTime),
+            endDate: formatDateForFrontend(nextOccurrence.endDate, eventData.endTime),
             isRecurringInstance: true
           });
         }
       } else if (event.startDate >= today) {
         featuredEvents.push({
           ...eventData,
-          startDate: formatDateForFrontend(eventData.startDate),
-          endDate: formatDateForFrontend(eventData.endDate)
+          startDate: formatDateForFrontend(eventData.startDate, eventData.startTime),
+          endDate: formatDateForFrontend(eventData.endDate, eventData.endTime)
         });
       }
     }

@@ -33,10 +33,14 @@
                                     </div>
                                     <div>
                                         <i class="fas fa-clock mr-2"></i>
-                                        <%= new Date(event.startDate).toLocaleTimeString('en-US', { 
-                                            hour: 'numeric', 
-                                            minute: '2-digit' 
-                                        }) %>
+                                        <% if (event.startTime) { %>
+                                            <%= event.startTime %>
+                                        <% } else { %>
+                                            <%= new Date(event.startDate).toLocaleTimeString('en-US', { 
+                                                hour: 'numeric', 
+                                                minute: '2-digit' 
+                                            }) %>
+                                        <% } %>
                                     </div>
                                     <% if (event.location) { %>
                                         <div>
