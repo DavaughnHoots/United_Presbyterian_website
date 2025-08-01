@@ -368,9 +368,12 @@ router.get('/api/content', requireAdmin, async (req, res) => {
 router.post('/api/content', requireAdmin, async (req, res) => {
   try {
     const { Content } = require('../models');
-    const { type, title, content, biblePassage, youtubeId, theme, season, tags, isActive } = req.body;
+    const { 
+      type, title, content, biblePassage, youtubeId, theme, season, tags, isActive,
+      duration_minutes, artist, image_url, video_url, instructions, prompts, metadata 
+    } = req.body;
     
-    const newContent = await Content.create({
+    const contentData = {
       type,
       title,
       content,
@@ -379,8 +382,22 @@ router.post('/api/content', requireAdmin, async (req, res) => {
       theme,
       season,
       tags,
-      isActive
-    });
+      isActive,
+      duration_minutes: duration_minutes || 5,
+      artist,
+      image_url,
+      video_url,
+      instructions,
+      prompts,
+      metadata: metadata || {}
+    };
+    
+    // Add author to metadata if it's a prayer type
+    if (type === 'prayer' && req.body.author) {
+      contentData.metadata = { ...contentData.metadata, author: req.body.author };
+    }
+    
+    const newContent = await Content.create(contentData);
     
     res.json({ success: true, content: newContent });
   } catch (error) {
@@ -394,14 +411,17 @@ router.put('/api/content/:id', requireAdmin, async (req, res) => {
   try {
     const { Content } = require('../models');
     const { id } = req.params;
-    const { type, title, content, biblePassage, youtubeId, theme, season, tags, isActive } = req.body;
+    const { 
+      type, title, content, biblePassage, youtubeId, theme, season, tags, isActive,
+      duration_minutes, artist, image_url, video_url, instructions, prompts, metadata
+    } = req.body;
     
     const existingContent = await Content.findByPk(id);
     if (!existingContent) {
       return res.status(404).json({ error: 'Content not found' });
     }
     
-    await existingContent.update({
+    const updateData = {
       type,
       title,
       content,
@@ -410,8 +430,22 @@ router.put('/api/content/:id', requireAdmin, async (req, res) => {
       theme,
       season,
       tags,
-      isActive
-    });
+      isActive,
+      duration_minutes: duration_minutes || existingContent.duration_minutes,
+      artist,
+      image_url,
+      video_url,
+      instructions,
+      prompts,
+      metadata: metadata || existingContent.metadata
+    };
+    
+    // Add author to metadata if it's a prayer type
+    if (type === 'prayer' && req.body.author) {
+      updateData.metadata = { ...updateData.metadata, author: req.body.author };
+    }
+    
+    await existingContent.update(updateData);
     
     res.json({ success: true, content: existingContent });
   } catch (error) {
@@ -1390,7 +1424,68 @@ router.get('/api/bible/verses/:bookId/:chapter', requireAdmin, async (req, res) 
   }
 });
 
-// Content search API
+// Unified content search API - searches all content types
+router.get('/api/content/unified/search', requireAdmin, async (req, res) => {
+  try {
+    const { Content } = require('../models');
+    const { Op } = require('sequelize');
+    const { type, q } = req.query;
+    
+    const where = {
+      isActive: true
+    };
+    
+    if (type) {
+      where.type = type;
+    }
+    
+    if (q) {
+      where[Op.or] = [
+        { title: { [Op.iLike]: `%${q}%` } },
+        { content: { [Op.iLike]: `%${q}%` } },
+        { metadata: { [Op.contains]: { author: q } } },
+        { tags: { [Op.contains]: [q.toLowerCase()] } }
+      ];
+    }
+    
+    const content = await Content.findAll({
+      where,
+      order: [
+        ['usageCount', 'ASC'],
+        ['title', 'ASC']
+      ],
+      limit: 50
+    });
+    
+    res.json(content);
+  } catch (error) {
+    console.error('Error searching unified content:', error);
+    res.status(500).json({ error: 'Failed to search content' });
+  }
+});
+
+// Get content by type
+router.get('/api/content/type/:type', requireAdmin, async (req, res) => {
+  try {
+    const { Content } = require('../models');
+    const { type } = req.params;
+    
+    const content = await Content.findAll({
+      where: {
+        type,
+        isActive: true
+      },
+      order: [['title', 'ASC']]
+    });
+    
+    res.json(content);
+  } catch (error) {
+    console.error('Error fetching content by type:', error);
+    res.status(500).json({ error: 'Failed to fetch content' });
+  }
+});
+
+// Content search API (legacy - for backward compatibility)
 router.get('/api/content/search', requireAdmin, async (req, res) => {
   try {
     const { Prayer, Content } = require('../models');

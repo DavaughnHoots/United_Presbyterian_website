@@ -1176,7 +1176,8 @@ async function searchContent(type) {
   const searchTerm = document.getElementById(type + 'Search')?.value || '';
   
   try {
-    const response = await fetch(`/admin/api/content/search?type=${type}&q=${searchTerm}`);
+    // Use unified content API
+    const response = await fetch(`/admin/api/content/unified/search?type=${type}&q=${searchTerm}`);
     const items = await response.json();
     
     const listEl = document.getElementById(type + 'List');
@@ -1185,12 +1186,19 @@ async function searchContent(type) {
       return;
     }
     
-    listEl.innerHTML = items.map(item => `
-      <div class="content-list-item" onclick="selectContent('${type}', '${item.id}', '${item.title}')">
-        <h5>${item.title}</h5>
-        <p class="text-muted mb-0">${item.preview || item.content?.substring(0, 100) + '...' || ''}</p>
-      </div>
-    `).join('');
+    listEl.innerHTML = items.map(item => {
+      // Extract author from metadata if it exists
+      const author = item.metadata?.author || item.artist || '';
+      const preview = item.content?.substring(0, 100) + '...' || item.instructions?.substring(0, 100) + '...' || '';
+      
+      return `
+        <div class="content-list-item" onclick="selectContent('${type}', '${item.id}', ${JSON.stringify(item.title).replace(/"/g, '&quot;')})">
+          <h5>${item.title}</h5>
+          ${author ? `<small class="text-muted">${author}</small>` : ''}
+          <p class="text-muted mb-0">${preview}</p>
+        </div>
+      `;
+    }).join('');
   } catch (error) {
     console.error('Error searching content:', error);
   }
@@ -1483,17 +1491,25 @@ async function saveNewPrayer() {
   const tags = tagsInput ? tagsInput.split(',').map(tag => tag.trim()).filter(tag => tag) : [];
   
   try {
-    const response = await fetch('/admin/api/prayers', {
+    const response = await fetch('/admin/api/content', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
+        type: 'prayer',
         title,
         content,
         author: author || null,
-        category,
-        tags
+        theme: category,
+        tags,
+        isActive: true,
+        duration_minutes: 3,
+        metadata: {
+          author: author || null,
+          category: category,
+          migrated_from: 'journey_editor'
+        }
       })
     });
     
@@ -1506,7 +1522,7 @@ async function saveNewPrayer() {
       searchContent('prayer');
       
       // Select the newly created prayer
-      selectContent('prayer', result.prayer.id, result.prayer.title);
+      selectContent('prayer', result.content.id, result.content.title);
     } else {
       const error = await response.json();
       alert('Error: ' + (error.error || 'Failed to create prayer'));

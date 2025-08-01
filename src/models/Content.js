@@ -6,7 +6,21 @@ module.exports = (sequelize, DataTypes) => {
       primaryKey: true
     },
     type: {
-      type: DataTypes.ENUM('reading', 'prayer', 'music', 'question'),
+      type: DataTypes.ENUM(
+        'reading', 
+        'prayer', 
+        'music', 
+        'question',
+        'hymn',
+        'creed',
+        'reflection',
+        'scripture_reading',
+        'artwork',
+        'video',
+        'journaling_prompt',
+        'guided_prayer',
+        'breathing_exercise'
+      ),
       allowNull: false
     },
     title: {
@@ -55,6 +69,32 @@ module.exports = (sequelize, DataTypes) => {
     metadata: {
       type: DataTypes.JSONB,
       defaultValue: {}
+    },
+    duration_minutes: {
+      type: DataTypes.INTEGER,
+      defaultValue: 5,
+      allowNull: false
+    },
+    artist: {
+      type: DataTypes.STRING,
+      allowNull: true
+    },
+    image_url: {
+      type: DataTypes.STRING,
+      allowNull: true
+    },
+    video_url: {
+      type: DataTypes.STRING,
+      allowNull: true
+    },
+    instructions: {
+      type: DataTypes.TEXT,
+      allowNull: true
+    },
+    prompts: {
+      type: DataTypes.ARRAY(DataTypes.TEXT),
+      defaultValue: [],
+      allowNull: true
     }
   }, {
     tableName: 'content',
