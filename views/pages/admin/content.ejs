@@ -17,10 +17,19 @@
                 <label class="block text-sm font-medium mb-2">Content Type</label>
                 <select id="typeFilter" onchange="filterContent()" class="w-full px-3 py-2 border rounded-lg">
                     <option value="">All Types</option>
-                    <option value="reading">Bible Reading</option>
+                    <option value="scripture_reading">Scripture Reading</option>
                     <option value="prayer">Prayer</option>
-                    <option value="music">Music</option>
-                    <option value="question">Reflection Question</option>
+                    <option value="hymn">Hymn</option>
+                    <option value="journaling_prompt">Journaling Prompt</option>
+                    <option value="guided_prayer">Guided Prayer</option>
+                    <option value="reflection">Reflection</option>
+                    <option value="artwork">Artwork</option>
+                    <option value="video">Video</option>
+                    <option value="creed">Creed</option>
+                    <!-- Legacy mappings -->
+                    <option value="reading" class="text-gray-500">Bible Reading (Legacy)</option>
+                    <option value="music" class="text-gray-500">Music (Legacy)</option>
+                    <option value="question" class="text-gray-500">Reflection Question (Legacy)</option>
                 </select>
             </div>
             <div>
@@ -57,12 +66,18 @@
                             <div class="flex items-center mb-2">
                                 <span class="content-type-badge <%= item.type %>">
                                     <i class="fas <%= 
-                                        item.type === 'reading' ? 'fa-book-bible' : 
+                                        item.type === 'reading' || item.type === 'scripture_reading' ? 'fa-book-bible' : 
                                         item.type === 'prayer' ? 'fa-praying-hands' : 
-                                        item.type === 'music' ? 'fa-music' : 
-                                        'fa-question-circle' 
+                                        item.type === 'music' || item.type === 'hymn' ? 'fa-music' : 
+                                        item.type === 'question' || item.type === 'journaling_prompt' ? 'fa-pencil-alt' :
+                                        item.type === 'guided_prayer' ? 'fa-headphones' :
+                                        item.type === 'reflection' ? 'fa-pen' :
+                                        item.type === 'artwork' ? 'fa-image' :
+                                        item.type === 'video' ? 'fa-video' :
+                                        item.type === 'creed' ? 'fa-scroll' :
+                                        'fa-file' 
                                     %> mr-1"></i>
-                                    <%= item.type.charAt(0).toUpperCase() + item.type.slice(1) %>
+                                    <%= item.type.replace(/_/g, ' ').split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ') %>
                                 </span>
                                 <% if (item.theme) { %>
                                     <span class="ml-2 text-sm text-gray-600">Theme: <%= item.theme %></span>
@@ -133,10 +148,15 @@
                         <select id="contentType" name="type" required onchange="updateFormFields()" 
                                 class="w-full px-3 py-2 border rounded-lg">
                             <option value="">Select Type</option>
-                            <option value="reading">Bible Reading</option>
+                            <option value="scripture_reading">Scripture Reading</option>
                             <option value="prayer">Prayer</option>
-                            <option value="music">Music</option>
-                            <option value="question">Reflection Question</option>
+                            <option value="hymn">Hymn</option>
+                            <option value="journaling_prompt">Journaling Prompt</option>
+                            <option value="guided_prayer">Guided Prayer</option>
+                            <option value="reflection">Reflection</option>
+                            <option value="artwork">Artwork</option>
+                            <option value="video">Video</option>
+                            <option value="creed">Creed</option>
                         </select>
                     </div>
                     
@@ -165,6 +185,50 @@
                         <label class="block text-sm font-medium mb-2">Content*</label>
                         <textarea id="contentText" name="content" rows="6" required
                                   class="w-full px-3 py-2 border rounded-lg"></textarea>
+                    </div>
+                    
+                    <!-- New multimedia fields -->
+                    <div id="imageUrlField" class="mb-4" style="display: none;">
+                        <label class="block text-sm font-medium mb-2">Image URL</label>
+                        <input type="url" id="imageUrl" name="image_url" 
+                               placeholder="https://example.com/image.jpg"
+                               class="w-full px-3 py-2 border rounded-lg">
+                        <div id="imagePreview" class="mt-2"></div>
+                    </div>
+                    
+                    <div id="videoUrlField" class="mb-4" style="display: none;">
+                        <label class="block text-sm font-medium mb-2">Video URL</label>
+                        <input type="url" id="videoUrl" name="video_url" 
+                               placeholder="https://youtube.com/watch?v=..."
+                               class="w-full px-3 py-2 border rounded-lg">
+                    </div>
+                    
+                    <div id="artistField" class="mb-4" style="display: none;">
+                        <label class="block text-sm font-medium mb-2">Artist/Author</label>
+                        <input type="text" id="artist" name="artist" 
+                               placeholder="e.g., Rembrandt, Traditional"
+                               class="w-full px-3 py-2 border rounded-lg">
+                    </div>
+                    
+                    <div id="instructionsField" class="mb-4" style="display: none;">
+                        <label class="block text-sm font-medium mb-2">Instructions/Description</label>
+                        <textarea id="instructions" name="instructions" rows="4"
+                                  placeholder="Provide guidance or context..."
+                                  class="w-full px-3 py-2 border rounded-lg"></textarea>
+                    </div>
+                    
+                    <div id="promptsField" class="mb-4" style="display: none;">
+                        <label class="block text-sm font-medium mb-2">Prompts/Questions (one per line)</label>
+                        <textarea id="prompts" name="prompts" rows="4"
+                                  placeholder="What storms are you facing?&#10;How can you trust God today?"
+                                  class="w-full px-3 py-2 border rounded-lg"></textarea>
+                    </div>
+                    
+                    <div id="durationField" class="mb-4" style="display: none;">
+                        <label class="block text-sm font-medium mb-2">Duration (minutes)</label>
+                        <input type="number" id="duration" name="duration_minutes" 
+                               min="1" value="5"
+                               class="w-full px-3 py-2 border rounded-lg">
                     </div>
                     
                     <div class="grid grid-cols-2 gap-4 mb-4">
@@ -269,18 +333,89 @@ function filterContent() {
 function updateFormFields() {
     const type = document.getElementById('contentType').value;
     
-    // Show/hide fields based on type
-    document.getElementById('biblePassageField').style.display = type === 'reading' ? 'block' : 'none';
-    document.getElementById('youtubeField').style.display = type === 'music' ? 'block' : 'none';
+    // Hide all optional fields first
+    document.getElementById('biblePassageField').style.display = 'none';
+    document.getElementById('youtubeField').style.display = 'none';
+    document.getElementById('imageUrlField').style.display = 'none';
+    document.getElementById('videoUrlField').style.display = 'none';
+    document.getElementById('artistField').style.display = 'none';
+    document.getElementById('instructionsField').style.display = 'none';
+    document.getElementById('promptsField').style.display = 'none';
+    document.getElementById('durationField').style.display = 'none';
     
-    // Update content field requirement
+    // Show fields based on type
     const contentField = document.getElementById('contentText');
-    if (type === 'music') {
-        contentField.required = false;
-        contentField.placeholder = 'Optional lyrics or description';
-    } else {
-        contentField.required = true;
-        contentField.placeholder = '';
+    const contentLabel = contentField.previousElementSibling;
+    
+    switch(type) {
+        case 'reading':
+        case 'scripture_reading':
+            document.getElementById('biblePassageField').style.display = 'block';
+            contentLabel.textContent = 'Scripture Text*';
+            contentField.placeholder = 'Enter the scripture passage text...';
+            break;
+            
+        case 'prayer':
+        case 'guided_prayer':
+            document.getElementById('artistField').style.display = 'block';
+            document.getElementById('durationField').style.display = 'block';
+            if (type === 'guided_prayer') {
+                document.getElementById('instructionsField').style.display = 'block';
+                document.getElementById('videoUrlField').style.display = 'block';
+            }
+            contentLabel.textContent = 'Prayer Text*';
+            contentField.placeholder = 'Enter the prayer text...';
+            break;
+            
+        case 'music':
+        case 'hymn':
+            document.getElementById('youtubeField').style.display = 'block';
+            document.getElementById('artistField').style.display = 'block';
+            contentField.required = false;
+            contentLabel.textContent = 'Lyrics (Optional)';
+            contentField.placeholder = 'Enter hymn lyrics or description...';
+            break;
+            
+        case 'artwork':
+            document.getElementById('imageUrlField').style.display = 'block';
+            document.getElementById('artistField').style.display = 'block';
+            document.getElementById('instructionsField').style.display = 'block';
+            contentLabel.textContent = 'Reflection/Description*';
+            contentField.placeholder = 'Describe the artwork and its spiritual significance...';
+            break;
+            
+        case 'video':
+            document.getElementById('videoUrlField').style.display = 'block';
+            document.getElementById('durationField').style.display = 'block';
+            document.getElementById('instructionsField').style.display = 'block';
+            contentLabel.textContent = 'Video Description*';
+            contentField.placeholder = 'Describe the video content...';
+            break;
+            
+        case 'question':
+        case 'journaling_prompt':
+            document.getElementById('promptsField').style.display = 'block';
+            document.getElementById('instructionsField').style.display = 'block';
+            contentLabel.textContent = 'Main Prompt*';
+            contentField.placeholder = 'Enter the main reflection question or journaling prompt...';
+            break;
+            
+        case 'reflection':
+            document.getElementById('instructionsField').style.display = 'block';
+            contentLabel.textContent = 'Reflection Content*';
+            contentField.placeholder = 'Write your reflection...';
+            break;
+            
+        case 'creed':
+            document.getElementById('artistField').style.display = 'block';
+            contentLabel.textContent = 'Creed Text*';
+            contentField.placeholder = 'Enter the creed text...';
+            break;
+            
+        default:
+            contentField.required = true;
+            contentLabel.textContent = 'Content*';
+            contentField.placeholder = '';
     }
 }
 
@@ -312,6 +447,14 @@ function editContent(id) {
     document.getElementById('contentTags').value = content.tags ? content.tags.join(', ') : '';
     document.getElementById('isActive').checked = content.isActive;
     
+    // Set new multimedia fields (temporarily commented out)
+    // document.getElementById('imageUrl').value = content.image_url || '';
+    // document.getElementById('videoUrl').value = content.video_url || '';
+    // document.getElementById('artist').value = content.artist || '';
+    // document.getElementById('instructions').value = content.instructions || '';
+    // document.getElementById('prompts').value = content.prompts ? content.prompts.join('\n') : '';
+    // document.getElementById('duration').value = content.duration_minutes || 5;
+    
     updateFormFields();
     document.getElementById('contentModal').classList.remove('hidden');
 }
@@ -330,6 +473,13 @@ async function saveContent(event) {
         season: formData.get('season'),
         tags: formData.get('tags').split(',').map(t => t.trim()).filter(t => t),
         isActive: formData.has('isActive')
+        // New fields (temporarily commented out)
+        // image_url: formData.get('image_url'),
+        // video_url: formData.get('video_url'),
+        // artist: formData.get('artist'),
+        // instructions: formData.get('instructions'),
+        // prompts: formData.get('prompts') ? formData.get('prompts').split('\n').filter(p => p.trim()) : [],
+        // duration_minutes: parseInt(formData.get('duration_minutes')) || 5
     };
     
     const id = formData.get('id');

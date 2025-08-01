@@ -1431,6 +1431,7 @@ router.get('/api/content/unified/search', requireAdmin, async (req, res) => {
   try {
     const { Content } = require('../models');
     const { Op } = require('sequelize');
+    const { mapLegacyType } = require('../utils/contentTypeMapping');
     const { type, q } = req.query;
     
     const where = {
@@ -1438,7 +1439,9 @@ router.get('/api/content/unified/search', requireAdmin, async (req, res) => {
     };
     
     if (type) {
-      where.type = type;
+      // Map legacy types to new types
+      const mappedType = mapLegacyType(type);
+      where.type = mappedType;
     }
     
     if (q) {
