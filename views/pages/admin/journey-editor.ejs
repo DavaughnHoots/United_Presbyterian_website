@@ -200,9 +200,54 @@
           
           <!-- Prayer Tab Content -->
           <div id="prayerTab" class="tab-content" style="display: none;">
-            <div class="search-bar">
+            <div class="search-bar mb-3">
               <input type="text" id="prayerSearch" class="form-control" placeholder="Search prayers..." 
                      onkeyup="searchContent('prayer')">
+            </div>
+            <div class="text-center mb-3">
+              <button class="btn btn-success" onclick="showCreatePrayerForm()">
+                <i class="fas fa-plus"></i> Create New Prayer
+              </button>
+            </div>
+            <div id="createPrayerForm" style="display: none;" class="mb-3 p-3 border rounded bg-light">
+              <h5>Create New Prayer</h5>
+              <div class="form-group">
+                <label>Prayer Title</label>
+                <input type="text" id="newPrayerTitle" class="form-control" placeholder="Enter prayer title">
+              </div>
+              <div class="form-group">
+                <label>Prayer Text</label>
+                <textarea id="newPrayerContent" class="form-control" rows="6" placeholder="Enter prayer text..."></textarea>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-md-6">
+                  <label>Author (optional)</label>
+                  <input type="text" id="newPrayerAuthor" class="form-control" placeholder="e.g., Traditional">
+                </div>
+                <div class="form-group col-md-6">
+                  <label>Category</label>
+                  <select id="newPrayerCategory" class="form-control">
+                    <option value="other">General</option>
+                    <option value="morning">Morning</option>
+                    <option value="evening">Evening</option>
+                    <option value="meal">Meal/Grace</option>
+                    <option value="healing">Healing</option>
+                    <option value="thanksgiving">Thanksgiving</option>
+                    <option value="confession">Confession</option>
+                    <option value="intercession">Intercession</option>
+                    <option value="traditional">Traditional</option>
+                    <option value="seasonal">Seasonal</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Tags (comma separated, optional)</label>
+                <input type="text" id="newPrayerTags" class="form-control" placeholder="e.g., peace, comfort, daily">
+              </div>
+              <div class="text-right">
+                <button class="btn btn-secondary" onclick="hideCreatePrayerForm()">Cancel</button>
+                <button class="btn btn-primary" onclick="saveNewPrayer()">Save Prayer</button>
+              </div>
             </div>
             <div class="content-list" id="prayerList">
               <!-- Prayer items will be loaded here -->
@@ -879,6 +924,11 @@ function resetContentPicker() {
     document.getElementById('hymnSearch').value = '';
   }
   
+  // Hide prayer creation form
+  if (document.getElementById('createPrayerForm')) {
+    hideCreatePrayerForm();
+  }
+  
   // Reset to first tab
   currentContentTab = 'bible';
   document.querySelectorAll('.tab-btn').forEach(btn => {
@@ -1400,6 +1450,71 @@ function getVideoEmbedUrl(url) {
   }
   
   return null;
+}
+
+// Prayer creation functions
+function showCreatePrayerForm() {
+  document.getElementById('createPrayerForm').style.display = 'block';
+  document.getElementById('newPrayerTitle').focus();
+}
+
+function hideCreatePrayerForm() {
+  document.getElementById('createPrayerForm').style.display = 'none';
+  // Clear form
+  document.getElementById('newPrayerTitle').value = '';
+  document.getElementById('newPrayerContent').value = '';
+  document.getElementById('newPrayerAuthor').value = '';
+  document.getElementById('newPrayerCategory').value = 'other';
+  document.getElementById('newPrayerTags').value = '';
+}
+
+async function saveNewPrayer() {
+  const title = document.getElementById('newPrayerTitle').value.trim();
+  const content = document.getElementById('newPrayerContent').value.trim();
+  const author = document.getElementById('newPrayerAuthor').value.trim();
+  const category = document.getElementById('newPrayerCategory').value;
+  const tagsInput = document.getElementById('newPrayerTags').value.trim();
+  
+  if (!title || !content) {
+    alert('Please enter both a title and prayer text');
+    return;
+  }
+  
+  const tags = tagsInput ? tagsInput.split(',').map(tag => tag.trim()).filter(tag => tag) : [];
+  
+  try {
+    const response = await fetch('/admin/api/prayers', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        title,
+        content,
+        author: author || null,
+        category,
+        tags
+      })
+    });
+    
+    if (response.ok) {
+      const result = await response.json();
+      alert('Prayer created successfully!');
+      hideCreatePrayerForm();
+      
+      // Refresh the prayer list
+      searchContent('prayer');
+      
+      // Select the newly created prayer
+      selectContent('prayer', result.prayer.id, result.prayer.title);
+    } else {
+      const error = await response.json();
+      alert('Error: ' + (error.error || 'Failed to create prayer'));
+    }
+  } catch (error) {
+    console.error('Error creating prayer:', error);
+    alert('Failed to create prayer');
+  }
 }
 
 // Close modal when clicking outside

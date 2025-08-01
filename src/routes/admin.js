@@ -1393,39 +1393,142 @@ router.get('/api/bible/verses/:bookId/:chapter', requireAdmin, async (req, res) 
 // Content search API
 router.get('/api/content/search', requireAdmin, async (req, res) => {
   try {
-    const { Content } = require('../models');
+    const { Prayer, Content } = require('../models');
     const { type, q } = req.query;
     
-    // For now, return mock data for prayers and hymns
-    // TODO: Create proper prayer and hymn models
     let items = [];
     
     if (type === 'prayer') {
-      items = [
-        { id: 'lords-prayer', title: "The Lord's Prayer", content: "Our Father, who art in heaven..." },
-        { id: 'serenity', title: "Serenity Prayer", content: "God, grant me the serenity..." },
-        { id: 'morning', title: "Morning Prayer", content: "Dear Lord, thank you for this new day..." }
-      ];
+      // Search actual prayers from database
+      const prayers = await Prayer.searchPrayers(q);
+      items = prayers.map(prayer => ({
+        id: prayer.id,
+        title: prayer.title,
+        content: prayer.content,
+        author: prayer.author,
+        category: prayer.category,
+        preview: prayer.content.substring(0, 150) + '...'
+      }));
     } else if (type === 'hymn') {
+      // TODO: Create Hymn model
       items = [
         { id: 'amazing-grace', title: "Amazing Grace", content: "Amazing grace, how sweet the sound..." },
         { id: 'holy-holy', title: "Holy, Holy, Holy", content: "Holy, holy, holy! Lord God Almighty..." },
         { id: 'blessed-assurance', title: "Blessed Assurance", content: "Blessed assurance, Jesus is mine..." }
       ];
-    }
-    
-    // Filter by search query if provided
-    if (q) {
-      items = items.filter(item => 
-        item.title.toLowerCase().includes(q.toLowerCase()) ||
-        item.content.toLowerCase().includes(q.toLowerCase())
-      );
+      
+      // Filter by search query if provided
+      if (q) {
+        items = items.filter(item => 
+          item.title.toLowerCase().includes(q.toLowerCase()) ||
+          item.content.toLowerCase().includes(q.toLowerCase())
+        );
+      }
     }
     
     res.json(items);
   } catch (error) {
     console.error('Error searching content:', error);
     res.status(500).json({ error: 'Failed to search content' });
+  }
+});
+
+// Prayer CRUD endpoints
+router.get('/api/prayers', requireAdmin, async (req, res) => {
+  try {
+    const { Prayer } = require('../models');
+    const { category, search } = req.query;
+    
+    let prayers;
+    if (search) {
+      prayers = await Prayer.searchPrayers(search, category);
+    } else if (category) {
+      prayers = await Prayer.getByCategory(category);
+    } else {
+      prayers = await Prayer.findAll({
+        where: { is_active: true },
+        order: [['title', 'ASC']]
+      });
+    }
+    
+    res.json(prayers);
+  } catch (error) {
+    console.error('Error fetching prayers:', error);
+    res.status(500).json({ error: 'Failed to fetch prayers' });
+  }
+});
+
+router.post('/api/prayers', requireAdmin, async (req, res) => {
+  try {
+    const { Prayer } = require('../models');
+    const { title, content, author, category, tags } = req.body;
+    
+    const prayer = await Prayer.create({
+      title,
+      content,
+      author,
+      category,
+      tags: tags || [],
+      created_by: req.session.user.id
+    });
+    
+    res.json({ success: true, prayer });
+  } catch (error) {
+    console.error('Error creating prayer:', error);
+    if (error.name === 'SequelizeUniqueConstraintError') {
+      res.status(400).json({ error: 'A prayer with this title already exists' });
+    } else {
+      res.status(500).json({ error: 'Failed to create prayer' });
+    }
+  }
+});
+
+router.put('/api/prayers/:id', requireAdmin, async (req, res) => {
+  try {
+    const { Prayer } = require('../models');
+    const { title, content, author, category, tags, is_active } = req.body;
+    
+    const prayer = await Prayer.findByPk(req.params.id);
+    if (!prayer) {
+      return res.status(404).json({ error: 'Prayer not found' });
+    }
+    
+    await prayer.update({
+      title,
+      content,
+      author,
+      category,
+      tags: tags || [],
+      is_active: is_active !== undefined ? is_active : prayer.is_active
+    });
+    
+    res.json({ success: true, prayer });
+  } catch (error) {
+    console.error('Error updating prayer:', error);
+    if (error.name === 'SequelizeUniqueConstraintError') {
+      res.status(400).json({ error: 'A prayer with this title already exists' });
+    } else {
+      res.status(500).json({ error: 'Failed to update prayer' });
+    }
+  }
+});
+
+router.delete('/api/prayers/:id', requireAdmin, async (req, res) => {
+  try {
+    const { Prayer } = require('../models');
+    
+    const prayer = await Prayer.findByPk(req.params.id);
+    if (!prayer) {
+      return res.status(404).json({ error: 'Prayer not found' });
+    }
+    
+    // Soft delete by setting is_active to false
+    await prayer.update({ is_active: false });
+    
+    res.json({ success: true });
+  } catch (error) {
+    console.error('Error deleting prayer:', error);
+    res.status(500).json({ error: 'Failed to delete prayer' });
   }
 });
 
