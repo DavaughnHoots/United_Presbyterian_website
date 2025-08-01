@@ -1059,6 +1059,158 @@ router.post('/api/users/import', requireAdmin, upload.single('file'), async (req
   }
 });
 
+// Journey management
+router.get('/journeys', requireAdmin, async (req, res) => {
+  try {
+    const { Journey } = require('../models');
+    const journeys = await Journey.findAll({
+      order: [['createdAt', 'DESC']]
+    });
+    
+    res.render('pages/admin/journeys', {
+      title: 'Journey Management',
+      user: req.session.user,
+      journeys
+    });
+  } catch (error) {
+    console.error('Error rendering journey management:', error);
+    res.status(500).send('Internal server error');
+  }
+});
+
+// Journey builder interface
+router.get('/journeys/builder/:id?', requireAdmin, async (req, res) => {
+  try {
+    const { Journey, JourneyDay, JourneyContent, DailyContent, BibleReading, Prayer } = require('../models');
+    
+    let journey = null;
+    let journeyDays = [];
+    
+    if (req.params.id) {
+      journey = await Journey.findByPk(req.params.id);
+      if (!journey) {
+        return res.status(404).send('Journey not found');
+      }
+      
+      journeyDays = await JourneyDay.findAll({
+        where: { journey_id: journey.id },
+        include: [{
+          model: JourneyContent,
+          as: 'contents',
+          include: ['dailyContent', 'bibleReading', 'prayer']
+        }],
+        order: [['day_number', 'ASC']]
+      });
+    }
+    
+    res.render('pages/admin/journey-builder', {
+      title: journey ? `Edit Journey: ${journey.title}` : 'Create New Journey',
+      user: req.session.user,
+      journey,
+      journeyDays
+    });
+  } catch (error) {
+    console.error('Error rendering journey builder:', error);
+    res.status(500).send('Internal server error');
+  }
+});
+
+// Create/update journey
+router.post('/api/journeys', requireAdmin, async (req, res) => {
+  try {
+    const { Journey } = require('../models');
+    const { id, title, description, duration_days, theme, is_published } = req.body;
+    
+    let journey;
+    if (id) {
+      journey = await Journey.findByPk(id);
+      await journey.update({ title, description, duration_days, theme, is_published });
+    } else {
+      journey = await Journey.create({
+        title,
+        description,
+        duration_days: duration_days || 30,
+        theme: theme || 'general',
+        is_published: is_published || false,
+        created_by: req.session.user.id
+      });
+    }
+    
+    res.json({ success: true, journey });
+  } catch (error) {
+    console.error('Error saving journey:', error);
+    res.status(500).json({ error: 'Failed to save journey' });
+  }
+});
+
+// Add/update journey day
+router.post('/api/journeys/:journeyId/days', requireAdmin, async (req, res) => {
+  try {
+    const { JourneyDay, JourneyContent } = require('../models');
+    const { journeyId } = req.params;
+    const { dayNumber, title, description, contents } = req.body;
+    
+    // Create or update journey day
+    let journeyDay = await JourneyDay.findOne({
+      where: { journey_id: journeyId, day_number: dayNumber }
+    });
+    
+    if (journeyDay) {
+      await journeyDay.update({ title, description });
+    } else {
+      journeyDay = await JourneyDay.create({
+        journey_id: journeyId,
+        day_number: dayNumber,
+        title,
+        description
+      });
+    }
+    
+    // Handle contents if provided
+    if (contents && Array.isArray(contents)) {
+      // Remove existing contents
+      await JourneyContent.destroy({
+        where: { journey_day_id: journeyDay.id }
+      });
+      
+      // Add new contents
+      for (let i = 0; i < contents.length; i++) {
+        const content = contents[i];
+        await JourneyContent.create({
+          journey_day_id: journeyDay.id,
+          content_type: content.type,
+          content_id: content.id,
+          order_index: i,
+          duration_minutes: content.duration || 5
+        });
+      }
+    }
+    
+    res.json({ success: true, journeyDay });
+  } catch (error) {
+    console.error('Error saving journey day:', error);
+    res.status(500).json({ error: 'Failed to save journey day' });
+  }
+});
+
+// Delete journey
+router.delete('/api/journeys/:id', requireAdmin, async (req, res) => {
+  try {
+    const { Journey } = require('../models');
+    const journey = await Journey.findByPk(req.params.id);
+    
+    if (!journey) {
+      return res.status(404).json({ error: 'Journey not found' });
+    }
+    
+    await journey.destroy();
+    res.json({ success: true });
+  } catch (error) {
+    console.error('Error deleting journey:', error);
+    res.status(500).json({ error: 'Failed to delete journey' });
+  }
+});
+
 // Log user activity (helper function)
 async function logActivity(userId, action, details = null, req = null) {
   try {

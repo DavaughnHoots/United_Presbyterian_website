@@ -1,0 +1,186 @@
+<%- include('../../partials/admin-header') %>
+
+<div class="admin-content">
+  <div class="header-section">
+    <h1>Journey Management</h1>
+    <a href="/admin/journeys/builder" class="btn btn-primary">
+      <i class="fas fa-plus"></i> Create New Journey
+    </a>
+  </div>
+
+  <% if (journeys.length === 0) { %>
+    <div class="empty-state">
+      <i class="fas fa-route fa-3x text-muted mb-3"></i>
+      <h3>No Journeys Created Yet</h3>
+      <p>Create your first spiritual journey to guide members on their faith path.</p>
+      <a href="/admin/journeys/builder" class="btn btn-primary mt-3">Create First Journey</a>
+    </div>
+  <% } else { %>
+    <div class="journeys-grid">
+      <% journeys.forEach(journey => { %>
+        <div class="journey-card">
+          <div class="journey-header">
+            <h3><%= journey.title %></h3>
+            <span class="badge <%= journey.is_published ? 'badge-success' : 'badge-secondary' %>">
+              <%= journey.is_published ? 'Published' : 'Draft' %>
+            </span>
+          </div>
+          
+          <div class="journey-body">
+            <p class="journey-description"><%= journey.description %></p>
+            
+            <div class="journey-meta">
+              <div class="meta-item">
+                <i class="fas fa-calendar"></i>
+                <span><%= journey.duration_days %> days</span>
+              </div>
+              <div class="meta-item">
+                <i class="fas fa-tag"></i>
+                <span><%= journey.theme %></span>
+              </div>
+              <div class="meta-item">
+                <i class="fas fa-users"></i>
+                <span><%= journey.participant_count || 0 %> participants</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="journey-actions">
+            <a href="/admin/journeys/builder/<%= journey.id %>" class="btn btn-sm btn-primary">
+              <i class="fas fa-edit"></i> Edit
+            </a>
+            <button class="btn btn-sm btn-secondary" onclick="previewJourney('<%= journey.id %>')">
+              <i class="fas fa-eye"></i> Preview
+            </button>
+            <button class="btn btn-sm btn-danger" onclick="deleteJourney('<%= journey.id %>', '<%= journey.title %>')">
+              <i class="fas fa-trash"></i> Delete
+            </button>
+          </div>
+        </div>
+      <% }) %>
+    </div>
+  <% } %>
+</div>
+
+<style>
+.header-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 4rem 2rem;
+  background: #f8f9fa;
+  border-radius: 8px;
+}
+
+.journeys-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 1.5rem;
+}
+
+.journey-card {
+  background: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 1.5rem;
+  transition: box-shadow 0.3s ease;
+}
+
+.journey-card:hover {
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.journey-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+}
+
+.journey-header h3 {
+  margin: 0;
+  font-size: 1.25rem;
+}
+
+.journey-description {
+  color: #666;
+  margin-bottom: 1rem;
+  line-height: 1.5;
+}
+
+.journey-meta {
+  display: flex;
+  gap: 1.5rem;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.meta-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.journey-actions {
+  display: flex;
+  gap: 0.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e0e0e0;
+}
+
+.badge {
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.badge-success {
+  background: #28a745;
+  color: white;
+}
+
+.badge-secondary {
+  background: #6c757d;
+  color: white;
+}
+</style>
+
+<script>
+function previewJourney(id) {
+  window.open(`/journeys/preview/${id}`, '_blank');
+}
+
+async function deleteJourney(id, title) {
+  if (!confirm(`Are you sure you want to delete the journey "${title}"? This action cannot be undone.`)) {
+    return;
+  }
+  
+  try {
+    const response = await fetch(`/admin/api/journeys/${id}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+    
+    if (response.ok) {
+      window.location.reload();
+    } else {
+      const error = await response.json();
+      alert('Error: ' + (error.error || 'Failed to delete journey'));
+    }
+  } catch (error) {
+    console.error('Error deleting journey:', error);
+    alert('Failed to delete journey');
+  }
+}
+</script>
+
+<%- include('../../partials/admin-footer') %>
