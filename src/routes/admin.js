@@ -370,7 +370,7 @@ router.post('/api/content', requireAdmin, async (req, res) => {
     const { Content } = require('../models');
     const { 
       type, title, content, biblePassage, youtubeId, theme, season, tags, isActive,
-      duration_minutes, artist, image_url, video_url, instructions, prompts, metadata 
+      duration_minutes, artist, image_url, video_url, audio_url, instructions, prompts, metadata 
     } = req.body;
     
     const contentData = {
@@ -387,6 +387,7 @@ router.post('/api/content', requireAdmin, async (req, res) => {
       artist,
       image_url,
       video_url,
+      audio_url,
       instructions,
       prompts,
       metadata: metadata || {}
@@ -413,7 +414,7 @@ router.put('/api/content/:id', requireAdmin, async (req, res) => {
     const { id } = req.params;
     const { 
       type, title, content, biblePassage, youtubeId, theme, season, tags, isActive,
-      duration_minutes, artist, image_url, video_url, instructions, prompts, metadata
+      duration_minutes, artist, image_url, video_url, audio_url, instructions, prompts, metadata
     } = req.body;
     
     const existingContent = await Content.findByPk(id);
@@ -435,6 +436,7 @@ router.put('/api/content/:id', requireAdmin, async (req, res) => {
       artist,
       image_url,
       video_url,
+      audio_url,
       instructions,
       prompts,
       metadata: metadata || existingContent.metadata
