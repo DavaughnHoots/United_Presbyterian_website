@@ -145,14 +145,26 @@
             <button class="tab-btn active" onclick="switchContentTab('bible')">
               <i class="fas fa-bible"></i> Bible Verse
             </button>
+            <button class="tab-btn" onclick="switchContentTab('scripture_reading')">
+              <i class="fas fa-book-open"></i> Scripture Reading
+            </button>
             <button class="tab-btn" onclick="switchContentTab('prayer')">
               <i class="fas fa-praying-hands"></i> Prayer
             </button>
             <button class="tab-btn" onclick="switchContentTab('hymn')">
               <i class="fas fa-music"></i> Hymn
             </button>
-            <button class="tab-btn" onclick="switchContentTab('creed')">
-              <i class="fas fa-scroll"></i> Creed
+            <button class="tab-btn" onclick="switchContentTab('artwork')">
+              <i class="fas fa-image"></i> Artwork
+            </button>
+            <button class="tab-btn" onclick="switchContentTab('video')">
+              <i class="fas fa-video"></i> Video
+            </button>
+            <button class="tab-btn" onclick="switchContentTab('journaling')">
+              <i class="fas fa-pencil-alt"></i> Journaling
+            </button>
+            <button class="tab-btn" onclick="switchContentTab('guided_prayer')">
+              <i class="fas fa-headphones"></i> Guided Prayer
             </button>
             <button class="tab-btn" onclick="switchContentTab('reflection')">
               <i class="fas fa-pen"></i> Reflection
@@ -212,6 +224,111 @@
           <div id="creedTab" class="tab-content" style="display: none;">
             <div class="content-list" id="creedList">
               <!-- Standard creeds will be loaded here -->
+            </div>
+          </div>
+          
+          <!-- Scripture Reading Tab (Extended passage) -->
+          <div id="scripture_readingTab" class="tab-content" style="display: none;">
+            <div class="form-group">
+              <label>Scripture Passage Reference</label>
+              <input type="text" id="scriptureReference" class="form-control" 
+                     placeholder="e.g., Matthew 8:23-27">
+            </div>
+            <div class="form-group">
+              <label>Context/Introduction</label>
+              <textarea id="scriptureContext" class="form-control" rows="3"
+                        placeholder="Brief context for this passage..."></textarea>
+            </div>
+            <div class="form-group">
+              <label>Scripture Text</label>
+              <textarea id="scriptureText" class="form-control" rows="6"
+                        placeholder="Paste the full scripture text here..."></textarea>
+            </div>
+          </div>
+          
+          <!-- Artwork Tab -->
+          <div id="artworkTab" class="tab-content" style="display: none;">
+            <div class="form-group">
+              <label>Artwork Title</label>
+              <input type="text" id="artworkTitle" class="form-control" 
+                     placeholder='e.g., "The Storm on the Sea of Galilee" by Rembrandt'>
+            </div>
+            <div class="form-group">
+              <label>Image URL</label>
+              <input type="url" id="artworkUrl" class="form-control" 
+                     placeholder="https://example.com/image.jpg" onchange="previewArtwork()">
+            </div>
+            <div class="form-group">
+              <label>Reflection on Artwork</label>
+              <textarea id="artworkReflection" class="form-control" rows="4"
+                        placeholder="How does this artwork connect to today's theme?"></textarea>
+            </div>
+            <div id="artworkPreview" class="media-preview"></div>
+          </div>
+          
+          <!-- Video Tab -->
+          <div id="videoTab" class="tab-content" style="display: none;">
+            <div class="form-group">
+              <label>Video Title</label>
+              <input type="text" id="videoTitle" class="form-control" 
+                     placeholder="e.g., 5-minute guided breathing prayer">
+            </div>
+            <div class="form-group">
+              <label>Video URL (YouTube, Vimeo, etc.)</label>
+              <input type="url" id="videoUrl" class="form-control" 
+                     placeholder="https://youtube.com/watch?v=..." onchange="previewVideo()">
+            </div>
+            <div class="form-group">
+              <label>Description</label>
+              <textarea id="videoDescription" class="form-control" rows="3"
+                        placeholder="Brief description of the video content..."></textarea>
+            </div>
+            <div id="videoPreview" class="media-preview"></div>
+          </div>
+          
+          <!-- Journaling Prompt Tab -->
+          <div id="journalingTab" class="tab-content" style="display: none;">
+            <div class="form-group">
+              <label>Journaling Theme</label>
+              <input type="text" id="journalTheme" class="form-control" 
+                     placeholder="e.g., Facing Life's Storms">
+            </div>
+            <div class="form-group">
+              <label>Main Prompt</label>
+              <textarea id="journalPrompt" class="form-control" rows="3"
+                        placeholder='e.g., "What storms are you facing today?"'></textarea>
+            </div>
+            <div class="form-group">
+              <label>Guiding Questions (optional)</label>
+              <textarea id="journalQuestions" class="form-control" rows="4"
+                        placeholder="Additional questions to guide reflection..."></textarea>
+            </div>
+          </div>
+          
+          <!-- Guided Prayer Tab -->
+          <div id="guided_prayerTab" class="tab-content" style="display: none;">
+            <div class="form-group">
+              <label>Prayer Title</label>
+              <input type="text" id="guidedPrayerTitle" class="form-control" 
+                     placeholder="e.g., Evening Prayer for Peace">
+            </div>
+            <div class="form-group">
+              <label>Type</label>
+              <select id="guidedPrayerType" class="form-control">
+                <option value="audio">Audio Recording</option>
+                <option value="video">Video Guide</option>
+                <option value="text">Written Prayer</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Media URL (if audio/video)</label>
+              <input type="url" id="guidedPrayerUrl" class="form-control" 
+                     placeholder="https://example.com/prayer.mp3">
+            </div>
+            <div class="form-group">
+              <label>Prayer Text/Description</label>
+              <textarea id="guidedPrayerText" class="form-control" rows="6"
+                        placeholder="Traditional Presbyterian prayer for peace..."></textarea>
             </div>
           </div>
           
@@ -430,6 +547,7 @@
   margin-bottom: 1.5rem;
   border-bottom: 2px solid #e0e0e0;
   padding-bottom: 0;
+  flex-wrap: wrap;
 }
 
 .tab-btn {
@@ -503,6 +621,37 @@
   margin-top: 1.5rem;
   padding-top: 1.5rem;
   border-top: 1px solid #e0e0e0;
+}
+
+.media-preview {
+  margin-top: 1rem;
+  padding: 1rem;
+  background: #f8f9fa;
+  border-radius: 4px;
+  text-align: center;
+  min-height: 100px;
+}
+
+.media-preview img {
+  max-width: 100%;
+  max-height: 300px;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.media-preview iframe {
+  width: 100%;
+  height: 300px;
+  border-radius: 4px;
+}
+
+.tab-btn {
+  font-size: 0.85rem;
+  padding: 0.5rem 0.75rem;
+}
+
+.tab-btn i {
+  margin-right: 0.25rem;
 }
 </style>
 
@@ -856,8 +1005,8 @@ function loadCreeds() {
 }
 
 function saveSelectedContent() {
+  // Handle custom content types
   if (currentContentTab === 'reflection') {
-    // Handle reflection separately
     const title = document.getElementById('reflectionTitle').value;
     const content = document.getElementById('reflectionContent').value;
     
@@ -872,10 +1021,109 @@ function saveSelectedContent() {
       title: title,
       content: content
     };
+  } else if (currentContentTab === 'scripture_reading') {
+    const reference = document.getElementById('scriptureReference').value;
+    const context = document.getElementById('scriptureContext').value;
+    const text = document.getElementById('scriptureText').value;
+    
+    if (!reference || !text) {
+      alert('Please enter scripture reference and text');
+      return;
+    }
+    
+    selectedContent = {
+      type: 'scripture_reading',
+      id: 'custom_' + Date.now(),
+      title: reference,
+      metadata: {
+        reference: reference,
+        context: context,
+        text: text
+      }
+    };
+  } else if (currentContentTab === 'artwork') {
+    const title = document.getElementById('artworkTitle').value;
+    const url = document.getElementById('artworkUrl').value;
+    const reflection = document.getElementById('artworkReflection').value;
+    
+    if (!title || !url) {
+      alert('Please enter artwork title and image URL');
+      return;
+    }
+    
+    selectedContent = {
+      type: 'artwork',
+      id: 'custom_' + Date.now(),
+      title: title,
+      metadata: {
+        imageUrl: url,
+        reflection: reflection
+      }
+    };
+  } else if (currentContentTab === 'video') {
+    const title = document.getElementById('videoTitle').value;
+    const url = document.getElementById('videoUrl').value;
+    const description = document.getElementById('videoDescription').value;
+    
+    if (!title || !url) {
+      alert('Please enter video title and URL');
+      return;
+    }
+    
+    selectedContent = {
+      type: 'video',
+      id: 'custom_' + Date.now(),
+      title: title,
+      metadata: {
+        videoUrl: url,
+        embedUrl: getVideoEmbedUrl(url),
+        description: description
+      }
+    };
+  } else if (currentContentTab === 'journaling') {
+    const theme = document.getElementById('journalTheme').value;
+    const prompt = document.getElementById('journalPrompt').value;
+    const questions = document.getElementById('journalQuestions').value;
+    
+    if (!theme || !prompt) {
+      alert('Please enter journaling theme and main prompt');
+      return;
+    }
+    
+    selectedContent = {
+      type: 'journaling_prompt',
+      id: 'custom_' + Date.now(),
+      title: theme,
+      metadata: {
+        prompt: prompt,
+        questions: questions
+      }
+    };
+  } else if (currentContentTab === 'guided_prayer') {
+    const title = document.getElementById('guidedPrayerTitle').value;
+    const type = document.getElementById('guidedPrayerType').value;
+    const url = document.getElementById('guidedPrayerUrl').value;
+    const text = document.getElementById('guidedPrayerText').value;
+    
+    if (!title || !text) {
+      alert('Please enter prayer title and text');
+      return;
+    }
+    
+    selectedContent = {
+      type: 'guided_prayer',
+      id: 'custom_' + Date.now(),
+      title: title,
+      metadata: {
+        prayerType: type,
+        mediaUrl: url,
+        text: text
+      }
+    };
   }
   
   if (!selectedContent) {
-    alert('Please select content to add');
+    alert('Please select or enter content to add');
     return;
   }
   
@@ -908,6 +1156,50 @@ function removeContentItem(index) {
     // Refresh display
     editDay(dayId);
   }
+}
+
+// Preview functions
+function previewArtwork() {
+  const url = document.getElementById('artworkUrl').value;
+  const preview = document.getElementById('artworkPreview');
+  
+  if (url) {
+    preview.innerHTML = `<img src="${url}" alt="Artwork preview" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22200%22%3E%3Crect width=%22200%22 height=%22200%22 fill=%22%23ddd%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 dy=%22.3em%22 fill=%22%23999%22%3EImage not found%3C/text%3E%3C/svg%3E'">`;
+  } else {
+    preview.innerHTML = '';
+  }
+}
+
+function previewVideo() {
+  const url = document.getElementById('videoUrl').value;
+  const preview = document.getElementById('videoPreview');
+  
+  if (url) {
+    const embedUrl = getVideoEmbedUrl(url);
+    if (embedUrl) {
+      preview.innerHTML = `<iframe src="${embedUrl}" frameborder="0" allowfullscreen></iframe>`;
+    } else {
+      preview.innerHTML = '<p class="text-muted">Video preview not available. URL will be saved.</p>';
+    }
+  } else {
+    preview.innerHTML = '';
+  }
+}
+
+function getVideoEmbedUrl(url) {
+  // YouTube
+  const youtubeMatch = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\n?#]+)/);
+  if (youtubeMatch) {
+    return `https://www.youtube.com/embed/${youtubeMatch[1]}`;
+  }
+  
+  // Vimeo
+  const vimeoMatch = url.match(/vimeo\.com\/(\d+)/);
+  if (vimeoMatch) {
+    return `https://player.vimeo.com/video/${vimeoMatch[1]}`;
+  }
+  
+  return null;
 }
 
 // Close modal when clicking outside

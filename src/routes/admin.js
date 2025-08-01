@@ -1220,20 +1220,24 @@ router.post('/api/journeys/:journeyId/days', requireAdmin, async (req, res) => {
         const content = contents[i];
         
         // Handle different content storage formats
-        if (content.type === 'reflection' && content.id === 'custom') {
-          // Store custom reflection in metadata
+        const customTypes = ['reflection', 'scripture_reading', 'artwork', 'video', 'journaling_prompt', 'guided_prayer'];
+        
+        if (customTypes.includes(content.type) && (content.id === 'custom' || content.id.startsWith('custom_'))) {
+          // Store custom content with full metadata
           await JourneyContent.create({
             journey_day_id: journeyDay.id,
             content_type: content.type,
-            content_id: `reflection_${Date.now()}_${i}`,
+            content_id: content.id.startsWith('custom_') ? content.id : `${content.type}_${Date.now()}_${i}`,
             order_index: i,
             duration_minutes: content.duration_minutes || 5,
             metadata: {
               title: content.title,
-              content: content.content
+              content: content.content,
+              ...content.metadata
             }
           });
         } else {
+          // Standard content types (bible verses, existing prayers, hymns, creeds)
           await JourneyContent.create({
             journey_day_id: journeyDay.id,
             content_type: content.type || content.content_type,
@@ -1241,7 +1245,8 @@ router.post('/api/journeys/:journeyId/days', requireAdmin, async (req, res) => {
             order_index: i,
             duration_minutes: content.duration_minutes || content.duration || 5,
             metadata: {
-              title: content.title
+              title: content.title,
+              preview: content.preview
             }
           });
         }

@@ -14,7 +14,19 @@ module.exports = (sequelize, DataTypes) => {
       }
     },
     content_type: {
-      type: DataTypes.ENUM('bible_verse', 'prayer', 'hymn', 'creed', 'reflection'),
+      type: DataTypes.ENUM(
+        'bible_verse', 
+        'prayer', 
+        'hymn', 
+        'creed', 
+        'reflection',
+        'scripture_reading',
+        'artwork',
+        'video',
+        'journaling_prompt',
+        'guided_prayer',
+        'breathing_exercise'
+      ),
       allowNull: false
     },
     content_id: {
@@ -25,6 +37,11 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       allowNull: false,
       defaultValue: 0
+    },
+    duration_minutes: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      defaultValue: 5
     },
     metadata: {
       type: DataTypes.JSONB,
