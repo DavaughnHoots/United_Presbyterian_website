@@ -76,34 +76,33 @@ module.exports = (sequelize, DataTypes) => {
     type: DataTypes.STRING,
     defaultValue: 'worship'
   },
-  // Temporarily commented out until migration runs on production
-  // categories: {
-  //   type: DataTypes.JSON,
-  //   defaultValue: []
-  // },
+  categories: {
+    type: DataTypes.JSON,
+    defaultValue: []
+  },
   color: {
     type: DataTypes.STRING,
     defaultValue: '#87CEEB'
   },
-  // slug: {
-  //   type: DataTypes.STRING,
-  //   allowNull: true,
-  //   unique: true
-  // },
-  // externalUrl: {
-  //   type: DataTypes.STRING,
-  //   allowNull: true
-  // },
-  // source: {
-  //   type: DataTypes.STRING,
-  //   defaultValue: 'user',
-  //   allowNull: true
-  // },
-  // importId: {
-  //   type: DataTypes.STRING,
-  //   allowNull: true,
-  //   unique: true
-  // },
+  slug: {
+    type: DataTypes.STRING,
+    allowNull: true,
+    unique: true
+  },
+  externalUrl: {
+    type: DataTypes.STRING,
+    allowNull: true
+  },
+  source: {
+    type: DataTypes.STRING,
+    defaultValue: 'user',
+    allowNull: true
+  },
+  importId: {
+    type: DataTypes.STRING,
+    allowNull: true,
+    unique: true
+  },
   isPublished: {
     type: DataTypes.BOOLEAN,
     defaultValue: true
