@@ -1,0 +1,333 @@
+
+<div class="max-w-7xl mx-auto px-4 py-8">
+<div class="journey-preview">
+  <div class="preview-header">
+    <h1>Preview: <%= journey.title %></h1>
+    <div class="header-actions">
+      <a href="/admin/journeys/edit/<%= journey.id %>" class="btn btn-primary">
+        <i class="fas fa-edit"></i> Edit Journey
+      </a>
+      <button class="btn btn-secondary" onclick="window.close()">
+        <i class="fas fa-times"></i> Close Preview
+      </button>
+    </div>
+  </div>
+
+  <div class="journey-info">
+    <h2><%= journey.title %></h2>
+    <p class="journey-description"><%= journey.description %></p>
+    <div class="journey-meta">
+      <span class="badge badge-info"><%= journey.duration_days %> Days</span>
+      <span class="badge badge-secondary"><%= journey.theme %></span>
+      <span class="badge <%= journey.is_published ? 'badge-success' : 'badge-warning' %>">
+        <%= journey.is_published ? 'Published' : 'Draft' %>
+      </span>
+    </div>
+  </div>
+
+  <div class="journey-path-container">
+    <h2>Journey Path</h2>
+    <p class="text-muted">This is how users will see the journey path</p>
+    
+    <div id="journeyPath" class="journey-path">
+      <svg id="pathSvg" width="100%" height="600">
+        <defs>
+          <pattern id="gridPattern" width="20" height="20" patternUnits="userSpaceOnUse">
+            <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#f0f0f0" stroke-width="1"/>
+          </pattern>
+        </defs>
+        <rect width="100%" height="100%" fill="url(#gridPattern)" />
+        <g id="pathGroup" transform="translate(0,0) scale(1)">
+          <!-- Path and nodes will be drawn here -->
+        </g>
+      </svg>
+    </div>
+  </div>
+
+</div>
+
+<style>
+.journey-preview {
+  padding: 1rem;
+}
+
+.preview-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.header-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.journey-info {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin-bottom: 2rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.journey-path-container {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.path-controls {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.journey-path {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Journey path styles */
+.path-line {
+  fill: none;
+  stroke: #87CEEB;
+  stroke-width: 4;
+  stroke-linecap: round;
+}
+
+.path-node {
+  transition: all 0.3s ease;
+}
+
+.node-circle {
+  fill: white;
+  stroke: #87CEEB;
+  stroke-width: 3;
+}
+
+.node-circle.completed {
+  fill: #28a745;
+}
+
+.node-circle.current {
+  fill: #ffc107;
+  stroke: #ffc107;
+}
+
+.node-number {
+  fill: #333;
+  font-weight: bold;
+  font-size: 14px;
+  text-anchor: middle;
+  dominant-baseline: central;
+  pointer-events: none;
+}
+
+/* Modal styles */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.5);
+}
+
+.modal-content {
+  background-color: white;
+  margin: 5% auto;
+  padding: 0;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 600px;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.modal-header {
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid #ddd;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-body {
+  padding: 1.5rem;
+}
+
+.modal-footer {
+  padding: 1rem 1.5rem;
+  border-top: 1px solid #ddd;
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #666;
+}
+
+.day-contents {
+  margin: 1rem 0;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 1rem;
+  min-height: 100px;
+}
+
+.content-item {
+  background: #f8f9fa;
+  padding: 0.75rem;
+  margin-bottom: 0.5rem;
+  border-radius: 4px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.content-item:last-child {
+  margin-bottom: 0;
+}
+
+.journey-description {
+  font-size: 1.1rem;
+  color: #666;
+  margin: 1rem 0;
+}
+
+.journey-meta {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+}
+
+.badge {
+  padding: 0.25rem 0.75rem;
+  border-radius: 4px;
+  font-size: 0.875rem;
+}
+
+.badge-info {
+  background: #17a2b8;
+  color: white;
+}
+
+.badge-secondary {
+  background: #6c757d;
+  color: white;
+}
+
+.badge-success {
+  background: #28a745;
+  color: white;
+}
+
+.badge-warning {
+  background: #ffc107;
+  color: #333;
+}
+</style>
+
+<script>
+// Journey data
+const journeyData = {
+  id: <%= journey.id %>,
+  title: '<%= journey.title %>',
+  description: '<%= journey.description %>',
+  duration_days: <%= journey.duration_days %>,
+  theme: '<%= journey.theme %>',
+  days: <%= JSON.stringify(journeyDays) %>
+};
+
+// Initialize on load
+document.addEventListener('DOMContentLoaded', function() {
+  const svg = document.getElementById('pathSvg');
+  const pathGroup = document.getElementById('pathGroup');
+  
+  drawJourneyPath();
+});
+
+// Draw the journey path
+function drawJourneyPath() {
+  const days = journeyData.days;
+  const nodeRadius = 25;
+  const nodeSpacing = 100;
+  const pathHeight = 500;
+  const pathWidth = days.length * nodeSpacing + 200;
+  
+  // Clear existing content
+  pathGroup.innerHTML = '';
+  
+  // Create winding path
+  let pathData = 'M 100 250';
+  const nodes = [];
+  
+  for (let i = 0; i < days.length; i++) {
+    const x = 100 + (i * nodeSpacing);
+    // Create a winding path with sine wave
+    const y = 250 + Math.sin(i * 0.5) * 100;
+    
+    if (i === 0) {
+      pathData = `M ${x} ${y}`;
+    } else {
+      // Create smooth curve between nodes
+      const prevX = nodes[i-1].x;
+      const prevY = nodes[i-1].y;
+      const midX = (prevX + x) / 2;
+      pathData += ` Q ${midX} ${prevY} ${x} ${y}`;
+    }
+    
+    nodes.push({ x, y, day: days[i] });
+  }
+  
+  // Draw the path
+  const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+  path.setAttribute('d', pathData);
+  path.setAttribute('class', 'path-line');
+  pathGroup.appendChild(path);
+  
+  // Draw nodes
+  nodes.forEach((node, index) => {
+    const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+    g.setAttribute('class', 'path-node');
+    g.setAttribute('transform', `translate(${node.x}, ${node.y})`);
+    g.setAttribute('data-day', index + 1);
+    
+    // Node circle
+    const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    circle.setAttribute('r', nodeRadius);
+    circle.setAttribute('class', 'node-circle');
+    
+    // Add status classes
+    if (node.day.contents && node.day.contents.length > 0) {
+      circle.classList.add('completed');
+    }
+    
+    // Node number
+    const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    text.setAttribute('class', 'node-number');
+    text.textContent = index + 1;
+    
+    g.appendChild(circle);
+    g.appendChild(text);
+    pathGroup.appendChild(g);
+  });
+  
+  // Update SVG viewBox
+  svg.setAttribute('viewBox', `0 0 ${pathWidth} ${pathHeight}`);
+}
+
+</script>
+</div>
+

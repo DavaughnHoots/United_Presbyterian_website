@@ -1078,25 +1078,10 @@ router.get('/journeys', requireAdmin, async (req, res) => {
   }
 });
 
-// Journey builder interface - new journey
-router.get('/journeys/builder', requireAdmin, async (req, res) => {
+// Journey editor interface - edit existing journey
+router.get('/journeys/edit/:id', requireAdmin, async (req, res) => {
   try {
-    res.render('pages/admin/journey-builder', {
-      title: 'Create New Journey',
-      user: req.session.user,
-      journey: null,
-      journeyDays: []
-    });
-  } catch (error) {
-    console.error('Error rendering journey builder:', error);
-    res.status(500).send('Internal server error');
-  }
-});
-
-// Journey builder interface - edit existing journey
-router.get('/journeys/builder/:id', requireAdmin, async (req, res) => {
-  try {
-    const { Journey, JourneyDay, JourneyContent, DailyContent, BibleReading, Prayer } = require('../models');
+    const { Journey, JourneyDay, JourneyContent } = require('../models');
     
     const journey = await Journey.findByPk(req.params.id);
     if (!journey) {
@@ -1107,20 +1092,50 @@ router.get('/journeys/builder/:id', requireAdmin, async (req, res) => {
       where: { journey_id: journey.id },
       include: [{
         model: JourneyContent,
-        as: 'contents',
-        include: ['dailyContent', 'bibleReading', 'prayer']
+        as: 'contents'
       }],
       order: [['day_number', 'ASC']]
     });
     
-    res.render('pages/admin/journey-builder', {
+    res.render('pages/admin/journey-editor', {
       title: `Edit Journey: ${journey.title}`,
       user: req.session.user,
       journey,
       journeyDays
     });
   } catch (error) {
-    console.error('Error rendering journey builder:', error);
+    console.error('Error rendering journey editor:', error);
+    res.status(500).send('Internal server error');
+  }
+});
+
+// Journey preview interface
+router.get('/journeys/preview/:id', requireAdmin, async (req, res) => {
+  try {
+    const { Journey, JourneyDay, JourneyContent } = require('../models');
+    
+    const journey = await Journey.findByPk(req.params.id);
+    if (!journey) {
+      return res.status(404).send('Journey not found');
+    }
+    
+    const journeyDays = await JourneyDay.findAll({
+      where: { journey_id: journey.id },
+      include: [{
+        model: JourneyContent,
+        as: 'contents'
+      }],
+      order: [['day_number', 'ASC']]
+    });
+    
+    res.render('pages/admin/journey-preview', {
+      title: `Preview: ${journey.title}`,
+      user: req.session.user,
+      journey,
+      journeyDays
+    });
+  } catch (error) {
+    console.error('Error rendering journey preview:', error);
     res.status(500).send('Internal server error');
   }
 });
@@ -1139,11 +1154,26 @@ router.post('/api/journeys', requireAdmin, async (req, res) => {
       journey = await Journey.create({
         title,
         description,
-        duration_days: duration_days || 30,
+        duration_days: duration_days || 3,
         theme: theme || 'general',
         is_published: is_published || false,
         created_by: req.session.user.id
       });
+      
+      // Create 3 default days for new journey
+      const { JourneyDay } = require('../models');
+      const defaultDays = [
+        { day_number: 1, title: 'Beginning Your Journey', description: 'Welcome to your spiritual journey. Today we start with reflection and preparation.' },
+        { day_number: 2, title: 'Going Deeper', description: 'Building on yesterday, we explore deeper truths and practices.' },
+        { day_number: 3, title: 'Moving Forward', description: 'Applying what we\'ve learned and looking ahead to continued growth.' }
+      ];
+      
+      for (const day of defaultDays) {
+        await JourneyDay.create({
+          journey_id: journey.id,
+          ...day
+        });
+      }
     }
     
     res.json({ success: true, journey });
@@ -1200,6 +1230,41 @@ router.post('/api/journeys/:journeyId/days', requireAdmin, async (req, res) => {
   } catch (error) {
     console.error('Error saving journey day:', error);
     res.status(500).json({ error: 'Failed to save journey day' });
+  }
+});
+
+// Delete journey day
+router.delete('/api/journeys/:journeyId/days/:dayId', requireAdmin, async (req, res) => {
+  try {
+    const { JourneyDay } = require('../models');
+    const { journeyId, dayId } = req.params;
+    
+    const day = await JourneyDay.findOne({
+      where: { id: dayId, journey_id: journeyId }
+    });
+    
+    if (!day) {
+      return res.status(404).json({ error: 'Day not found' });
+    }
+    
+    await day.destroy();
+    
+    // Renumber remaining days
+    const remainingDays = await JourneyDay.findAll({
+      where: { journey_id: journeyId },
+      order: [['day_number', 'ASC']]
+    });
+    
+    for (let i = 0; i < remainingDays.length; i++) {
+      if (remainingDays[i].day_number !== i + 1) {
+        await remainingDays[i].update({ day_number: i + 1 });
+      }
+    }
+    
+    res.json({ success: true });
+  } catch (error) {
+    console.error('Error deleting journey day:', error);
+    res.status(500).json({ error: 'Failed to delete day' });
   }
 });
 
