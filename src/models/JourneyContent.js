@@ -71,6 +71,12 @@ module.exports = (sequelize, DataTypes) => {
 
   // Helper method to get the actual content
   JourneyContent.prototype.getContent = async function() {
+    // Check if this is custom content stored inline
+    if (this.content_id && (this.content_id === 'custom' || this.content_id.startsWith('custom_'))) {
+      // Return metadata as the content for custom items
+      return this.metadata || {};
+    }
+    
     if (this.content_type === 'bible_verse') {
       // Parse verse reference (e.g., "1001001" or "1001001-1001005")
       const verses = this.content_id.split('-');
@@ -80,8 +86,12 @@ module.exports = (sequelize, DataTypes) => {
       // Check if the parsed IDs are valid numbers
       if (isNaN(startId) || isNaN(endId)) {
         console.error(`Invalid Bible verse IDs: ${this.content_id}`);
-        // Try to fetch as regular content instead
-        return await sequelize.models.Content.findByPk(this.content_id);
+        // Check if it's a UUID (Content table reference)
+        const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+        if (uuidRegex.test(this.content_id)) {
+          return await sequelize.models.Content.findByPk(this.content_id);
+        }
+        return null;
       }
       
       return await sequelize.models.BibleVerse.findAll({
@@ -97,8 +107,13 @@ module.exports = (sequelize, DataTypes) => {
         order: [['id', 'ASC']]
       });
     } else {
-      // For all other content types (including scripture_reading), fetch from the Content table
-      return await sequelize.models.Content.findByPk(this.content_id);
+      // For all other content types, check if it's a valid UUID first
+      const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+      if (uuidRegex.test(this.content_id)) {
+        return await sequelize.models.Content.findByPk(this.content_id);
+      }
+      // Otherwise return null or metadata
+      return this.metadata || null;
     }
   };
 
