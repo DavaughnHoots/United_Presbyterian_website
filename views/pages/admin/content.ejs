@@ -447,13 +447,13 @@ function editContent(id) {
     document.getElementById('contentTags').value = content.tags ? content.tags.join(', ') : '';
     document.getElementById('isActive').checked = content.isActive;
     
-    // Set new multimedia fields (temporarily commented out)
-    // document.getElementById('imageUrl').value = content.image_url || '';
-    // document.getElementById('videoUrl').value = content.video_url || '';
-    // document.getElementById('artist').value = content.artist || '';
-    // document.getElementById('instructions').value = content.instructions || '';
-    // document.getElementById('prompts').value = content.prompts ? content.prompts.join('\n') : '';
-    // document.getElementById('duration').value = content.duration_minutes || 5;
+    // Set new multimedia fields
+    document.getElementById('imageUrl').value = content.image_url || '';
+    document.getElementById('videoUrl').value = content.video_url || '';
+    document.getElementById('artist').value = content.artist || '';
+    document.getElementById('instructions').value = content.instructions || '';
+    document.getElementById('prompts').value = content.prompts ? content.prompts.join('\n') : '';
+    document.getElementById('duration').value = content.duration_minutes || 5;
     
     updateFormFields();
     document.getElementById('contentModal').classList.remove('hidden');
@@ -472,14 +472,13 @@ async function saveContent(event) {
         theme: formData.get('theme'),
         season: formData.get('season'),
         tags: formData.get('tags').split(',').map(t => t.trim()).filter(t => t),
-        isActive: formData.has('isActive')
-        // New fields (temporarily commented out)
-        // image_url: formData.get('image_url'),
-        // video_url: formData.get('video_url'),
-        // artist: formData.get('artist'),
-        // instructions: formData.get('instructions'),
-        // prompts: formData.get('prompts') ? formData.get('prompts').split('\n').filter(p => p.trim()) : [],
-        // duration_minutes: parseInt(formData.get('duration_minutes')) || 5
+        isActive: formData.has('isActive'),
+        image_url: formData.get('image_url'),
+        video_url: formData.get('video_url'),
+        artist: formData.get('artist'),
+        instructions: formData.get('instructions'),
+        prompts: formData.get('prompts') ? formData.get('prompts').split('\n').filter(p => p.trim()) : [],
+        duration_minutes: parseInt(formData.get('duration_minutes')) || 5
     };
     
     const id = formData.get('id');

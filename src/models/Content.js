@@ -10,17 +10,16 @@ module.exports = (sequelize, DataTypes) => {
         'reading', 
         'prayer', 
         'music', 
-        'question'
-        // Temporarily commented out until migrations are run
-        // 'hymn',
-        // 'creed',
-        // 'reflection',
-        // 'scripture_reading',
-        // 'artwork',
-        // 'video',
-        // 'journaling_prompt',
-        // 'guided_prayer',
-        // 'breathing_exercise'
+        'question',
+        'hymn',
+        'creed',
+        'reflection',
+        'scripture_reading',
+        'artwork',
+        'video',
+        'journaling_prompt',
+        'guided_prayer',
+        'breathing_exercise'
       ),
       allowNull: false
     },
@@ -70,34 +69,33 @@ module.exports = (sequelize, DataTypes) => {
     metadata: {
       type: DataTypes.JSONB,
       defaultValue: {}
+    },
+    duration_minutes: {
+      type: DataTypes.INTEGER,
+      defaultValue: 5,
+      allowNull: false
+    },
+    artist: {
+      type: DataTypes.STRING,
+      allowNull: true
+    },
+    image_url: {
+      type: DataTypes.STRING,
+      allowNull: true
+    },
+    video_url: {
+      type: DataTypes.STRING,
+      allowNull: true
+    },
+    instructions: {
+      type: DataTypes.TEXT,
+      allowNull: true
+    },
+    prompts: {
+      type: DataTypes.ARRAY(DataTypes.TEXT),
+      defaultValue: [],
+      allowNull: true
     }
-    // Temporarily commented out until migrations are run
-    // duration_minutes: {
-    //   type: DataTypes.INTEGER,
-    //   defaultValue: 5,
-    //   allowNull: false
-    // },
-    // artist: {
-    //   type: DataTypes.STRING,
-    //   allowNull: true
-    // },
-    // image_url: {
-    //   type: DataTypes.STRING,
-    //   allowNull: true
-    // },
-    // video_url: {
-    //   type: DataTypes.STRING,
-    //   allowNull: true
-    // },
-    // instructions: {
-    //   type: DataTypes.TEXT,
-    //   allowNull: true
-    // },
-    // prompts: {
-    //   type: DataTypes.ARRAY(DataTypes.TEXT),
-    //   defaultValue: [],
-    //   allowNull: true
-    // }
   }, {
     tableName: 'content',
     timestamps: true,
