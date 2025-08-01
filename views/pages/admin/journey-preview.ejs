@@ -242,12 +242,12 @@
 <script>
 // Journey data
 const journeyData = {
-  id: <%= journey.id %>,
+  id: '<%= journey.id %>',
   title: '<%= journey.title %>',
   description: '<%= journey.description %>',
   duration_days: <%= journey.duration_days %>,
   theme: '<%= journey.theme %>',
-  days: <%= JSON.stringify(journeyDays) %>
+  days: <%- JSON.stringify(journeyDays) %>
 };
 
 // Initialize on load

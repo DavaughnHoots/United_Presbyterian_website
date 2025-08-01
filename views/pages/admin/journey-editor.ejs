@@ -130,6 +130,117 @@
       </div>
     </div>
   </div>
+  
+  <!-- Content Picker Modal -->
+  <div id="contentPickerModal" class="modal" style="display: none;">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3>Select Content</h3>
+          <button type="button" class="close" onclick="closeContentPicker()">&times;</button>
+        </div>
+        <div class="modal-body">
+          <!-- Content Type Tabs -->
+          <div class="content-tabs">
+            <button class="tab-btn active" onclick="switchContentTab('bible')">
+              <i class="fas fa-bible"></i> Bible Verse
+            </button>
+            <button class="tab-btn" onclick="switchContentTab('prayer')">
+              <i class="fas fa-praying-hands"></i> Prayer
+            </button>
+            <button class="tab-btn" onclick="switchContentTab('hymn')">
+              <i class="fas fa-music"></i> Hymn
+            </button>
+            <button class="tab-btn" onclick="switchContentTab('creed')">
+              <i class="fas fa-scroll"></i> Creed
+            </button>
+            <button class="tab-btn" onclick="switchContentTab('reflection')">
+              <i class="fas fa-pen"></i> Reflection
+            </button>
+          </div>
+          
+          <!-- Bible Tab Content -->
+          <div id="bibleTab" class="tab-content active">
+            <div class="bible-selector">
+              <div class="form-row">
+                <div class="form-group col-md-4">
+                  <label>Book</label>
+                  <select id="bibleBook" class="form-control" onchange="loadChapters()">
+                    <option value="">Select Book...</option>
+                  </select>
+                </div>
+                <div class="form-group col-md-4">
+                  <label>Chapter</label>
+                  <select id="bibleChapter" class="form-control" onchange="loadVerses()" disabled>
+                    <option value="">Select Chapter...</option>
+                  </select>
+                </div>
+                <div class="form-group col-md-4">
+                  <label>Verse(s)</label>
+                  <input type="text" id="bibleVerses" class="form-control" placeholder="e.g., 1 or 1-5" disabled>
+                </div>
+              </div>
+              <div class="verse-preview" id="versePreview">
+                <p class="text-muted">Select a passage to preview</p>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Prayer Tab Content -->
+          <div id="prayerTab" class="tab-content" style="display: none;">
+            <div class="search-bar">
+              <input type="text" id="prayerSearch" class="form-control" placeholder="Search prayers..." 
+                     onkeyup="searchContent('prayer')">
+            </div>
+            <div class="content-list" id="prayerList">
+              <!-- Prayer items will be loaded here -->
+            </div>
+          </div>
+          
+          <!-- Hymn Tab Content -->
+          <div id="hymnTab" class="tab-content" style="display: none;">
+            <div class="search-bar">
+              <input type="text" id="hymnSearch" class="form-control" placeholder="Search hymns..." 
+                     onkeyup="searchContent('hymn')">
+            </div>
+            <div class="content-list" id="hymnList">
+              <!-- Hymn items will be loaded here -->
+            </div>
+          </div>
+          
+          <!-- Creed Tab Content -->
+          <div id="creedTab" class="tab-content" style="display: none;">
+            <div class="content-list" id="creedList">
+              <!-- Standard creeds will be loaded here -->
+            </div>
+          </div>
+          
+          <!-- Reflection Tab Content -->
+          <div id="reflectionTab" class="tab-content" style="display: none;">
+            <div class="form-group">
+              <label>Reflection Title</label>
+              <input type="text" id="reflectionTitle" class="form-control" placeholder="Enter title...">
+            </div>
+            <div class="form-group">
+              <label>Reflection Content</label>
+              <textarea id="reflectionContent" class="form-control" rows="6" 
+                        placeholder="Write your reflection..."></textarea>
+            </div>
+          </div>
+          
+          <!-- Duration for all content types -->
+          <div class="duration-section">
+            <label>Estimated Duration (minutes)</label>
+            <input type="number" id="contentDuration" class="form-control" min="1" value="5" style="width: 100px;">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="closeContentPicker()">Cancel</button>
+          <button type="button" class="btn btn-primary" onclick="saveSelectedContent()">Add to Day</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <style>
@@ -307,6 +418,92 @@
   cursor: pointer;
   color: #666;
 }
+
+/* Content Picker Styles */
+.modal-lg {
+  max-width: 800px;
+}
+
+.content-tabs {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 2px solid #e0e0e0;
+  padding-bottom: 0;
+}
+
+.tab-btn {
+  background: none;
+  border: none;
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  color: #666;
+  font-size: 0.9rem;
+  border-bottom: 3px solid transparent;
+  transition: all 0.3s ease;
+}
+
+.tab-btn:hover {
+  color: #333;
+}
+
+.tab-btn.active {
+  color: #87CEEB;
+  border-bottom-color: #87CEEB;
+}
+
+.tab-content {
+  min-height: 300px;
+}
+
+.bible-selector .form-row {
+  margin-bottom: 1rem;
+}
+
+.verse-preview {
+  background: #f8f9fa;
+  padding: 1rem;
+  border-radius: 4px;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.search-bar {
+  margin-bottom: 1rem;
+}
+
+.content-list {
+  max-height: 300px;
+  overflow-y: auto;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  padding: 0.5rem;
+}
+
+.content-list-item {
+  padding: 0.75rem;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  margin-bottom: 0.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.content-list-item:hover {
+  background: #f8f9fa;
+  border-color: #87CEEB;
+}
+
+.content-list-item.selected {
+  background: #e3f2fd;
+  border-color: #87CEEB;
+}
+
+.duration-section {
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #e0e0e0;
+}
 </style>
 
 <script>
@@ -375,7 +572,7 @@ function editDay(dayId) {
     contentsDiv.innerHTML = day.contents.map((content, index) => `
       <div class="content-item">
         <div>
-          <strong>${content.content_type}</strong>
+          <strong>${content.type || content.content_type}</strong>: ${content.title}
           <span class="text-muted ml-2">${content.duration_minutes || 5} minutes</span>
         </div>
         <button class="btn btn-sm btn-danger" onclick="removeContentItem(${index})">
@@ -398,10 +595,15 @@ async function saveDayChanges() {
   const dayId = document.getElementById('modalDayId').value;
   const day = journeyDays.find(d => d.id == dayId);
   
+  // Update the day object with new values
+  day.title = document.getElementById('modalDayTitle').value;
+  day.description = document.getElementById('modalDayDescription').value;
+  
   const dayData = {
+    dayId: dayId,
     dayNumber: day.day_number,
-    title: document.getElementById('modalDayTitle').value,
-    description: document.getElementById('modalDayDescription').value,
+    title: day.title,
+    description: day.description,
     contents: day.contents || []
   };
   
@@ -460,19 +662,261 @@ async function deleteDay(dayId, dayNumber) {
   }
 }
 
+// Content picker variables
+let currentDayForContent = null;
+let selectedContent = null;
+let currentContentTab = 'bible';
+
 function addContentItem() {
-  alert('Content selector would open here to choose Bible reading, prayer, reflection, video, etc.');
-  // TODO: Implement content selector
+  const dayId = document.getElementById('modalDayId').value;
+  currentDayForContent = journeyDays.find(d => d.id === dayId);
+  
+  // Reset content picker
+  selectedContent = null;
+  document.getElementById('contentDuration').value = 5;
+  
+  // Load initial data
+  loadBibleBooks();
+  loadCreeds();
+  
+  // Show modal
+  document.getElementById('contentPickerModal').style.display = 'flex';
+}
+
+function closeContentPicker() {
+  document.getElementById('contentPickerModal').style.display = 'none';
+  selectedContent = null;
+}
+
+function switchContentTab(tabName) {
+  currentContentTab = tabName;
+  
+  // Update tab buttons
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.classList.remove('active');
+  });
+  event.target.classList.add('active');
+  
+  // Hide all tab contents
+  document.querySelectorAll('.tab-content').forEach(content => {
+    content.style.display = 'none';
+  });
+  
+  // Show selected tab
+  document.getElementById(tabName + 'Tab').style.display = 'block';
+  
+  // Load content for the tab if needed
+  if (tabName === 'prayer' || tabName === 'hymn') {
+    searchContent(tabName);
+  }
+}
+
+async function loadBibleBooks() {
+  try {
+    const response = await fetch('/admin/api/bible/books');
+    const books = await response.json();
+    
+    const select = document.getElementById('bibleBook');
+    select.innerHTML = '<option value="">Select Book...</option>';
+    
+    books.forEach(book => {
+      const option = document.createElement('option');
+      option.value = book.id;
+      option.textContent = book.name;
+      select.appendChild(option);
+    });
+  } catch (error) {
+    console.error('Error loading Bible books:', error);
+  }
+}
+
+async function loadChapters() {
+  const bookId = document.getElementById('bibleBook').value;
+  if (!bookId) return;
+  
+  try {
+    const response = await fetch(`/admin/api/bible/chapters/${bookId}`);
+    const data = await response.json();
+    
+    const select = document.getElementById('bibleChapter');
+    select.innerHTML = '<option value="">Select Chapter...</option>';
+    select.disabled = false;
+    
+    for (let i = 1; i <= data.chapterCount; i++) {
+      const option = document.createElement('option');
+      option.value = i;
+      option.textContent = `Chapter ${i}`;
+      select.appendChild(option);
+    }
+    
+    // Reset verses
+    document.getElementById('bibleVerses').value = '';
+    document.getElementById('bibleVerses').disabled = true;
+    document.getElementById('versePreview').innerHTML = '<p class="text-muted">Select a passage to preview</p>';
+  } catch (error) {
+    console.error('Error loading chapters:', error);
+  }
+}
+
+async function loadVerses() {
+  const bookId = document.getElementById('bibleBook').value;
+  const chapter = document.getElementById('bibleChapter').value;
+  if (!bookId || !chapter) return;
+  
+  document.getElementById('bibleVerses').disabled = false;
+  document.getElementById('bibleVerses').focus();
+  
+  // Add event listener for verse input
+  document.getElementById('bibleVerses').oninput = loadVersePreview;
+}
+
+async function loadVersePreview() {
+  const bookId = document.getElementById('bibleBook').value;
+  const chapter = document.getElementById('bibleChapter').value;
+  const verseRange = document.getElementById('bibleVerses').value;
+  
+  if (!bookId || !chapter || !verseRange) return;
+  
+  try {
+    const response = await fetch(`/admin/api/bible/verses/${bookId}/${chapter}?verses=${verseRange}`);
+    const data = await response.json();
+    
+    if (data.verses && data.verses.length > 0) {
+      const preview = document.getElementById('versePreview');
+      preview.innerHTML = `
+        <h5>${data.bookName} ${chapter}:${verseRange}</h5>
+        <p>${data.verses.map(v => `<strong>${v.verse}.</strong> ${v.text}`).join(' ')}</p>
+      `;
+      
+      // Store selected content
+      selectedContent = {
+        type: 'bible_verse',
+        id: `${bookId}-${chapter}-${verseRange}`,
+        title: `${data.bookName} ${chapter}:${verseRange}`,
+        preview: data.verses[0].text.substring(0, 100) + '...'
+      };
+    }
+  } catch (error) {
+    console.error('Error loading verse preview:', error);
+  }
+}
+
+async function searchContent(type) {
+  const searchTerm = document.getElementById(type + 'Search')?.value || '';
+  
+  try {
+    const response = await fetch(`/admin/api/content/search?type=${type}&q=${searchTerm}`);
+    const items = await response.json();
+    
+    const listEl = document.getElementById(type + 'List');
+    if (items.length === 0) {
+      listEl.innerHTML = '<p class="text-muted text-center">No items found</p>';
+      return;
+    }
+    
+    listEl.innerHTML = items.map(item => `
+      <div class="content-list-item" onclick="selectContent('${type}', '${item.id}', '${item.title}')">
+        <h5>${item.title}</h5>
+        <p class="text-muted mb-0">${item.preview || item.content?.substring(0, 100) + '...' || ''}</p>
+      </div>
+    `).join('');
+  } catch (error) {
+    console.error('Error searching content:', error);
+  }
+}
+
+function selectContent(type, id, title) {
+  // Update selection UI
+  document.querySelectorAll('.content-list-item').forEach(item => {
+    item.classList.remove('selected');
+  });
+  event.target.closest('.content-list-item').classList.add('selected');
+  
+  // Store selected content
+  selectedContent = {
+    type: type,
+    id: id,
+    title: title
+  };
+}
+
+function loadCreeds() {
+  const creeds = [
+    { id: 'apostles', title: "Apostles' Creed" },
+    { id: 'nicene', title: "Nicene Creed" },
+    { id: 'athanasian', title: "Athanasian Creed" }
+  ];
+  
+  const listEl = document.getElementById('creedList');
+  listEl.innerHTML = creeds.map(creed => `
+    <div class="content-list-item" onclick="selectContent('creed', '${creed.id}', '${creed.title}')">
+      <h5>${creed.title}</h5>
+    </div>
+  `).join('');
+}
+
+function saveSelectedContent() {
+  if (currentContentTab === 'reflection') {
+    // Handle reflection separately
+    const title = document.getElementById('reflectionTitle').value;
+    const content = document.getElementById('reflectionContent').value;
+    
+    if (!title || !content) {
+      alert('Please enter both title and content for the reflection');
+      return;
+    }
+    
+    selectedContent = {
+      type: 'reflection',
+      id: 'custom',
+      title: title,
+      content: content
+    };
+  }
+  
+  if (!selectedContent) {
+    alert('Please select content to add');
+    return;
+  }
+  
+  // Add content to current day
+  const duration = document.getElementById('contentDuration').value;
+  const contentItem = {
+    ...selectedContent,
+    duration_minutes: parseInt(duration),
+    order_index: currentDayForContent.contents ? currentDayForContent.contents.length : 0
+  };
+  
+  if (!currentDayForContent.contents) {
+    currentDayForContent.contents = [];
+  }
+  currentDayForContent.contents.push(contentItem);
+  
+  // Refresh the day modal content display
+  editDay(currentDayForContent.id);
+  
+  // Close content picker
+  closeContentPicker();
 }
 
 function removeContentItem(index) {
-  // TODO: Implement content removal
+  const dayId = document.getElementById('modalDayId').value;
+  const day = journeyDays.find(d => d.id === dayId);
+  
+  if (day && day.contents) {
+    day.contents.splice(index, 1);
+    // Refresh display
+    editDay(dayId);
+  }
 }
 
 // Close modal when clicking outside
 window.onclick = function(event) {
   if (event.target == document.getElementById('dayModal')) {
     closeDayModal();
+  }
+  if (event.target == document.getElementById('contentPickerModal')) {
+    closeContentPicker();
   }
 }
 </script>

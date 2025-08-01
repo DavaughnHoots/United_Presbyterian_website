@@ -1180,22 +1180,32 @@ router.post('/api/journeys/:journeyId/days', requireAdmin, async (req, res) => {
   try {
     const { JourneyDay, JourneyContent } = require('../models');
     const { journeyId } = req.params;
-    const { dayNumber, title, description, contents } = req.body;
+    const { dayId, dayNumber, title, description, contents } = req.body;
     
-    // Create or update journey day
-    let journeyDay = await JourneyDay.findOne({
-      where: { journey_id: journeyId, day_number: dayNumber }
-    });
+    let journeyDay;
     
-    if (journeyDay) {
-      await journeyDay.update({ title, description });
+    if (dayId) {
+      // Update existing day by ID
+      journeyDay = await JourneyDay.findByPk(dayId);
+      if (journeyDay) {
+        await journeyDay.update({ title, description });
+      }
     } else {
-      journeyDay = await JourneyDay.create({
-        journey_id: journeyId,
-        day_number: dayNumber,
-        title,
-        description
+      // Create or update journey day by number
+      journeyDay = await JourneyDay.findOne({
+        where: { journey_id: journeyId, day_number: dayNumber }
       });
+      
+      if (journeyDay) {
+        await journeyDay.update({ title, description });
+      } else {
+        journeyDay = await JourneyDay.create({
+          journey_id: journeyId,
+          day_number: dayNumber,
+          title,
+          description
+        });
+      }
     }
     
     // Handle contents if provided
@@ -1208,13 +1218,33 @@ router.post('/api/journeys/:journeyId/days', requireAdmin, async (req, res) => {
       // Add new contents
       for (let i = 0; i < contents.length; i++) {
         const content = contents[i];
-        await JourneyContent.create({
-          journey_day_id: journeyDay.id,
-          content_type: content.type,
-          content_id: content.id,
-          order_index: i,
-          duration_minutes: content.duration || 5
-        });
+        
+        // Handle different content storage formats
+        if (content.type === 'reflection' && content.id === 'custom') {
+          // Store custom reflection in metadata
+          await JourneyContent.create({
+            journey_day_id: journeyDay.id,
+            content_type: content.type,
+            content_id: `reflection_${Date.now()}_${i}`,
+            order_index: i,
+            duration_minutes: content.duration_minutes || 5,
+            metadata: {
+              title: content.title,
+              content: content.content
+            }
+          });
+        } else {
+          await JourneyContent.create({
+            journey_day_id: journeyDay.id,
+            content_type: content.type || content.content_type,
+            content_id: content.id,
+            order_index: i,
+            duration_minutes: content.duration_minutes || content.duration || 5,
+            metadata: {
+              title: content.title
+            }
+          });
+        }
       }
     }
     
@@ -1257,6 +1287,130 @@ router.delete('/api/journeys/:journeyId/days/:dayId', requireAdmin, async (req, 
   } catch (error) {
     console.error('Error deleting journey day:', error);
     res.status(500).json({ error: 'Failed to delete day' });
+  }
+});
+
+// Bible API endpoints
+router.get('/api/bible/books', requireAdmin, async (req, res) => {
+  try {
+    const { BibleBook } = require('../models');
+    const books = await BibleBook.findAll({
+      order: [['id', 'ASC']]
+    });
+    res.json(books);
+  } catch (error) {
+    console.error('Error fetching Bible books:', error);
+    res.status(500).json({ error: 'Failed to fetch Bible books' });
+  }
+});
+
+router.get('/api/bible/chapters/:bookId', requireAdmin, async (req, res) => {
+  try {
+    const { BibleBook, BibleVerse } = require('../models');
+    const book = await BibleBook.findByPk(req.params.bookId);
+    
+    if (!book) {
+      return res.status(404).json({ error: 'Book not found' });
+    }
+    
+    // Get the max chapter number for this book
+    const maxChapter = await BibleVerse.max('chapter', {
+      where: { book_id: req.params.bookId }
+    });
+    
+    res.json({ 
+      bookName: book.name,
+      chapterCount: maxChapter || 0 
+    });
+  } catch (error) {
+    console.error('Error fetching chapters:', error);
+    res.status(500).json({ error: 'Failed to fetch chapters' });
+  }
+});
+
+router.get('/api/bible/verses/:bookId/:chapter', requireAdmin, async (req, res) => {
+  try {
+    const { BibleBook, BibleVerse } = require('../models');
+    const { bookId, chapter } = req.params;
+    const { verses: verseRange } = req.query;
+    
+    const book = await BibleBook.findByPk(bookId);
+    if (!book) {
+      return res.status(404).json({ error: 'Book not found' });
+    }
+    
+    let whereClause = {
+      book_id: bookId,
+      chapter: parseInt(chapter)
+    };
+    
+    // Handle verse range (e.g., "1-5" or "3")
+    if (verseRange) {
+      if (verseRange.includes('-')) {
+        const [start, end] = verseRange.split('-').map(v => parseInt(v));
+        whereClause.verse = {
+          [require('sequelize').Op.between]: [start, end]
+        };
+      } else {
+        whereClause.verse = parseInt(verseRange);
+      }
+    }
+    
+    const verses = await BibleVerse.findAll({
+      where: whereClause,
+      order: [['verse', 'ASC']]
+    });
+    
+    res.json({
+      bookName: book.name,
+      chapter: parseInt(chapter),
+      verses: verses.map(v => ({
+        verse: v.verse,
+        text: v.text
+      }))
+    });
+  } catch (error) {
+    console.error('Error fetching verses:', error);
+    res.status(500).json({ error: 'Failed to fetch verses' });
+  }
+});
+
+// Content search API
+router.get('/api/content/search', requireAdmin, async (req, res) => {
+  try {
+    const { Content } = require('../models');
+    const { type, q } = req.query;
+    
+    // For now, return mock data for prayers and hymns
+    // TODO: Create proper prayer and hymn models
+    let items = [];
+    
+    if (type === 'prayer') {
+      items = [
+        { id: 'lords-prayer', title: "The Lord's Prayer", content: "Our Father, who art in heaven..." },
+        { id: 'serenity', title: "Serenity Prayer", content: "God, grant me the serenity..." },
+        { id: 'morning', title: "Morning Prayer", content: "Dear Lord, thank you for this new day..." }
+      ];
+    } else if (type === 'hymn') {
+      items = [
+        { id: 'amazing-grace', title: "Amazing Grace", content: "Amazing grace, how sweet the sound..." },
+        { id: 'holy-holy', title: "Holy, Holy, Holy", content: "Holy, holy, holy! Lord God Almighty..." },
+        { id: 'blessed-assurance', title: "Blessed Assurance", content: "Blessed assurance, Jesus is mine..." }
+      ];
+    }
+    
+    // Filter by search query if provided
+    if (q) {
+      items = items.filter(item => 
+        item.title.toLowerCase().includes(q.toLowerCase()) ||
+        item.content.toLowerCase().includes(q.toLowerCase())
+      );
+    }
+    
+    res.json(items);
+  } catch (error) {
+    console.error('Error searching content:', error);
+    res.status(500).json({ error: 'Failed to search content' });
   }
 });
 
