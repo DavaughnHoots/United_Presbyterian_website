@@ -383,12 +383,13 @@ router.post('/api/content', requireAdmin, async (req, res) => {
       season,
       tags,
       isActive,
-      duration_minutes: duration_minutes || 5,
-      artist,
-      image_url,
-      video_url,
-      instructions,
-      prompts,
+      // Temporarily commented out until migrations are run
+      // duration_minutes: duration_minutes || 5,
+      // artist,
+      // image_url,
+      // video_url,
+      // instructions,
+      // prompts,
       metadata: metadata || {}
     };
     
@@ -431,12 +432,13 @@ router.put('/api/content/:id', requireAdmin, async (req, res) => {
       season,
       tags,
       isActive,
-      duration_minutes: duration_minutes || existingContent.duration_minutes,
-      artist,
-      image_url,
-      video_url,
-      instructions,
-      prompts,
+      // Temporarily commented out until migrations are run
+      // duration_minutes: duration_minutes || existingContent.duration_minutes,
+      // artist,
+      // image_url,
+      // video_url,
+      // instructions,
+      // prompts,
       metadata: metadata || existingContent.metadata
     };
     
