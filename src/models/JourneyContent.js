@@ -77,6 +77,13 @@ module.exports = (sequelize, DataTypes) => {
       const startId = parseInt(verses[0]);
       const endId = verses[1] ? parseInt(verses[1]) : startId;
       
+      // Check if the parsed IDs are valid numbers
+      if (isNaN(startId) || isNaN(endId)) {
+        console.error(`Invalid Bible verse IDs: ${this.content_id}`);
+        // Try to fetch as regular content instead
+        return await sequelize.models.Content.findByPk(this.content_id);
+      }
+      
       return await sequelize.models.BibleVerse.findAll({
         where: {
           id: {
@@ -90,7 +97,7 @@ module.exports = (sequelize, DataTypes) => {
         order: [['id', 'ASC']]
       });
     } else {
-      // For other content types, fetch from the Content table
+      // For all other content types (including scripture_reading), fetch from the Content table
       return await sequelize.models.Content.findByPk(this.content_id);
     }
   };
