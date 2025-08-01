@@ -1650,6 +1650,130 @@ router.delete('/api/journeys/:id', requireAdmin, async (req, res) => {
   }
 });
 
+// Import journey
+router.post('/api/journeys/import', requireAdmin, async (req, res) => {
+  const { Journey, JourneyDay, JourneyContent, Content } = require('../models');
+  const { journey, days, createNewContent } = req.body;
+  
+  const transaction = await sequelize.transaction();
+  
+  try {
+    // Validate input
+    if (!journey || !journey.title) {
+      throw new Error('Journey title is required');
+    }
+    
+    if (!days || !Array.isArray(days) || days.length === 0) {
+      throw new Error('At least one day is required');
+    }
+    
+    // Create the journey
+    const newJourney = await Journey.create({
+      title: journey.title,
+      description: journey.description || '',
+      duration_days: journey.duration_days || days.length,
+      theme: journey.theme || 'general',
+      is_published: journey.is_published || false,
+      created_by: req.session.user.id
+    }, { transaction });
+    
+    // Process each day
+    for (const day of days) {
+      // Validate day
+      if (!day.day_number) {
+        throw new Error('Day number is required for each day');
+      }
+      
+      // Create journey day
+      const journeyDay = await JourneyDay.create({
+        journey_id: newJourney.id,
+        day_number: day.day_number,
+        title: day.title || `Day ${day.day_number}`,
+        description: day.description || ''
+      }, { transaction });
+      
+      // Process content for this day
+      if (day.content && Array.isArray(day.content)) {
+        for (const contentItem of day.content) {
+          let contentId;
+          
+          if (createNewContent) {
+            // Create new content item
+            const contentData = {
+              type: contentItem.type,
+              title: contentItem.title,
+              content: contentItem.content || '',
+              biblePassage: contentItem.biblePassage,
+              youtubeId: contentItem.youtubeId,
+              artist: contentItem.artist,
+              image_url: contentItem.image_url,
+              video_url: contentItem.video_url,
+              audio_url: contentItem.audio_url,
+              instructions: contentItem.instructions,
+              prompts: contentItem.prompts,
+              theme: contentItem.theme || journey.theme,
+              tags: contentItem.tags || [],
+              duration_minutes: contentItem.duration_minutes || 5,
+              metadata: contentItem.metadata || {},
+              isActive: true
+            };
+            
+            const newContent = await Content.create(contentData, { transaction });
+            contentId = newContent.id;
+          } else {
+            // Try to find existing content by title
+            const existingContent = await Content.findOne({
+              where: { 
+                title: contentItem.title,
+                type: contentItem.type
+              },
+              transaction
+            });
+            
+            if (existingContent) {
+              contentId = existingContent.id;
+            } else {
+              // Create new if not found
+              const newContent = await Content.create({
+                type: contentItem.type,
+                title: contentItem.title,
+                content: contentItem.content || '',
+                duration_minutes: contentItem.duration_minutes || 5,
+                metadata: contentItem.metadata || {},
+                isActive: true
+              }, { transaction });
+              contentId = newContent.id;
+            }
+          }
+          
+          // Create journey content link
+          await JourneyContent.create({
+            journey_day_id: journeyDay.id,
+            content_type: contentItem.type,
+            content_id: contentId,
+            order_index: contentItem.order_index || 0,
+            duration_minutes: contentItem.duration_minutes || 5,
+            metadata: contentItem.journey_metadata || {}
+          }, { transaction });
+        }
+      }
+    }
+    
+    await transaction.commit();
+    
+    res.json({ 
+      success: true, 
+      journeyId: newJourney.id,
+      message: `Journey "${newJourney.title}" imported successfully with ${days.length} days`
+    });
+    
+  } catch (error) {
+    await transaction.rollback();
+    console.error('Error importing journey:', error);
+    res.status(400).json({ error: error.message || 'Failed to import journey' });
+  }
+});
+
 // Log user activity (helper function)
 async function logActivity(userId, action, details = null, req = null) {
   try {

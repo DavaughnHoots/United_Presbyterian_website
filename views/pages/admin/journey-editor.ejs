@@ -9,6 +9,9 @@
         <a href="/admin/journeys/preview/<%= journey.id %>" target="_blank" class="btn btn-secondary">
           <i class="fas fa-eye"></i> Preview
         </a>
+        <button class="btn btn-secondary" onclick="exportJourney()">
+          <i class="fas fa-file-export"></i> Export
+        </button>
         <button class="btn btn-primary" onclick="saveJourney()">
           <i class="fas fa-save"></i> Save Changes
         </button>
@@ -1530,6 +1533,72 @@ async function saveNewPrayer() {
   } catch (error) {
     console.error('Error creating prayer:', error);
     alert('Failed to create prayer');
+  }
+}
+
+// Export Journey Function
+async function exportJourney() {
+  try {
+    // Prepare export data
+    const exportData = {
+      journey: {
+        title: document.getElementById('journeyTitle').value,
+        description: document.getElementById('journeyDescription').value,
+        duration_days: journeyDays.length,
+        theme: document.getElementById('journeyTheme').value,
+        is_published: document.getElementById('journeyStatus').value === 'true'
+      },
+      days: journeyDays.map(day => ({
+        day_number: day.day_number,
+        title: day.title,
+        description: day.description,
+        content: day.contents.map((content, index) => {
+          const contentData = {
+            type: content.content_type || content.type,
+            title: content.metadata?.title || 'Untitled',
+            content: content.metadata?.content || '',
+            order_index: index + 1,
+            duration_minutes: content.duration_minutes || 5
+          };
+          
+          // Add type-specific fields from metadata
+          if (content.metadata) {
+            if (content.metadata.biblePassage) contentData.biblePassage = content.metadata.biblePassage;
+            if (content.metadata.youtubeId) contentData.youtubeId = content.metadata.youtubeId;
+            if (content.metadata.artist) contentData.artist = content.metadata.artist;
+            if (content.metadata.image_url) contentData.image_url = content.metadata.image_url;
+            if (content.metadata.video_url) contentData.video_url = content.metadata.video_url;
+            if (content.metadata.audio_url) contentData.audio_url = content.metadata.audio_url;
+            if (content.metadata.instructions) contentData.instructions = content.metadata.instructions;
+            if (content.metadata.prompts) contentData.prompts = content.metadata.prompts;
+            if (content.metadata.tags) contentData.tags = content.metadata.tags;
+            if (content.metadata.theme) contentData.theme = content.metadata.theme;
+            
+            // Include other metadata
+            contentData.metadata = { ...content.metadata };
+          }
+          
+          return contentData;
+        })
+      }))
+    };
+    
+    // Create and download JSON file
+    const dataStr = JSON.stringify(exportData, null, 2);
+    const dataBlob = new Blob([dataStr], { type: 'application/json' });
+    const url = URL.createObjectURL(dataBlob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `journey-${exportData.journey.title.toLowerCase().replace(/\s+/g, '-')}-export.json`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+    
+    alert('Journey exported successfully! You can now share this file with others who can import it into their system.');
+  } catch (error) {
+    console.error('Error exporting journey:', error);
+    alert('Failed to export journey');
   }
 }
 
