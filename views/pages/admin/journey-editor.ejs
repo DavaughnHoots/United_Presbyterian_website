@@ -63,10 +63,10 @@
             <div class="day-header">
               <div class="day-number">Day <%= day.day_number %></div>
               <div class="day-actions">
-                <button class="btn btn-sm btn-outline-primary" onclick="editDay(<%= day.id %>)">
+                <button class="btn btn-sm btn-outline-primary" onclick="editDay('<%= day.id || '' %>')">
                   <i class="fas fa-edit"></i> Edit
                 </button>
-                <button class="btn btn-sm btn-outline-danger" onclick="deleteDay(<%= day.id %>, <%= day.day_number %>)">
+                <button class="btn btn-sm btn-outline-danger" onclick="deleteDay('<%= day.id || '' %>', <%= day.day_number %>)">
                   <i class="fas fa-trash"></i>
                 </button>
               </div>
@@ -357,6 +357,10 @@ function addDay() {
 }
 
 function editDay(dayId) {
+  if (!dayId) {
+    alert('Please save the journey first to edit days');
+    return;
+  }
   const day = journeyDays.find(d => d.id === dayId);
   if (!day) return;
   
@@ -431,6 +435,10 @@ async function saveDayToServer(dayData, isNew) {
 }
 
 async function deleteDay(dayId, dayNumber) {
+  if (!dayId) {
+    alert('Cannot delete unsaved day. Please reload the page.');
+    return;
+  }
   if (!confirm(`Are you sure you want to delete Day ${dayNumber}?`)) {
     return;
   }
