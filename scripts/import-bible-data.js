@@ -1,6 +1,6 @@
 const fs = require('fs');
 const path = require('path');
-const csv = require('csv-parser');
+const { parse } = require('csv-parse');
 const { sequelize } = require('../src/config/database');
 
 // Bible data directory
@@ -14,7 +14,7 @@ async function importBibleBooks() {
   
   return new Promise((resolve, reject) => {
     fs.createReadStream(path.join(BIBLE_DATA_DIR, 'key_english.csv'))
-      .pipe(csv())
+      .pipe(parse({ columns: true }))
       .on('data', (row) => {
         books.push({
           id: parseInt(row.b),
@@ -64,7 +64,7 @@ async function importBibleVerses(translation = 'kjv') {
   
   return new Promise((resolve, reject) => {
     fs.createReadStream(filepath)
-      .pipe(csv())
+      .pipe(parse({ columns: true }))
       .on('data', async (row) => {
         batch.push({
           id: parseInt(row.id),
