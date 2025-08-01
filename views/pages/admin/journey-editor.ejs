@@ -77,9 +77,9 @@
               <p class="day-description"><%= day.description || 'No description' %></p>
               
               <div class="day-contents">
-                <% if (day.contents && day.contents.length > 0) { %>
+                <% if (day.content && day.content.length > 0) { %>
                   <div class="content-count">
-                    <i class="fas fa-list"></i> <%= day.contents.length %> content items
+                    <i class="fas fa-list"></i> <%= day.content.length %> content items
                   </div>
                 <% } else { %>
                   <div class="no-content">
@@ -657,7 +657,10 @@
 
 <script>
 let currentJourneyId = '<%= journey.id %>';
-let journeyDays = <%- JSON.stringify(journeyDays) %>;
+let journeyDays = <%- JSON.stringify(journeyDays.map(day => ({
+  ...day.toJSON(),
+  contents: day.content || []
+}))) %>;
 
 async function saveJourney() {
   const journeyData = {

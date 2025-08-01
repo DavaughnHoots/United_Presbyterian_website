@@ -178,8 +178,10 @@ router.get('/daily', async (req, res) => {
       
       if (userJourney) {
         // Calculate current day based on start date
-        const daysSinceStart = Math.floor((today - userJourney.start_date) / (1000 * 60 * 60 * 24));
-        const currentDay = Math.min(daysSinceStart + 1, userJourney.journey.duration_days);
+        const startDate = new Date(userJourney.start_date);
+        startDate.setHours(0, 0, 0, 0);
+        const daysSinceStart = Math.floor((today - startDate) / (1000 * 60 * 60 * 24));
+        const currentDay = Math.max(1, Math.min(daysSinceStart + 1, userJourney.journey.duration_days));
         
         // Allow viewing specific day if requested
         const requestedDay = req.query.day ? parseInt(req.query.day) : currentDay;

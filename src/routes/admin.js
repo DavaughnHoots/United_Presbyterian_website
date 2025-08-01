@@ -1090,6 +1090,11 @@ router.get('/journeys/edit/:id', requireAdmin, async (req, res) => {
     
     const journeyDays = await JourneyDay.findAll({
       where: { journey_id: journey.id },
+      include: [{
+        model: JourneyContent,
+        as: 'content',
+        order: [['order_index', 'ASC']]
+      }],
       order: [['day_number', 'ASC']]
     });
     
@@ -1117,6 +1122,11 @@ router.get('/journeys/preview/:id', requireAdmin, async (req, res) => {
     
     const journeyDays = await JourneyDay.findAll({
       where: { journey_id: journey.id },
+      include: [{
+        model: JourneyContent,
+        as: 'content',
+        order: [['order_index', 'ASC']]
+      }],
       order: [['day_number', 'ASC']]
     });
     
