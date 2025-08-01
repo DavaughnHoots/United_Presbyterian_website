@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { requireAuth, requireAdmin } = require('../middleware/auth');
-const { Submission, DailyContent, User, Content, Setting, Event, EventRegistration, UserActivity } = require('../models');
+const { Submission, DailyContent, User, Content, Setting, Event, EventRegistration /*, UserActivity*/ } = require('../models');
 const { Op } = require('sequelize');
 const multer = require('multer');
 const csv = require('csv-parse');
@@ -842,11 +842,11 @@ router.post('/api/users', requireAdmin, async (req, res) => {
     });
     
     // Log activity
-    await UserActivity.create({
-      userId: newUser.id,
-      action: 'USER_CREATED',
-      details: `Created by admin ${req.session.user.email}`
-    });
+    // await UserActivity.create({
+    //   userId: newUser.id,
+    //   action: 'USER_CREATED',
+    //   details: `Created by admin ${req.session.user.email}`
+    // });
     
     // Send welcome email if requested
     if (sendWelcome && process.env.SMTP_USER) {
@@ -866,19 +866,19 @@ router.get('/api/users/:id/activity', requireAdmin, async (req, res) => {
   try {
     const { id } = req.params;
     
-    const logs = await UserActivity.findAll({
-      where: { userId: id },
-      order: [['createdAt', 'DESC']],
-      limit: 50
-    });
+    const logs = []; // await UserActivity.findAll({
+    //   where: { userId: id },
+    //   order: [['createdAt', 'DESC']],
+    //   limit: 50
+    // });
     
     // Get total logins
-    const totalLogins = await UserActivity.count({
-      where: { 
-        userId: id,
-        action: 'LOGIN'
-      }
-    });
+    const totalLogins = 0; // await UserActivity.count({
+    //   where: { 
+    //     userId: id,
+    //     action: 'LOGIN'
+    //   }
+    // });
     
     res.json({ logs, totalLogins });
   } catch (error) {
@@ -903,7 +903,7 @@ router.post('/api/users/bulk-activate', requireAdmin, async (req, res) => {
       action: 'ACTIVATED',
       details: `Bulk activated by admin ${req.session.user.email}`
     }));
-    await UserActivity.bulkCreate(activities);
+    // await UserActivity.bulkCreate(activities);
     
     res.json({ success: true });
   } catch (error) {
@@ -928,7 +928,7 @@ router.post('/api/users/bulk-deactivate', requireAdmin, async (req, res) => {
       action: 'DEACTIVATED',
       details: `Bulk deactivated by admin ${req.session.user.email}`
     }));
-    await UserActivity.bulkCreate(activities);
+    // await UserActivity.bulkCreate(activities);
     
     res.json({ success: true });
   } catch (error) {
@@ -1090,10 +1090,6 @@ router.get('/journeys/edit/:id', requireAdmin, async (req, res) => {
     
     const journeyDays = await JourneyDay.findAll({
       where: { journey_id: journey.id },
-      include: [{
-        model: JourneyContent,
-        as: 'contents'
-      }],
       order: [['day_number', 'ASC']]
     });
     
@@ -1121,10 +1117,6 @@ router.get('/journeys/preview/:id', requireAdmin, async (req, res) => {
     
     const journeyDays = await JourneyDay.findAll({
       where: { journey_id: journey.id },
-      include: [{
-        model: JourneyContent,
-        as: 'contents'
-      }],
       order: [['day_number', 'ASC']]
     });
     
@@ -1289,13 +1281,13 @@ router.delete('/api/journeys/:id', requireAdmin, async (req, res) => {
 // Log user activity (helper function)
 async function logActivity(userId, action, details = null, req = null) {
   try {
-    await UserActivity.create({
-      userId,
-      action,
-      details,
-      ipAddress: req ? req.ip : null,
-      userAgent: req ? req.headers['user-agent'] : null
-    });
+    // await UserActivity.create({
+    //   userId,
+    //   action,
+    //   details,
+    //   ipAddress: req ? req.ip : null,
+    //   userAgent: req ? req.headers['user-agent'] : null
+    // });
   } catch (error) {
     console.error('Error logging activity:', error);
   }
