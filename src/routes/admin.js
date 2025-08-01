@@ -1078,33 +1078,43 @@ router.get('/journeys', requireAdmin, async (req, res) => {
   }
 });
 
-// Journey builder interface
-router.get('/journeys/builder/:id?', requireAdmin, async (req, res) => {
+// Journey builder interface - new journey
+router.get('/journeys/builder', requireAdmin, async (req, res) => {
+  try {
+    res.render('pages/admin/journey-builder', {
+      title: 'Create New Journey',
+      user: req.session.user,
+      journey: null,
+      journeyDays: []
+    });
+  } catch (error) {
+    console.error('Error rendering journey builder:', error);
+    res.status(500).send('Internal server error');
+  }
+});
+
+// Journey builder interface - edit existing journey
+router.get('/journeys/builder/:id', requireAdmin, async (req, res) => {
   try {
     const { Journey, JourneyDay, JourneyContent, DailyContent, BibleReading, Prayer } = require('../models');
     
-    let journey = null;
-    let journeyDays = [];
-    
-    if (req.params.id) {
-      journey = await Journey.findByPk(req.params.id);
-      if (!journey) {
-        return res.status(404).send('Journey not found');
-      }
-      
-      journeyDays = await JourneyDay.findAll({
-        where: { journey_id: journey.id },
-        include: [{
-          model: JourneyContent,
-          as: 'contents',
-          include: ['dailyContent', 'bibleReading', 'prayer']
-        }],
-        order: [['day_number', 'ASC']]
-      });
+    const journey = await Journey.findByPk(req.params.id);
+    if (!journey) {
+      return res.status(404).send('Journey not found');
     }
     
+    const journeyDays = await JourneyDay.findAll({
+      where: { journey_id: journey.id },
+      include: [{
+        model: JourneyContent,
+        as: 'contents',
+        include: ['dailyContent', 'bibleReading', 'prayer']
+      }],
+      order: [['day_number', 'ASC']]
+    });
+    
     res.render('pages/admin/journey-builder', {
-      title: journey ? `Edit Journey: ${journey.title}` : 'Create New Journey',
+      title: `Edit Journey: ${journey.title}`,
       user: req.session.user,
       journey,
       journeyDays
