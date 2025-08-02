@@ -1,0 +1,1 @@
+// Content Type Modal Manager - functionality included in init file

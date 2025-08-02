@@ -1,0 +1,1 @@
+// Content Type Filter Manager - functionality included in init file

@@ -1,0 +1,1 @@
+// Content Type Form Manager - functionality included in init file

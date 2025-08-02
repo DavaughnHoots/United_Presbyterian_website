@@ -1962,4 +1962,131 @@ async function logActivity(userId, action, details = null, req = null) {
   }
 }
 
+// ============= CONTENT TYPE API ENDPOINTS =============
+
+// Generic content API endpoints
+router.get('/api/content/:type', requireAdmin, async (req, res) => {
+  try {
+    const { Content } = require('../models');
+    const { type } = req.params;
+    
+    const items = await Content.findAll({
+      where: { type },
+      order: [['createdAt', 'DESC']]
+    });
+    
+    res.json(items);
+  } catch (error) {
+    console.error('Error fetching content:', error);
+    res.status(500).json({ error: 'Failed to fetch content' });
+  }
+});
+
+// Create content item
+router.post('/api/content/:type', requireAdmin, async (req, res) => {
+  try {
+    const { Content } = require('../models');
+    const { type } = req.params;
+    const itemData = req.body;
+    
+    // Ensure type matches
+    itemData.type = type;
+    
+    const newItem = await Content.create(itemData);
+    res.json(newItem);
+  } catch (error) {
+    console.error('Error creating content:', error);
+    res.status(500).json({ error: 'Failed to create content' });
+  }
+});
+
+// Update content item
+router.put('/api/content/:type/:id', requireAdmin, async (req, res) => {
+  try {
+    const { Content } = require('../models');
+    const { type, id } = req.params;
+    const updates = req.body;
+    
+    const item = await Content.findOne({
+      where: { id, type }
+    });
+    
+    if (!item) {
+      return res.status(404).json({ error: 'Content not found' });
+    }
+    
+    await item.update(updates);
+    res.json(item);
+  } catch (error) {
+    console.error('Error updating content:', error);
+    res.status(500).json({ error: 'Failed to update content' });
+  }
+});
+
+// Toggle content active status
+router.patch('/api/content/:type/:id/toggle', requireAdmin, async (req, res) => {
+  try {
+    const { Content } = require('../models');
+    const { type, id } = req.params;
+    const { is_active } = req.body;
+    
+    const item = await Content.findOne({
+      where: { id, type }
+    });
+    
+    if (!item) {
+      return res.status(404).json({ error: 'Content not found' });
+    }
+    
+    await item.update({ isActive: is_active });
+    res.json({ id: item.id, is_active: item.isActive });
+  } catch (error) {
+    console.error('Error toggling content status:', error);
+    res.status(500).json({ error: 'Failed to toggle status' });
+  }
+});
+
+// Delete content item
+router.delete('/api/content/:type/:id', requireAdmin, async (req, res) => {
+  try {
+    const { Content } = require('../models');
+    const { type, id } = req.params;
+    
+    const result = await Content.destroy({
+      where: { id, type }
+    });
+    
+    if (result === 0) {
+      return res.status(404).json({ error: 'Content not found' });
+    }
+    
+    res.json({ success: true });
+  } catch (error) {
+    console.error('Error deleting content:', error);
+    res.status(500).json({ error: 'Failed to delete content' });
+  }
+});
+
+// Import content items
+router.post('/api/content/:type/import', requireAdmin, async (req, res) => {
+  try {
+    const { Content } = require('../models');
+    const { type } = req.params;
+    const { items } = req.body;
+    
+    if (!Array.isArray(items)) {
+      return res.status(400).json({ error: 'Invalid import data' });
+    }
+    
+    // Add type to each item and create
+    const itemsWithType = items.map(item => ({ ...item, type }));
+    const created = await Content.bulkCreate(itemsWithType);
+    
+    res.json({ count: created.length });
+  } catch (error) {
+    console.error('Error importing content:', error);
+    res.status(500).json({ error: 'Failed to import content' });
+  }
+});
+
 module.exports = router;
