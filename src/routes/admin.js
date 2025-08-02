@@ -1663,6 +1663,25 @@ router.delete('/api/journeys/:id', requireAdmin, async (req, res) => {
   }
 });
 
+// Prayers management
+router.get('/prayers', requireAdmin, async (req, res) => {
+  try {
+    const { Prayer } = require('../models');
+    const prayers = await Prayer.findAll({
+      order: [['category', 'ASC'], ['title', 'ASC']]
+    });
+    
+    res.render('pages/admin/prayers', {
+      title: 'Prayer Management',
+      user: req.session.user,
+      prayers
+    });
+  } catch (error) {
+    console.error('Error rendering prayer management:', error);
+    res.status(500).send('Internal server error');
+  }
+});
+
 // Import journey
 router.post('/api/journeys/import', requireAdmin, async (req, res) => {
   const { Journey, JourneyDay, JourneyContent, Content } = require('../models');

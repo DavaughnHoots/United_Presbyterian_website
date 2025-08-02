@@ -1,0 +1,391 @@
+<div class="max-w-7xl mx-auto">
+    <!-- Prayers Header -->
+    <div class="mb-8 flex justify-between items-center">
+        <div>
+            <h1 class="text-3xl font-bold mb-2" style="color: var(--text-primary);">Prayer Library</h1>
+            <p class="text-gray-600">Manage prayers for daily devotionals and spiritual journeys</p>
+        </div>
+        <div class="flex gap-2">
+            <button onclick="PrayerManager.showImportModal()" class="btn-secondary">
+                <i class="fas fa-upload mr-2"></i>Import
+            </button>
+            <button onclick="PrayerManager.exportPrayers()" class="btn-secondary">
+                <i class="fas fa-download mr-2"></i>Export
+            </button>
+            <button onclick="PrayerManager.ModalManager.openAddPrayerModal()" class="btn-primary">
+                <i class="fas fa-plus mr-2"></i>Add New Prayer
+            </button>
+        </div>
+    </div>
+    
+    <!-- Filters -->
+    <div class="module-card mb-6">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div>
+                <label class="block text-sm font-medium mb-2">Category</label>
+                <select id="categoryFilter" onchange="PrayerManager.FilterManager.filterPrayers()" class="w-full px-3 py-2 border rounded-lg">
+                    <option value="">All Categories</option>
+                    <option value="morning">Morning Prayers</option>
+                    <option value="evening">Evening Prayers</option>
+                    <option value="meal">Meal Blessings</option>
+                    <option value="healing">Healing Prayers</option>
+                    <option value="thanksgiving">Thanksgiving</option>
+                    <option value="confession">Confession</option>
+                    <option value="intercession">Intercession</option>
+                    <option value="traditional">Traditional</option>
+                    <option value="seasonal">Seasonal</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+            <div>
+                <label class="block text-sm font-medium mb-2">Search</label>
+                <input type="text" id="searchFilter" placeholder="Search prayers..." 
+                       onkeyup="PrayerManager.FilterManager.filterPrayers()" 
+                       class="w-full px-3 py-2 border rounded-lg">
+            </div>
+            <div>
+                <label class="block text-sm font-medium mb-2">Author</label>
+                <input type="text" id="authorFilter" placeholder="Filter by author..." 
+                       onkeyup="PrayerManager.FilterManager.filterPrayers()" 
+                       class="w-full px-3 py-2 border rounded-lg">
+            </div>
+            <div>
+                <label class="block text-sm font-medium mb-2">Sort By</label>
+                <select id="sortBy" onchange="PrayerManager.FilterManager.sortPrayers()" class="w-full px-3 py-2 border rounded-lg">
+                    <option value="title">Title</option>
+                    <option value="category">Category</option>
+                    <option value="author">Author</option>
+                    <option value="recent">Recently Added</option>
+                    <option value="usage">Most Used</option>
+                </select>
+            </div>
+        </div>
+        
+        <!-- Quick Stats -->
+        <div class="mt-4 pt-4 border-t grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+            <div>
+                <span class="text-gray-600">Total Prayers:</span>
+                <span class="font-semibold ml-2" id="totalCount">0</span>
+            </div>
+            <div>
+                <span class="text-gray-600">Active:</span>
+                <span class="font-semibold ml-2 text-green-600" id="activeCount">0</span>
+            </div>
+            <div>
+                <span class="text-gray-600">Categories:</span>
+                <span class="font-semibold ml-2" id="categoryCount">0</span>
+            </div>
+            <div>
+                <span class="text-gray-600">Filtered:</span>
+                <span class="font-semibold ml-2" id="filteredCount">0</span>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Prayer List -->
+    <div id="prayerList" class="space-y-4">
+        <% if (prayers && prayers.length > 0) { %>
+            <% prayers.forEach(prayer => { %>
+                <div class="module-card prayer-item" 
+                     data-id="<%= prayer.id %>"
+                     data-category="<%= prayer.category %>"
+                     data-author="<%= (prayer.author || '').toLowerCase() %>"
+                     data-title="<%= prayer.title.toLowerCase() %>"
+                     data-active="<%= prayer.is_active %>">
+                    <div class="flex items-start justify-between">
+                        <div class="flex-1">
+                            <div class="flex items-center mb-2">
+                                <span class="category-badge category-<%= prayer.category %>">
+                                    <i class="fas <%= getCategoryIcon(prayer.category) %> mr-1"></i>
+                                    <%= prayer.category.charAt(0).toUpperCase() + prayer.category.slice(1) %>
+                                </span>
+                                <% if (!prayer.is_active) { %>
+                                    <span class="ml-2 px-2 py-1 bg-red-100 text-red-700 text-xs rounded">Inactive</span>
+                                <% } %>
+                                <% if (prayer.usage_count > 0) { %>
+                                    <span class="ml-2 text-sm text-gray-600">
+                                        <i class="fas fa-chart-bar mr-1"></i>Used <%= prayer.usage_count %> times
+                                    </span>
+                                <% } %>
+                            </div>
+                            
+                            <h3 class="text-lg font-semibold mb-1"><%= prayer.title %></h3>
+                            
+                            <% if (prayer.author) { %>
+                                <p class="text-sm text-gray-600 mb-2">
+                                    <i class="fas fa-user mr-1"></i><%= prayer.author %>
+                                </p>
+                            <% } %>
+                            
+                            <div class="prayer-content line-clamp-3">
+                                <%= prayer.content %>
+                            </div>
+                            
+                            <% if (prayer.tags && prayer.tags.length > 0) { %>
+                                <div class="mt-2">
+                                    <% prayer.tags.forEach(tag => { %>
+                                        <span class="inline-block px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded mr-2 mb-1">
+                                            <%= tag %>
+                                        </span>
+                                    <% } %>
+                                </div>
+                            <% } %>
+                            
+                            <% if (prayer.audio_url) { %>
+                                <div class="mt-2 text-sm text-blue-600">
+                                    <i class="fas fa-headphones mr-1"></i>Audio available
+                                </div>
+                            <% } %>
+                        </div>
+                        
+                        <div class="ml-4 flex items-center space-x-2">
+                            <button onclick="PrayerManager.ModalManager.showPreview('<%= prayer.id %>')" 
+                                    class="text-indigo-600 hover:bg-indigo-50 p-2 rounded" title="Preview">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button onclick="PrayerManager.ModalManager.editPrayer('<%= prayer.id %>')" 
+                                    class="text-blue-600 hover:bg-blue-50 p-2 rounded" title="Edit">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button onclick="PrayerManager.togglePrayerStatus('<%= prayer.id %>', <%= prayer.is_active %>)" 
+                                    class="<%= prayer.is_active ? 'text-yellow-600 hover:bg-yellow-50' : 'text-green-600 hover:bg-green-50' %> p-2 rounded" 
+                                    title="<%= prayer.is_active ? 'Deactivate' : 'Activate' %>">
+                                <i class="fas <%= prayer.is_active ? 'fa-pause' : 'fa-play' %>"></i>
+                            </button>
+                            <button onclick="PrayerManager.deletePrayer('<%= prayer.id %>')" 
+                                    class="text-red-600 hover:bg-red-50 p-2 rounded" title="Delete">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            <% }) %>
+        <% } else { %>
+            <div class="module-card text-center py-12">
+                <i class="fas fa-praying-hands text-4xl text-gray-400 mb-4"></i>
+                <p class="text-gray-500">No prayers found. Add your first prayer to get started!</p>
+            </div>
+        <% } %>
+    </div>
+    
+    <!-- Empty State (hidden by default) -->
+    <div id="emptyState" class="module-card text-center py-12" style="display: none;">
+        <i class="fas fa-search text-4xl text-gray-400 mb-4"></i>
+        <p class="text-gray-500">No prayers match your filters.</p>
+        <button onclick="PrayerManager.FilterManager.resetFilters()" class="btn btn-sm btn-secondary mt-4">
+            Reset Filters
+        </button>
+    </div>
+</div>
+
+<!-- Add/Edit Prayer Modal -->
+<div id="prayerModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+    <div class="flex items-center justify-center min-h-screen p-4">
+        <div class="bg-white rounded-lg max-w-3xl w-full max-h-[90vh] overflow-hidden">
+            <div class="p-6 border-b">
+                <div class="flex justify-between items-center">
+                    <h2 id="modalTitle" class="text-2xl font-bold">Add New Prayer</h2>
+                    <button onclick="PrayerManager.ModalManager.closePrayerModal()" class="text-gray-500 hover:text-gray-700">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <form id="prayerForm" onsubmit="PrayerManager.FormManager.savePrayer(event)">
+                <div class="p-6 overflow-y-auto" style="max-height: calc(90vh - 180px);">
+                    <input type="hidden" id="prayerId" name="id">
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <label class="block text-sm font-medium mb-2">Prayer Title*</label>
+                            <input type="text" id="prayerTitle" name="title" required 
+                                   class="w-full px-3 py-2 border rounded-lg">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-2">Category*</label>
+                            <select id="prayerCategory" name="category" required 
+                                    class="w-full px-3 py-2 border rounded-lg">
+                                <option value="">Select Category</option>
+                                <option value="morning">Morning Prayer</option>
+                                <option value="evening">Evening Prayer</option>
+                                <option value="meal">Meal Blessing</option>
+                                <option value="healing">Healing Prayer</option>
+                                <option value="thanksgiving">Thanksgiving</option>
+                                <option value="confession">Confession</option>
+                                <option value="intercession">Intercession</option>
+                                <option value="traditional">Traditional</option>
+                                <option value="seasonal">Seasonal</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium mb-2">Author/Source</label>
+                        <input type="text" id="prayerAuthor" name="author" 
+                               placeholder="e.g., Book of Common Prayer, St. Augustine"
+                               class="w-full px-3 py-2 border rounded-lg">
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium mb-2">Prayer Text*</label>
+                        <textarea id="prayerContent" name="content" rows="8" required
+                                  class="w-full px-3 py-2 border rounded-lg"></textarea>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium mb-2">Audio Recording (Optional)</label>
+                        <input type="url" id="prayerAudioUrl" name="audio_url" 
+                               placeholder="https://example.com/prayer-audio.mp3"
+                               class="w-full px-3 py-2 border rounded-lg">
+                        <small class="text-gray-500">URL to audio recording of this prayer</small>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium mb-2">Tags (comma separated)</label>
+                        <input type="text" id="prayerTags" name="tags" 
+                               placeholder="e.g., peace, comfort, strength"
+                               class="w-full px-3 py-2 border rounded-lg">
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label class="flex items-center">
+                            <input type="checkbox" id="prayerIsActive" name="is_active" checked class="mr-2">
+                            <span class="text-sm">Active (available for use)</span>
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="p-6 border-t flex justify-end space-x-3">
+                    <button type="button" onclick="PrayerManager.ModalManager.closePrayerModal()" 
+                            class="px-4 py-2 border rounded-lg hover:bg-gray-50">
+                        Cancel
+                    </button>
+                    <button type="submit" class="btn-primary">
+                        <i class="fas fa-save mr-2"></i>Save Prayer
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Preview Modal -->
+<div id="previewModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+    <div class="flex items-center justify-center min-h-screen p-4">
+        <div class="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-hidden">
+            <div class="p-6 border-b">
+                <div class="flex justify-between items-center">
+                    <h2 class="text-2xl font-bold">Prayer Preview</h2>
+                    <button onclick="PrayerManager.ModalManager.closePreview()" class="text-gray-500 hover:text-gray-700">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+            </div>
+            <div id="previewContent" class="p-6 overflow-y-auto" style="max-height: calc(90vh - 120px);">
+                <!-- Preview content will be inserted here -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Import Modal -->
+<div id="importModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+    <div class="flex items-center justify-center min-h-screen p-4">
+        <div class="bg-white rounded-lg max-w-md w-full">
+            <div class="p-6 border-b">
+                <div class="flex justify-between items-center">
+                    <h2 class="text-2xl font-bold">Import Prayers</h2>
+                    <button onclick="PrayerManager.closeImportModal()" class="text-gray-500 hover:text-gray-700">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="p-6">
+                <p class="text-gray-600 mb-4">Upload a JSON file containing prayers to import.</p>
+                <input type="file" id="importFile" accept=".json" class="mb-4">
+                <div class="flex justify-end space-x-3">
+                    <button onclick="PrayerManager.closeImportModal()" class="px-4 py-2 border rounded-lg hover:bg-gray-50">
+                        Cancel
+                    </button>
+                    <button onclick="PrayerManager.importPrayers()" class="btn-primary">
+                        <i class="fas fa-upload mr-2"></i>Import
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.category-badge {
+    @apply px-3 py-1 rounded-full text-sm font-medium;
+}
+
+.category-morning { @apply bg-yellow-100 text-yellow-700; }
+.category-evening { @apply bg-indigo-100 text-indigo-700; }
+.category-meal { @apply bg-green-100 text-green-700; }
+.category-healing { @apply bg-red-100 text-red-700; }
+.category-thanksgiving { @apply bg-orange-100 text-orange-700; }
+.category-confession { @apply bg-purple-100 text-purple-700; }
+.category-intercession { @apply bg-blue-100 text-blue-700; }
+.category-traditional { @apply bg-gray-100 text-gray-700; }
+.category-seasonal { @apply bg-teal-100 text-teal-700; }
+.category-other { @apply bg-gray-100 text-gray-700; }
+
+.prayer-content {
+    white-space: pre-line;
+}
+</style>
+
+<%
+function getCategoryIcon(category) {
+    const icons = {
+        morning: 'fa-sun',
+        evening: 'fa-moon',
+        meal: 'fa-utensils',
+        healing: 'fa-hand-holding-heart',
+        thanksgiving: 'fa-hands',
+        confession: 'fa-heart',
+        intercession: 'fa-pray',
+        traditional: 'fa-church',
+        seasonal: 'fa-calendar-alt',
+        other: 'fa-praying-hands'
+    };
+    return icons[category] || 'fa-praying-hands';
+}
+%>
+
+<!-- Initialize prayer data -->
+<script>
+(function() {
+  'use strict';
+  
+  // Initialize prayer data
+  const prayerData = <% if (prayers) { %><%- JSON.stringify(prayers) %><% } else { %>[]<% } %>;
+  
+  // Initialize PrayerManager when modules are loaded
+  window.addEventListener('DOMContentLoaded', function() {
+    if (window.PrayerManager && window.PrayerManager.init) {
+      window.PrayerManager.init(prayerData);
+    } else {
+      console.error('PrayerManager modules not loaded!');
+    }
+  });
+})();
+</script>
+
+<!-- Load modular JavaScript files -->
+<script src="/js/admin/prayer-manager-core.js"></script>
+<script src="/js/admin/prayer-filter-manager.js"></script>
+<script src="/js/admin/prayer-form-manager.js"></script>
+<script src="/js/admin/prayer-modal-manager.js"></script>
+<script src="/js/admin/prayer-export-import.js"></script>
+<script src="/js/admin/prayer-manager-init.js"></script>
