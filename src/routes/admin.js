@@ -1549,22 +1549,44 @@ router.get('/api/content/search', requireAdmin, async (req, res) => {
 // Prayer CRUD endpoints
 router.get('/api/prayers', requireAdmin, async (req, res) => {
   try {
-    const { Prayer } = require('../models');
+    const { Content } = require('../models');
+    const { Op } = require('sequelize');
     const { category, search } = req.query;
     
-    let prayers;
-    if (search) {
-      prayers = await Prayer.searchPrayers(search, category);
-    } else if (category) {
-      prayers = await Prayer.getByCategory(category);
-    } else {
-      prayers = await Prayer.findAll({
-        where: { is_active: true },
-        order: [['title', 'ASC']]
-      });
+    let where = { type: 'prayer' };
+    
+    if (category) {
+      where['metadata.category'] = category;
     }
     
-    res.json(prayers);
+    if (search) {
+      where[Op.or] = [
+        { title: { [Op.iLike]: `%${search}%` } },
+        { content: { [Op.iLike]: `%${search}%` } },
+        { 'metadata.author': { [Op.iLike]: `%${search}%` } }
+      ];
+    }
+    
+    const prayers = await Content.findAll({
+      where,
+      order: [['title', 'ASC']]
+    });
+    
+    // Transform to expected format
+    const formattedPrayers = prayers.map(prayer => ({
+      id: prayer.id,
+      title: prayer.title,
+      content: prayer.content,
+      category: prayer.metadata?.category || 'other',
+      author: prayer.metadata?.author || '',
+      audio_url: prayer.audio_url || '',
+      tags: prayer.tags || [],
+      is_active: prayer.isActive,
+      usage_count: prayer.metadata?.usage_count || 0,
+      lastUsedDate: prayer.metadata?.lastUsedDate || null
+    }));
+    
+    res.json(formattedPrayers);
   } catch (error) {
     console.error('Error fetching prayers:', error);
     res.status(500).json({ error: 'Failed to fetch prayers' });
@@ -1573,19 +1595,33 @@ router.get('/api/prayers', requireAdmin, async (req, res) => {
 
 router.post('/api/prayers', requireAdmin, async (req, res) => {
   try {
-    const { Prayer } = require('../models');
-    const { title, content, author, category, tags } = req.body;
+    const { Content } = require('../models');
+    const { title, content, author, category, audio_url, tags, is_active } = req.body;
     
-    const prayer = await Prayer.create({
+    const prayer = await Content.create({
+      type: 'prayer',
       title,
       content,
-      author,
-      category,
+      audio_url,
       tags: tags || [],
-      created_by: req.session.user.id
+      isActive: is_active !== false,
+      metadata: {
+        category: category || 'other',
+        author: author || '',
+        usage_count: 0
+      }
     });
     
-    res.json({ success: true, prayer });
+    res.json({ success: true, prayer: {
+      id: prayer.id,
+      title: prayer.title,
+      content: prayer.content,
+      category: prayer.metadata.category,
+      author: prayer.metadata.author,
+      audio_url: prayer.audio_url,
+      tags: prayer.tags,
+      is_active: prayer.isActive
+    }});
   } catch (error) {
     console.error('Error creating prayer:', error);
     if (error.name === 'SequelizeUniqueConstraintError') {
@@ -1598,24 +1634,46 @@ router.post('/api/prayers', requireAdmin, async (req, res) => {
 
 router.put('/api/prayers/:id', requireAdmin, async (req, res) => {
   try {
-    const { Prayer } = require('../models');
-    const { title, content, author, category, tags, is_active } = req.body;
+    const { Content } = require('../models');
+    const { title, content, author, category, audio_url, tags, is_active } = req.body;
     
-    const prayer = await Prayer.findByPk(req.params.id);
+    const prayer = await Content.findOne({
+      where: { 
+        id: req.params.id,
+        type: 'prayer'
+      }
+    });
+    
     if (!prayer) {
       return res.status(404).json({ error: 'Prayer not found' });
     }
     
+    // Update metadata
+    const updatedMetadata = {
+      ...prayer.metadata,
+      category: category || prayer.metadata?.category || 'other',
+      author: author !== undefined ? author : prayer.metadata?.author || ''
+    };
+    
     await prayer.update({
       title,
       content,
-      author,
-      category,
+      audio_url,
       tags: tags || [],
-      is_active: is_active !== undefined ? is_active : prayer.is_active
+      isActive: is_active !== undefined ? is_active : prayer.isActive,
+      metadata: updatedMetadata
     });
     
-    res.json({ success: true, prayer });
+    res.json({ success: true, prayer: {
+      id: prayer.id,
+      title: prayer.title,
+      content: prayer.content,
+      category: updatedMetadata.category,
+      author: updatedMetadata.author,
+      audio_url: prayer.audio_url,
+      tags: prayer.tags,
+      is_active: prayer.isActive
+    }});
   } catch (error) {
     console.error('Error updating prayer:', error);
     if (error.name === 'SequelizeUniqueConstraintError') {
@@ -1628,15 +1686,21 @@ router.put('/api/prayers/:id', requireAdmin, async (req, res) => {
 
 router.delete('/api/prayers/:id', requireAdmin, async (req, res) => {
   try {
-    const { Prayer } = require('../models');
+    const { Content } = require('../models');
     
-    const prayer = await Prayer.findByPk(req.params.id);
+    const prayer = await Content.findOne({
+      where: { 
+        id: req.params.id,
+        type: 'prayer'
+      }
+    });
+    
     if (!prayer) {
       return res.status(404).json({ error: 'Prayer not found' });
     }
     
-    // Soft delete by setting is_active to false
-    await prayer.update({ is_active: false });
+    // Soft delete by setting isActive to false
+    await prayer.update({ isActive: false });
     
     res.json({ success: true });
   } catch (error) {
@@ -1666,15 +1730,32 @@ router.delete('/api/journeys/:id', requireAdmin, async (req, res) => {
 // Prayers management
 router.get('/prayers', requireAdmin, async (req, res) => {
   try {
-    const { Prayer } = require('../models');
-    const prayers = await Prayer.findAll({
-      order: [['category', 'ASC'], ['title', 'ASC']]
+    const { Content } = require('../models');
+    const prayers = await Content.findAll({
+      where: { type: 'prayer' },
+      order: [['metadata.category', 'ASC'], ['title', 'ASC']]
     });
+    
+    // Transform prayers to match expected format
+    const formattedPrayers = prayers.map(prayer => ({
+      id: prayer.id,
+      title: prayer.title,
+      content: prayer.content,
+      category: prayer.metadata?.category || 'other',
+      author: prayer.metadata?.author || '',
+      audio_url: prayer.audio_url || '',
+      tags: prayer.tags || [],
+      is_active: prayer.isActive,
+      usage_count: prayer.metadata?.usage_count || 0,
+      lastUsedDate: prayer.metadata?.lastUsedDate || null,
+      createdAt: prayer.createdAt,
+      updatedAt: prayer.updatedAt
+    }));
     
     res.render('pages/admin/prayers', {
       title: 'Prayer Management',
       user: req.session.user,
-      prayers
+      prayers: formattedPrayers
     });
   } catch (error) {
     console.error('Error rendering prayer management:', error);
