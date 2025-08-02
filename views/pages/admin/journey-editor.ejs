@@ -80,9 +80,12 @@
               <p class="day-description"><%= day.description || 'No description' %></p>
               
               <div class="day-contents">
-                <% if (day.content && day.content.length > 0) { %>
+                <% 
+                  const dayContent = day.content || day.contents || [];
+                %>
+                <% if (dayContent.length > 0) { %>
                   <div class="content-count">
-                    <i class="fas fa-list"></i> <%= day.content.length %> content items
+                    <i class="fas fa-list"></i> <%= dayContent.length %> content items
                   </div>
                 <% } else { %>
                   <div class="no-content">
@@ -627,11 +630,24 @@
 </style>
 
 <script>
-let currentJourneyId = '<%= journey.id %>';
-let journeyDays = <%- JSON.stringify(journeyDays.map(day => ({
-  ...day.toJSON(),
-  contents: day.content || []
-}))) %>;
+let currentJourneyId;
+let journeyDays;
+
+try {
+  currentJourneyId = '<%= journey.id %>';
+  journeyDays = <%- JSON.stringify(journeyDays.map(day => ({
+    ...day.toJSON(),
+    contents: day.content || []
+  }))) %>;
+  
+  // Log to verify data loaded
+  console.log('Journey editor loaded for:', currentJourneyId);
+  console.log('Journey days:', journeyDays);
+} catch (error) {
+  console.error('Error initializing journey data:', error);
+  currentJourneyId = '<%= journey.id %>';
+  journeyDays = [];
+}
 
 async function saveJourney() {
   const journeyData = {
@@ -1363,4 +1379,17 @@ window.onclick = function(event) {
     closeContentPicker();
   }
 }
+
+// Verify critical functions are defined
+window.addEventListener('DOMContentLoaded', function() {
+  console.log('Checking if functions are defined:');
+  console.log('editDay:', typeof editDay);
+  console.log('saveJourney:', typeof saveJourney);
+  console.log('addDay:', typeof addDay);
+  console.log('deleteDay:', typeof deleteDay);
+  
+  if (typeof editDay === 'undefined') {
+    console.error('editDay function is not defined! Check for JavaScript errors above.');
+  }
+});
 </script>
