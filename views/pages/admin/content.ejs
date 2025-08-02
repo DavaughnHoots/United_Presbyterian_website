@@ -307,258 +307,29 @@
 }
 </style>
 
+<!-- Initialize content library data -->
 <script>
-let allContent = [];
-
-// Store content data for client-side operations
-<% if (content) { %>
-    allContent = <%- JSON.stringify(content) %>;
-<% } %>
-
-function filterContent() {
-    const typeFilter = document.getElementById('typeFilter').value;
-    const themeFilter = document.getElementById('themeFilter').value.toLowerCase();
-    const statusFilter = document.getElementById('statusFilter').value;
-    const sortBy = document.getElementById('sortBy').value;
-    
-    const contentItems = document.querySelectorAll('.content-item');
-    
-    contentItems.forEach(item => {
-        const type = item.dataset.type;
-        const theme = (item.dataset.theme || '').toLowerCase();
-        const status = item.dataset.status;
-        
-        let show = true;
-        
-        if (typeFilter && type !== typeFilter) show = false;
-        if (themeFilter && !theme.includes(themeFilter)) show = false;
-        if (statusFilter && status !== statusFilter) show = false;
-        
-        item.style.display = show ? 'block' : 'none';
-    });
-}
-
-function updateFormFields() {
-    const type = document.getElementById('contentType').value;
-    
-    // Hide all optional fields first
-    document.getElementById('biblePassageField').style.display = 'none';
-    document.getElementById('youtubeField').style.display = 'none';
-    document.getElementById('imageUrlField').style.display = 'none';
-    document.getElementById('videoUrlField').style.display = 'none';
-    document.getElementById('audioUrlField').style.display = 'none';
-    document.getElementById('artistField').style.display = 'none';
-    document.getElementById('instructionsField').style.display = 'none';
-    document.getElementById('promptsField').style.display = 'none';
-    document.getElementById('durationField').style.display = 'none';
-    
-    // Show fields based on type
-    const contentField = document.getElementById('contentText');
-    const contentLabel = contentField.previousElementSibling;
-    
-    switch(type) {
-        case 'reading':
-        case 'scripture_reading':
-            document.getElementById('biblePassageField').style.display = 'block';
-            contentLabel.textContent = 'Scripture Text*';
-            contentField.placeholder = 'Enter the scripture passage text...';
-            break;
-            
-        case 'prayer':
-        case 'guided_prayer':
-            document.getElementById('artistField').style.display = 'block';
-            document.getElementById('durationField').style.display = 'block';
-            if (type === 'guided_prayer') {
-                document.getElementById('instructionsField').style.display = 'block';
-                document.getElementById('videoUrlField').style.display = 'block';
-                document.getElementById('audioUrlField').style.display = 'block';
-            }
-            contentLabel.textContent = 'Prayer Text*';
-            contentField.placeholder = 'Enter the prayer text...';
-            break;
-            
-        case 'music':
-        case 'hymn':
-            document.getElementById('youtubeField').style.display = 'block';
-            document.getElementById('artistField').style.display = 'block';
-            contentField.required = false;
-            contentLabel.textContent = 'Lyrics (Optional)';
-            contentField.placeholder = 'Enter hymn lyrics or description...';
-            break;
-            
-        case 'artwork':
-            document.getElementById('imageUrlField').style.display = 'block';
-            document.getElementById('artistField').style.display = 'block';
-            document.getElementById('instructionsField').style.display = 'block';
-            contentLabel.textContent = 'Reflection/Description*';
-            contentField.placeholder = 'Describe the artwork and its spiritual significance...';
-            break;
-            
-        case 'video':
-            document.getElementById('videoUrlField').style.display = 'block';
-            document.getElementById('durationField').style.display = 'block';
-            document.getElementById('instructionsField').style.display = 'block';
-            contentLabel.textContent = 'Video Description*';
-            contentField.placeholder = 'Describe the video content...';
-            break;
-            
-        case 'question':
-        case 'journaling_prompt':
-            document.getElementById('promptsField').style.display = 'block';
-            document.getElementById('instructionsField').style.display = 'block';
-            contentLabel.textContent = 'Main Prompt*';
-            contentField.placeholder = 'Enter the main reflection question or journaling prompt...';
-            break;
-            
-        case 'reflection':
-            document.getElementById('instructionsField').style.display = 'block';
-            contentLabel.textContent = 'Reflection Content*';
-            contentField.placeholder = 'Write your reflection...';
-            break;
-            
-        case 'creed':
-            document.getElementById('artistField').style.display = 'block';
-            contentLabel.textContent = 'Creed Text*';
-            contentField.placeholder = 'Enter the creed text...';
-            break;
-            
-        default:
-            contentField.required = true;
-            contentLabel.textContent = 'Content*';
-            contentField.placeholder = '';
+(function() {
+  'use strict';
+  
+  // Initialize content data
+  const contentData = <% if (content) { %><%- JSON.stringify(content) %><% } else { %>[]<% } %>;
+  
+  // Initialize ContentLibrary when modules are loaded
+  window.addEventListener('DOMContentLoaded', function() {
+    if (window.ContentLibrary && window.ContentLibrary.init) {
+      window.ContentLibrary.init(contentData);
+    } else {
+      console.error('ContentLibrary modules not loaded!');
     }
-}
-
-function openAddContentModal() {
-    document.getElementById('modalTitle').textContent = 'Add New Content';
-    document.getElementById('contentForm').reset();
-    document.getElementById('contentId').value = '';
-    document.getElementById('contentModal').classList.remove('hidden');
-    updateFormFields();
-}
-
-function closeContentModal() {
-    document.getElementById('contentModal').classList.add('hidden');
-}
-
-function editContent(id) {
-    const content = allContent.find(c => c.id === id);
-    if (!content) return;
-    
-    document.getElementById('modalTitle').textContent = 'Edit Content';
-    document.getElementById('contentId').value = content.id;
-    document.getElementById('contentType').value = content.type;
-    document.getElementById('contentTitle').value = content.title;
-    document.getElementById('contentText').value = content.content || '';
-    document.getElementById('biblePassage').value = content.biblePassage || '';
-    document.getElementById('youtubeId').value = content.youtubeId || '';
-    document.getElementById('contentTheme').value = content.theme || '';
-    document.getElementById('contentSeason').value = content.season || '';
-    document.getElementById('contentTags').value = content.tags ? content.tags.join(', ') : '';
-    document.getElementById('isActive').checked = content.isActive;
-    
-    // Set new multimedia fields
-    document.getElementById('imageUrl').value = content.image_url || '';
-    document.getElementById('videoUrl').value = content.video_url || '';
-    document.getElementById('audioUrl').value = content.audio_url || '';
-    document.getElementById('artist').value = content.artist || '';
-    document.getElementById('instructions').value = content.instructions || '';
-    document.getElementById('prompts').value = content.prompts ? content.prompts.join('\n') : '';
-    document.getElementById('duration').value = content.duration_minutes || 5;
-    
-    updateFormFields();
-    document.getElementById('contentModal').classList.remove('hidden');
-}
-
-async function saveContent(event) {
-    event.preventDefault();
-    
-    const formData = new FormData(event.target);
-    const data = {
-        type: formData.get('type'),
-        title: formData.get('title'),
-        content: formData.get('content'),
-        biblePassage: formData.get('biblePassage'),
-        youtubeId: formData.get('youtubeId'),
-        theme: formData.get('theme'),
-        season: formData.get('season'),
-        tags: formData.get('tags').split(',').map(t => t.trim()).filter(t => t),
-        isActive: formData.has('isActive'),
-        image_url: formData.get('image_url'),
-        video_url: formData.get('video_url'),
-        audio_url: formData.get('audio_url'),
-        artist: formData.get('artist'),
-        instructions: formData.get('instructions'),
-        prompts: formData.get('prompts') ? formData.get('prompts').split('\n').filter(p => p.trim()) : [],
-        duration_minutes: parseInt(formData.get('duration_minutes')) || 5
-    };
-    
-    const id = formData.get('id');
-    const url = id ? `/admin/api/content/${id}` : '/admin/api/content';
-    const method = id ? 'PUT' : 'POST';
-    
-    try {
-        const response = await fetch(url, {
-            method,
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(data)
-        });
-        
-        if (response.ok) {
-            location.reload();
-        } else {
-            const error = await response.json();
-            alert('Error: ' + (error.message || 'Failed to save content'));
-        }
-    } catch (error) {
-        alert('Error: ' + error.message);
-    }
-}
-
-async function toggleContentStatus(id, currentStatus) {
-    if (!confirm(`Are you sure you want to ${currentStatus ? 'deactivate' : 'activate'} this content?`)) {
-        return;
-    }
-    
-    try {
-        const response = await fetch(`/admin/api/content/${id}/toggle`, {
-            method: 'PUT'
-        });
-        
-        if (response.ok) {
-            location.reload();
-        } else {
-            alert('Failed to update content status');
-        }
-    } catch (error) {
-        alert('Error: ' + error.message);
-    }
-}
-
-async function deleteContent(id) {
-    if (!confirm('Are you sure you want to delete this content? This action cannot be undone.')) {
-        return;
-    }
-    
-    try {
-        const response = await fetch(`/admin/api/content/${id}`, {
-            method: 'DELETE'
-        });
-        
-        if (response.ok) {
-            location.reload();
-        } else {
-            alert('Failed to delete content');
-        }
-    } catch (error) {
-        alert('Error: ' + error.message);
-    }
-}
-
-// Close modal when clicking outside
-document.getElementById('contentModal').addEventListener('click', function(e) {
-    if (e.target === this) {
-        closeContentModal();
-    }
-});
+  });
+})();
 </script>
+
+<!-- Load modular JavaScript files -->
+<script src="/js/admin/content-library-core.js"></script>
+<script src="/js/admin/content-filter-manager.js"></script>
+<script src="/js/admin/content-form-manager.js"></script>
+<script src="/js/admin/content-modal-manager.js"></script>
+<script src="/js/admin/content-media-preview.js"></script>
+<script src="/js/admin/content-library-init.js"></script>
