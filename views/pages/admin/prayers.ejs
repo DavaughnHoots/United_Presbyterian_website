@@ -364,21 +364,16 @@ function getCategoryIcon(category) {
 %>
 
 <!-- Initialize prayer data -->
+<script id="initialPrayerData" type="application/json">
+<%- JSON.stringify(prayers || []) %>
+</script>
+
 <script>
 (function() {
   'use strict';
   
-  // Initialize prayer data
-  const prayerData = <% if (prayers) { %><%- JSON.stringify(prayers) %><% } else { %>[]<% } %>;
-  
-  // Initialize PrayerManager when modules are loaded
-  window.addEventListener('DOMContentLoaded', function() {
-    if (window.PrayerManager && window.PrayerManager.init) {
-      window.PrayerManager.init(prayerData);
-    } else {
-      console.error('PrayerManager modules not loaded!');
-    }
-  });
+  // Prayer Manager will read the data from the script tag during initialization
+  console.log('Prayer page loaded, waiting for PrayerManager modules...');
 })();
 </script>
 
