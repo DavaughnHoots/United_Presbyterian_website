@@ -1,0 +1,417 @@
+<div class="max-w-7xl mx-auto">
+    <!-- Header -->
+    <div class="mb-8 flex justify-between items-center">
+        <div>
+            <h1 class="text-3xl font-bold mb-2" style="color: var(--text-primary);"><%= contentType.pluralName %> Library</h1>
+            <p class="text-gray-600"><%= contentType.description %></p>
+        </div>
+        <div class="flex gap-2">
+            <button onclick="ContentTypeManager.showImportModal()" class="btn-secondary">
+                <i class="fas fa-upload mr-2"></i>Import
+            </button>
+            <button onclick="ContentTypeManager.exportItems()" class="btn-secondary">
+                <i class="fas fa-download mr-2"></i>Export
+            </button>
+            <button onclick="ContentTypeManager.ModalManager.openAddModal()" class="btn-primary">
+                <i class="fas fa-plus mr-2"></i>Add New <%= contentType.name %>
+            </button>
+        </div>
+    </div>
+    
+    <!-- Filters -->
+    <div class="module-card mb-6">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div>
+                <label class="block text-sm font-medium mb-2">Category</label>
+                <select id="categoryFilter" onchange="ContentTypeManager.FilterManager.filterItems()" class="w-full px-3 py-2 border rounded-lg">
+                    <option value="">All Categories</option>
+                    <% contentType.categories.forEach(function(category) { %>
+                        <option value="<%= category.toLowerCase() %>"><%= category %></option>
+                    <% }) %>
+                </select>
+            </div>
+            <div>
+                <label class="block text-sm font-medium mb-2">Search</label>
+                <input type="text" id="searchFilter" placeholder="Search <%= contentType.pluralName.toLowerCase() %>..." 
+                       onkeyup="ContentTypeManager.FilterManager.filterItems()" 
+                       class="w-full px-3 py-2 border rounded-lg">
+            </div>
+            <% if (contentType.fields.season) { %>
+            <div>
+                <label class="block text-sm font-medium mb-2">Season</label>
+                <select id="seasonFilter" onchange="ContentTypeManager.FilterManager.filterItems()" class="w-full px-3 py-2 border rounded-lg">
+                    <option value="">All Seasons</option>
+                    <% contentType.fields.season.options.forEach(function(season) { %>
+                        <option value="<%= season.toLowerCase() %>"><%= season %></option>
+                    <% }) %>
+                </select>
+            </div>
+            <% } else if (contentType.fields.author || contentType.fields.artist) { %>
+            <div>
+                <label class="block text-sm font-medium mb-2"><%= contentType.fields.author ? 'Author' : 'Artist' %></label>
+                <input type="text" id="authorFilter" placeholder="Filter by <%= contentType.fields.author ? 'author' : 'artist' %>..." 
+                       onkeyup="ContentTypeManager.FilterManager.filterItems()" 
+                       class="w-full px-3 py-2 border rounded-lg">
+            </div>
+            <% } else { %>
+            <div>
+                <label class="block text-sm font-medium mb-2">Theme</label>
+                <input type="text" id="themeFilter" placeholder="Filter by theme..." 
+                       onkeyup="ContentTypeManager.FilterManager.filterItems()" 
+                       class="w-full px-3 py-2 border rounded-lg">
+            </div>
+            <% } %>
+            <div>
+                <label class="block text-sm font-medium mb-2">Sort By</label>
+                <select id="sortBy" onchange="ContentTypeManager.FilterManager.sortItems()" class="w-full px-3 py-2 border rounded-lg">
+                    <option value="title">Title</option>
+                    <option value="category">Category</option>
+                    <% if (contentType.fields.author || contentType.fields.artist) { %>
+                        <option value="author"><%= contentType.fields.author ? 'Author' : 'Artist' %></option>
+                    <% } %>
+                    <option value="recent">Recently Added</option>
+                    <option value="usage">Most Used</option>
+                </select>
+            </div>
+        </div>
+        
+        <!-- Quick Stats -->
+        <div class="mt-4 pt-4 border-t grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+            <div>
+                <span class="text-gray-600">Total:</span>
+                <span class="font-semibold ml-2" id="totalCount">0</span>
+            </div>
+            <div>
+                <span class="text-gray-600">Active:</span>
+                <span class="font-semibold ml-2 text-green-600" id="activeCount">0</span>
+            </div>
+            <div>
+                <span class="text-gray-600">Categories:</span>
+                <span class="font-semibold ml-2" id="categoryCount">0</span>
+            </div>
+            <div>
+                <span class="text-gray-600">Filtered:</span>
+                <span class="font-semibold ml-2" id="filteredCount">0</span>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Item List -->
+    <div id="itemList" class="space-y-4">
+        <% if (items && items.length > 0) { %>
+            <% items.forEach(function(item) { %>
+                <div class="module-card item-card" 
+                     data-id="<%= item.id %>"
+                     data-category="<%= item.category %>"
+                     data-author="<%= (item.author || '').toLowerCase() %>"
+                     data-theme="<%= (item.theme || '').toLowerCase() %>"
+                     data-season="<%= (item.season || '').toLowerCase() %>"
+                     data-title="<%= item.title.toLowerCase() %>"
+                     data-active="<%= item.is_active %>">
+                    <div class="flex items-start justify-between">
+                        <div class="flex-1">
+                            <div class="flex items-center mb-2">
+                                <span class="category-badge category-<%= item.category %>">
+                                    <i class="fas <%= contentType.icon %> mr-1"></i>
+                                    <%= item.category.charAt(0).toUpperCase() + item.category.slice(1) %>
+                                </span>
+                                <% if (!item.is_active) { %>
+                                    <span class="ml-2 px-2 py-1 bg-red-100 text-red-700 text-xs rounded">Inactive</span>
+                                <% } %>
+                                <% if (item.usage_count > 0) { %>
+                                    <span class="ml-2 text-sm text-gray-600">
+                                        <i class="fas fa-chart-bar mr-1"></i>Used <%= item.usage_count %> times
+                                    </span>
+                                <% } %>
+                            </div>
+                            
+                            <h3 class="text-lg font-semibold mb-1"><%= item.title %></h3>
+                            
+                            <% if (item.biblePassage) { %>
+                                <p class="text-sm text-gray-600 mb-2">
+                                    <i class="fas fa-bible mr-1"></i><%= item.biblePassage %>
+                                </p>
+                            <% } %>
+                            
+                            <% if (item.author || item.artist) { %>
+                                <p class="text-sm text-gray-600 mb-2">
+                                    <i class="fas fa-user mr-1"></i><%= item.author || item.artist %>
+                                </p>
+                            <% } %>
+                            
+                            <% if (item.duration_minutes) { %>
+                                <p class="text-sm text-gray-600 mb-2">
+                                    <i class="fas fa-clock mr-1"></i><%= item.duration_minutes %> minutes
+                                </p>
+                            <% } %>
+                            
+                            <div class="content-preview line-clamp-3">
+                                <%= item.content || item.instructions || '' %>
+                            </div>
+                            
+                            <% if (item.tags && item.tags.length > 0) { %>
+                                <div class="mt-2">
+                                    <% item.tags.forEach(function(tag) { %>
+                                        <span class="inline-block px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded mr-2 mb-1">
+                                            <%= tag %>
+                                        </span>
+                                    <% }) %>
+                                </div>
+                            <% } %>
+                            
+                            <div class="mt-2 flex flex-wrap gap-2 text-sm">
+                                <% if (item.audio_url) { %>
+                                    <span class="text-blue-600"><i class="fas fa-headphones mr-1"></i>Audio</span>
+                                <% } %>
+                                <% if (item.video_url || item.youtubeId) { %>
+                                    <span class="text-red-600"><i class="fas fa-video mr-1"></i>Video</span>
+                                <% } %>
+                                <% if (item.image_url) { %>
+                                    <span class="text-green-600"><i class="fas fa-image mr-1"></i>Image</span>
+                                <% } %>
+                            </div>
+                        </div>
+                        
+                        <div class="ml-4 flex items-center space-x-2">
+                            <button data-action="preview" data-item-id="<%= item.id %>" 
+                                    class="text-indigo-600 hover:bg-indigo-50 p-2 rounded" title="Preview">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button data-action="edit" data-item-id="<%= item.id %>" 
+                                    class="text-blue-600 hover:bg-blue-50 p-2 rounded" title="Edit">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button data-action="toggle" data-item-id="<%= item.id %>" data-is-active="<%= item.is_active %>" 
+                                    class="<%= item.is_active ? 'text-yellow-600 hover:bg-yellow-50' : 'text-green-600 hover:bg-green-50' %> p-2 rounded" 
+                                    title="<%= item.is_active ? 'Deactivate' : 'Activate' %>">
+                                <i class="fas <%= item.is_active ? 'fa-pause' : 'fa-play' %>"></i>
+                            </button>
+                            <button data-action="delete" data-item-id="<%= item.id %>" 
+                                    class="text-red-600 hover:bg-red-50 p-2 rounded" title="Delete">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            <% }) %>
+        <% } else { %>
+            <div class="module-card text-center py-12">
+                <i class="fas <%= contentType.icon %> text-4xl text-gray-400 mb-4"></i>
+                <p class="text-gray-500">No <%= contentType.pluralName.toLowerCase() %> found. Add your first <%= contentType.name.toLowerCase() %> to get started!</p>
+            </div>
+        <% } %>
+    </div>
+    
+    <!-- Empty State (hidden by default) -->
+    <div id="emptyState" class="module-card text-center py-12" style="display: none;">
+        <i class="fas fa-search text-4xl text-gray-400 mb-4"></i>
+        <p class="text-gray-500">No <%= contentType.pluralName.toLowerCase() %> match your filters.</p>
+        <button onclick="ContentTypeManager.FilterManager.resetFilters()" class="btn btn-sm btn-secondary mt-4">
+            Reset Filters
+        </button>
+    </div>
+</div>
+
+<!-- Add/Edit Modal -->
+<div id="contentModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+    <div class="flex items-center justify-center min-h-screen p-4">
+        <div class="bg-white rounded-lg max-w-3xl w-full max-h-[90vh] overflow-hidden">
+            <div class="p-6 border-b">
+                <div class="flex justify-between items-center">
+                    <h2 id="modalTitle" class="text-2xl font-bold">Add New <%= contentType.name %></h2>
+                    <button onclick="ContentTypeManager.ModalManager.closeModal()" class="text-gray-500 hover:text-gray-700">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <form id="contentForm" onsubmit="ContentTypeManager.FormManager.saveItem(event)">
+                <div class="p-6 overflow-y-auto" style="max-height: calc(90vh - 180px);">
+                    <input type="hidden" id="itemId" name="id">
+                    
+                    <!-- Dynamic form fields based on content type -->
+                    <% Object.entries(contentType.fields).forEach(function([fieldName, field]) { %>
+                        <% if (field.type === 'array') { %>
+                            <!-- Array field (for prompts, questions, etc.) -->
+                            <div class="mb-4">
+                                <label class="block text-sm font-medium mb-2"><%= field.label %><% if (field.required) { %>*<% } %></label>
+                                <div id="<%= fieldName %>Container" class="space-y-2">
+                                    <!-- Array items will be added dynamically -->
+                                </div>
+                                <button type="button" onclick="ContentTypeManager.FormManager.addArrayItem('<%= fieldName %>')" 
+                                        class="mt-2 text-sm text-blue-600 hover:text-blue-800">
+                                    <i class="fas fa-plus mr-1"></i>Add <%= field.label.slice(0, -1) %>
+                                </button>
+                            </div>
+                        <% } else if (field.type === 'select') { %>
+                            <!-- Select field -->
+                            <div class="mb-4">
+                                <label class="block text-sm font-medium mb-2"><%= field.label %><% if (field.required) { %>*<% } %></label>
+                                <select id="<%= fieldName %>" name="<%= fieldName %>" <% if (field.required) { %>required<% } %> 
+                                        class="w-full px-3 py-2 border rounded-lg">
+                                    <option value="">Select <%= field.label %></option>
+                                    <% field.options.forEach(function(option) { %>
+                                        <option value="<%= option.toLowerCase() %>"><%= option %></option>
+                                    <% }) %>
+                                </select>
+                            </div>
+                        <% } else if (field.type === 'textarea') { %>
+                            <!-- Textarea field -->
+                            <div class="mb-4">
+                                <label class="block text-sm font-medium mb-2"><%= field.label %><% if (field.required) { %>*<% } %></label>
+                                <textarea id="<%= fieldName %>" name="<%= fieldName %>" rows="<%= field.rows || 4 %>" 
+                                          <% if (field.required) { %>required<% } %>
+                                          class="w-full px-3 py-2 border rounded-lg"><%= field.placeholder || '' %></textarea>
+                            </div>
+                        <% } else if (field.type === 'number') { %>
+                            <!-- Number field -->
+                            <div class="mb-4">
+                                <label class="block text-sm font-medium mb-2"><%= field.label %><% if (field.required) { %>*<% } %></label>
+                                <input type="number" id="<%= fieldName %>" name="<%= fieldName %>" 
+                                       <% if (field.default) { %>value="<%= field.default %>"<% } %>
+                                       <% if (field.required) { %>required<% } %>
+                                       class="w-full px-3 py-2 border rounded-lg">
+                            </div>
+                        <% } else { %>
+                            <!-- Text/URL field -->
+                            <div class="mb-4">
+                                <label class="block text-sm font-medium mb-2"><%= field.label %><% if (field.required) { %>*<% } %></label>
+                                <input type="<%= field.type === 'url' ? 'url' : 'text' %>" 
+                                       id="<%= fieldName %>" name="<%= fieldName %>" 
+                                       placeholder="<%= field.placeholder || '' %>"
+                                       <% if (field.required) { %>required<% } %>
+                                       class="w-full px-3 py-2 border rounded-lg">
+                            </div>
+                        <% } %>
+                    <% }) %>
+                    
+                    <!-- Category field (common to all) -->
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium mb-2">Category*</label>
+                        <select id="itemCategory" name="category" required class="w-full px-3 py-2 border rounded-lg">
+                            <option value="">Select Category</option>
+                            <% contentType.categories.forEach(function(category) { %>
+                                <option value="<%= category.toLowerCase() %>"><%= category %></option>
+                            <% }) %>
+                        </select>
+                    </div>
+                    
+                    <!-- Active status -->
+                    <div class="mb-4">
+                        <label class="flex items-center">
+                            <input type="checkbox" id="itemIsActive" name="is_active" checked class="mr-2">
+                            <span class="text-sm">Active (available for use)</span>
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="p-6 border-t flex justify-end space-x-3">
+                    <button type="button" onclick="ContentTypeManager.ModalManager.closeModal()" 
+                            class="px-4 py-2 border rounded-lg hover:bg-gray-50">
+                        Cancel
+                    </button>
+                    <button type="submit" class="btn-primary">
+                        <i class="fas fa-save mr-2"></i>Save <%= contentType.name %>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Preview Modal -->
+<div id="previewModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+    <div class="flex items-center justify-center min-h-screen p-4">
+        <div class="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-hidden">
+            <div class="p-6 border-b">
+                <div class="flex justify-between items-center">
+                    <h2 class="text-2xl font-bold"><%= contentType.name %> Preview</h2>
+                    <button onclick="ContentTypeManager.ModalManager.closePreview()" class="text-gray-500 hover:text-gray-700">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+            </div>
+            <div id="previewContent" class="p-6 overflow-y-auto" style="max-height: calc(90vh - 120px);">
+                <!-- Preview content will be inserted here -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Import Modal -->
+<div id="importModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+    <div class="flex items-center justify-center min-h-screen p-4">
+        <div class="bg-white rounded-lg max-w-md w-full">
+            <div class="p-6 border-b">
+                <div class="flex justify-between items-center">
+                    <h2 class="text-2xl font-bold">Import <%= contentType.pluralName %></h2>
+                    <button onclick="ContentTypeManager.closeImportModal()" class="text-gray-500 hover:text-gray-700">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="p-6">
+                <p class="text-gray-600 mb-4">Upload a JSON file containing <%= contentType.pluralName.toLowerCase() %> to import.</p>
+                <input type="file" id="importFile" accept=".json" class="mb-4">
+                <div class="flex justify-end space-x-3">
+                    <button onclick="ContentTypeManager.closeImportModal()" class="px-4 py-2 border rounded-lg hover:bg-gray-50">
+                        Cancel
+                    </button>
+                    <button onclick="ContentTypeManager.importItems()" class="btn-primary">
+                        <i class="fas fa-upload mr-2"></i>Import
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.category-badge {
+    @apply px-3 py-1 rounded-full text-sm font-medium;
+}
+
+/* Dynamic category colors */
+<% contentType.categories.forEach(function(category) { %>
+.category-<%= category.toLowerCase() %> { 
+    @apply bg-<%= contentType.color %>-100 text-<%= contentType.color %>-700; 
+}
+<% }) %>
+
+.content-preview {
+    white-space: pre-line;
+}
+</style>
+
+<!-- Initialize content data -->
+<script id="initialContentData" type="application/json">
+<%- JSON.stringify(items || []) %>
+</script>
+
+<script id="contentTypeConfig" type="application/json">
+<%- JSON.stringify(contentType) %>
+</script>
+
+<script>
+(function() {
+  'use strict';
+  
+  // Content Manager will read the data from the script tags during initialization
+  console.log('Content type page loaded for <%= contentType.dbType %>, waiting for ContentTypeManager modules...');
+})();
+</script>
+
+<!-- Load modular JavaScript files -->
+<script src="/js/admin/content-type-manager-core.js"></script>
+<script src="/js/admin/content-type-filter-manager.js"></script>
+<script src="/js/admin/content-type-form-manager.js"></script>
+<script src="/js/admin/content-type-modal-manager.js"></script>
+<script src="/js/admin/content-type-export-import.js"></script>
+<script src="/js/admin/content-type-manager-init.js"></script>

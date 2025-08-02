@@ -1763,6 +1763,66 @@ router.get('/prayers', requireAdmin, async (req, res) => {
   }
 });
 
+// Content Type Management Routes
+const { contentTypes, getContentTypeBySlug } = require('../config/contentTypes');
+
+// Generic content type route handler
+const contentTypeRoutes = ['scripture-readings', 'hymns', 'journaling-prompts', 'guided-prayers', 'reflections', 'artwork', 'videos', 'creeds'];
+
+contentTypeRoutes.forEach(urlSlug => {
+  router.get(`/${urlSlug}`, requireAdmin, async (req, res) => {
+    try {
+      const contentType = getContentTypeBySlug(urlSlug);
+      if (!contentType) {
+        return res.status(404).send('Content type not found');
+      }
+
+      const { Content } = require('../models');
+      const items = await Content.findAll({
+        where: { type: contentType.dbType },
+        order: [['title', 'ASC']]
+      });
+      
+      // Transform items to match expected format
+      const formattedItems = items.map(item => ({
+        id: item.id,
+        title: item.title,
+        content: item.content,
+        category: item.metadata?.category || contentType.categories[contentType.categories.length - 1].toLowerCase(),
+        author: item.metadata?.author || item.artist || '',
+        theme: item.theme,
+        season: item.season,
+        tags: item.tags || [],
+        is_active: item.isActive,
+        usage_count: item.metadata?.usage_count || item.usageCount || 0,
+        lastUsedDate: item.lastUsedDate,
+        createdAt: item.createdAt,
+        // Type-specific fields
+        biblePassage: item.biblePassage,
+        youtubeId: item.youtubeId,
+        audio_url: item.audio_url,
+        video_url: item.video_url,
+        image_url: item.image_url,
+        duration_minutes: item.duration_minutes,
+        instructions: item.instructions,
+        prompts: item.prompts,
+        // Additional metadata
+        ...item.metadata
+      }));
+      
+      res.render(`pages/admin/content-type`, {
+        title: `${contentType.pluralName} Management`,
+        user: req.session.user,
+        items: formattedItems,
+        contentType: contentType
+      });
+    } catch (error) {
+      console.error(`Error rendering ${urlSlug} management:`, error);
+      res.status(500).send('Internal server error');
+    }
+  });
+});
+
 // Import journey
 router.post('/api/journeys/import', requireAdmin, async (req, res) => {
   const { Journey, JourneyDay, JourneyContent, Content } = require('../models');
