@@ -147,7 +147,7 @@
                                     class="text-blue-600 hover:bg-blue-50 p-2 rounded" title="Edit">
                                 <i class="fas fa-edit"></i>
                             </button>
-                            <button onclick="PrayerManager.togglePrayerStatus('<%= prayer.id %>', <%= prayer.is_active ? 'true' : 'false' %>)" 
+                            <button data-action="toggle" data-prayer-id="<%= prayer.id %>" data-is-active="<%= prayer.is_active %>" 
                                     class="<%= prayer.is_active ? 'text-yellow-600 hover:bg-yellow-50' : 'text-green-600 hover:bg-green-50' %> p-2 rounded" 
                                     title="<%= prayer.is_active ? 'Deactivate' : 'Activate' %>">
                                 <i class="fas <%= prayer.is_active ? 'fa-pause' : 'fa-play' %>"></i>
