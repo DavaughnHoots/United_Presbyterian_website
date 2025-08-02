@@ -1456,10 +1456,10 @@ router.get('/api/content/unified/search', requireAdmin, async (req, res) => {
     const content = await Content.findAll({
       where,
       order: [
-        ['usageCount', 'ASC'],
+        ['createdAt', 'DESC'],  // Newest first
         ['title', 'ASC']
       ],
-      limit: 50
+      limit: 100  // Increased limit for journey building
     });
     
     res.json(content);
