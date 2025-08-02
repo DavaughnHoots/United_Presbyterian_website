@@ -3,12 +3,112 @@
  * Simple initialization for content type management
  */
 
+// Set up global object and methods immediately
+window.ContentTypeManager = window.ContentTypeManager || {};
+
+// Modal Manager - available immediately
+window.ContentTypeManager.ModalManager = {
+  openAddModal: function() {
+    const contentType = window.ContentTypeManager.getContentType ? window.ContentTypeManager.getContentType() : null;
+    const modalTitle = document.getElementById('modalTitle');
+    if (modalTitle && contentType) {
+      modalTitle.textContent = `Add New ${contentType.name}`;
+    }
+    const form = document.getElementById('contentForm');
+    if (form) form.reset();
+    const itemId = document.getElementById('itemId');
+    if (itemId) itemId.value = '';
+    const modal = document.getElementById('contentModal');
+    if (modal) modal.classList.remove('hidden');
+  },
+  closeModal: function() {
+    const modal = document.getElementById('contentModal');
+    if (modal) modal.classList.add('hidden');
+  },
+  closePreview: function() {
+    const modal = document.getElementById('previewModal');
+    if (modal) modal.classList.add('hidden');
+  }
+};
+
+// Filter Manager - available immediately
+window.ContentTypeManager.FilterManager = {
+  filterItems: function() {
+    // Will be overridden after initialization
+    console.log('Filter items called before initialization');
+  },
+  sortItems: function() {
+    // Will be overridden after initialization
+    console.log('Sort items called before initialization');
+  },
+  resetFilters: function() {
+    const searchFilter = document.getElementById('searchFilter');
+    if (searchFilter) searchFilter.value = '';
+    const categoryFilter = document.getElementById('categoryFilter');
+    if (categoryFilter) categoryFilter.value = '';
+    const seasonFilter = document.getElementById('seasonFilter');
+    if (seasonFilter) seasonFilter.value = '';
+    const authorFilter = document.getElementById('authorFilter');
+    if (authorFilter) authorFilter.value = '';
+    const themeFilter = document.getElementById('themeFilter');
+    if (themeFilter) themeFilter.value = '';
+    // Try to call filter if available
+    if (window.ContentTypeManager.FilterManager._filterItems) {
+      window.ContentTypeManager.FilterManager._filterItems();
+    }
+  }
+};
+
+// Form Manager - available immediately
+window.ContentTypeManager.FormManager = {
+  saveItem: function(event) {
+    if (event) event.preventDefault();
+    if (window.ContentTypeManager.FormManager._saveItem) {
+      window.ContentTypeManager.FormManager._saveItem();
+    }
+  },
+  addArrayItem: function(fieldName) {
+    const container = document.getElementById(`${fieldName}Container`);
+    if (!container) return;
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.className = 'w-full px-3 py-2 border rounded-lg';
+    input.placeholder = 'Enter item...';
+    const wrapper = document.createElement('div');
+    wrapper.appendChild(input);
+    container.appendChild(wrapper);
+  }
+};
+
+// Import/Export functions - available immediately
+window.ContentTypeManager.showImportModal = function() {
+  const modal = document.getElementById('importModal');
+  if (modal) modal.classList.remove('hidden');
+};
+
+window.ContentTypeManager.closeImportModal = function() {
+  const modal = document.getElementById('importModal');
+  if (modal) modal.classList.add('hidden');
+};
+
+window.ContentTypeManager.importItems = function() {
+  const fileInput = document.getElementById('importFile');
+  if (fileInput && fileInput.files.length > 0 && window.ContentTypeManager._importItems) {
+    window.ContentTypeManager._importItems(fileInput.files[0]);
+    window.ContentTypeManager.closeImportModal();
+  }
+};
+
+window.ContentTypeManager.exportItems = function() {
+  if (window.ContentTypeManager._exportItems) {
+    window.ContentTypeManager._exportItems();
+  }
+};
+
+// Initialize when DOM is ready
 (function() {
   'use strict';
 
-  /**
-   * Initialize when DOM is ready
-   */
   document.addEventListener('DOMContentLoaded', function() {
     console.log('Initializing Content Type Manager...');
     
@@ -38,8 +138,21 @@
     // Initialize the manager
     ContentTypeManager.init(items, contentType);
     
+    // Store references to internal functions
+    window.ContentTypeManager._importItems = ContentTypeManager.importItems;
+    window.ContentTypeManager._exportItems = ContentTypeManager.exportItems;
+    window.ContentTypeManager.getContentType = ContentTypeManager.getContentType;
+    
     // Set up event listeners using delegation
     setupEventListeners();
+    
+    // Set up filter and sort functions
+    window.ContentTypeManager.FilterManager._filterItems = filterItems;
+    window.ContentTypeManager.FilterManager.filterItems = filterItems;
+    window.ContentTypeManager.FilterManager.sortItems = sortItems;
+    
+    // Set up save function
+    window.ContentTypeManager.FormManager._saveItem = saveItem;
     
     console.log(`Content Type Manager initialized for ${contentType.name}`);
   });
@@ -350,72 +463,5 @@
     // Reorder DOM
     items.forEach(item => itemList.appendChild(item));
   }
-
-  // Expose functions globally for onclick handlers
-  window.ContentTypeManager = window.ContentTypeManager || {};
-  window.ContentTypeManager.ModalManager = {
-    openAddModal: function() {
-      document.getElementById('modalTitle').textContent = `Add New ${ContentTypeManager.getContentType().name}`;
-      document.getElementById('contentForm').reset();
-      document.getElementById('itemId').value = '';
-      document.getElementById('contentModal').classList.remove('hidden');
-    },
-    closeModal: function() {
-      document.getElementById('contentModal').classList.add('hidden');
-    },
-    closePreview: function() {
-      document.getElementById('previewModal').classList.add('hidden');
-    }
-  };
-  
-  window.ContentTypeManager.FilterManager = {
-    filterItems: filterItems,
-    sortItems: sortItems,
-    resetFilters: function() {
-      document.getElementById('searchFilter').value = '';
-      document.getElementById('categoryFilter').value = '';
-      const seasonFilter = document.getElementById('seasonFilter');
-      if (seasonFilter) seasonFilter.value = '';
-      const authorFilter = document.getElementById('authorFilter');
-      if (authorFilter) authorFilter.value = '';
-      const themeFilter = document.getElementById('themeFilter');
-      if (themeFilter) themeFilter.value = '';
-      filterItems();
-    }
-  };
-  
-  window.ContentTypeManager.FormManager = {
-    saveItem: saveItem,
-    addArrayItem: function(fieldName) {
-      const container = document.getElementById(`${fieldName}Container`);
-      const input = document.createElement('input');
-      input.type = 'text';
-      input.className = 'w-full px-3 py-2 border rounded-lg';
-      input.placeholder = 'Enter item...';
-      const wrapper = document.createElement('div');
-      wrapper.appendChild(input);
-      container.appendChild(wrapper);
-    }
-  };
-  
-  window.ContentTypeManager.showImportModal = function() {
-    document.getElementById('importModal').classList.remove('hidden');
-  };
-  
-  window.ContentTypeManager.closeImportModal = function() {
-    document.getElementById('importModal').classList.add('hidden');
-  };
-  
-  window.ContentTypeManager.importItems = function() {
-    const fileInput = document.getElementById('importFile');
-    if (fileInput.files.length > 0) {
-      ContentTypeManager.importItems(fileInput.files[0]);
-      window.ContentTypeManager.closeImportModal();
-    }
-  };
-  
-  window.ContentTypeManager.exportItems = function() {
-    ContentTypeManager.exportItems();
-  };
 
 })();
