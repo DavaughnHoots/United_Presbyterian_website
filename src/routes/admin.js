@@ -1733,7 +1733,7 @@ router.get('/prayers', requireAdmin, async (req, res) => {
     const { Content } = require('../models');
     const prayers = await Content.findAll({
       where: { type: 'prayer' },
-      order: [['metadata.category', 'ASC'], ['title', 'ASC']]
+      order: [['title', 'ASC']]
     });
     
     // Transform prayers to match expected format
