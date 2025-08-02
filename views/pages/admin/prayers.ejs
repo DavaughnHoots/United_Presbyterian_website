@@ -85,7 +85,7 @@
     <!-- Prayer List -->
     <div id="prayerList" class="space-y-4">
         <% if (prayers && prayers.length > 0) { %>
-            <% prayers.forEach(prayer => { %>
+            <% prayers.forEach(function(prayer) { %>
                 <div class="module-card prayer-item" 
                      data-id="<%= prayer.id %>"
                      data-category="<%= prayer.category %>"
@@ -123,11 +123,11 @@
                             
                             <% if (prayer.tags && prayer.tags.length > 0) { %>
                                 <div class="mt-2">
-                                    <% prayer.tags.forEach(tag => { %>
+                                    <% prayer.tags.forEach(function(tag) { %>
                                         <span class="inline-block px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded mr-2 mb-1">
                                             <%= tag %>
                                         </span>
-                                    <% } %>
+                                    <% }) %>
                                 </div>
                             <% } %>
                             
