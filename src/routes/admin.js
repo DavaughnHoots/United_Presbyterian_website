@@ -1119,8 +1119,11 @@ router.get('/journeys/edit/:id', requireAdmin, async (req, res) => {
   try {
     const { Journey, JourneyDay, JourneyContent } = require('../models');
     
+    console.log('Journey edit route hit for ID:', req.params.id);
+    
     const journey = await Journey.findByPk(req.params.id);
     if (!journey) {
+      console.error('Journey not found:', req.params.id);
       return res.status(404).send('Journey not found');
     }
     
@@ -1133,6 +1136,8 @@ router.get('/journeys/edit/:id', requireAdmin, async (req, res) => {
       }],
       order: [['day_number', 'ASC']]
     });
+    
+    console.log('Rendering journey-editor for:', journey.title);
     
     res.render('pages/admin/journey-editor', {
       title: `Edit Journey: ${journey.title}`,
