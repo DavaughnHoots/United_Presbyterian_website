@@ -1140,15 +1140,12 @@ router.get('/journeys/edit/:id', requireAdmin, async (req, res) => {
     console.log('Rendering journey-editor for:', journey.title);
     console.log('Journey days count:', journeyDays.length);
     
-    // Force a specific response to verify the route is hit
-    if (req.query.debug === 'true') {
-      return res.json({
-        message: 'Journey editor route is working',
-        journeyId: journey.id,
-        journeyTitle: journey.title,
-        daysCount: journeyDays.length
-      });
-    }
+    // Force no-cache headers to prevent 304 responses
+    res.set({
+      'Cache-Control': 'no-store, no-cache, must-revalidate, private',
+      'Pragma': 'no-cache',
+      'Expires': '0'
+    });
     
     res.render('pages/admin/journey-editor', {
       title: `Edit Journey: ${journey.title}`,
