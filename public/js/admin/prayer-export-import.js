@@ -7,6 +7,10 @@ window.PrayerManager = window.PrayerManager || {};
 
 (function(PrayerManager) {
   'use strict';
+  
+  console.log('Prayer Export/Import module loading...');
+  
+  try {
 
   /**
    * Export prayers to JSON file
@@ -341,7 +345,6 @@ window.PrayerManager = window.PrayerManager || {};
       PrayerManager.showMessage('No prayers found in import data', 'warning');
       return;
     }
-      
     
     // Confirm import
     const confirmMsg = `Import ${prayers.length} prayers? Duplicate titles will be skipped.`;
@@ -355,63 +358,63 @@ window.PrayerManager = window.PrayerManager || {};
     
     for (const prayerData of prayers) {
       try {
-          // Validate required fields
-          if (!prayerData.title || !prayerData.category || !prayerData.content) {
-            skipped++;
-            continue;
-          }
-          
-          // Check if prayer with same title exists
-          const existing = PrayerManager.getAllPrayers().find(p => 
-            p.title.toLowerCase() === prayerData.title.toLowerCase()
-          );
-          
-          if (existing) {
-            skipped++;
-            continue;
-          }
-          
-          // Create prayer
-          const response = await fetch('/admin/api/prayers', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              title: prayerData.title,
-              category: prayerData.category,
-              author: prayerData.author || '',
-              content: prayerData.content,
-              audio_url: prayerData.audio_url || '',
-              tags: prayerData.tags || [],
-              bible_references: prayerData.bible_references || [],
-              metadata: prayerData.metadata || {},
-              is_active: prayerData.is_active !== false
-            })
-          });
-          
-          if (response.ok) {
-            imported++;
-          } else {
-            skipped++;
-          }
-        } catch (error) {
-          console.error('Error importing prayer:', error);
+        // Validate required fields
+        if (!prayerData.title || !prayerData.category || !prayerData.content) {
+          skipped++;
+          continue;
+        }
+        
+        // Check if prayer with same title exists
+        const existing = PrayerManager.getAllPrayers().find(p => 
+          p.title.toLowerCase() === prayerData.title.toLowerCase()
+        );
+        
+        if (existing) {
+          skipped++;
+          continue;
+        }
+        
+        // Create prayer
+        const response = await fetch('/admin/api/prayers', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            title: prayerData.title,
+            category: prayerData.category,
+            author: prayerData.author || '',
+            content: prayerData.content,
+            audio_url: prayerData.audio_url || '',
+            tags: prayerData.tags || [],
+            bible_references: prayerData.bible_references || [],
+            metadata: prayerData.metadata || {},
+            is_active: prayerData.is_active !== false
+          })
+        });
+        
+        if (response.ok) {
+          imported++;
+        } else {
           skipped++;
         }
+      } catch (error) {
+        console.error('Error importing prayer:', error);
+        skipped++;
       }
-      
-      PrayerManager.showMessage(
-        `Import complete! Imported: ${imported}, Skipped: ${skipped}`,
-        imported > 0 ? 'success' : 'warning'
-      );
-      
-      if (imported > 0) {
-        PrayerManager.closeImportModal();
-        setTimeout(() => window.location.reload(), 2000);
-      }
-    } catch (error) {
-      console.error('Error importing prayers:', error);
-      PrayerManager.showMessage('Failed to import prayers: ' + error.message, 'error');
     }
+    
+    PrayerManager.showMessage(
+      `Import complete! Imported: ${imported}, Skipped: ${skipped}`,
+      imported > 0 ? 'success' : 'warning'
+    );
+    
+    if (imported > 0) {
+      PrayerManager.closeImportModal();
+      setTimeout(() => window.location.reload(), 2000);
+    }
+  } catch (error) {
+    console.error('Error importing prayers:', error);
+    PrayerManager.showMessage('Failed to import prayers: ' + error.message, 'error');
+  }
   };
 
   /**
@@ -480,5 +483,16 @@ window.PrayerManager = window.PrayerManager || {};
     // Restore original filtered
     PrayerManager.updateFilteredStats(originalFiltered);
   };
+
+  console.log('Prayer Export/Import module loaded successfully');
+  
+  // Verify functions are attached
+  console.log('showImportModal:', typeof PrayerManager.showImportModal);
+  console.log('exportPrayers:', typeof PrayerManager.exportPrayers);
+  
+  } catch (error) {
+    console.error('Error loading Prayer Export/Import module:', error);
+    console.error('Stack trace:', error.stack);
+  }
 
 })(window.PrayerManager);
