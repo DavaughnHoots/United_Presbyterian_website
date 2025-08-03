@@ -171,7 +171,7 @@ const DailyScheduler = (function() {
     async function updateCalendar() {
         // Fetch content for new month
         try {
-            const response = await fetch(`/api/admin/daily-schedule/${currentYear}/${currentMonth}`);
+            const response = await fetch(`/admin/api/admin/daily-schedule/${currentYear}/${currentMonth}`);
             if (response.ok) {
                 contentByDate = await response.json();
             }
@@ -274,13 +274,17 @@ const DailyScheduler = (function() {
         
         // Fetch available content
         try {
-            const response = await fetch(`/api/content/${contentType}`);
+            const response = await fetch(`/admin/api/content/${contentType}`);
             if (response.ok) {
                 const content = await response.json();
                 displayContentList(content);
+            } else {
+                console.error('Failed to fetch content:', response.status);
+                displayContentList([]);
             }
         } catch (error) {
             console.error('Error fetching content:', error);
+            displayContentList([]);
         }
         
         document.getElementById('contentSelectionModal').classList.remove('hidden');
@@ -374,7 +378,7 @@ const DailyScheduler = (function() {
         } else {
             // Remove from database
             try {
-                const response = await fetch(`/api/admin/daily-schedule/${itemId}`, {
+                const response = await fetch(`/admin/api/admin/daily-schedule/${itemId}`, {
                     method: 'DELETE'
                 });
                 
@@ -412,7 +416,7 @@ const DailyScheduler = (function() {
         }
         
         try {
-            const response = await fetch('/api/admin/daily-schedule', {
+            const response = await fetch('/admin/api/admin/daily-schedule', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -484,7 +488,7 @@ const DailyScheduler = (function() {
         }
         
         try {
-            const response = await fetch('/api/admin/daily-schedule/generate', {
+            const response = await fetch('/admin/api/admin/daily-schedule/generate', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
