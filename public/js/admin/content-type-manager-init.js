@@ -182,7 +182,15 @@ window.ContentTypeManager.exportItems = function() {
           break;
           
         case 'import-confirm':
-          window.ContentTypeManager.importItems();
+          importFromCurrentTab();
+          break;
+          
+        case 'validate-json':
+          validateJsonInput();
+          break;
+          
+        case 'copy-example':
+          copyExampleTemplate();
           break;
           
         case 'reset-filters':
@@ -216,6 +224,14 @@ window.ContentTypeManager.exportItems = function() {
         case 'delete':
           ContentTypeManager.deleteItem(button.dataset.itemId);
           break;
+      }
+    });
+    
+    // Tab switching in import modal
+    document.addEventListener('click', function(e) {
+      if (e.target.matches('[data-tab]')) {
+        const tab = e.target.dataset.tab;
+        showImportTab(tab);
       }
     });
     
@@ -490,5 +506,223 @@ window.ContentTypeManager.exportItems = function() {
     // Reorder DOM
     items.forEach(item => itemList.appendChild(item));
   }
+
+  /**
+   * Show specific tab in import modal
+   */
+  function showImportTab(tabName) {
+    // Update tab buttons
+    document.querySelectorAll('[data-tab]').forEach(btn => {
+      if (btn.dataset.tab === tabName) {
+        btn.classList.add('text-blue-600', 'border-b-2', 'border-blue-600');
+        btn.classList.remove('text-gray-600');
+      } else {
+        btn.classList.remove('text-blue-600', 'border-b-2', 'border-blue-600');
+        btn.classList.add('text-gray-600');
+      }
+    });
+    
+    // Show/hide content
+    document.querySelectorAll('.tab-content').forEach(content => {
+      content.classList.add('hidden');
+    });
+    
+    const contentMap = {
+      'file': 'fileImportContent',
+      'json': 'jsonImportContent',
+      'example': 'exampleContent'
+    };
+    
+    const contentId = contentMap[tabName];
+    if (contentId) {
+      document.getElementById(contentId)?.classList.remove('hidden');
+    }
+  }
+
+  /**
+   * Generate example template for current content type
+   */
+  function generateExampleTemplate() {
+    const contentType = ContentTypeManager.getContentType();
+    if (!contentType) return;
+    
+    // Build example based on content type
+    const example = {
+      title: `Example ${contentType.name}`,
+      content: 'This is the main content for your ' + contentType.name.toLowerCase(),
+      category: contentType.categories[0].toLowerCase(),
+      tags: ['example', 'template', contentType.name.toLowerCase()],
+      is_active: true
+    };
+    
+    // Add type-specific fields
+    if (contentType.dbType === 'hymn') {
+      example.artist = 'Composer Name';
+      example.youtubeId = 'dQw4w9WgXcQ';
+      example.audio_url = 'https://example.com/audio.mp3';
+      example.theme = 'Praise & Worship';
+      example.season = 'general';
+      example.metadata = {
+        composer: 'Composer Full Name',
+        tune: 'Tune Name',
+        meter: '8.8.8.8',
+        hymnalNumber: 'GTG 123'
+      };
+    } else if (contentType.dbType === 'scripture_reading') {
+      example.biblePassage = 'John 3:16-17';
+      example.theme = 'God\'s Love';
+      example.season = 'ordinary time';
+    } else if (contentType.dbType === 'guided_prayer') {
+      example.instructions = 'Begin by finding a quiet place...';
+      example.duration_minutes = 10;
+      example.prompts = ['Reflect on...', 'Consider how...', 'Pray for...'];
+    } else if (contentType.dbType === 'journaling_prompt') {
+      example.prompts = [
+        'What are you grateful for today?',
+        'How did you see God working in your life?',
+        'What challenges did you face?'
+      ];
+      example.duration_minutes = 15;
+    } else if (contentType.dbType === 'artwork') {
+      example.artist = 'Artist Name';
+      example.image_url = 'https://example.com/artwork.jpg';
+      example.metadata = {
+        medium: 'Oil on canvas',
+        year: '2024',
+        scripture_reference: 'Psalm 23'
+      };
+    } else if (contentType.dbType === 'video') {
+      example.video_url = 'https://youtube.com/watch?v=example';
+      example.duration_minutes = 5;
+      example.metadata = {
+        speaker: 'Speaker Name',
+        transcript: 'Video transcript goes here...'
+      };
+    } else if (contentType.dbType === 'creed') {
+      example.metadata = {
+        origin: 'Historical origin information',
+        usage: 'When this creed is typically used',
+        denomination: 'Presbyterian'
+      };
+    } else if (contentType.dbType === 'reflection') {
+      example.metadata = {
+        author: 'Author Name',
+        scripture_reference: 'Matthew 5:1-12',
+        discussion_questions: [
+          'What does this mean to you?',
+          'How can you apply this?'
+        ]
+      };
+    }
+    
+    // Display the example
+    const exampleElement = document.getElementById('exampleTemplate');
+    if (exampleElement) {
+      exampleElement.textContent = JSON.stringify([example], null, 2);
+    }
+  }
+
+  /**
+   * Validate JSON input
+   */
+  function validateJsonInput() {
+    const jsonInput = document.getElementById('jsonInput');
+    const validation = document.getElementById('jsonValidation');
+    
+    if (!jsonInput || !validation) return;
+    
+    try {
+      const data = JSON.parse(jsonInput.value);
+      validation.textContent = '✓ Valid JSON';
+      validation.className = 'text-sm text-green-600';
+      
+      // Additional validation
+      const items = Array.isArray(data) ? data : [data];
+      if (items.length === 0) {
+        throw new Error('No items found');
+      }
+      
+      // Check for required fields
+      items.forEach((item, index) => {
+        if (!item.title) {
+          throw new Error(`Item ${index + 1} is missing required field: title`);
+        }
+      });
+      
+      validation.textContent = `✓ Valid JSON with ${items.length} item(s)`;
+    } catch (error) {
+      validation.textContent = '✗ ' + error.message;
+      validation.className = 'text-sm text-red-600';
+    }
+  }
+
+  /**
+   * Copy example template to clipboard
+   */
+  function copyExampleTemplate() {
+    const exampleElement = document.getElementById('exampleTemplate');
+    if (!exampleElement) return;
+    
+    navigator.clipboard.writeText(exampleElement.textContent).then(() => {
+      ContentTypeManager.showToast('Example copied to clipboard!');
+    }).catch(() => {
+      ContentTypeManager.showToast('Failed to copy example', 'error');
+    });
+  }
+
+  /**
+   * Import from current active tab
+   */
+  function importFromCurrentTab() {
+    // Check which tab is active
+    const activeTab = document.querySelector('[data-tab].text-blue-600');
+    if (!activeTab) return;
+    
+    const tabName = activeTab.dataset.tab;
+    
+    if (tabName === 'file') {
+      // Original file import
+      window.ContentTypeManager.importItems();
+    } else if (tabName === 'json') {
+      // Import from JSON input
+      importFromJsonInput();
+    }
+  }
+
+  /**
+   * Import from JSON input textarea
+   */
+  async function importFromJsonInput() {
+    const jsonInput = document.getElementById('jsonInput');
+    if (!jsonInput || !jsonInput.value.trim()) {
+      ContentTypeManager.showToast('Please enter JSON data', 'error');
+      return;
+    }
+    
+    try {
+      const data = JSON.parse(jsonInput.value);
+      const items = Array.isArray(data) ? data : [data];
+      
+      // Create a fake file object for the existing import function
+      const blob = new Blob([JSON.stringify(items)], { type: 'application/json' });
+      const file = new File([blob], 'import.json', { type: 'application/json' });
+      
+      // Use existing import function
+      if (window.ContentTypeManager._importItems) {
+        await window.ContentTypeManager._importItems(file);
+        window.ContentTypeManager.closeImportModal();
+      }
+    } catch (error) {
+      ContentTypeManager.showToast('Invalid JSON: ' + error.message, 'error');
+    }
+  }
+
+  // Update the showImportModal function
+  const originalShowImportModal = window.ContentTypeManager.showImportModal;
+  window.ContentTypeManager.showImportModal = function() {
+    originalShowImportModal();
+    generateExampleTemplate();
+    showImportTab('file');
+  };
 
 })();

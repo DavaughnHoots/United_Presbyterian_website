@@ -2193,14 +2193,81 @@ router.post('/api/content/:type/import', requireAdmin, async (req, res) => {
       return res.status(400).json({ error: 'Invalid import data' });
     }
     
-    // Add type to each item and create
-    const itemsWithType = items.map(item => ({ ...item, type }));
-    const created = await Content.bulkCreate(itemsWithType);
+    // Transform each item to match database schema
+    const transformedItems = items.map(item => {
+      const transformed = {
+        type: type,
+        title: item.title,
+        content: item.content,
+        isActive: item.is_active !== undefined ? item.is_active : true,
+        metadata: item.metadata || {},
+        tags: Array.isArray(item.tags) ? item.tags : 
+              (item.tags ? item.tags.split(',').map(t => t.trim()).filter(t => t) : []),
+        // Standard fields
+        biblePassage: item.biblePassage,
+        youtubeId: item.youtubeId,
+        theme: item.theme,
+        season: item.season,
+        artist: item.artist,
+        image_url: item.image_url,
+        video_url: item.video_url,
+        audio_url: item.audio_url,
+        duration_minutes: item.duration_minutes ? parseInt(item.duration_minutes) : null,
+        instructions: item.instructions,
+        prompts: item.prompts,
+        usageCount: item.usage_count || item.usageCount || 0,
+        lastUsedDate: item.lastUsedDate
+      };
+      
+      // Handle category
+      if (item.category) {
+        transformed.metadata.category = item.category;
+      }
+      
+      // Handle type-specific metadata fields
+      if (type === 'hymn') {
+        // Map hymn-specific fields to metadata
+        if (item.composer) transformed.metadata.composer = item.composer;
+        if (item.tune) transformed.metadata.tune = item.tune;
+        if (item.meter) transformed.metadata.meter = item.meter;
+        if (item.hymnalNumber) transformed.metadata.hymnalNumber = item.hymnalNumber;
+        // Also check if artist should be set from author
+        if (item.author && !transformed.artist) transformed.artist = item.author;
+      } else if (type === 'prayer') {
+        if (item.author) transformed.metadata.author = item.author;
+      } else if (type === 'artwork') {
+        if (item.medium) transformed.metadata.medium = item.medium;
+        if (item.year) transformed.metadata.year = item.year;
+        if (item.scripture_reference) transformed.metadata.scripture_reference = item.scripture_reference;
+      } else if (type === 'video') {
+        if (item.speaker) transformed.metadata.speaker = item.speaker;
+        if (item.transcript) transformed.metadata.transcript = item.transcript;
+      } else if (type === 'creed') {
+        if (item.origin) transformed.metadata.origin = item.origin;
+        if (item.usage) transformed.metadata.usage = item.usage;
+        if (item.denomination) transformed.metadata.denomination = item.denomination;
+      } else if (type === 'reflection') {
+        if (item.author) transformed.metadata.author = item.author;
+        if (item.scripture_reference) transformed.metadata.scripture_reference = item.scripture_reference;
+        if (item.discussion_questions) transformed.metadata.discussion_questions = item.discussion_questions;
+      }
+      
+      // Remove undefined and null fields
+      Object.keys(transformed).forEach(key => {
+        if (transformed[key] === undefined || (transformed[key] === null && key !== 'type' && key !== 'title')) {
+          delete transformed[key];
+        }
+      });
+      
+      return transformed;
+    });
+    
+    const created = await Content.bulkCreate(transformedItems);
     
     res.json({ count: created.length });
   } catch (error) {
     console.error('Error importing content:', error);
-    res.status(500).json({ error: 'Failed to import content' });
+    res.status(500).json({ error: 'Failed to import content', details: error.message });
   }
 });
 
