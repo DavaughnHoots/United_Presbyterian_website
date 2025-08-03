@@ -2399,15 +2399,21 @@ router.post('/api/admin/daily-schedule', requireAdmin, async (req, res) => {
         }
       });
       
-      if (existing) {
-        continue; // Skip if already scheduled
-      }
+      let dailyContent;
       
-      const dailyContent = await DailyContent.create({
-        date,
-        contentId: item.contentId,
-        contentType: item.contentType
-      });
+      if (existing) {
+        // Update existing record
+        existing.contentId = item.contentId;
+        await existing.save();
+        dailyContent = existing;
+      } else {
+        // Create new record
+        dailyContent = await DailyContent.create({
+          date,
+          contentId: item.contentId,
+          contentType: item.contentType
+        });
+      }
       
       // Fetch the full content
       const fullItem = await DailyContent.findByPk(dailyContent.id, {

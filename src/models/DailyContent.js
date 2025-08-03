@@ -7,8 +7,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     date: {
       type: DataTypes.DATEONLY,
-      allowNull: false,
-      unique: true
+      allowNull: false
     },
     contentId: {
       type: DataTypes.UUID,
