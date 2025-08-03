@@ -238,43 +238,40 @@ router.get('/daily', async (req, res) => {
       }
     }
     
-    // Fallback to legacy daily content if no journey
-    let todayContent = null;
+    // Fallback to daily scheduled content if no journey
+    let dailyScheduledContent = [];
     let userProgress = null;
     
     if (!userJourney) {
-      // Fetch today's content
-      todayContent = await DailyContent.findOne({
+      // Fetch today's scheduled content
+      const { Content } = require('../models');
+      const todaySchedule = await DailyContent.findAll({
         where: {
-          date: today
-        }
+          date: today.toISOString().split('T')[0]
+        },
+        include: [{
+          model: Content,
+          as: 'content'
+        }],
+        order: [['contentType', 'ASC']]
       });
       
-      // If no content for today, get the most recent content
-      if (!todayContent) {
-        todayContent = await DailyContent.findOne({
-          order: [['date', 'DESC']]
-        });
-      }
-      
-      // Check user's progress for today if logged in
-      if (req.session.user && todayContent) {
-        userProgress = await UserProgress.findOne({
-          where: {
-            userId: req.session.user.id,
-            contentId: todayContent.id
-          }
-        });
-      }
+      // Transform to match journey content format
+      dailyScheduledContent = todaySchedule.map(item => ({
+        id: item.id,
+        content_type: item.contentType,
+        actualContent: item.content,
+        isCompleted: false // TODO: Track completion for daily content
+      }));
     }
     
     res.render('pages/daily-content', {
       title: 'Daily Spiritual Journey',
-      content: todayContent,
+      content: null, // Legacy field, kept for compatibility
       userProgress: userProgress,
       userJourney: userJourney,
       journeyDay: journeyDay,
-      journeyContent: journeyContent,
+      journeyContent: userJourney ? journeyContent : dailyScheduledContent,
       allContentCompleted: allContentCompleted,
       today: today.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })
     });

@@ -415,7 +415,7 @@
                     </div>
                 <% } %>
             <% }); %>
-        <% } else if (!content) { %>
+        <% } else if (journeyContent.length === 0) { %>
             <!-- No Journey Content -->
             <div class="module-card text-center py-12">
                 <i class="fas fa-map-signs text-6xl mb-4" style="color: var(--sky-blue);"></i>
@@ -424,11 +424,141 @@
             </div>
         <% } %>
         
-    <% } else if (!content) { %>
+    <% } else if (journeyContent && journeyContent.length > 0) { %>
+        <!-- Daily Scheduled Content (No Journey) -->
+        <div class="module-card mb-6">
+            <h2 class="text-2xl font-bold mb-2">Today's Spiritual Content</h2>
+            <p class="text-gray-700">Curated content for your daily spiritual practice</p>
+        </div>
+        
+        <% journeyContent.forEach((content, index) => { %>
+            <% const contentData = content.actualContent; %>
+            
+            <% if (content.content_type === 'scripture_reading' && contentData) { %>
+                <!-- Scripture Reading Card -->
+                <div class="module-card mb-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
+                                <i class="fas fa-book-open text-xl" style="color: var(--sky-blue);"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-semibold"><%= contentData.title || 'Scripture Reading' %></h3>
+                                <% if (contentData.biblePassage) { %>
+                                    <p class="text-sm text-gray-600"><%= contentData.biblePassage %></p>
+                                <% } %>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-gradient-to-r from-sky-50 to-blue-50 rounded-lg p-6">
+                        <p class="text-gray-700 leading-relaxed whitespace-pre-line">
+                            <%= contentData.content || '' %>
+                        </p>
+                    </div>
+                </div>
+            <% } else if (content.content_type === 'hymn' && contentData) { %>
+                <!-- Hymn Card -->
+                <div class="module-card mb-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
+                                <i class="fas fa-music text-xl text-green-600"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-semibold"><%= contentData.title || 'Hymn' %></h3>
+                                <% if (contentData.artist) { %>
+                                    <p class="text-sm text-gray-600"><%= contentData.artist %></p>
+                                <% } %>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-green-50 rounded-lg p-6">
+                        <p class="text-gray-700 leading-relaxed whitespace-pre-line">
+                            <%= contentData.content || '' %>
+                        </p>
+                    </div>
+                    
+                    <% if (contentData.youtubeId || contentData.audio_url) { %>
+                        <div class="mt-4 flex justify-center gap-4">
+                            <% if (contentData.youtubeId) { %>
+                                <a href="https://youtube.com/watch?v=<%= contentData.youtubeId %>" target="_blank" 
+                                   class="inline-flex items-center gap-2 px-4 py-2 bg-red-100 text-red-700 rounded-lg hover:bg-red-200">
+                                    <i class="fas fa-video"></i>
+                                    <span>Watch Video</span>
+                                </a>
+                            <% } %>
+                            <% if (contentData.audio_url) { %>
+                                <a href="<%= contentData.audio_url %>" target="_blank" 
+                                   class="inline-flex items-center gap-2 px-4 py-2 bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200">
+                                    <i class="fas fa-headphones"></i>
+                                    <span>Listen</span>
+                                </a>
+                            <% } %>
+                        </div>
+                    <% } %>
+                </div>
+            <% } else if (content.content_type === 'prayer' && contentData) { %>
+                <!-- Prayer Card -->
+                <div class="module-card mb-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-12 h-12 bg-indigo-100 rounded-full flex items-center justify-center">
+                                <i class="fas fa-praying-hands text-xl text-indigo-600"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-semibold"><%= contentData.title || 'Prayer' %></h3>
+                                <% if (contentData.author) { %>
+                                    <p class="text-sm text-gray-600"><%= contentData.author %></p>
+                                <% } %>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-indigo-50 rounded-lg p-6">
+                        <p class="text-gray-700 leading-relaxed whitespace-pre-line">
+                            <%= contentData.content || '' %>
+                        </p>
+                    </div>
+                </div>
+            <% } else if (content.content_type === 'journaling_prompt' && contentData) { %>
+                <!-- Journaling Prompt Card -->
+                <div class="module-card mb-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center">
+                                <i class="fas fa-pen-fancy text-xl text-purple-600"></i>
+                            </div>
+                            <h3 class="text-xl font-semibold"><%= contentData.title || 'Journaling Prompt' %></h3>
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-4">
+                        <% if (contentData.content) { %>
+                            <p class="text-gray-700"><%= contentData.content %></p>
+                        <% } %>
+                        
+                        <% if (contentData.prompts && contentData.prompts.length > 0) { %>
+                            <div class="bg-purple-50 rounded-lg p-6">
+                                <h4 class="font-semibold mb-3">Reflection Questions:</h4>
+                                <ol class="list-decimal list-inside space-y-2">
+                                    <% contentData.prompts.forEach(prompt => { %>
+                                        <li class="text-gray-700"><%= prompt %></li>
+                                    <% }) %>
+                                </ol>
+                            </div>
+                        <% } %>
+                    </div>
+                </div>
+            <% } %>
+        <% }); %>
+        
+    <% } else { %>
         <!-- No Content Available -->
         <div class="module-card text-center py-12">
             <i class="fas fa-seedling text-6xl mb-4" style="color: var(--sky-blue);"></i>
-            <h2 class="text-2xl font-semibold mb-2">Start Your Spiritual Journey</h2>
+            <h2 class="text-2xl font-semibold mb-2">No Content for Today</h2>
             <p class="text-gray-600 mb-6">Join a spiritual journey to receive daily scripture, prayers, and reflections.</p>
             <% if (user) { %>
                 <a href="/journeys" class="btn-primary">
