@@ -34,12 +34,12 @@ module.exports = {
           );
         `);
         
-        // Add the column
-        await queryInterface.addColumn('daily_content', 'contentType', {
-          type: 'enum_daily_content_contentType',
-          allowNull: false,
-          defaultValue: 'prayer'
-        });
+        // Add the column using raw SQL to avoid case issues
+        await queryInterface.sequelize.query(`
+          ALTER TABLE daily_content 
+          ADD COLUMN "contentType" "enum_daily_content_contentType" 
+          NOT NULL DEFAULT 'prayer';
+        `);
       } else {
         console.log('contentType column already exists - migration already complete');
       }
