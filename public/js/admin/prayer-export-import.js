@@ -106,6 +106,14 @@ window.PrayerManager = window.PrayerManager || {};
       modal.classList.remove('hidden');
       // Initialize tabs
       PrayerManager.initImportTabs();
+      
+      // Debug: Check if all elements exist
+      console.log('Import modal opened');
+      console.log('File tab:', modal.querySelector('#fileImportContent'));
+      console.log('JSON tab:', modal.querySelector('#jsonImportContent'));
+      console.log('Example tab:', modal.querySelector('#exampleContent'));
+    } else {
+      console.error('Import modal not found');
     }
   };
 
@@ -140,38 +148,62 @@ window.PrayerManager = window.PrayerManager || {};
    * Initialize import modal tabs
    */
   PrayerManager.initImportTabs = function() {
-    const tabs = document.querySelectorAll('[data-tab]');
-    tabs.forEach(tab => {
-      tab.addEventListener('click', function() {
-        const targetTab = this.getAttribute('data-tab');
-        
-        // Update tab buttons
-        tabs.forEach(t => {
-          t.classList.remove('text-blue-600', 'border-b-2', 'border-blue-600');
-          t.classList.add('text-gray-600');
-        });
-        this.classList.remove('text-gray-600');
-        this.classList.add('text-blue-600', 'border-b-2', 'border-blue-600');
-        
-        // Update content
-        document.querySelectorAll('.tab-content').forEach(content => {
-          content.classList.add('hidden');
-        });
-        
-        const targetContent = document.getElementById(targetTab + 'ImportContent');
-        if (targetContent) {
-          targetContent.classList.remove('hidden');
-        }
+    const modal = document.getElementById('importModal');
+    if (!modal) return;
+    
+    // Remove any existing listeners by using event delegation
+    const tabContainer = modal.querySelector('.flex.border-b');
+    if (!tabContainer) return;
+    
+    // Remove any existing click handler
+    if (tabContainer._tabHandler) {
+      tabContainer.removeEventListener('click', tabContainer._tabHandler);
+    }
+    
+    // Create new handler
+    tabContainer._tabHandler = function(e) {
+      const tab = e.target.closest('[data-tab]');
+      if (!tab) return;
+      
+      const targetTab = tab.getAttribute('data-tab');
+      console.log('Tab clicked:', targetTab);
+      
+      // Update tab buttons within the modal only
+      modal.querySelectorAll('[data-tab]').forEach(t => {
+        t.classList.remove('text-blue-600', 'border-b-2', 'border-blue-600');
+        t.classList.add('text-gray-600');
       });
-    });
+      tab.classList.remove('text-gray-600');
+      tab.classList.add('text-blue-600', 'border-b-2', 'border-blue-600');
+      
+      // Update content within the modal only
+      modal.querySelectorAll('.tab-content').forEach(content => {
+        content.classList.add('hidden');
+      });
+      
+      const targetContent = modal.querySelector('#' + targetTab + 'ImportContent');
+      if (targetContent) {
+        targetContent.classList.remove('hidden');
+        console.log('Showing content:', targetTab + 'ImportContent');
+      } else {
+        console.error('Content not found:', targetTab + 'ImportContent');
+      }
+    };
+    
+    // Add the handler
+    tabContainer.addEventListener('click', tabContainer._tabHandler);
+    console.log('Prayer import tabs initialized');
   };
 
   /**
    * Validate JSON input
    */
   PrayerManager.validateJSON = function() {
-    const jsonInput = document.getElementById('jsonInput');
-    const validation = document.getElementById('jsonValidation');
+    const modal = document.getElementById('importModal');
+    if (!modal) return;
+    
+    const jsonInput = modal.querySelector('#jsonInput');
+    const validation = modal.querySelector('#jsonValidation');
     
     if (!jsonInput || !validation) return;
     
@@ -198,15 +230,42 @@ window.PrayerManager = window.PrayerManager || {};
    * Copy example template
    */
   PrayerManager.copyExample = function() {
-    const exampleTemplate = document.getElementById('exampleTemplate');
-    if (!exampleTemplate) return;
+    const modal = document.getElementById('importModal');
+    if (!modal) return;
+    
+    const exampleTemplate = modal.querySelector('#exampleTemplate');
+    if (!exampleTemplate) {
+      console.error('Example template not found');
+      return;
+    }
     
     const text = exampleTemplate.textContent;
-    navigator.clipboard.writeText(text).then(() => {
-      PrayerManager.showMessage('Example copied to clipboard!', 'success');
-    }).catch(err => {
-      PrayerManager.showMessage('Failed to copy example', 'error');
-    });
+    
+    // Fallback for older browsers
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(() => {
+        PrayerManager.showMessage('Example copied to clipboard!', 'success');
+      }).catch(err => {
+        console.error('Clipboard error:', err);
+        PrayerManager.showMessage('Failed to copy example', 'error');
+      });
+    } else {
+      // Fallback method
+      const textArea = document.createElement('textarea');
+      textArea.value = text;
+      textArea.style.position = 'fixed';
+      textArea.style.opacity = '0';
+      document.body.appendChild(textArea);
+      textArea.select();
+      try {
+        document.execCommand('copy');
+        PrayerManager.showMessage('Example copied to clipboard!', 'success');
+      } catch (err) {
+        console.error('Copy error:', err);
+        PrayerManager.showMessage('Failed to copy example', 'error');
+      }
+      document.body.removeChild(textArea);
+    }
   };
 
   /**
@@ -216,8 +275,16 @@ window.PrayerManager = window.PrayerManager || {};
     let data;
     
     // Check which tab is active
-    const fileTab = document.getElementById('fileImportContent');
+    const modal = document.getElementById('importModal');
+    if (!modal) {
+      PrayerManager.showMessage('Import modal not found', 'error');
+      return;
+    }
+    
+    const fileTab = modal.querySelector('#fileImportContent');
     const isFileTabActive = fileTab && !fileTab.classList.contains('hidden');
+    
+    console.log('Import called, file tab active:', isFileTabActive);
     
     if (isFileTabActive) {
       // Import from file
@@ -243,7 +310,7 @@ window.PrayerManager = window.PrayerManager || {};
       }
     } else {
       // Import from JSON input
-      const jsonInput = document.getElementById('jsonInput');
+      const jsonInput = modal.querySelector('#jsonInput');
       if (!jsonInput || !jsonInput.value.trim()) {
         PrayerManager.showMessage('Please paste JSON data to import', 'warning');
         return;
