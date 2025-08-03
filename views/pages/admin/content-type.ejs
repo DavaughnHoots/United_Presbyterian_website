@@ -6,13 +6,13 @@
             <p class="text-gray-600"><%= contentType.description %></p>
         </div>
         <div class="flex gap-2">
-            <button onclick="ContentTypeManager.showImportModal()" class="btn-secondary">
+            <button data-action="import" class="btn-secondary">
                 <i class="fas fa-upload mr-2"></i>Import
             </button>
-            <button onclick="ContentTypeManager.exportItems()" class="btn-secondary">
+            <button data-action="export" class="btn-secondary">
                 <i class="fas fa-download mr-2"></i>Export
             </button>
-            <button onclick="ContentTypeManager.ModalManager.openAddModal()" class="btn-primary">
+            <button data-action="add-new" class="btn-primary">
                 <i class="fas fa-plus mr-2"></i>Add New <%= contentType.name %>
             </button>
         </div>
@@ -23,7 +23,7 @@
         <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div>
                 <label class="block text-sm font-medium mb-2">Category</label>
-                <select id="categoryFilter" onchange="ContentTypeManager.FilterManager.filterItems()" class="w-full px-3 py-2 border rounded-lg">
+                <select id="categoryFilter" data-filter="category" class="w-full px-3 py-2 border rounded-lg">
                     <option value="">All Categories</option>
                     <% contentType.categories.forEach(function(category) { %>
                         <option value="<%= category.toLowerCase() %>"><%= category %></option>
@@ -33,13 +33,13 @@
             <div>
                 <label class="block text-sm font-medium mb-2">Search</label>
                 <input type="text" id="searchFilter" placeholder="Search <%= contentType.pluralName.toLowerCase() %>..." 
-                       onkeyup="ContentTypeManager.FilterManager.filterItems()" 
+                       data-filter="search" 
                        class="w-full px-3 py-2 border rounded-lg">
             </div>
             <% if (contentType.fields.season) { %>
             <div>
                 <label class="block text-sm font-medium mb-2">Season</label>
-                <select id="seasonFilter" onchange="ContentTypeManager.FilterManager.filterItems()" class="w-full px-3 py-2 border rounded-lg">
+                <select id="seasonFilter" data-filter="season" class="w-full px-3 py-2 border rounded-lg">
                     <option value="">All Seasons</option>
                     <% contentType.fields.season.options.forEach(function(season) { %>
                         <option value="<%= season.toLowerCase() %>"><%= season %></option>
@@ -50,20 +50,20 @@
             <div>
                 <label class="block text-sm font-medium mb-2"><%= contentType.fields.author ? 'Author' : 'Artist' %></label>
                 <input type="text" id="authorFilter" placeholder="Filter by <%= contentType.fields.author ? 'author' : 'artist' %>..." 
-                       onkeyup="ContentTypeManager.FilterManager.filterItems()" 
+                       data-filter="author" 
                        class="w-full px-3 py-2 border rounded-lg">
             </div>
             <% } else { %>
             <div>
                 <label class="block text-sm font-medium mb-2">Theme</label>
                 <input type="text" id="themeFilter" placeholder="Filter by theme..." 
-                       onkeyup="ContentTypeManager.FilterManager.filterItems()" 
+                       data-filter="theme" 
                        class="w-full px-3 py-2 border rounded-lg">
             </div>
             <% } %>
             <div>
                 <label class="block text-sm font-medium mb-2">Sort By</label>
-                <select id="sortBy" onchange="ContentTypeManager.FilterManager.sortItems()" class="w-full px-3 py-2 border rounded-lg">
+                <select id="sortBy" data-action="sort" class="w-full px-3 py-2 border rounded-lg">
                     <option value="title">Title</option>
                     <option value="category">Category</option>
                     <% if (contentType.fields.author || contentType.fields.artist) { %>
@@ -206,7 +206,7 @@
     <div id="emptyState" class="module-card text-center py-12" style="display: none;">
         <i class="fas fa-search text-4xl text-gray-400 mb-4"></i>
         <p class="text-gray-500">No <%= contentType.pluralName.toLowerCase() %> match your filters.</p>
-        <button onclick="ContentTypeManager.FilterManager.resetFilters()" class="btn btn-sm btn-secondary mt-4">
+        <button data-action="reset-filters" class="btn btn-sm btn-secondary mt-4">
             Reset Filters
         </button>
     </div>
@@ -219,13 +219,13 @@
             <div class="p-6 border-b">
                 <div class="flex justify-between items-center">
                     <h2 id="modalTitle" class="text-2xl font-bold">Add New <%= contentType.name %></h2>
-                    <button onclick="ContentTypeManager.ModalManager.closeModal()" class="text-gray-500 hover:text-gray-700">
+                    <button data-action="close-modal" data-modal="contentModal" class="text-gray-500 hover:text-gray-700">
                         <i class="fas fa-times text-xl"></i>
                     </button>
                 </div>
             </div>
             
-            <form id="contentForm" onsubmit="ContentTypeManager.FormManager.saveItem(event)">
+            <form id="contentForm" data-action="save-item">
                 <div class="p-6 overflow-y-auto" style="max-height: calc(90vh - 180px);">
                     <input type="hidden" id="itemId" name="id">
                     
@@ -238,7 +238,7 @@
                                 <div id="<%= fieldName %>Container" class="space-y-2">
                                     <!-- Array items will be added dynamically -->
                                 </div>
-                                <button type="button" onclick="ContentTypeManager.FormManager.addArrayItem('<%= fieldName %>')" 
+                                <button type="button" data-action="add-array-item" data-field="<%= fieldName %>" 
                                         class="mt-2 text-sm text-blue-600 hover:text-blue-800">
                                     <i class="fas fa-plus mr-1"></i>Add <%= field.label.slice(0, -1) %>
                                 </button>
@@ -306,7 +306,7 @@
                 </div>
                 
                 <div class="p-6 border-t flex justify-end space-x-3">
-                    <button type="button" onclick="ContentTypeManager.ModalManager.closeModal()" 
+                    <button type="button" data-action="close-modal" data-modal="contentModal" 
                             class="px-4 py-2 border rounded-lg hover:bg-gray-50">
                         Cancel
                     </button>
@@ -326,7 +326,7 @@
             <div class="p-6 border-b">
                 <div class="flex justify-between items-center">
                     <h2 class="text-2xl font-bold"><%= contentType.name %> Preview</h2>
-                    <button onclick="ContentTypeManager.ModalManager.closePreview()" class="text-gray-500 hover:text-gray-700">
+                    <button data-action="close-modal" data-modal="previewModal" class="text-gray-500 hover:text-gray-700">
                         <i class="fas fa-times text-xl"></i>
                     </button>
                 </div>
@@ -345,7 +345,7 @@
             <div class="p-6 border-b">
                 <div class="flex justify-between items-center">
                     <h2 class="text-2xl font-bold">Import <%= contentType.pluralName %></h2>
-                    <button onclick="ContentTypeManager.closeImportModal()" class="text-gray-500 hover:text-gray-700">
+                    <button data-action="close-modal" data-modal="importModal" class="text-gray-500 hover:text-gray-700">
                         <i class="fas fa-times text-xl"></i>
                     </button>
                 </div>
@@ -354,10 +354,10 @@
                 <p class="text-gray-600 mb-4">Upload a JSON file containing <%= contentType.pluralName.toLowerCase() %> to import.</p>
                 <input type="file" id="importFile" accept=".json" class="mb-4">
                 <div class="flex justify-end space-x-3">
-                    <button onclick="ContentTypeManager.closeImportModal()" class="px-4 py-2 border rounded-lg hover:bg-gray-50">
+                    <button data-action="close-modal" data-modal="importModal" class="px-4 py-2 border rounded-lg hover:bg-gray-50">
                         Cancel
                     </button>
-                    <button onclick="ContentTypeManager.importItems()" class="btn-primary">
+                    <button data-action="import-confirm" class="btn-primary">
                         <i class="fas fa-upload mr-2"></i>Import
                     </button>
                 </div>

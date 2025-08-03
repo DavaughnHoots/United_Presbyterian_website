@@ -161,36 +161,63 @@ window.ContentTypeManager.exportItems = function() {
    * Set up event listeners
    */
   function setupEventListeners() {
-    // Item action buttons
-    const itemList = document.getElementById('itemList');
-    if (itemList) {
-      itemList.addEventListener('click', function(e) {
-        const button = e.target.closest('button[data-action]');
-        if (!button) return;
-        
-        const action = button.dataset.action;
-        const itemId = button.dataset.itemId;
-        
-        switch (action) {
-          case 'preview':
-            showPreview(itemId);
-            break;
-            
-          case 'edit':
-            editItem(itemId);
-            break;
-            
-          case 'toggle':
-            const isActive = button.dataset.isActive === 'true';
-            ContentTypeManager.toggleItemStatus(itemId, isActive);
-            break;
-            
-          case 'delete':
-            ContentTypeManager.deleteItem(itemId);
-            break;
-        }
-      });
-    }
+    // Global click handler for all data-action buttons
+    document.addEventListener('click', function(e) {
+      const button = e.target.closest('button[data-action]');
+      if (!button) return;
+      
+      const action = button.dataset.action;
+      
+      switch (action) {
+        case 'add-new':
+          window.ContentTypeManager.ModalManager.openAddModal();
+          break;
+          
+        case 'import':
+          window.ContentTypeManager.showImportModal();
+          break;
+          
+        case 'export':
+          window.ContentTypeManager.exportItems();
+          break;
+          
+        case 'import-confirm':
+          window.ContentTypeManager.importItems();
+          break;
+          
+        case 'reset-filters':
+          window.ContentTypeManager.FilterManager.resetFilters();
+          break;
+          
+        case 'close-modal':
+          const modalId = button.dataset.modal;
+          const modal = document.getElementById(modalId);
+          if (modal) modal.classList.add('hidden');
+          break;
+          
+        case 'add-array-item':
+          const fieldName = button.dataset.field;
+          window.ContentTypeManager.FormManager.addArrayItem(fieldName);
+          break;
+          
+        case 'preview':
+          showPreview(button.dataset.itemId);
+          break;
+          
+        case 'edit':
+          editItem(button.dataset.itemId);
+          break;
+          
+        case 'toggle':
+          const isActive = button.dataset.isActive === 'true';
+          ContentTypeManager.toggleItemStatus(button.dataset.itemId, isActive);
+          break;
+          
+        case 'delete':
+          ContentTypeManager.deleteItem(button.dataset.itemId);
+          break;
+      }
+    });
     
     // Form submission
     const form = document.getElementById('contentForm');
@@ -201,20 +228,20 @@ window.ContentTypeManager.exportItems = function() {
       });
     }
     
-    // Filter and sort handlers
-    const filters = ['categoryFilter', 'searchFilter', 'seasonFilter', 'authorFilter', 'themeFilter'];
-    filters.forEach(filterId => {
-      const element = document.getElementById(filterId);
-      if (element) {
-        element.addEventListener('change', filterItems);
-        element.addEventListener('keyup', filterItems);
+    // Filter handlers using event delegation
+    document.addEventListener('change', function(e) {
+      if (e.target.matches('[data-filter]')) {
+        filterItems();
+      } else if (e.target.matches('[data-action="sort"]')) {
+        sortItems();
       }
     });
     
-    const sortBy = document.getElementById('sortBy');
-    if (sortBy) {
-      sortBy.addEventListener('change', sortItems);
-    }
+    document.addEventListener('keyup', function(e) {
+      if (e.target.matches('[data-filter]')) {
+        filterItems();
+      }
+    });
     
     // Import file handler
     const importFile = document.getElementById('importFile');
