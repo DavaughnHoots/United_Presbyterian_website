@@ -403,15 +403,74 @@
 (function() {
   'use strict';
   
-  // Content Manager will read the data from the script tags during initialization
-  console.log('Content type page loaded for <%= contentType.dbType %>, waiting for ContentTypeManager modules...');
+  // Debug: Check if ContentTypeManager is being loaded
+  console.log('Content type page loaded for <%= contentType.dbType %>');
+  console.log('Initial ContentTypeManager exists:', typeof window.ContentTypeManager !== 'undefined');
+  console.log('Initial ContentTypeManager.ModalManager exists:', typeof window.ContentTypeManager?.ModalManager !== 'undefined');
+  
+  // Check again after scripts should have loaded
+  window.addEventListener('load', function() {
+    console.log('After page load - ContentTypeManager exists:', typeof window.ContentTypeManager !== 'undefined');
+    console.log('After page load - ContentTypeManager.ModalManager exists:', typeof window.ContentTypeManager?.ModalManager !== 'undefined');
+    if (window.ContentTypeManager?.ModalManager) {
+      console.log('ModalManager methods:', Object.keys(window.ContentTypeManager.ModalManager));
+    }
+  });
+  
+  // Add error handlers for script loading
+  window.addEventListener('error', function(e) {
+    if (e.target.tagName === 'SCRIPT') {
+      console.error('Failed to load script:', e.target.src);
+    }
+  }, true);
 })();
 </script>
 
-<!-- Load modular JavaScript files -->
-<script src="/js/admin/content-type-manager-core.js"></script>
-<script src="/js/admin/content-type-filter-manager.js"></script>
-<script src="/js/admin/content-type-form-manager.js"></script>
-<script src="/js/admin/content-type-modal-manager.js"></script>
-<script src="/js/admin/content-type-export-import.js"></script>
-<script src="/js/admin/content-type-manager-init.js"></script>
+<!-- Load modular JavaScript files with cache busting -->
+<script src="/js/admin/content-type-manager-core.js?v=<%= Date.now() %>"></script>
+<script src="/js/admin/content-type-filter-manager.js?v=<%= Date.now() %>"></script>
+<script src="/js/admin/content-type-form-manager.js?v=<%= Date.now() %>"></script>
+<script src="/js/admin/content-type-modal-manager.js?v=<%= Date.now() %>"></script>
+<script src="/js/admin/content-type-export-import.js?v=<%= Date.now() %>"></script>
+<script src="/js/admin/content-type-manager-init.js?v=<%= Date.now() %>"></script>
+
+<!-- Fallback in case scripts don't load -->
+<script>
+(function() {
+  // Wait a moment to see if scripts loaded
+  setTimeout(function() {
+    if (!window.ContentTypeManager || !window.ContentTypeManager.ModalManager) {
+      console.error('ContentTypeManager failed to load. Creating fallback...');
+      
+      // Create minimal fallback
+      window.ContentTypeManager = window.ContentTypeManager || {};
+      window.ContentTypeManager.ModalManager = {
+        openAddModal: function() {
+          alert('JavaScript files failed to load. Please refresh the page.');
+        },
+        closeModal: function() {
+          const modal = document.getElementById('contentModal');
+          if (modal) modal.classList.add('hidden');
+        }
+      };
+      
+      // Try to provide basic functionality
+      window.ContentTypeManager.FilterManager = {
+        filterItems: function() { console.log('Filter not available'); },
+        sortItems: function() { console.log('Sort not available'); },
+        resetFilters: function() { console.log('Reset not available'); }
+      };
+      
+      window.ContentTypeManager.showImportModal = function() {
+        alert('Import functionality not available. Please refresh the page.');
+      };
+      
+      window.ContentTypeManager.exportItems = function() {
+        alert('Export functionality not available. Please refresh the page.');
+      };
+    } else {
+      console.log('ContentTypeManager loaded successfully');
+    }
+  }, 100);
+})();
+</script>
