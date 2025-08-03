@@ -16,11 +16,13 @@ app.use(helmet({
     directives: {
       defaultSrc: ["'self'"],
       styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com", "https://cdn.tailwindcss.com", "https://cdnjs.cloudflare.com"],
-      scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'", "https://www.google.com", "https://www.gstatic.com", "https://cdn.tailwindcss.com", "https://cdnjs.cloudflare.com"],
-      imgSrc: ["'self'", "data:", "https:", "http:", "https://images.unsplash.com"],
+      scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'", "https://www.google.com", "https://www.gstatic.com", "https://cdn.tailwindcss.com", "https://cdnjs.cloudflare.com", "https://www.youtube.com", "https://www.youtube-nocookie.com"],
+      scriptSrcAttr: ["'unsafe-inline'"],
+      imgSrc: ["'self'", "data:", "https:", "http:", "https://images.unsplash.com", "https://i.ytimg.com", "https://img.youtube.com"],
       fontSrc: ["'self'", "https://fonts.gstatic.com", "https://cdnjs.cloudflare.com"],
-      frameSrc: ["'self'", "https://www.youtube.com", "https://www.google.com"],
-      connectSrc: ["'self'", "https://fonts.googleapis.com", "https://fonts.gstatic.com", "https://cdnjs.cloudflare.com"]
+      frameSrc: ["'self'", "https://www.youtube.com", "https://www.youtube-nocookie.com", "https://www.google.com", "https://youtube.com", "https://youtu.be"],
+      mediaSrc: ["'self'", "https://www.youtube.com", "https://youtube.com", "https://youtu.be", "https:", "blob:"],
+      connectSrc: ["'self'", "https://fonts.googleapis.com", "https://fonts.gstatic.com", "https://cdnjs.cloudflare.com", "https://cdn.tailwindcss.com", "https://images.unsplash.com", "https://www.youtube.com", "https://youtube.com"]
     }
   }
 }));
