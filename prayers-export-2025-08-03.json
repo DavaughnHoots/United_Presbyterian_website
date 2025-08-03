@@ -1,0 +1,39 @@
+{
+  "version": "1.0",
+  "exported_at": "2025-08-03T13:29:01.305Z",
+  "prayer_count": 3,
+  "prayers": [
+    {
+      "title": "“Prayer for Peace” written by the Presbytery of Chicago’s Ecumenical and Interreligious Workgroup",
+      "category": "other",
+      "author": "",
+      "content": "“Holy God of All Creation, hear the cries of your people. The world is reeling and our hearts are breaking at the death, suffering, and violence that is happening in Israel and Palestine. We call upon you, who took the form of the Prince of Peace, to pour your healing power into the region. Sustain us all with the courage, wisdom, and comfort of your Holy Spirit.\n\n“Bring a quick end to the violence. Be a source of healing for those who are wounded. Comfort those who are grieving the loss of loved ones. Bring restraint to those who would escalate and continue the violence, even as you pour wisdom and courage into the lives of those working to end this conflict.\n\n“Give us strength to remain aware and not look away. Heal human division to one day make way for a divine vision of lasting peace. Let us be your hands, heart, and feet, extending friendship and compassion to our neighbors here in Chicago and across the globe who are impacted most personally by this heartbreaking tragedy. Strengthen our resolve to support those who are traumatized by this conflict.\n\n“Prince of Peace, come quickly. We know that every human being is created in your image, and we grieve each and every death, each and every injury, each and every experience of trauma and tragedy. Come quickly, God of All Creation. We pray in the name of Jesus Christ. Amen.”",
+      "audio_url": "",
+      "tags": [
+        "Peace",
+        "Prayer",
+        "Presbytery of Chicago",
+        "Presbytery of Chicago’s Ecumenical and Interreligious Workgroup"
+      ],
+      "is_active": true
+    },
+    {
+      "title": "Prayer of Thanksgiving",
+      "category": "other",
+      "author": "",
+      "content": "Dear God,\nThank you for the blessed assurance that trouble don’t last always.\nEven in life’s most intense storms, you are near—\na steady presence, a shelter of comfort and hope.\nWhen the winds rise and the waters roar,\nremind me that your peace is not shaken.\nHold me close, and help me rest in your unfailing love.\nAmen.",
+      "audio_url": "",
+      "tags": [],
+      "is_active": true
+    },
+    {
+      "title": "Thanks Giving",
+      "category": "other",
+      "author": "",
+      "content": "Almighty God,\nThank you for your immeasurable and everlasting love.\nThank you for showing no partiality, for your justice and love are impartial and complete.\nThank you for reminding us in your word that you are the God of all and that you love all people.\nWhat an amazing and comforting notion: You, the creator, love every one of your creations. Thank you, Lord.\nThank you for the lyrics of today’s hymn, which remind us that your Church is a sanctuary of welcome, where every soul is received with grace.\nAmen.\n",
+      "audio_url": "",
+      "tags": [],
+      "is_active": true
+    }
+  ]
+}

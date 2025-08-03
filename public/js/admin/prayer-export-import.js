@@ -31,6 +31,8 @@ window.PrayerManager = window.PrayerManager || {};
         content: prayer.content,
         audio_url: prayer.audio_url,
         tags: prayer.tags,
+        bible_references: prayer.bible_references || [],
+        metadata: prayer.metadata || {},
         is_active: prayer.is_active
       }))
     };
@@ -102,6 +104,8 @@ window.PrayerManager = window.PrayerManager || {};
     const modal = document.getElementById('importModal');
     if (modal) {
       modal.classList.remove('hidden');
+      // Initialize tabs
+      PrayerManager.initImportTabs();
     }
   };
 
@@ -114,51 +118,176 @@ window.PrayerManager = window.PrayerManager || {};
       modal.classList.add('hidden');
     }
     
-    // Reset file input
+    // Reset inputs
     const fileInput = document.getElementById('importFile');
     if (fileInput) {
       fileInput.value = '';
     }
+    
+    const jsonInput = document.getElementById('jsonInput');
+    if (jsonInput) {
+      jsonInput.value = '';
+    }
+    
+    const validation = document.getElementById('jsonValidation');
+    if (validation) {
+      validation.textContent = '';
+      validation.className = 'text-sm';
+    }
   };
 
   /**
-   * Import prayers from JSON file
+   * Initialize import modal tabs
    */
-  PrayerManager.importPrayers = async function() {
-    const fileInput = document.getElementById('importFile');
-    const file = fileInput?.files[0];
+  PrayerManager.initImportTabs = function() {
+    const tabs = document.querySelectorAll('[data-tab]');
+    tabs.forEach(tab => {
+      tab.addEventListener('click', function() {
+        const targetTab = this.getAttribute('data-tab');
+        
+        // Update tab buttons
+        tabs.forEach(t => {
+          t.classList.remove('text-blue-600', 'border-b-2', 'border-blue-600');
+          t.classList.add('text-gray-600');
+        });
+        this.classList.remove('text-gray-600');
+        this.classList.add('text-blue-600', 'border-b-2', 'border-blue-600');
+        
+        // Update content
+        document.querySelectorAll('.tab-content').forEach(content => {
+          content.classList.add('hidden');
+        });
+        
+        const targetContent = document.getElementById(targetTab + 'ImportContent');
+        if (targetContent) {
+          targetContent.classList.remove('hidden');
+        }
+      });
+    });
+  };
+
+  /**
+   * Validate JSON input
+   */
+  PrayerManager.validateJSON = function() {
+    const jsonInput = document.getElementById('jsonInput');
+    const validation = document.getElementById('jsonValidation');
     
-    if (!file) {
-      PrayerManager.showMessage('Please select a file to import', 'warning');
-      return;
-    }
-    
-    if (!file.name.endsWith('.json')) {
-      PrayerManager.showMessage('Please select a valid JSON file', 'error');
-      return;
-    }
+    if (!jsonInput || !validation) return;
     
     try {
-      const text = await file.text();
-      const data = JSON.parse(text);
+      const data = JSON.parse(jsonInput.value);
       
-      // Validate structure
-      if (!data.prayers || !Array.isArray(data.prayers)) {
-        throw new Error('Invalid prayer file format');
+      // Check if it's valid prayer data
+      if (Array.isArray(data)) {
+        validation.textContent = `✓ Valid JSON with ${data.length} prayers`;
+        validation.className = 'text-sm text-green-600';
+      } else if (data && typeof data === 'object') {
+        validation.textContent = '✓ Valid JSON with 1 prayer';
+        validation.className = 'text-sm text-green-600';
+      } else {
+        throw new Error('Invalid prayer data format');
       }
+    } catch (error) {
+      validation.textContent = '✗ Invalid JSON: ' + error.message;
+      validation.className = 'text-sm text-red-600';
+    }
+  };
+
+  /**
+   * Copy example template
+   */
+  PrayerManager.copyExample = function() {
+    const exampleTemplate = document.getElementById('exampleTemplate');
+    if (!exampleTemplate) return;
+    
+    const text = exampleTemplate.textContent;
+    navigator.clipboard.writeText(text).then(() => {
+      PrayerManager.showMessage('Example copied to clipboard!', 'success');
+    }).catch(err => {
+      PrayerManager.showMessage('Failed to copy example', 'error');
+    });
+  };
+
+  /**
+   * Import prayers from JSON file or text
+   */
+  PrayerManager.importPrayers = async function() {
+    let data;
+    
+    // Check which tab is active
+    const fileTab = document.getElementById('fileImportContent');
+    const isFileTabActive = fileTab && !fileTab.classList.contains('hidden');
+    
+    if (isFileTabActive) {
+      // Import from file
+      const fileInput = document.getElementById('importFile');
+      const file = fileInput?.files[0];
       
-      // Confirm import
-      const confirmMsg = `Import ${data.prayers.length} prayers? Duplicate titles will be skipped.`;
-      if (!confirm(confirmMsg)) {
+      if (!file) {
+        PrayerManager.showMessage('Please select a file to import', 'warning');
         return;
       }
       
-      // Import prayers
-      let imported = 0;
-      let skipped = 0;
+      if (!file.name.endsWith('.json')) {
+        PrayerManager.showMessage('Please select a valid JSON file', 'error');
+        return;
+      }
       
-      for (const prayerData of data.prayers) {
-        try {
+      try {
+        const text = await file.text();
+        data = JSON.parse(text);
+      } catch (error) {
+        PrayerManager.showMessage('Failed to read file: ' + error.message, 'error');
+        return;
+      }
+    } else {
+      // Import from JSON input
+      const jsonInput = document.getElementById('jsonInput');
+      if (!jsonInput || !jsonInput.value.trim()) {
+        PrayerManager.showMessage('Please paste JSON data to import', 'warning');
+        return;
+      }
+      
+      try {
+        data = JSON.parse(jsonInput.value);
+      } catch (error) {
+        PrayerManager.showMessage('Invalid JSON: ' + error.message, 'error');
+        return;
+      }
+    }
+    
+    // Normalize data structure
+    let prayers;
+    if (Array.isArray(data)) {
+      prayers = data;
+    } else if (data.prayers && Array.isArray(data.prayers)) {
+      prayers = data.prayers;
+    } else if (data && typeof data === 'object' && data.title) {
+      prayers = [data]; // Single prayer object
+    } else {
+      PrayerManager.showMessage('Invalid prayer data format', 'error');
+      return;
+    }
+    
+    if (prayers.length === 0) {
+      PrayerManager.showMessage('No prayers found in import data', 'warning');
+      return;
+    }
+      
+    
+    // Confirm import
+    const confirmMsg = `Import ${prayers.length} prayers? Duplicate titles will be skipped.`;
+    if (!confirm(confirmMsg)) {
+      return;
+    }
+    
+    // Import prayers
+    let imported = 0;
+    let skipped = 0;
+    
+    for (const prayerData of prayers) {
+      try {
           // Validate required fields
           if (!prayerData.title || !prayerData.category || !prayerData.content) {
             skipped++;
@@ -186,6 +315,8 @@ window.PrayerManager = window.PrayerManager || {};
               content: prayerData.content,
               audio_url: prayerData.audio_url || '',
               tags: prayerData.tags || [],
+              bible_references: prayerData.bible_references || [],
+              metadata: prayerData.metadata || {},
               is_active: prayerData.is_active !== false
             })
           });
