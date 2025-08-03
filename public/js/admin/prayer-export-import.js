@@ -5,10 +5,12 @@
 
 window.PrayerManager = window.PrayerManager || {};
 
+console.log('Prayer Export/Import module starting...');
+
 (function(PrayerManager) {
   'use strict';
   
-  console.log('Prayer Export/Import module loading...');
+  console.log('Inside IIFE, PrayerManager:', PrayerManager);
   
   try {
 
@@ -411,10 +413,6 @@ window.PrayerManager = window.PrayerManager || {};
       PrayerManager.closeImportModal();
       setTimeout(() => window.location.reload(), 2000);
     }
-  } catch (error) {
-    console.error('Error importing prayers:', error);
-    PrayerManager.showMessage('Failed to import prayers: ' + error.message, 'error');
-  }
   };
 
   /**
@@ -496,3 +494,24 @@ window.PrayerManager = window.PrayerManager || {};
   }
 
 })(window.PrayerManager);
+
+// Ensure functions are available globally as a fallback
+if (window.PrayerManager && !window.PrayerManager.showImportModal) {
+  console.error('Functions not attached to PrayerManager, attempting manual attachment...');
+  
+  // Simple versions that should always work
+  window.PrayerManager.showImportModal = function() {
+    console.log('Fallback showImportModal called');
+    const modal = document.getElementById('importModal');
+    if (modal) {
+      modal.classList.remove('hidden');
+    } else {
+      console.error('Import modal not found');
+    }
+  };
+  
+  window.PrayerManager.exportPrayers = function() {
+    console.log('Fallback exportPrayers called');
+    alert('Export functionality is temporarily unavailable. Please check the console for errors.');
+  };
+}
