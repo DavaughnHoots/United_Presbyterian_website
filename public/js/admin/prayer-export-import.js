@@ -421,24 +421,100 @@ console.log('Prayer Export/Import module starting...');
   PrayerManager.downloadTemplate = function() {
     const template = {
       version: '1.0',
-      description: 'Prayer import template file',
+      description: 'Prayer import template file with examples for all categories',
       prayers: [
         {
-          title: 'Morning Prayer Example',
+          title: 'Morning Prayer of Gratitude',
+          content: 'Gracious God,\nWe thank you for the gift of this new day.\nAs the sun rises, may our hearts rise to meet you.\nFill us with your Spirit and guide our steps.\nHelp us to see your presence in all we encounter today.\nIn Jesus\' name we pray,\nAmen.',
           category: 'morning',
-          author: 'Traditional',
-          content: 'Lord, we thank you for this new day...',
+          author: 'Traditional Presbyterian',
+          tags: ['daily', 'gratitude', 'morning'],
+          bible_references: ['Psalm 118:24', 'Lamentations 3:22-23'],
+          metadata: {
+            tradition: 'Presbyterian',
+            usage: 'Daily morning devotion',
+            source: 'Book of Common Worship'
+          },
           audio_url: '',
-          tags: ['morning', 'daily', 'gratitude'],
           is_active: true
         },
         {
-          title: 'Evening Prayer Example',
+          title: 'Evening Prayer for Rest',
+          content: 'Lord God,\nAs evening falls and the day comes to a close,\nwe give you thanks for your faithfulness throughout this day.\nForgive us where we have fallen short,\nand grant us peaceful rest this night.\nWatch over us and all whom we love.\nThrough Christ our Lord,\nAmen.',
           category: 'evening',
           author: 'Book of Common Prayer',
-          content: 'Gracious God, as night falls...',
-          audio_url: '',
           tags: ['evening', 'rest', 'peace'],
+          audio_url: '',
+          is_active: true
+        },
+        {
+          title: 'Grace Before Meals',
+          content: 'Bless us, O Lord,\nand these thy gifts which we are about to receive\nfrom thy bounty, through Christ our Lord.\nAmen.',
+          category: 'meal',
+          author: 'Traditional',
+          tags: ['blessing', 'food', 'gratitude'],
+          is_active: true
+        },
+        {
+          title: 'Prayer for Healing',
+          content: 'Loving God, the comfort of all who sorrow,\nthe strength of all who suffer:\nLet your healing presence be with those who are ill.\nGrant them courage when afraid,\npatience when afflicted,\nhope when dejected,\nand when alone, assurance of the support\nof your holy people.\nWe ask this through Christ our Lord.\nAmen.',
+          category: 'healing',
+          author: 'Presbyterian Church (USA)',
+          tags: ['healing', 'comfort', 'strength'],
+          bible_references: ['James 5:14-15', 'Psalm 147:3'],
+          is_active: true
+        },
+        {
+          title: 'Prayer of Thanksgiving',
+          content: 'Almighty God,\nFather of all mercies,\nwe your unworthy servants give you humble thanks\nfor all your goodness and loving-kindness\nto us and to all whom you have made.\nWe bless you for our creation, preservation,\nand all the blessings of this life;\nbut above all for your immeasurable love\nin the redemption of the world by our Lord Jesus Christ;\nfor the means of grace, and for the hope of glory.\nAmen.',
+          category: 'thanksgiving',
+          author: 'Book of Common Worship',
+          tags: ['thanksgiving', 'gratitude', 'praise'],
+          is_active: true
+        },
+        {
+          title: 'Prayer of Confession',
+          content: 'Merciful God,\nwe confess that we have sinned against you\nin thought, word, and deed,\nby what we have done,\nand by what we have left undone.\nWe have not loved you with our whole heart;\nwe have not loved our neighbors as ourselves.\nWe are truly sorry and we humbly repent.\nFor the sake of your Son Jesus Christ,\nhave mercy on us and forgive us;\nthat we may delight in your will,\nand walk in your ways,\nto the glory of your Name. Amen.',
+          category: 'confession',
+          author: 'Traditional Reformed',
+          tags: ['confession', 'repentance', 'forgiveness'],
+          is_active: true
+        },
+        {
+          title: 'Intercessory Prayer for Others',
+          content: 'God of compassion,\nwe bring before you those who suffer:\nthe sick and the dying,\nthe lonely and the bereaved,\nthe poor and the oppressed.\nComfort them in their distress,\nstrengthen them in their weakness,\nand deliver them from their troubles.\nGrant wisdom to those who care for them,\nand help us all to show your love\nthrough acts of kindness and mercy.\nThrough Jesus Christ our Lord,\nAmen.',
+          category: 'intercession',
+          author: 'Contemporary Presbyterian',
+          tags: ['intercession', 'compassion', 'service'],
+          is_active: true
+        },
+        {
+          title: 'The Lord\'s Prayer',
+          content: 'Our Father, who art in heaven,\nhallowed be thy Name,\nthy kingdom come,\nthy will be done,\non earth as it is in heaven.\nGive us this day our daily bread.\nAnd forgive us our debts,\nas we forgive our debtors.\nAnd lead us not into temptation,\nbut deliver us from evil.\nFor thine is the kingdom,\nand the power, and the glory,\nforever. Amen.',
+          category: 'traditional',
+          author: 'Matthew 6:9-13',
+          tags: ['traditional', 'Lord\'s Prayer', 'daily'],
+          bible_references: ['Matthew 6:9-13', 'Luke 11:2-4'],
+          is_active: true
+        },
+        {
+          title: 'Advent Prayer',
+          content: 'Come, Lord Jesus,\nbe our guest and companion on the way.\nBless our Advent journey of preparation.\nOpen our hearts to receive you,\nopen our eyes to see you in others,\nopen our hands to serve you in all we meet.\nCome quickly, Lord Jesus,\nand make all things new.\nAmen.',
+          category: 'seasonal',
+          author: 'Presbyterian Advent Liturgy',
+          tags: ['Advent', 'seasonal', 'preparation'],
+          metadata: {
+            season: 'Advent',
+            usage: 'Weekly during Advent season'
+          },
+          is_active: true
+        },
+        {
+          title: 'Prayer for Peace',
+          content: 'God of all nations and peoples,\nwe pray for peace in our world.\nWhere there is conflict, bring reconciliation.\nWhere there is hatred, sow love.\nWhere there is violence, establish justice.\nHelp us to be instruments of your peace,\nthat all your children may live in safety and freedom.\nWe ask this in the name of the Prince of Peace,\nJesus Christ our Lord.\nAmen.',
+          category: 'other',
+          author: 'Presbyterian Peace Fellowship',
+          tags: ['peace', 'justice', 'world'],
           is_active: true
         }
       ]
