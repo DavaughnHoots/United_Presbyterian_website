@@ -48,6 +48,29 @@ const contentTypes = {
     categories: ['Traditional', 'Contemporary', 'Gospel', 'Praise', 'Worship', 'Children', 'Seasonal', 'Other']
   },
   
+  prayer: {
+    name: 'Prayer',
+    pluralName: 'Prayers',
+    dbType: 'prayer',
+    icon: 'fa-praying-hands',
+    color: 'indigo',
+    urlSlug: 'prayers',
+    description: 'Traditional prayers and blessings',
+    fields: {
+      title: { required: true, label: 'Prayer Title', type: 'text' },
+      content: { required: true, label: 'Prayer Text', type: 'textarea', rows: 8 },
+      author: { required: false, label: 'Author/Source', type: 'text', metadata: true },
+      category: { required: true, label: 'Category', type: 'select', 
+        options: ['Morning', 'Evening', 'Meal', 'Healing', 'Thanksgiving', 'Confession', 'Intercession', 'Traditional', 'Seasonal', 'Other'] 
+      },
+      theme: { required: false, label: 'Theme', type: 'text' },
+      season: { required: false, label: 'Liturgical Season', type: 'select', options: ['Advent', 'Christmas', 'Epiphany', 'Lent', 'Easter', 'Pentecost', 'Ordinary Time'] },
+      audio_url: { required: false, label: 'Audio Recording', type: 'url', placeholder: 'https://example.com/prayer-audio.mp3' },
+      tags: { required: false, label: 'Tags', type: 'text', placeholder: 'Comma-separated tags' }
+    },
+    categories: ['Morning', 'Evening', 'Meal', 'Healing', 'Thanksgiving', 'Confession', 'Intercession', 'Traditional', 'Seasonal', 'Other']
+  },
+  
   journaling_prompt: {
     name: 'Journaling Prompt',
     pluralName: 'Journaling Prompts',
