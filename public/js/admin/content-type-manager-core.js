@@ -172,7 +172,14 @@ const ContentTypeManager = (function() {
         body: JSON.stringify(itemData)
       });
 
-      if (!response.ok) throw new Error('Failed to save item');
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error('Server error:', errorData);
+        const error = new Error(errorData.details || errorData.error || 'Failed to save item');
+        error.response = response;
+        error.data = errorData;
+        throw error;
+      }
 
       const savedItem = await response.json();
       
@@ -195,7 +202,19 @@ const ContentTypeManager = (function() {
       return savedItem;
     } catch (error) {
       console.error('Error saving item:', error);
-      showToast(`Failed to ${isUpdate ? 'update' : 'create'} item. Please try again.`, 'error');
+      
+      // Show detailed error message
+      if (error.data) {
+        console.error('Server error details:', error.data);
+        if (error.data.validationErrors) {
+          const fieldErrors = error.data.validationErrors.map(e => `${e.field}: ${e.message}`).join(', ');
+          showToast(`Validation failed: ${fieldErrors}`, 'error');
+        } else {
+          showToast(`Failed to ${isUpdate ? 'update' : 'create'} item: ${error.data.details || error.data.error}`, 'error');
+        }
+      } else {
+        showToast(`Failed to ${isUpdate ? 'update' : 'create'} item: ${error.message}`, 'error');
+      }
       throw error;
     }
   }

@@ -2017,12 +2017,15 @@ router.post('/api/content/:type', requireAdmin, async (req, res) => {
       contentData.metadata.category = itemData.metadata.category;
     }
     
-    // Remove undefined fields
+    // Remove undefined and null fields for optional fields
     Object.keys(contentData).forEach(key => {
-      if (contentData[key] === undefined) {
+      if (contentData[key] === undefined || (contentData[key] === null && key !== 'type' && key !== 'title')) {
         delete contentData[key];
       }
     });
+    
+    // Log the final data being saved
+    console.log('Creating content with data:', JSON.stringify(contentData, null, 2));
     
     const newItem = await Content.create(contentData);
     
@@ -2040,7 +2043,27 @@ router.post('/api/content/:type', requireAdmin, async (req, res) => {
     res.json(response);
   } catch (error) {
     console.error('Error creating content:', error);
-    res.status(500).json({ error: 'Failed to create content', details: error.message });
+    console.error('Request body:', req.body);
+    console.error('Transformed data:', contentData);
+    
+    // Check for validation errors
+    if (error.name === 'SequelizeValidationError') {
+      const validationErrors = error.errors.map(e => ({
+        field: e.path,
+        message: e.message
+      }));
+      return res.status(400).json({ 
+        error: 'Validation failed', 
+        details: error.message,
+        validationErrors 
+      });
+    }
+    
+    res.status(500).json({ 
+      error: 'Failed to create content', 
+      details: error.message,
+      type: error.name 
+    });
   }
 });
 
