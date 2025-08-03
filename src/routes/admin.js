@@ -1989,14 +1989,58 @@ router.post('/api/content/:type', requireAdmin, async (req, res) => {
     const { type } = req.params;
     const itemData = req.body;
     
-    // Ensure type matches
-    itemData.type = type;
+    // Transform client data to match Content model
+    const contentData = {
+      type: type,
+      title: itemData.title,
+      content: itemData.content,
+      isActive: itemData.is_active !== undefined ? itemData.is_active : true,
+      metadata: itemData.metadata || {},
+      tags: Array.isArray(itemData.tags) ? itemData.tags : 
+            (itemData.tags ? itemData.tags.split(',').map(t => t.trim()).filter(t => t) : []),
+      // Type-specific fields
+      biblePassage: itemData.biblePassage,
+      youtubeId: itemData.youtubeId,
+      theme: itemData.theme,
+      season: itemData.season,
+      artist: itemData.artist,
+      image_url: itemData.image_url,
+      video_url: itemData.video_url,
+      audio_url: itemData.audio_url,
+      duration_minutes: itemData.duration_minutes ? parseInt(itemData.duration_minutes) : null,
+      instructions: itemData.instructions,
+      prompts: itemData.prompts
+    };
     
-    const newItem = await Content.create(itemData);
-    res.json(newItem);
+    // Store category in metadata if provided
+    if (itemData.metadata?.category) {
+      contentData.metadata.category = itemData.metadata.category;
+    }
+    
+    // Remove undefined fields
+    Object.keys(contentData).forEach(key => {
+      if (contentData[key] === undefined) {
+        delete contentData[key];
+      }
+    });
+    
+    const newItem = await Content.create(contentData);
+    
+    // Transform response to match client expectations
+    const response = {
+      id: newItem.id,
+      title: newItem.title,
+      content: newItem.content,
+      category: newItem.metadata?.category || 'other',
+      is_active: newItem.isActive,
+      usage_count: newItem.usageCount || 0,
+      ...newItem.toJSON()
+    };
+    
+    res.json(response);
   } catch (error) {
     console.error('Error creating content:', error);
-    res.status(500).json({ error: 'Failed to create content' });
+    res.status(500).json({ error: 'Failed to create content', details: error.message });
   }
 });
 
@@ -2005,7 +2049,7 @@ router.put('/api/content/:type/:id', requireAdmin, async (req, res) => {
   try {
     const { Content } = require('../models');
     const { type, id } = req.params;
-    const updates = req.body;
+    const itemData = req.body;
     
     const item = await Content.findOne({
       where: { id, type }
@@ -2015,11 +2059,59 @@ router.put('/api/content/:type/:id', requireAdmin, async (req, res) => {
       return res.status(404).json({ error: 'Content not found' });
     }
     
-    await item.update(updates);
-    res.json(item);
+    // Transform client data to match Content model
+    const updateData = {
+      title: itemData.title,
+      content: itemData.content,
+      isActive: itemData.is_active !== undefined ? itemData.is_active : item.isActive,
+      metadata: { ...item.metadata, ...itemData.metadata },
+      tags: itemData.tags !== undefined ? 
+            (Array.isArray(itemData.tags) ? itemData.tags : 
+             itemData.tags ? itemData.tags.split(',').map(t => t.trim()).filter(t => t) : []) 
+            : item.tags,
+      // Type-specific fields
+      biblePassage: itemData.biblePassage,
+      youtubeId: itemData.youtubeId,
+      theme: itemData.theme,
+      season: itemData.season,
+      artist: itemData.artist,
+      image_url: itemData.image_url,
+      video_url: itemData.video_url,
+      audio_url: itemData.audio_url,
+      duration_minutes: itemData.duration_minutes ? parseInt(itemData.duration_minutes) : item.duration_minutes,
+      instructions: itemData.instructions,
+      prompts: itemData.prompts
+    };
+    
+    // Store category in metadata if provided
+    if (itemData.metadata?.category) {
+      updateData.metadata.category = itemData.metadata.category;
+    }
+    
+    // Remove undefined fields
+    Object.keys(updateData).forEach(key => {
+      if (updateData[key] === undefined) {
+        delete updateData[key];
+      }
+    });
+    
+    await item.update(updateData);
+    
+    // Transform response to match client expectations
+    const response = {
+      id: item.id,
+      title: item.title,
+      content: item.content,
+      category: item.metadata?.category || 'other',
+      is_active: item.isActive,
+      usage_count: item.usageCount || 0,
+      ...item.toJSON()
+    };
+    
+    res.json(response);
   } catch (error) {
     console.error('Error updating content:', error);
-    res.status(500).json({ error: 'Failed to update content' });
+    res.status(500).json({ error: 'Failed to update content', details: error.message });
   }
 });
 
