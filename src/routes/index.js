@@ -238,32 +238,30 @@ router.get('/daily', async (req, res) => {
       }
     }
     
-    // Fallback to daily scheduled content if no journey
+    // Always fetch daily scheduled content
     let dailyScheduledContent = [];
     let userProgress = null;
     
-    if (!userJourney) {
-      // Fetch today's scheduled content
-      const { Content } = require('../models');
-      const todaySchedule = await DailyContent.findAll({
-        where: {
-          date: today.toISOString().split('T')[0]
-        },
-        include: [{
-          model: Content,
-          as: 'content'
-        }],
-        order: [['contentType', 'ASC']]
-      });
-      
-      // Transform to match journey content format
-      dailyScheduledContent = todaySchedule.map(item => ({
-        id: item.id,
-        content_type: item.contentType,
-        actualContent: item.content,
-        isCompleted: false // TODO: Track completion for daily content
-      }));
-    }
+    // Fetch today's scheduled content
+    const { Content } = require('../models');
+    const todaySchedule = await DailyContent.findAll({
+      where: {
+        date: today.toISOString().split('T')[0]
+      },
+      include: [{
+        model: Content,
+        as: 'content'
+      }],
+      order: [['contentType', 'ASC']]
+    });
+    
+    // Transform to match journey content format
+    dailyScheduledContent = todaySchedule.map(item => ({
+      id: item.id,
+      content_type: item.contentType,
+      actualContent: item.content,
+      isCompleted: false // TODO: Track completion for daily content
+    }));
     
     res.render('pages/daily-content', {
       title: 'Daily Spiritual Journey',
@@ -271,7 +269,8 @@ router.get('/daily', async (req, res) => {
       userProgress: userProgress,
       userJourney: userJourney,
       journeyDay: journeyDay,
-      journeyContent: userJourney ? journeyContent : dailyScheduledContent,
+      journeyContent: journeyContent,
+      dailyScheduledContent: dailyScheduledContent,
       allContentCompleted: allContentCompleted,
       today: today.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })
     });
