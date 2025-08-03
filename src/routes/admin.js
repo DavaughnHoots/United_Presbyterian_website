@@ -1763,6 +1763,54 @@ router.get('/prayers', requireAdmin, async (req, res) => {
   }
 });
 
+// Daily Content Scheduler
+router.get('/daily-scheduler', requireAdmin, async (req, res) => {
+  try {
+    const { Content } = require('../models');
+    const currentMonth = req.query.month || new Date().getMonth() + 1;
+    const currentYear = req.query.year || new Date().getFullYear();
+    
+    // Get scheduled content for the current month
+    const startDate = new Date(currentYear, currentMonth - 1, 1);
+    const endDate = new Date(currentYear, currentMonth, 0);
+    
+    const scheduledContent = await DailyContent.findAll({
+      where: {
+        date: {
+          [Op.between]: [startDate, endDate]
+        }
+      },
+      include: [{
+        model: Content,
+        as: 'content'
+      }],
+      order: [['date', 'ASC'], ['contentType', 'ASC']]
+    });
+    
+    // Group content by date
+    const contentByDate = {};
+    scheduledContent.forEach(item => {
+      const dateStr = item.date;
+      if (!contentByDate[dateStr]) {
+        contentByDate[dateStr] = [];
+      }
+      contentByDate[dateStr].push(item);
+    });
+    
+    res.render('pages/admin/daily-scheduler', {
+      title: 'Daily Content Scheduler',
+      user: req.session.user,
+      currentMonth,
+      currentYear,
+      contentByDate,
+      contentTypes: contentTypes
+    });
+  } catch (error) {
+    console.error('Error rendering daily scheduler:', error);
+    res.status(500).send('Internal server error');
+  }
+});
+
 // Content Type Management Routes
 const { contentTypes, getContentTypeBySlug } = require('../config/contentTypes');
 
@@ -2286,6 +2334,249 @@ router.post('/api/content/:type/import', requireAdmin, async (req, res) => {
   } catch (error) {
     console.error('Error importing content:', error);
     res.status(500).json({ error: 'Failed to import content', details: error.message });
+  }
+});
+
+// Daily Scheduler API Endpoints
+
+// Get scheduled content for a specific month
+router.get('/api/admin/daily-schedule/:year/:month', requireAdmin, async (req, res) => {
+  try {
+    const { year, month } = req.params;
+    const { Content } = require('../models');
+    
+    const startDate = new Date(year, month - 1, 1);
+    const endDate = new Date(year, month, 0);
+    
+    const scheduledContent = await DailyContent.findAll({
+      where: {
+        date: {
+          [Op.between]: [startDate, endDate]
+        }
+      },
+      include: [{
+        model: Content,
+        as: 'content'
+      }],
+      order: [['date', 'ASC'], ['contentType', 'ASC']]
+    });
+    
+    // Group by date
+    const contentByDate = {};
+    scheduledContent.forEach(item => {
+      const dateStr = item.date;
+      if (!contentByDate[dateStr]) {
+        contentByDate[dateStr] = [];
+      }
+      contentByDate[dateStr].push(item);
+    });
+    
+    res.json(contentByDate);
+  } catch (error) {
+    console.error('Error fetching schedule:', error);
+    res.status(500).json({ error: 'Failed to fetch schedule' });
+  }
+});
+
+// Schedule content for a specific date
+router.post('/api/admin/daily-schedule', requireAdmin, async (req, res) => {
+  try {
+    const { date, items } = req.body;
+    const { Content } = require('../models');
+    
+    if (!date || !items || !Array.isArray(items)) {
+      return res.status(400).json({ error: 'Invalid request data' });
+    }
+    
+    const createdItems = [];
+    
+    for (const item of items) {
+      // Check if content already scheduled for this date and type
+      const existing = await DailyContent.findOne({
+        where: {
+          date,
+          contentType: item.contentType
+        }
+      });
+      
+      if (existing) {
+        continue; // Skip if already scheduled
+      }
+      
+      const dailyContent = await DailyContent.create({
+        date,
+        contentId: item.contentId,
+        contentType: item.contentType
+      });
+      
+      // Fetch the full content
+      const fullItem = await DailyContent.findByPk(dailyContent.id, {
+        include: [{
+          model: Content,
+          as: 'content'
+        }]
+      });
+      
+      createdItems.push(fullItem);
+    }
+    
+    res.json(createdItems);
+  } catch (error) {
+    console.error('Error scheduling content:', error);
+    res.status(500).json({ error: 'Failed to schedule content' });
+  }
+});
+
+// Remove scheduled content
+router.delete('/api/admin/daily-schedule/:id', requireAdmin, async (req, res) => {
+  try {
+    const { id } = req.params;
+    
+    const result = await DailyContent.destroy({
+      where: { id }
+    });
+    
+    if (result === 0) {
+      return res.status(404).json({ error: 'Content not found' });
+    }
+    
+    res.json({ success: true });
+  } catch (error) {
+    console.error('Error removing scheduled content:', error);
+    res.status(500).json({ error: 'Failed to remove content' });
+  }
+});
+
+// Generate content for date range
+router.post('/api/admin/daily-schedule/generate', requireAdmin, async (req, res) => {
+  try {
+    const { startDate, endDate, overwrite, avoidRepeats } = req.body;
+    const { Content } = require('../models');
+    
+    if (!startDate || !endDate) {
+      return res.status(400).json({ error: 'Date range required' });
+    }
+    
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+    let daysGenerated = 0;
+    
+    // Get content types to generate
+    const contentTypesToGenerate = [
+      'scripture_reading',
+      'hymn', 
+      'prayer',
+      'journaling_prompt'
+    ];
+    
+    // Process each day in the range
+    for (let date = new Date(start); date <= end; date.setDate(date.getDate() + 1)) {
+      const dateStr = date.toISOString().split('T')[0];
+      
+      // Check existing content for this date
+      if (!overwrite) {
+        const existingCount = await DailyContent.count({
+          where: { date: dateStr }
+        });
+        
+        if (existingCount > 0) {
+          continue; // Skip this date
+        }
+      } else {
+        // Remove existing content if overwriting
+        await DailyContent.destroy({
+          where: { date: dateStr }
+        });
+      }
+      
+      // Get recently used content if avoiding repeats
+      let recentIds = [];
+      if (avoidRepeats) {
+        const recentDays = 7;
+        const recentDate = new Date(date);
+        recentDate.setDate(recentDate.getDate() - recentDays);
+        
+        const recentContent = await DailyContent.findAll({
+          where: {
+            date: {
+              [Op.between]: [recentDate, date]
+            }
+          },
+          attributes: ['contentId']
+        });
+        
+        recentIds = recentContent.map(c => c.contentId);
+      }
+      
+      // Generate content for each type
+      for (const contentType of contentTypesToGenerate) {
+        const whereClause = {
+          type: contentType,
+          isActive: true
+        };
+        
+        if (recentIds.length > 0) {
+          whereClause.id = {
+            [Op.notIn]: recentIds
+          };
+        }
+        
+        // Get available content
+        const availableContent = await Content.findAll({
+          where: whereClause,
+          order: [
+            ['usageCount', 'ASC'],
+            ['lastUsedDate', 'ASC NULLS FIRST']
+          ],
+          limit: 10
+        });
+        
+        if (availableContent.length > 0) {
+          // Select random content from the least used
+          const content = availableContent[Math.floor(Math.random() * Math.min(5, availableContent.length))];
+          
+          await DailyContent.create({
+            date: dateStr,
+            contentId: content.id,
+            contentType: contentType
+          });
+          
+          // Update usage
+          content.usageCount = (content.usageCount || 0) + 1;
+          content.lastUsedDate = dateStr;
+          await content.save();
+        }
+      }
+      
+      daysGenerated++;
+    }
+    
+    res.json({ daysGenerated });
+  } catch (error) {
+    console.error('Error generating content:', error);
+    res.status(500).json({ error: 'Failed to generate content' });
+  }
+});
+
+// Preview content for a specific date
+router.get('/api/admin/daily-schedule/preview/:date', requireAdmin, async (req, res) => {
+  try {
+    const { date } = req.params;
+    const { Content } = require('../models');
+    
+    const scheduledContent = await DailyContent.findAll({
+      where: { date },
+      include: [{
+        model: Content,
+        as: 'content'
+      }],
+      order: [['contentType', 'ASC']]
+    });
+    
+    res.json(scheduledContent);
+  } catch (error) {
+    console.error('Error fetching preview:', error);
+    res.status(500).json({ error: 'Failed to fetch preview' });
   }
 });
 

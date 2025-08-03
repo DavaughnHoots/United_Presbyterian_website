@@ -19,7 +19,20 @@ module.exports = (sequelize, DataTypes) => {
       }
     },
     contentType: {
-      type: DataTypes.ENUM('reading', 'prayer', 'music', 'question'),
+      type: DataTypes.ENUM(
+        'scripture_reading',
+        'hymn',
+        'prayer',
+        'guided_prayer',
+        'journaling_prompt',
+        'reflection',
+        'artwork',
+        'video',
+        'creed',
+        'reading',
+        'music',
+        'question'
+      ),
       allowNull: false
     },
     theme: {
@@ -121,6 +134,14 @@ module.exports = (sequelize, DataTypes) => {
       await this.bulkCreate(dailyContent);
       console.log(`Generated daily content for ${dateString}`);
     }
+  };
+
+  // Define associations
+  DailyContent.associate = function(models) {
+    DailyContent.belongsTo(models.Content, {
+      foreignKey: 'contentId',
+      as: 'content'
+    });
   };
 
   return DailyContent;
