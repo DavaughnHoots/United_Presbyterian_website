@@ -1789,7 +1789,8 @@ contentTypeRoutes.forEach(urlSlug => {
         title: item.title,
         content: item.content,
         category: item.metadata?.category || contentType.categories[contentType.categories.length - 1].toLowerCase(),
-        author: item.metadata?.author || item.artist || '',
+        author: item.metadata?.author || '',
+        artist: item.artist || '', // Separate artist field for hymns/artwork
         theme: item.theme,
         season: item.season,
         tags: item.tags || [],
@@ -1807,7 +1808,7 @@ contentTypeRoutes.forEach(urlSlug => {
         instructions: item.instructions,
         prompts: item.prompts,
         // Additional metadata
-        ...item.metadata
+        metadata: item.metadata || {}
       }));
       
       res.render(`pages/admin/content-type`, {
@@ -2231,8 +2232,25 @@ router.post('/api/content/:type/import', requireAdmin, async (req, res) => {
         if (item.tune) transformed.metadata.tune = item.tune;
         if (item.meter) transformed.metadata.meter = item.meter;
         if (item.hymnalNumber) transformed.metadata.hymnalNumber = item.hymnalNumber;
-        // Also check if artist should be set from author
-        if (item.author && !transformed.artist) transformed.artist = item.author;
+        
+        // Handle artist field - it could come from author, artist, or composer
+        if (!transformed.artist) {
+          if (item.author) {
+            transformed.artist = item.author;
+          } else if (item.composer) {
+            transformed.artist = item.composer;
+          }
+          // If still no artist and we have tags, try to extract composer from tags
+          if (!transformed.artist && item.tags && Array.isArray(item.tags)) {
+            // Look for common composer names in tags
+            const composerTag = item.tags.find(tag => 
+              tag && !['Praise & Worship', 'Trinity', 'Traditional', 'Contemporary', 'Gospel', 'Holy, Holy, Holy', 'GTG'].some(exclude => tag.includes(exclude))
+            );
+            if (composerTag) {
+              transformed.artist = composerTag;
+            }
+          }
+        }
       } else if (type === 'prayer') {
         if (item.author) transformed.metadata.author = item.author;
       } else if (type === 'artwork') {

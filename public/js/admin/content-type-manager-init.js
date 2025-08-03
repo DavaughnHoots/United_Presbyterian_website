@@ -354,9 +354,29 @@ window.ContentTypeManager.exportItems = function() {
       const element = document.getElementById(fieldName);
       if (element) {
         if (field.type === 'array') {
-          // Handle array fields later
+          // Handle array fields - populate existing values
+          if (item[fieldName] && Array.isArray(item[fieldName])) {
+            const container = document.getElementById(`${fieldName}Container`);
+            if (container) {
+              container.innerHTML = ''; // Clear existing
+              item[fieldName].forEach(value => {
+                const input = document.createElement('input');
+                input.type = 'text';
+                input.className = 'w-full px-3 py-2 border rounded-lg mb-2';
+                input.value = value;
+                const wrapper = document.createElement('div');
+                wrapper.appendChild(input);
+                container.appendChild(wrapper);
+              });
+            }
+          }
         } else {
-          element.value = item[fieldName] || '';
+          // Check if it's a metadata field
+          if (field.metadata && item.metadata && item.metadata[fieldName]) {
+            element.value = item.metadata[fieldName];
+          } else {
+            element.value = item[fieldName] || '';
+          }
         }
       }
     });

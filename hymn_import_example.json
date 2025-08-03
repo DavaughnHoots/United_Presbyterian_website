@@ -1,0 +1,30 @@
+[
+  {
+    "title": "Holy, Holy, Holy! Lord God Almighty!",
+    "content": "1. Holy, holy, holy! Lord God Almighty!\nEarly in the morning our song shall rise to thee.\nHoly, holy, holy! merciful and mighty!\nGod in three Persons, blessed Trinity!\n\n2. Holy, holy, holy! all the saints adore thee,\nCasting down their golden crowns around the glassy sea.\nCherubim and seraphim, falling down before thee,\nWho was and is and evermore shall be.\n\n3. Holy, Holy, Holy! though the darkness hide thee,\nThough the eye of sinful man thy glory may not see,\nOnly thou art holy; there is none beside thee,\nPerfect in pow'r, in love, and purity.\n\n4. Holy, holy, holy! Lord God Almighty!\nAll thy works shall praise thy name, in earth, and sky, and sea;\nHoly, holy, holy! merciful and mighty!\nGod in three Persons, blessed Trinity.",
+    "artist": "Reginald Heber (lyrics), John Bacchus Dykes (tune)",
+    "category": "traditional",
+    "theme": "Praise & Worship",
+    "season": "general",
+    "tags": ["Praise & Worship", "Trinity", "Traditional", "Classic Hymn"],
+    "youtubeId": "XsXPTBkhqfQ",
+    "audio_url": "https://youtu.be/XsXPTBkhqfQ",
+    "hymnalNumber": "GTG 1",
+    "tune": "Nicaea",
+    "meter": "11.12.12.10",
+    "is_active": true
+  },
+  {
+    "title": "Amazing Grace",
+    "content": "1. Amazing grace! How sweet the sound\nThat saved a wretch like me!\nI once was lost, but now am found;\nWas blind, but now I see.\n\n2. 'Twas grace that taught my heart to fear,\nAnd grace my fears relieved;\nHow precious did that grace appear\nThe hour I first believed.\n\n3. Through many dangers, toils, and snares,\nI have already come;\n'Tis grace hath brought me safe thus far,\nAnd grace will lead me home.\n\n4. The Lord has promised good to me,\nHis word my hope secures;\nHe will my shield and portion be,\nAs long as life endures.\n\n5. When we've been there ten thousand years,\nBright shining as the sun,\nWe've no less days to sing God's praise\nThan when we first begun.",
+    "artist": "John Newton (lyrics)",
+    "category": "traditional",
+    "theme": "Grace & Redemption",
+    "season": "general",
+    "tags": ["Grace", "Redemption", "Traditional", "Classic Hymn"],
+    "hymnalNumber": "GTG 649",
+    "tune": "Amazing Grace (New Britain)",
+    "meter": "8.6.8.6 (C.M.)",
+    "is_active": true
+  }
+]
