@@ -1763,45 +1763,6 @@ router.get('/prayers', requireAdmin, async (req, res) => {
   }
 });
 
-// Historical Contexts management
-router.get('/historical-contexts', requireAdmin, async (req, res) => {
-  try {
-    const { Content } = require('../models');
-    const historicalContexts = await Content.findAll({
-      where: { type: 'historical_context' },
-      order: [['title', 'ASC']]
-    });
-    
-    res.render('pages/admin/historical-contexts', {
-      title: 'Historical Context Management',
-      user: req.session.user,
-      historicalContexts
-    });
-  } catch (error) {
-    console.error('Error rendering historical context management:', error);
-    res.status(500).send('Internal server error');
-  }
-});
-
-// Interactive Maps management
-router.get('/interactive-maps', requireAdmin, async (req, res) => {
-  try {
-    const { Content } = require('../models');
-    const maps = await Content.findAll({
-      where: { type: 'interactive_map' },
-      order: [['title', 'ASC']]
-    });
-    
-    res.render('pages/admin/interactive-maps', {
-      title: 'Interactive Map Management',
-      user: req.session.user,
-      maps
-    });
-  } catch (error) {
-    console.error('Error rendering interactive map management:', error);
-    res.status(500).send('Internal server error');
-  }
-});
 
 // Daily Content Scheduler
 router.get('/daily-scheduler', requireAdmin, async (req, res) => {
@@ -1855,7 +1816,7 @@ router.get('/daily-scheduler', requireAdmin, async (req, res) => {
 const { contentTypes, getContentTypeBySlug } = require('../config/contentTypes');
 
 // Generic content type route handler
-const contentTypeRoutes = ['scripture-readings', 'hymns', 'journaling-prompts', 'guided-prayers', 'reflections', 'artwork', 'videos', 'creeds'];
+const contentTypeRoutes = ['scripture-readings', 'hymns', 'journaling-prompts', 'guided-prayers', 'reflections', 'artwork', 'videos', 'creeds', 'historical-contexts', 'interactive-maps'];
 
 contentTypeRoutes.forEach(urlSlug => {
   router.get(`/${urlSlug}`, requireAdmin, async (req, res) => {
