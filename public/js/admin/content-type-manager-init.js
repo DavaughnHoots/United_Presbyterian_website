@@ -633,6 +633,46 @@ window.ContentTypeManager.exportItems = function() {
           'How can you apply this?'
         ]
       };
+    } else if (contentType.dbType === 'historical_context') {
+      example.image_url = 'https://example.com/historical-image.jpg';
+      example.theme = 'Faith & Perseverance';
+      example.metadata = {
+        time_period: '1873',
+        location: 'Chicago, Illinois',
+        figure: 'Horatio Spafford',
+        related_hymn: 'It Is Well With My Soul',
+        biblical_reference: 'Luke 8:22-25',
+        questions: [
+          'How does this historical context deepen your understanding of the hymn?',
+          'What can we learn from this story about trusting God in difficult times?',
+          'How might this story encourage someone facing loss today?'
+        ]
+      };
+    } else if (contentType.dbType === 'interactive_map') {
+      example.map_url = 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d215489.5736121651!2d35.3547534!3d32.8191218!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x151c65816c2e0f3d%3A0x54dac12b30f0c6e2!2sSea%20of%20Galilee!5e0!3m2!1sen!2sus!4v1234567890123';
+      example.theme = 'Miracles of Jesus';
+      example.metadata = {
+        region: 'Israel/Palestine',
+        biblical_period: 'New Testament',
+        biblical_events: 'Jesus walks on water, Calming of the storm, Miraculous catch of fish',
+        locations: [
+          {
+            name: 'Capernaum',
+            description: 'Jesus\' base of operations during his Galilean ministry',
+            coordinates: '32.8806° N, 35.5753° E'
+          },
+          {
+            name: 'Mount of Beatitudes',
+            description: 'Traditional site of the Sermon on the Mount',
+            coordinates: '32.8824° N, 35.5572° E'
+          },
+          {
+            name: 'Tabgha',
+            description: 'Site of the multiplication of loaves and fishes',
+            coordinates: '32.8739° N, 35.5489° E'
+          }
+        ]
+      };
     }
     
     // Display the example
