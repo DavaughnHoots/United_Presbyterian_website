@@ -944,6 +944,17 @@ window.ContentTypeManager.exportItems = function() {
       return;
     }
     
+    // Check if input contains YouTube URL
+    const youtubeUrlMatch = input.value.match(/(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)(\/[^\s]+)/);
+    if (youtubeUrlMatch) {
+      loading.innerHTML = `
+        <div class="flex items-center justify-center p-4">
+          <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+          <span class="ml-3 text-gray-600">Fetching YouTube video information...</span>
+        </div>
+      `;
+    }
+    
     // Reset state
     resultContainer.classList.add('hidden');
     errorDiv.classList.add('hidden');
@@ -982,6 +993,13 @@ window.ContentTypeManager.exportItems = function() {
       errorMessage.textContent = error.message || 'Failed to generate content. Please try again.';
       errorDiv.classList.remove('hidden');
     } finally {
+      // Reset loading state
+      loading.innerHTML = `
+        <div class="flex items-center justify-center p-4">
+          <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+          <span class="ml-3 text-gray-600">AI is generating your content...</span>
+        </div>
+      `;
       loading.classList.add('hidden');
     }
   }

@@ -1724,10 +1724,30 @@ router.post('/api/ai-assist', requireAdmin, async (req, res) => {
       });
     }
     
+    // Check for YouTube URL and fetch metadata
+    const { extractAndFetchYouTubeData } = require('../utils/youtube');
+    const youtubeData = await extractAndFetchYouTubeData(prompt);
+    
+    let enhancedPrompt = prompt;
+    if (youtubeData) {
+      // Add YouTube metadata to the prompt
+      enhancedPrompt = `${prompt}\n\nYouTube Video Information:\n`;
+      enhancedPrompt += `Title: ${youtubeData.title}\n`;
+      enhancedPrompt += `Channel: ${youtubeData.channelTitle}\n`;
+      if (youtubeData.description) {
+        enhancedPrompt += `Description: ${youtubeData.description.substring(0, 300)}...\n`;
+      }
+    }
+    
     // Build a system prompt for prayer generation
     let systemPrompt = `You are a helpful assistant that creates properly formatted JSON for a prayer content management system. `;
     systemPrompt += `Generate a prayer based on the user's description. `;
     systemPrompt += `The prayer should be thoughtful, reverent, and appropriate for Presbyterian worship. `;
+    
+    if (youtubeData) {
+      systemPrompt += `If the YouTube video is a hymn or worship song, create a prayer that complements its themes. `;
+    }
+    
     systemPrompt += `Return ONLY valid JSON with this exact structure:
 {
   "title": "Prayer Title",
@@ -1752,7 +1772,7 @@ router.post('/api/ai-assist', requireAdmin, async (req, res) => {
         model: "gpt-3.5-turbo",
         messages: [
           { role: "system", content: systemPrompt },
-          { role: "user", content: prompt }
+          { role: "user", content: enhancedPrompt }
         ],
         temperature: 0.7,
         max_tokens: 1000
@@ -1770,7 +1790,7 @@ router.post('/api/ai-assist', requireAdmin, async (req, res) => {
         model: "claude-3-haiku-20240307",
         max_tokens: 1000,
         system: systemPrompt,
-        messages: [{ role: "user", content: prompt }]
+        messages: [{ role: "user", content: enhancedPrompt }]
       });
       
       const responseText = message.content[0].text;
@@ -2332,6 +2352,23 @@ router.post('/api/content/:type/ai-assist', requireAdmin, async (req, res) => {
       });
     }
     
+    // Check for YouTube URL and fetch metadata
+    const { extractAndFetchYouTubeData } = require('../utils/youtube');
+    const youtubeData = await extractAndFetchYouTubeData(prompt);
+    
+    let enhancedPrompt = prompt;
+    if (youtubeData) {
+      // Add YouTube metadata to the prompt
+      enhancedPrompt = `${prompt}\n\nYouTube Video Information:\n`;
+      enhancedPrompt += `Title: ${youtubeData.title}\n`;
+      enhancedPrompt += `Channel: ${youtubeData.channelTitle}\n`;
+      enhancedPrompt += `Duration: ${youtubeData.duration} minutes\n`;
+      if (youtubeData.description) {
+        enhancedPrompt += `Description: ${youtubeData.description.substring(0, 500)}...\n`;
+      }
+      enhancedPrompt += `Video ID: ${youtubeData.id}\n`;
+    }
+    
     // Build a system prompt based on content type
     let systemPrompt = `You are a helpful assistant that creates properly formatted JSON for a ${contentType.name} content management system. `;
     systemPrompt += `Generate valid JSON that matches this exact structure and requirements. `;
@@ -2343,6 +2380,12 @@ router.post('/api/content/:type/ai-assist', requireAdmin, async (req, res) => {
     systemPrompt += `- Use appropriate values for the content type\n`;
     systemPrompt += `- Set is_active to true\n`;
     systemPrompt += `- For array fields, provide relevant items\n`;
+    
+    if (youtubeData) {
+      systemPrompt += `- Use the provided YouTube metadata to fill relevant fields accurately\n`;
+      systemPrompt += `- For video_url or youtube fields, use the video ID: ${youtubeData.id}\n`;
+      systemPrompt += `- For duration fields, use: ${youtubeData.duration} minutes\n`;
+    }
     
     let generatedContent;
     
@@ -2356,7 +2399,7 @@ router.post('/api/content/:type/ai-assist', requireAdmin, async (req, res) => {
         model: "gpt-3.5-turbo",
         messages: [
           { role: "system", content: systemPrompt },
-          { role: "user", content: prompt }
+          { role: "user", content: enhancedPrompt }
         ],
         temperature: 0.7,
         max_tokens: 2000
@@ -2374,7 +2417,7 @@ router.post('/api/content/:type/ai-assist', requireAdmin, async (req, res) => {
         model: "claude-3-haiku-20240307",
         max_tokens: 2000,
         system: systemPrompt,
-        messages: [{ role: "user", content: prompt }]
+        messages: [{ role: "user", content: enhancedPrompt }]
       });
       
       const responseText = message.content[0].text;

@@ -636,6 +636,17 @@ console.log('Prayer Export/Import module starting...');
       return;
     }
     
+    // Check if input contains YouTube URL
+    const youtubeUrlMatch = aiInput.value.match(/(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)(\/[^\s]+)/);
+    if (youtubeUrlMatch) {
+      aiLoading.innerHTML = `
+        <div class="flex items-center justify-center p-4">
+          <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+          <span class="ml-3 text-gray-600">Fetching YouTube video information...</span>
+        </div>
+      `;
+    }
+    
     // Hide previous results/errors and show loading
     aiResultContainer.classList.add('hidden');
     aiError.classList.add('hidden');
@@ -669,6 +680,13 @@ console.log('Prayer Export/Import module starting...');
       aiErrorMessage.textContent = error.message;
       aiError.classList.remove('hidden');
     } finally {
+      // Reset loading state
+      aiLoading.innerHTML = `
+        <div class="flex items-center justify-center p-4">
+          <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+          <span class="ml-3 text-gray-600">AI is generating your prayer...</span>
+        </div>
+      `;
       aiLoading.classList.add('hidden');
     }
   };
