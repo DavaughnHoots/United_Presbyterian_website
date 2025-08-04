@@ -25,7 +25,9 @@ module.exports = (sequelize, DataTypes) => {
         'video',
         'journaling_prompt',
         'guided_prayer',
-        'breathing_exercise'
+        'breathing_exercise',
+        'historical_context',
+        'interactive_map'
       ),
       allowNull: false
     },

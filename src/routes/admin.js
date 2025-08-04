@@ -1279,7 +1279,7 @@ router.post('/api/journeys/:journeyId/days', requireAdmin, async (req, res) => {
         const content = contents[i];
         
         // Handle different content storage formats
-        const customTypes = ['reflection', 'scripture_reading', 'artwork', 'video', 'journaling_prompt', 'guided_prayer'];
+        const customTypes = ['reflection', 'scripture_reading', 'artwork', 'video', 'journaling_prompt', 'guided_prayer', 'historical_context', 'interactive_map'];
         
         if (customTypes.includes(content.type) && (content.id === 'custom' || content.id.startsWith('custom_'))) {
           // Store custom content with full metadata
