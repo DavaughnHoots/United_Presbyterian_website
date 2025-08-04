@@ -2317,6 +2317,32 @@ router.post('/api/content/:type/import', requireAdmin, async (req, res) => {
         if (item.author) transformed.metadata.author = item.author;
         if (item.scripture_reference) transformed.metadata.scripture_reference = item.scripture_reference;
         if (item.discussion_questions) transformed.metadata.discussion_questions = item.discussion_questions;
+      } else if (type === 'historical_context') {
+        // Handle Historical Context fields
+        if (item.time_period) transformed.metadata.time_period = item.time_period;
+        if (item.location) transformed.metadata.location = item.location;
+        if (item.figure) transformed.metadata.figure = item.figure;
+        if (item.related_hymn) transformed.metadata.related_hymn = item.related_hymn;
+        if (item.biblical_reference) transformed.metadata.biblical_reference = item.biblical_reference;
+        if (item.questions) transformed.metadata.questions = item.questions;
+        // Also check if these fields are already in metadata
+        if (item.metadata) {
+          Object.assign(transformed.metadata, item.metadata);
+        }
+      } else if (type === 'interactive_map') {
+        // Handle Interactive Map fields
+        // map_url is a top-level field, not metadata
+        if (item.map_url) transformed.map_url = item.map_url;
+        
+        // These go in metadata
+        if (item.region) transformed.metadata.region = item.region;
+        if (item.biblical_period) transformed.metadata.biblical_period = item.biblical_period;
+        if (item.biblical_events) transformed.metadata.biblical_events = item.biblical_events;
+        if (item.locations) transformed.metadata.locations = item.locations;
+        // Also check if these fields are already in metadata
+        if (item.metadata) {
+          Object.assign(transformed.metadata, item.metadata);
+        }
       }
       
       // Remove undefined and null fields
