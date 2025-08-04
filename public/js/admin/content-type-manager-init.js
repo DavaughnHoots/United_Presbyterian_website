@@ -70,13 +70,27 @@ window.ContentTypeManager.FormManager = {
   addArrayItem: function(fieldName) {
     const container = document.getElementById(`${fieldName}Container`);
     if (!container) return;
-    const input = document.createElement('input');
-    input.type = 'text';
-    input.className = 'w-full px-3 py-2 border rounded-lg';
-    input.placeholder = 'Enter item...';
-    const wrapper = document.createElement('div');
-    wrapper.appendChild(input);
-    container.appendChild(wrapper);
+    
+    if (fieldName === 'locations') {
+      // Special handling for locations
+      const div = document.createElement('div');
+      div.className = 'border p-3 rounded-lg mb-2';
+      div.innerHTML = `
+        <input type="text" placeholder="Location name" class="w-full px-3 py-2 border rounded-lg mb-2" data-field="name">
+        <textarea placeholder="Description" class="w-full px-3 py-2 border rounded-lg mb-2" rows="2" data-field="description"></textarea>
+        <input type="text" placeholder="Coordinates (optional)" class="w-full px-3 py-2 border rounded-lg" data-field="coordinates">
+      `;
+      container.appendChild(div);
+    } else {
+      // Regular array item
+      const input = document.createElement('input');
+      input.type = 'text';
+      input.className = 'w-full px-3 py-2 border rounded-lg';
+      input.placeholder = 'Enter item...';
+      const wrapper = document.createElement('div');
+      wrapper.appendChild(input);
+      container.appendChild(wrapper);
+    }
   }
 };
 
@@ -328,6 +342,72 @@ window.ContentTypeManager.exportItems = function() {
       html += `<div class="text-center"><audio controls class="w-full"><source src="${item.audio_url}" type="audio/mpeg">Your browser does not support audio.</audio></div>`;
     }
     
+    // Handle Interactive Map
+    if (contentType.dbType === 'interactive_map' && item.map_url) {
+      html += `<div class="mt-4"><iframe src="${item.map_url}" width="100%" height="400" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></div>`;
+      
+      if (item.metadata) {
+        if (item.metadata.region || item.metadata.biblical_period || item.metadata.biblical_events) {
+          html += '<div class="mt-4 space-y-2">';
+          if (item.metadata.region) {
+            html += `<p><strong>Region:</strong> ${item.metadata.region}</p>`;
+          }
+          if (item.metadata.biblical_period) {
+            html += `<p><strong>Biblical Period:</strong> ${item.metadata.biblical_period}</p>`;
+          }
+          if (item.metadata.biblical_events) {
+            html += `<p><strong>Biblical Events:</strong> ${item.metadata.biblical_events}</p>`;
+          }
+          html += '</div>';
+        }
+        
+        if (item.metadata.locations && item.metadata.locations.length > 0) {
+          html += '<div class="mt-4"><h4 class="font-semibold mb-2">Locations:</h4><ul class="space-y-2">';
+          item.metadata.locations.forEach(location => {
+            if (typeof location === 'object') {
+              html += `<li><strong>${location.name}</strong>: ${location.description}`;
+              if (location.coordinates) {
+                html += ` <em>(${location.coordinates})</em>`;
+              }
+              html += '</li>';
+            } else {
+              html += `<li>${location}</li>`;
+            }
+          });
+          html += '</ul></div>';
+        }
+      }
+    }
+    
+    // Handle Historical Context
+    if (contentType.dbType === 'historical_context' && item.metadata) {
+      html += '<div class="mt-4 space-y-2">';
+      if (item.metadata.time_period) {
+        html += `<p><strong>Time Period:</strong> ${item.metadata.time_period}</p>`;
+      }
+      if (item.metadata.location) {
+        html += `<p><strong>Location:</strong> ${item.metadata.location}</p>`;
+      }
+      if (item.metadata.figure) {
+        html += `<p><strong>Historical Figure:</strong> ${item.metadata.figure}</p>`;
+      }
+      if (item.metadata.related_hymn) {
+        html += `<p><strong>Related Hymn:</strong> ${item.metadata.related_hymn}</p>`;
+      }
+      if (item.metadata.biblical_reference) {
+        html += `<p><strong>Biblical Reference:</strong> ${item.metadata.biblical_reference}</p>`;
+      }
+      html += '</div>';
+      
+      if (item.metadata.questions && item.metadata.questions.length > 0) {
+        html += '<div class="mt-4"><h4 class="font-semibold mb-2">Reflection Questions:</h4><ol class="list-decimal list-inside space-y-2">';
+        item.metadata.questions.forEach(question => {
+          html += `<li>${question}</li>`;
+        });
+        html += '</ol></div>';
+      }
+    }
+    
     html += '</div>';
     
     content.innerHTML = html;
@@ -343,6 +423,9 @@ window.ContentTypeManager.exportItems = function() {
     
     if (!item) return;
     
+    console.log('Editing item:', item);
+    console.log('Content type:', contentType);
+    
     // Set modal title
     document.getElementById('modalTitle').textContent = `Edit ${contentType.name}`;
     
@@ -353,20 +436,48 @@ window.ContentTypeManager.exportItems = function() {
     Object.entries(contentType.fields).forEach(([fieldName, field]) => {
       const element = document.getElementById(fieldName);
       if (element) {
+        console.log(`Processing field ${fieldName}:`, field);
+        console.log(`Element found: ${element.tagName}, type: ${element.type || 'N/A'}`);
+        console.log(`Field metadata flag: ${field.metadata}`);
+        console.log(`Item value: ${item[fieldName]}`);
+        console.log(`Item metadata value: ${item.metadata ? item.metadata[fieldName] : 'No metadata'}`);
+        
         if (field.type === 'array') {
           // Handle array fields - populate existing values
-          if (item[fieldName] && Array.isArray(item[fieldName])) {
+          let arrayData = null;
+          
+          // Check if this is a metadata field
+          if (field.metadata && item.metadata && item.metadata[fieldName]) {
+            arrayData = item.metadata[fieldName];
+          } else if (item[fieldName]) {
+            arrayData = item[fieldName];
+          }
+          
+          if (arrayData && Array.isArray(arrayData)) {
             const container = document.getElementById(`${fieldName}Container`);
             if (container) {
               container.innerHTML = ''; // Clear existing
-              item[fieldName].forEach(value => {
-                const input = document.createElement('input');
-                input.type = 'text';
-                input.className = 'w-full px-3 py-2 border rounded-lg mb-2';
-                input.value = value;
-                const wrapper = document.createElement('div');
-                wrapper.appendChild(input);
-                container.appendChild(wrapper);
+              arrayData.forEach(value => {
+                if (fieldName === 'locations' && typeof value === 'object') {
+                  // Special handling for locations objects
+                  const div = document.createElement('div');
+                  div.className = 'border p-3 rounded-lg mb-2';
+                  div.innerHTML = `
+                    <input type="text" placeholder="Location name" value="${value.name || ''}" class="w-full px-3 py-2 border rounded-lg mb-2" data-field="name">
+                    <textarea placeholder="Description" class="w-full px-3 py-2 border rounded-lg mb-2" rows="2" data-field="description">${value.description || ''}</textarea>
+                    <input type="text" placeholder="Coordinates (optional)" value="${value.coordinates || ''}" class="w-full px-3 py-2 border rounded-lg" data-field="coordinates">
+                  `;
+                  container.appendChild(div);
+                } else {
+                  // Regular string array items
+                  const input = document.createElement('input');
+                  input.type = 'text';
+                  input.className = 'w-full px-3 py-2 border rounded-lg mb-2';
+                  input.value = typeof value === 'object' ? JSON.stringify(value) : value;
+                  const wrapper = document.createElement('div');
+                  wrapper.appendChild(input);
+                  container.appendChild(wrapper);
+                }
               });
             }
           }
@@ -418,13 +529,37 @@ window.ContentTypeManager.exportItems = function() {
         const arrayItems = [];
         const container = document.getElementById(`${fieldName}Container`);
         if (container) {
-          container.querySelectorAll('input, textarea').forEach(input => {
-            if (input.value.trim()) {
-              arrayItems.push(input.value.trim());
-            }
-          });
+          if (fieldName === 'locations') {
+            // Special handling for locations - each location is in a div with multiple inputs
+            container.querySelectorAll('div.border').forEach(locationDiv => {
+              const location = {};
+              const nameInput = locationDiv.querySelector('[data-field="name"]');
+              const descInput = locationDiv.querySelector('[data-field="description"]');
+              const coordInput = locationDiv.querySelector('[data-field="coordinates"]');
+              
+              if (nameInput && nameInput.value.trim()) {
+                location.name = nameInput.value.trim();
+                if (descInput) location.description = descInput.value.trim();
+                if (coordInput && coordInput.value.trim()) location.coordinates = coordInput.value.trim();
+                arrayItems.push(location);
+              }
+            });
+          } else {
+            // Regular array items
+            container.querySelectorAll('input, textarea').forEach(input => {
+              if (input.value.trim()) {
+                arrayItems.push(input.value.trim());
+              }
+            });
+          }
         }
-        itemData[fieldName] = arrayItems;
+        
+        // Store in metadata if it's a metadata field
+        if (field.metadata) {
+          itemData.metadata[fieldName] = arrayItems;
+        } else {
+          itemData[fieldName] = arrayItems;
+        }
       } else if (field.metadata) {
         // Store in metadata
         itemData.metadata[fieldName] = value || null;
