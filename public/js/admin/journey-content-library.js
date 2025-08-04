@@ -113,7 +113,8 @@ JourneyEditor.ContentLibrary = {};
    */
   function mapTypeForAPI(type) {
     const mapping = {
-      'journaling': 'journaling_prompt',
+      'journaling': 'journaling_prompt',  // Legacy mapping
+      'journaling_prompt': 'journaling_prompt',
       'scripture_reading': 'scripture_reading',
       'guided_prayer': 'guided_prayer',
       'prayer': 'prayer',
@@ -220,7 +221,7 @@ JourneyEditor.ContentLibrary = {};
   ContentLibrary.initializeSearches = function() {
     const contentTypes = [
       'prayer', 'hymn', 'scripture_reading', 'artwork', 
-      'video', 'journaling', 'guided_prayer', 'reflection'
+      'video', 'journaling_prompt', 'guided_prayer', 'reflection'
     ];
     
     contentTypes.forEach(type => {
