@@ -193,6 +193,52 @@ const contentTypes = {
       tags: { required: false, label: 'Tags', type: 'text' }
     },
     categories: ['Ecumenical', 'Reformed', 'Presbyterian', 'Historic', 'Contemporary', 'Liturgical', 'Personal', 'Other']
+  },
+  
+  historical_context: {
+    name: 'Historical Context',
+    pluralName: 'Historical Contexts',
+    dbType: 'historical_context',
+    icon: 'fa-history',
+    color: 'amber',
+    urlSlug: 'historical-contexts',
+    description: 'Historical background and stories',
+    fields: {
+      title: { required: true, label: 'Title', type: 'text', placeholder: 'e.g., The Story Behind "It Is Well With My Soul"' },
+      content: { required: true, label: 'Historical Narrative', type: 'textarea', rows: 12 },
+      time_period: { required: false, label: 'Time Period', type: 'text', placeholder: 'e.g., 1873, First Century AD', metadata: true },
+      location: { required: false, label: 'Location', type: 'text', placeholder: 'e.g., Chicago, Jerusalem', metadata: true },
+      historical_figures: { required: false, label: 'Key Historical Figures', type: 'array', placeholder: 'Add historical figures...', metadata: true },
+      related_content: { required: false, label: 'Related Scripture/Hymn', type: 'text', placeholder: 'e.g., Hymn #377, Matthew 14:22-33', metadata: true },
+      image_url: { required: false, label: 'Historical Image URL', type: 'url', placeholder: 'https://example.com/historical-image.jpg' },
+      sources: { required: false, label: 'Historical Sources', type: 'array', placeholder: 'Add sources/references...', metadata: true },
+      theme: { required: false, label: 'Theme', type: 'text' },
+      tags: { required: false, label: 'Tags', type: 'text', placeholder: 'Comma-separated tags' }
+    },
+    categories: ['Hymn History', 'Biblical History', 'Church History', 'Saint Biography', 'Reformation', 'Mission History', 'Contemporary History', 'Other']
+  },
+  
+  interactive_map: {
+    name: 'Interactive Map',
+    pluralName: 'Interactive Maps',
+    dbType: 'interactive_map',
+    icon: 'fa-map-marked-alt',
+    color: 'teal',
+    urlSlug: 'interactive-maps',
+    description: 'Biblical and historical interactive maps',
+    fields: {
+      title: { required: true, label: 'Map Title', type: 'text', placeholder: 'e.g., Sea of Galilee - Where Jesus Walked on Water' },
+      content: { required: true, label: 'Map Description', type: 'textarea', rows: 4 },
+      map_url: { required: true, label: 'Map Embed URL', type: 'url', placeholder: 'Google Maps embed URL or similar' },
+      map_type: { required: false, label: 'Map Type', type: 'select', options: ['Satellite', 'Terrain', 'Road Map', 'Historical Recreation'], metadata: true },
+      biblical_references: { required: false, label: 'Biblical References', type: 'array', placeholder: 'Add scripture references...', metadata: true },
+      historical_period: { required: false, label: 'Historical Period', type: 'text', placeholder: 'e.g., Time of Jesus, Old Testament Era', metadata: true },
+      points_of_interest: { required: false, label: 'Points of Interest', type: 'array', placeholder: 'Add locations of interest...', metadata: true },
+      modern_location: { required: false, label: 'Modern Location', type: 'text', placeholder: 'e.g., Northern Israel', metadata: true },
+      theme: { required: false, label: 'Theme', type: 'text' },
+      tags: { required: false, label: 'Tags', type: 'text', placeholder: 'Comma-separated tags' }
+    },
+    categories: ['Holy Land', 'Paul\'s Journeys', 'Old Testament', 'New Testament', 'Early Church', 'Reformation Sites', 'Modern Pilgrimage', 'Other']
   }
 };
 
@@ -215,7 +261,9 @@ const getColorClass = (color) => {
     orange: 'text-orange-600 bg-orange-100',
     pink: 'text-pink-600 bg-pink-100',
     red: 'text-red-600 bg-red-100',
-    gray: 'text-gray-600 bg-gray-100'
+    gray: 'text-gray-600 bg-gray-100',
+    amber: 'text-amber-600 bg-amber-100',
+    teal: 'text-teal-600 bg-teal-100'
   };
   return colorMap[color] || colorMap.gray;
 };

@@ -181,6 +181,12 @@
             <button class="tab-btn" onclick="switchContentTab('reflection')">
               <i class="fas fa-pen"></i> Reflection
             </button>
+            <button class="tab-btn" onclick="switchContentTab('historical_context')">
+              <i class="fas fa-history"></i> Historical Context
+            </button>
+            <button class="tab-btn" onclick="switchContentTab('interactive_map')">
+              <i class="fas fa-map-marked-alt"></i> Interactive Map
+            </button>
           </div>
           
           <!-- Bible Tab Content -->
@@ -315,6 +321,32 @@
             <div class="content-list" id="reflectionList">
               <div class="text-center py-4">
                 <i class="fas fa-spinner fa-spin"></i> Loading reflections...
+              </div>
+            </div>
+          </div>
+          
+          <!-- Historical Context Tab -->
+          <div id="historical_contextTab" class="tab-content" style="display: none;">
+            <div class="search-bar">
+              <input type="text" class="form-control" placeholder="Search historical context..." 
+                     onkeyup="searchContent('historical_context')">
+            </div>
+            <div class="content-list" id="historical_contextList">
+              <div class="text-center py-4">
+                <i class="fas fa-spinner fa-spin"></i> Loading historical context...
+              </div>
+            </div>
+          </div>
+          
+          <!-- Interactive Map Tab -->
+          <div id="interactive_mapTab" class="tab-content" style="display: none;">
+            <div class="search-bar">
+              <input type="text" class="form-control" placeholder="Search interactive maps..." 
+                     onkeyup="searchContent('interactive_map')">
+            </div>
+            <div class="content-list" id="interactive_mapList">
+              <div class="text-center py-4">
+                <i class="fas fa-spinner fa-spin"></i> Loading interactive maps...
               </div>
             </div>
           </div>

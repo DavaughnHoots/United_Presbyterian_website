@@ -18,7 +18,9 @@ const TYPE_MAPPINGS = {
   'reflection': 'reflection',
   'artwork': 'artwork',
   'video': 'video',
-  'creed': 'creed'
+  'creed': 'creed',
+  'historical_context': 'historical_context',
+  'interactive_map': 'interactive_map'
 };
 
 // Reverse mappings for backward compatibility
@@ -39,6 +41,8 @@ const TYPE_DISPLAY_NAMES = {
   'artwork': 'Artwork',
   'video': 'Video',
   'creed': 'Creed',
+  'historical_context': 'Historical Context',
+  'interactive_map': 'Interactive Map',
   // Legacy types
   'reading': 'Bible Reading',
   'music': 'Music',
@@ -56,6 +60,8 @@ const TYPE_ICONS = {
   'artwork': 'fa-image',
   'video': 'fa-video',
   'creed': 'fa-scroll',
+  'historical_context': 'fa-history',
+  'interactive_map': 'fa-map-marked-alt',
   // Legacy types
   'reading': 'fa-book-bible',
   'music': 'fa-music',
@@ -123,7 +129,9 @@ function getAllContentTypes() {
     'reflection',
     'artwork',
     'video',
-    'creed'
+    'creed',
+    'historical_context',
+    'interactive_map'
   ];
 }
 

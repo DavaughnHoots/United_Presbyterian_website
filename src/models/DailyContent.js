@@ -30,7 +30,9 @@ module.exports = (sequelize, DataTypes) => {
         'creed',
         'reading',
         'music',
-        'question'
+        'question',
+        'historical_context',
+        'interactive_map'
       ),
       allowNull: false
     },

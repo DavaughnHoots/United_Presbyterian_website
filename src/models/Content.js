@@ -19,7 +19,9 @@ module.exports = (sequelize, DataTypes) => {
         'video',
         'journaling_prompt',
         'guided_prayer',
-        'breathing_exercise'
+        'breathing_exercise',
+        'historical_context',
+        'interactive_map'
       ),
       allowNull: false
     },
@@ -98,6 +100,10 @@ module.exports = (sequelize, DataTypes) => {
     prompts: {
       type: DataTypes.ARRAY(DataTypes.TEXT),
       defaultValue: [],
+      allowNull: true
+    },
+    map_url: {
+      type: DataTypes.STRING,
       allowNull: true
     }
   }, {

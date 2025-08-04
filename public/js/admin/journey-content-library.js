@@ -221,7 +221,8 @@ JourneyEditor.ContentLibrary = {};
   ContentLibrary.initializeSearches = function() {
     const contentTypes = [
       'prayer', 'hymn', 'scripture_reading', 'artwork', 
-      'video', 'journaling_prompt', 'guided_prayer', 'reflection'
+      'video', 'journaling_prompt', 'guided_prayer', 'reflection',
+      'historical_context', 'interactive_map'
     ];
     
     contentTypes.forEach(type => {
