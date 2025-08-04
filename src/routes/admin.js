@@ -1709,6 +1709,90 @@ router.delete('/api/prayers/:id', requireAdmin, async (req, res) => {
   }
 });
 
+// AI Assist endpoint for prayer generation
+router.post('/api/ai-assist', requireAdmin, async (req, res) => {
+  try {
+    const { prompt, contentType } = req.body;
+    
+    // Check if AI is configured
+    const openaiKey = process.env.OPENAI_API_KEY;
+    const anthropicKey = process.env.ANTHROPIC_API_KEY;
+    
+    if (!openaiKey && !anthropicKey) {
+      return res.status(503).json({ 
+        error: 'AI service not configured. Please add OPENAI_API_KEY or ANTHROPIC_API_KEY to your environment variables.' 
+      });
+    }
+    
+    // Build a system prompt for prayer generation
+    let systemPrompt = `You are a helpful assistant that creates properly formatted JSON for a prayer content management system. `;
+    systemPrompt += `Generate a prayer based on the user's description. `;
+    systemPrompt += `The prayer should be thoughtful, reverent, and appropriate for Presbyterian worship. `;
+    systemPrompt += `Return ONLY valid JSON with this exact structure:
+{
+  "title": "Prayer Title",
+  "content": "The prayer text with proper line breaks",
+  "category": "morning|evening|meal|healing|thanksgiving|confession|intercession|traditional|seasonal|other",
+  "author": "Author or source (optional)",
+  "tags": ["tag1", "tag2"],
+  "bible_references": ["Reference 1", "Reference 2"],
+  "is_active": true
+}`;
+    systemPrompt += `\nImportant: Choose the most appropriate category. Include relevant tags and Bible references if mentioned.`;
+    
+    let generatedContent;
+    
+    if (openaiKey) {
+      // Use OpenAI
+      const { Configuration, OpenAIApi } = require('openai');
+      const configuration = new Configuration({ apiKey: openaiKey });
+      const openai = new OpenAIApi(configuration);
+      
+      const completion = await openai.createChatCompletion({
+        model: "gpt-3.5-turbo",
+        messages: [
+          { role: "system", content: systemPrompt },
+          { role: "user", content: prompt }
+        ],
+        temperature: 0.7,
+        max_tokens: 1000
+      });
+      
+      const responseText = completion.data.choices[0].message.content;
+      generatedContent = JSON.parse(responseText);
+      
+    } else if (anthropicKey) {
+      // Use Anthropic Claude
+      const Anthropic = require('@anthropic-ai/sdk');
+      const anthropic = new Anthropic({ apiKey: anthropicKey });
+      
+      const message = await anthropic.messages.create({
+        model: "claude-3-haiku-20240307",
+        max_tokens: 1000,
+        system: systemPrompt,
+        messages: [{ role: "user", content: prompt }]
+      });
+      
+      const responseText = message.content[0].text;
+      generatedContent = JSON.parse(responseText);
+    }
+    
+    // Ensure it's always an array for consistency
+    if (!Array.isArray(generatedContent)) {
+      generatedContent = [generatedContent];
+    }
+    
+    res.json({ content: generatedContent });
+    
+  } catch (error) {
+    console.error('AI assist error:', error);
+    res.status(500).json({ 
+      error: 'Failed to generate prayer. Please check your input and try again.',
+      details: error.message 
+    });
+  }
+});
+
 // Delete journey
 router.delete('/api/journeys/:id', requireAdmin, async (req, res) => {
   try {
@@ -2229,6 +2313,87 @@ router.delete('/api/content/:type/:id', requireAdmin, async (req, res) => {
   } catch (error) {
     console.error('Error deleting content:', error);
     res.status(500).json({ error: 'Failed to delete content' });
+  }
+});
+
+// AI Assist endpoint for content generation
+router.post('/api/content/:type/ai-assist', requireAdmin, async (req, res) => {
+  try {
+    const { type } = req.params;
+    const { prompt, contentType, exampleJSON } = req.body;
+    
+    // Check if AI is configured
+    const openaiKey = process.env.OPENAI_API_KEY;
+    const anthropicKey = process.env.ANTHROPIC_API_KEY;
+    
+    if (!openaiKey && !anthropicKey) {
+      return res.status(503).json({ 
+        error: 'AI service not configured. Please add OPENAI_API_KEY or ANTHROPIC_API_KEY to your environment variables.' 
+      });
+    }
+    
+    // Build a system prompt based on content type
+    let systemPrompt = `You are a helpful assistant that creates properly formatted JSON for a ${contentType.name} content management system. `;
+    systemPrompt += `Generate valid JSON that matches this exact structure and requirements. `;
+    systemPrompt += `The content type is "${type}" with these characteristics: ${contentType.description}. `;
+    systemPrompt += `Here is an example of the expected format:\n${exampleJSON}\n\n`;
+    systemPrompt += `Important requirements:\n`;
+    systemPrompt += `- Return ONLY valid JSON, no explanations or markdown\n`;
+    systemPrompt += `- Include all required fields\n`;
+    systemPrompt += `- Use appropriate values for the content type\n`;
+    systemPrompt += `- Set is_active to true\n`;
+    systemPrompt += `- For array fields, provide relevant items\n`;
+    
+    let generatedContent;
+    
+    if (openaiKey) {
+      // Use OpenAI
+      const { Configuration, OpenAIApi } = require('openai');
+      const configuration = new Configuration({ apiKey: openaiKey });
+      const openai = new OpenAIApi(configuration);
+      
+      const completion = await openai.createChatCompletion({
+        model: "gpt-3.5-turbo",
+        messages: [
+          { role: "system", content: systemPrompt },
+          { role: "user", content: prompt }
+        ],
+        temperature: 0.7,
+        max_tokens: 2000
+      });
+      
+      const responseText = completion.data.choices[0].message.content;
+      generatedContent = JSON.parse(responseText);
+      
+    } else if (anthropicKey) {
+      // Use Anthropic Claude
+      const Anthropic = require('@anthropic-ai/sdk');
+      const anthropic = new Anthropic({ apiKey: anthropicKey });
+      
+      const message = await anthropic.messages.create({
+        model: "claude-3-haiku-20240307",
+        max_tokens: 2000,
+        system: systemPrompt,
+        messages: [{ role: "user", content: prompt }]
+      });
+      
+      const responseText = message.content[0].text;
+      generatedContent = JSON.parse(responseText);
+    }
+    
+    // Ensure it's always an array
+    if (!Array.isArray(generatedContent)) {
+      generatedContent = [generatedContent];
+    }
+    
+    res.json({ content: generatedContent });
+    
+  } catch (error) {
+    console.error('AI assist error:', error);
+    res.status(500).json({ 
+      error: 'Failed to generate content. Please check your input and try again.',
+      details: error.message 
+    });
   }
 });
 

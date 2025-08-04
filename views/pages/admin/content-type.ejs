@@ -362,6 +362,9 @@
                     <button id="exampleTab" data-tab="example" class="px-4 py-2 font-medium text-gray-600 hover:text-gray-800">
                         <i class="fas fa-lightbulb mr-2"></i>Example Template
                     </button>
+                    <button id="aiAssistTab" data-tab="ai-assist" class="px-4 py-2 font-medium text-gray-600 hover:text-gray-800">
+                        <i class="fas fa-robot mr-2"></i>AI Assist
+                    </button>
                 </div>
                 
                 <!-- File Upload Tab -->
@@ -439,6 +442,58 @@
                         <button data-action="copy-example" class="btn-secondary">
                             <i class="fas fa-copy mr-2"></i>Copy Example
                         </button>
+                    </div>
+                </div>
+                
+                <!-- AI Assist Tab -->
+                <div id="aiAssistContent" class="tab-content hidden">
+                    <p class="text-gray-600 mb-4">Describe the <%= contentType.name.toLowerCase() %> you want to create in natural language, and AI will generate the proper JSON format for you.</p>
+                    
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Describe your <%= contentType.name.toLowerCase() %>:</label>
+                        <textarea id="aiInput" 
+                                  rows="8" 
+                                  class="w-full px-3 py-2 border rounded-lg" 
+                                  placeholder="Example: Create a morning prayer about gratitude that references Psalm 118:24 and includes themes of thanksgiving for a new day..."></textarea>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <button data-action="ai-generate" class="btn-primary">
+                            <i class="fas fa-magic mr-2"></i>Generate with AI
+                        </button>
+                    </div>
+                    
+                    <!-- Loading indicator -->
+                    <div id="aiLoading" class="hidden mb-4">
+                        <div class="flex items-center justify-center p-4">
+                            <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+                            <span class="ml-3 text-gray-600">AI is generating your content...</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Generated JSON preview -->
+                    <div id="aiResultContainer" class="hidden">
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Generated JSON (review before importing):</label>
+                            <div class="bg-gray-100 p-4 rounded-lg overflow-x-auto">
+                                <pre id="aiGeneratedJson" class="text-sm font-mono whitespace-pre"></pre>
+                            </div>
+                        </div>
+                        <div class="flex gap-2">
+                            <button data-action="ai-edit" class="btn-secondary">
+                                <i class="fas fa-edit mr-2"></i>Edit JSON
+                            </button>
+                            <button data-action="ai-import" class="btn-primary">
+                                <i class="fas fa-check mr-2"></i>Import This Content
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Error display -->
+                    <div id="aiError" class="hidden">
+                        <div class="bg-red-50 border border-red-200 rounded-lg p-4">
+                            <p class="text-red-800"><i class="fas fa-exclamation-circle mr-2"></i><span id="aiErrorMessage"></span></p>
+                        </div>
                     </div>
                 </div>
             </div>

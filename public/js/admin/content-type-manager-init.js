@@ -215,6 +215,18 @@ window.ContentTypeManager.exportItems = function() {
           copyAIPrompt();
           break;
           
+        case 'ai-generate':
+          generateAIContent();
+          break;
+          
+        case 'ai-edit':
+          editAIGeneratedJSON();
+          break;
+          
+        case 'ai-import':
+          importAIGeneratedContent();
+          break;
+          
         case 'reset-filters':
           window.ContentTypeManager.FilterManager.resetFilters();
           break;
@@ -693,7 +705,8 @@ window.ContentTypeManager.exportItems = function() {
     const contentMap = {
       'file': 'fileImportContent',
       'json': 'jsonImportContent',
-      'example': 'exampleContent'
+      'example': 'exampleContent',
+      'ai-assist': 'aiAssistContent'
     };
     
     const contentId = contentMap[tabName];
@@ -913,6 +926,110 @@ window.ContentTypeManager.exportItems = function() {
     }).catch(() => {
       ContentTypeManager.showToast('Failed to copy prompt', 'error');
     });
+  }
+
+  /**
+   * Generate content using AI
+   */
+  async function generateAIContent() {
+    const input = document.getElementById('aiInput');
+    const loading = document.getElementById('aiLoading');
+    const resultContainer = document.getElementById('aiResultContainer');
+    const errorDiv = document.getElementById('aiError');
+    const errorMessage = document.getElementById('aiErrorMessage');
+    const contentType = ContentTypeManager.getContentType();
+    
+    if (!input || !input.value.trim()) {
+      ContentTypeManager.showToast('Please describe the content you want to create', 'error');
+      return;
+    }
+    
+    // Reset state
+    resultContainer.classList.add('hidden');
+    errorDiv.classList.add('hidden');
+    loading.classList.remove('hidden');
+    
+    try {
+      // Get the example template to help AI understand the format
+      const exampleElement = document.getElementById('exampleTemplate');
+      const exampleJSON = exampleElement ? exampleElement.textContent : '';
+      
+      const response = await fetch(`/admin/api/content/${contentType.dbType}/ai-assist`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          prompt: input.value.trim(),
+          contentType: contentType,
+          exampleJSON: exampleJSON
+        })
+      });
+      
+      const data = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to generate content');
+      }
+      
+      // Display the generated JSON
+      document.getElementById('aiGeneratedJson').textContent = JSON.stringify(data.content, null, 2);
+      resultContainer.classList.remove('hidden');
+      
+      // Store for later use
+      window.aiGeneratedContent = data.content;
+      
+    } catch (error) {
+      console.error('AI generation error:', error);
+      errorMessage.textContent = error.message || 'Failed to generate content. Please try again.';
+      errorDiv.classList.remove('hidden');
+    } finally {
+      loading.classList.add('hidden');
+    }
+  }
+
+  /**
+   * Edit AI generated JSON
+   */
+  function editAIGeneratedJSON() {
+    const jsonTab = document.getElementById('jsonImportTab');
+    const jsonInput = document.getElementById('jsonInput');
+    
+    if (window.aiGeneratedContent && jsonInput) {
+      // Switch to JSON tab
+      showImportTab('json');
+      
+      // Populate the JSON input with the generated content
+      jsonInput.value = JSON.stringify(window.aiGeneratedContent, null, 2);
+      
+      ContentTypeManager.showToast('You can now edit the generated JSON');
+    }
+  }
+
+  /**
+   * Import AI generated content
+   */
+  async function importAIGeneratedContent() {
+    if (!window.aiGeneratedContent) {
+      ContentTypeManager.showToast('No AI generated content to import', 'error');
+      return;
+    }
+    
+    try {
+      // Create a fake file object for the existing import function
+      const items = Array.isArray(window.aiGeneratedContent) ? window.aiGeneratedContent : [window.aiGeneratedContent];
+      const blob = new Blob([JSON.stringify(items)], { type: 'application/json' });
+      const file = new File([blob], 'ai-generated.json', { type: 'application/json' });
+      
+      // Use existing import function
+      if (window.ContentTypeManager._importItems) {
+        await window.ContentTypeManager._importItems(file);
+        window.ContentTypeManager.closeImportModal();
+        
+        // Clear the AI generated content
+        window.aiGeneratedContent = null;
+      }
+    } catch (error) {
+      ContentTypeManager.showToast('Failed to import content: ' + error.message, 'error');
+    }
   }
 
   /**

@@ -617,6 +617,127 @@ console.log('Prayer Export/Import module starting...');
     PrayerManager.updateFilteredStats(originalFiltered);
   };
 
+  /**
+   * Generate AI content based on user input
+   */
+  PrayerManager.generateAIContent = async function() {
+    const modal = document.getElementById('importModal');
+    if (!modal) return;
+    
+    const aiInput = modal.querySelector('#aiInput');
+    const aiLoading = modal.querySelector('#aiLoading');
+    const aiResultContainer = modal.querySelector('#aiResultContainer');
+    const aiGeneratedJson = modal.querySelector('#aiGeneratedJson');
+    const aiError = modal.querySelector('#aiError');
+    const aiErrorMessage = modal.querySelector('#aiErrorMessage');
+    
+    if (!aiInput || !aiInput.value.trim()) {
+      PrayerManager.showMessage('Please describe the prayer you want to create', 'warning');
+      return;
+    }
+    
+    // Hide previous results/errors and show loading
+    aiResultContainer.classList.add('hidden');
+    aiError.classList.add('hidden');
+    aiLoading.classList.remove('hidden');
+    
+    try {
+      const response = await fetch('/admin/api/ai-assist', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          prompt: aiInput.value.trim(),
+          contentType: 'prayer'
+        })
+      });
+      
+      const data = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to generate content');
+      }
+      
+      // Display the generated JSON
+      aiGeneratedJson.textContent = JSON.stringify(data.content, null, 2);
+      aiResultContainer.classList.remove('hidden');
+      
+      // Store the generated content for later import
+      PrayerManager._aiGeneratedContent = data.content;
+      
+    } catch (error) {
+      console.error('AI generation error:', error);
+      aiErrorMessage.textContent = error.message;
+      aiError.classList.remove('hidden');
+    } finally {
+      aiLoading.classList.add('hidden');
+    }
+  };
+
+  /**
+   * Edit AI generated JSON
+   */
+  PrayerManager.editAIGeneratedJSON = function() {
+    const modal = document.getElementById('importModal');
+    if (!modal) return;
+    
+    const aiGeneratedJson = modal.querySelector('#aiGeneratedJson');
+    const jsonInput = modal.querySelector('#jsonInput');
+    const jsonTab = modal.querySelector('#jsonImportTab');
+    
+    if (!aiGeneratedJson || !jsonInput || !jsonTab) return;
+    
+    // Copy the generated JSON to the JSON input tab
+    jsonInput.value = aiGeneratedJson.textContent;
+    
+    // Switch to JSON tab
+    jsonTab.click();
+  };
+
+  /**
+   * Import AI generated content
+   */
+  PrayerManager.importAIGeneratedContent = async function() {
+    if (!PrayerManager._aiGeneratedContent) {
+      PrayerManager.showMessage('No AI generated content to import', 'error');
+      return;
+    }
+    
+    // Create prayer from the generated content
+    try {
+      const prayerData = Array.isArray(PrayerManager._aiGeneratedContent) 
+        ? PrayerManager._aiGeneratedContent[0] 
+        : PrayerManager._aiGeneratedContent;
+      
+      const response = await fetch('/admin/api/prayers', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          title: prayerData.title,
+          category: prayerData.category,
+          author: prayerData.author || '',
+          content: prayerData.content,
+          audio_url: prayerData.audio_url || '',
+          tags: prayerData.tags || [],
+          bible_references: prayerData.bible_references || [],
+          metadata: prayerData.metadata || {},
+          is_active: prayerData.is_active !== false
+        })
+      });
+      
+      if (response.ok) {
+        PrayerManager.showMessage('Prayer imported successfully!', 'success');
+        PrayerManager.closeImportModal();
+        setTimeout(() => window.location.reload(), 1500);
+      } else {
+        const error = await response.json();
+        throw new Error(error.error || 'Failed to import prayer');
+      }
+    } catch (error) {
+      console.error('Import error:', error);
+      PrayerManager.showMessage('Failed to import prayer: ' + error.message, 'error');
+    }
+  };
+
   console.log('Prayer Export/Import module loaded successfully');
   
   // Verify functions are attached
