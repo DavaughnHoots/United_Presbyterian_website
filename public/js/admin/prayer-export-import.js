@@ -275,6 +275,65 @@ console.log('Prayer Export/Import module starting...');
   };
 
   /**
+   * Generate AI prompt with URL and example JSON
+   */
+  PrayerManager.generateAIPrompt = function() {
+    const urlInput = document.getElementById('aiPromptUrl');
+    const promptContainer = document.getElementById('aiPromptContainer');
+    const promptText = document.getElementById('aiPromptText');
+    const exampleTemplate = document.getElementById('exampleTemplate');
+    
+    if (!urlInput || !promptContainer || !promptText || !exampleTemplate) return;
+    
+    const url = urlInput.value.trim();
+    if (!url) {
+      PrayerManager.showMessage('Please enter a URL first', 'error');
+      return;
+    }
+    
+    // Generate the prompt
+    const prompt = `I need you to change the following information ${url} & put it in the following JSON format:\n\n${exampleTemplate.textContent}`;
+    
+    // Display the prompt
+    promptText.value = prompt;
+    promptContainer.classList.remove('hidden');
+    
+    // Auto-select the text for easy copying
+    promptText.select();
+  };
+
+  /**
+   * Copy AI prompt to clipboard
+   */
+  PrayerManager.copyAIPrompt = function() {
+    const promptText = document.getElementById('aiPromptText');
+    if (!promptText) return;
+    
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(promptText.value).then(() => {
+        PrayerManager.showMessage('AI prompt copied to clipboard!', 'success');
+      }).catch(() => {
+        PrayerManager.showMessage('Failed to copy prompt', 'error');
+      });
+    } else {
+      // Fallback method
+      const textArea = document.createElement('textarea');
+      textArea.value = promptText.value;
+      textArea.style.position = 'fixed';
+      textArea.style.opacity = '0';
+      document.body.appendChild(textArea);
+      textArea.select();
+      try {
+        document.execCommand('copy');
+        PrayerManager.showMessage('AI prompt copied to clipboard!', 'success');
+      } catch (err) {
+        PrayerManager.showMessage('Failed to copy prompt', 'error');
+      }
+      document.body.removeChild(textArea);
+    }
+  };
+
+  /**
    * Import prayers from JSON file or text
    */
   PrayerManager.importPrayers = async function() {
