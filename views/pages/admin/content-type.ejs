@@ -401,6 +401,37 @@
                 <!-- Example Template Tab -->
                 <div id="exampleContent" class="tab-content hidden">
                     <p class="text-gray-600 mb-4">Here's a complete example showing all available fields for <%= contentType.pluralName.toLowerCase() %>:</p>
+                    
+                    <!-- AI Prompt Generator -->
+                    <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+                        <h4 class="font-semibold text-blue-900 mb-3">
+                            <i class="fas fa-robot mr-2"></i>AI Conversion Helper
+                        </h4>
+                        <p class="text-sm text-blue-800 mb-3">Paste a URL below to generate an AI prompt for converting web content to JSON format:</p>
+                        <div class="flex gap-2 mb-3">
+                            <input type="url" 
+                                   id="aiPromptUrl" 
+                                   placeholder="Paste URL here" 
+                                   class="flex-1 px-3 py-2 border border-blue-300 rounded-lg text-sm">
+                            <button data-action="generate-ai-prompt" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm">
+                                Generate AI Prompt
+                            </button>
+                        </div>
+                        <div id="aiPromptContainer" class="hidden">
+                            <label class="block text-sm font-medium text-blue-900 mb-2">Copy this prompt to use with ChatGPT, Claude, or other AI:</label>
+                            <textarea id="aiPromptText" 
+                                      rows="6" 
+                                      readonly 
+                                      class="w-full px-3 py-2 border border-blue-300 rounded-lg font-mono text-xs bg-white"></textarea>
+                            <div class="mt-2 flex justify-end">
+                                <button data-action="copy-ai-prompt" class="text-sm text-blue-600 hover:text-blue-800">
+                                    <i class="fas fa-copy mr-1"></i>Copy Prompt
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Example JSON -->
                     <div class="bg-gray-100 p-4 rounded-lg overflow-x-auto">
                         <pre id="exampleTemplate" class="text-sm font-mono whitespace-pre"></pre>
                     </div>

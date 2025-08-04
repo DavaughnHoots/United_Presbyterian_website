@@ -207,6 +207,14 @@ window.ContentTypeManager.exportItems = function() {
           copyExampleTemplate();
           break;
           
+        case 'generate-ai-prompt':
+          generateAIPrompt();
+          break;
+          
+        case 'copy-ai-prompt':
+          copyAIPrompt();
+          break;
+          
         case 'reset-filters':
           window.ContentTypeManager.FilterManager.resetFilters();
           break;
@@ -862,6 +870,48 @@ window.ContentTypeManager.exportItems = function() {
       ContentTypeManager.showToast('Example copied to clipboard!');
     }).catch(() => {
       ContentTypeManager.showToast('Failed to copy example', 'error');
+    });
+  }
+
+  /**
+   * Generate AI prompt with URL and example JSON
+   */
+  function generateAIPrompt() {
+    const urlInput = document.getElementById('aiPromptUrl');
+    const promptContainer = document.getElementById('aiPromptContainer');
+    const promptText = document.getElementById('aiPromptText');
+    const exampleElement = document.getElementById('exampleTemplate');
+    
+    if (!urlInput || !promptContainer || !promptText || !exampleElement) return;
+    
+    const url = urlInput.value.trim();
+    if (!url) {
+      ContentTypeManager.showToast('Please enter a URL first', 'error');
+      return;
+    }
+    
+    // Generate the prompt
+    const prompt = `I need you to change the following information ${url} & put it in the following JSON format:\n\n${exampleElement.textContent}`;
+    
+    // Display the prompt
+    promptText.value = prompt;
+    promptContainer.classList.remove('hidden');
+    
+    // Auto-select the text for easy copying
+    promptText.select();
+  }
+
+  /**
+   * Copy AI prompt to clipboard
+   */
+  function copyAIPrompt() {
+    const promptText = document.getElementById('aiPromptText');
+    if (!promptText) return;
+    
+    navigator.clipboard.writeText(promptText.value).then(() => {
+      ContentTypeManager.showToast('AI prompt copied to clipboard!');
+    }).catch(() => {
+      ContentTypeManager.showToast('Failed to copy prompt', 'error');
     });
   }
 
