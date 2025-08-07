@@ -1,7 +1,5 @@
-const { DataTypes } = require('sequelize');
-const sequelize = require('../config/database');
-
-const SentimentAnnotation = sequelize.define('SentimentAnnotation', {
+module.exports = (sequelize, DataTypes) => {
+  const SentimentAnnotation = sequelize.define('SentimentAnnotation', {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
@@ -56,18 +54,19 @@ const SentimentAnnotation = sequelize.define('SentimentAnnotation', {
     type: DataTypes.TEXT,
     allowNull: true
   }
-}, {
-  tableName: 'sentiment_annotations',
-  timestamps: true,
-  underscored: true
-});
-
-// Add associations
-SentimentAnnotation.associate = function(models) {
-  SentimentAnnotation.belongsTo(models.User, {
-    foreignKey: 'annotator_id',
-    as: 'annotator'
+  }, {
+    tableName: 'sentiment_annotations',
+    timestamps: true,
+    underscored: true
   });
-};
 
-module.exports = SentimentAnnotation;
+  // Add associations
+  SentimentAnnotation.associate = function(models) {
+    SentimentAnnotation.belongsTo(models.User, {
+      foreignKey: 'annotator_id',
+      as: 'annotator'
+    });
+  };
+
+  return SentimentAnnotation;
+};

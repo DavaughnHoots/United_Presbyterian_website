@@ -1816,7 +1816,7 @@ router.post('/api/ai-assist', requireAdmin, async (req, res) => {
 // Sentiment Annotation API endpoints
 router.get('/api/sentiment/next-verse', requireAdmin, async (req, res) => {
   try {
-    const SentimentAnnotation = require('../models/SentimentAnnotation');
+    const { SentimentAnnotation } = require('../models');
     const { Op } = require('sequelize');
     
     // Get next unannotated verse or verse not annotated by current user
@@ -1857,7 +1857,7 @@ router.get('/api/sentiment/next-verse', requireAdmin, async (req, res) => {
 
 router.post('/api/sentiment/annotate', requireAdmin, async (req, res) => {
   try {
-    const SentimentAnnotation = require('../models/SentimentAnnotation');
+    const { SentimentAnnotation } = require('../models');
     const { sampleId, sentiment } = req.body;
     
     if (!['positive', 'negative', 'neutral', 'skip'].includes(sentiment)) {
@@ -1888,7 +1888,7 @@ router.post('/api/sentiment/annotate', requireAdmin, async (req, res) => {
 
 router.get('/api/sentiment/stats', requireAdmin, async (req, res) => {
   try {
-    const SentimentAnnotation = require('../models/SentimentAnnotation');
+    const { SentimentAnnotation } = require('../models');
     const { Op } = require('sequelize');
     
     const total = await SentimentAnnotation.count({
@@ -1939,7 +1939,7 @@ router.get('/api/sentiment/stats', requireAdmin, async (req, res) => {
 
 router.get('/api/sentiment/export', requireAdmin, async (req, res) => {
   try {
-    const SentimentAnnotation = require('../models/SentimentAnnotation');
+    const { SentimentAnnotation } = require('../models');
     const { Op } = require('sequelize');
     
     const annotations = await SentimentAnnotation.findAll({
@@ -2024,7 +2024,7 @@ router.get('/prayers', requireAdmin, async (req, res) => {
 // Bible Sentiment Annotation Tool
 router.get('/sentiment-annotation', requireAdmin, async (req, res) => {
   try {
-    const SentimentAnnotation = require('../models/SentimentAnnotation');
+    const { SentimentAnnotation } = require('../models');
     const { Op } = require('sequelize');
     
     // Get annotation statistics for current user

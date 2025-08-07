@@ -20,6 +20,7 @@ const JourneyDay = require('./JourneyDay')(sequelize, DataTypes);
 const JourneyContent = require('./JourneyContent')(sequelize, DataTypes);
 const UserJourney = require('./UserJourney')(sequelize, DataTypes);
 const UserJourneyProgress = require('./UserJourneyProgress')(sequelize, DataTypes);
+const SentimentAnnotation = require('./SentimentAnnotation')(sequelize, DataTypes);
 
 // Define associations
 User.hasMany(Progress, { foreignKey: 'userId' });
@@ -63,7 +64,8 @@ const models = {
   JourneyDay,
   JourneyContent,
   UserJourney,
-  UserJourneyProgress
+  UserJourneyProgress,
+  SentimentAnnotation
 };
 
 Object.keys(models).forEach(modelName => {
