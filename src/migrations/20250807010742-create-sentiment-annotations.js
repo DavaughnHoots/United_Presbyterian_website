@@ -39,7 +39,7 @@ module.exports = {
         allowNull: true
       },
       annotator_id: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.UUID,
         allowNull: true,
         references: {
           model: 'users',

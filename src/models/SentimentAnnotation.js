@@ -39,7 +39,7 @@ const SentimentAnnotation = sequelize.define('SentimentAnnotation', {
     allowNull: true
   },
   annotatorId: {
-    type: DataTypes.INTEGER,
+    type: DataTypes.UUID,
     allowNull: true,
     field: 'annotator_id',
     references: {
