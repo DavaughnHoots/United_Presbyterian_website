@@ -1,0 +1,376 @@
+<div class="max-w-4xl mx-auto">
+    <!-- Header -->
+    <div class="mb-8 flex justify-between items-center">
+        <div>
+            <h1 class="text-3xl font-bold mb-2" style="color: var(--text-primary);">Bible Sentiment Research</h1>
+            <p class="text-gray-600">Annotate Bible verses with sentiment for research analysis</p>
+        </div>
+        <div class="flex gap-2">
+            <button onclick="SentimentAnnotator.exportAnnotations()" class="btn-secondary">
+                <i class="fas fa-download mr-2"></i>Export CSV
+            </button>
+            <button onclick="SentimentAnnotator.showStats()" class="btn-secondary">
+                <i class="fas fa-chart-bar mr-2"></i>Statistics
+            </button>
+        </div>
+    </div>
+
+    <!-- Progress Bar -->
+    <div class="module-card mb-6">
+        <div class="flex justify-between items-center mb-2">
+            <span class="text-sm font-medium">Progress</span>
+            <span class="text-sm text-gray-600">
+                <span id="annotatedCount"><%= annotatedByUser %></span> / <%= totalVerses %> verses
+            </span>
+        </div>
+        <div class="w-full bg-gray-200 rounded-full h-3">
+            <div id="progressBar" class="bg-blue-600 h-3 rounded-full transition-all duration-300"
+                 style="width: <%= (annotatedByUser / totalVerses * 100).toFixed(1) %>%"></div>
+        </div>
+        <div class="mt-2 text-sm text-gray-600">
+            <span id="progressPercent"><%= (annotatedByUser / totalVerses * 100).toFixed(1) %></span>% complete
+            <span id="timeEstimate" class="ml-4"></span>
+        </div>
+    </div>
+
+    <!-- Main Annotation Interface -->
+    <div id="annotationInterface" class="module-card">
+        <!-- Loading State -->
+        <div id="loadingState" class="text-center py-12">
+            <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+            <p class="mt-4 text-gray-600">Loading verse...</p>
+        </div>
+
+        <!-- Verse Display -->
+        <div id="verseDisplay" class="hidden">
+            <div class="border-b pb-4 mb-6">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <h2 class="text-xl font-bold mb-2">
+                            <span id="verseReference"></span>
+                        </h2>
+                        <div class="flex gap-4 text-sm text-gray-600">
+                            <span><i class="fas fa-book mr-1"></i><span id="verseBook"></span></span>
+                            <span><i class="fas fa-tag mr-1"></i><span id="verseGenre"></span></span>
+                            <span><i class="fas fa-hashtag mr-1"></i>Verse <span id="verseNumber"></span> of <%= totalVerses %></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Verse Text -->
+            <div class="mb-8">
+                <div id="verseText" class="text-lg leading-relaxed p-6 bg-gray-50 rounded-lg"></div>
+            </div>
+
+            <!-- Sentiment Options -->
+            <div class="mb-6">
+                <h3 class="text-lg font-semibold mb-4">Select Sentiment:</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <!-- Positive -->
+                    <button onclick="SentimentAnnotator.annotate('positive')" 
+                            class="sentiment-btn p-4 border-2 rounded-lg hover:shadow-lg transition-all group">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-lg font-semibold text-green-700">Positive</span>
+                            <kbd class="px-2 py-1 bg-gray-100 rounded text-sm">P</kbd>
+                        </div>
+                        <p class="text-sm text-gray-600 text-left">
+                            Joy, blessing, hope, love, praise, mercy, grace
+                        </p>
+                    </button>
+
+                    <!-- Negative -->
+                    <button onclick="SentimentAnnotator.annotate('negative')" 
+                            class="sentiment-btn p-4 border-2 rounded-lg hover:shadow-lg transition-all group">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-lg font-semibold text-red-700">Negative</span>
+                            <kbd class="px-2 py-1 bg-gray-100 rounded text-sm">N</kbd>
+                        </div>
+                        <p class="text-sm text-gray-600 text-left">
+                            Judgment, sin, suffering, fear, condemnation
+                        </p>
+                    </button>
+
+                    <!-- Neutral -->
+                    <button onclick="SentimentAnnotator.annotate('neutral')" 
+                            class="sentiment-btn p-4 border-2 rounded-lg hover:shadow-lg transition-all group">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-lg font-semibold text-gray-700">Neutral</span>
+                            <kbd class="px-2 py-1 bg-gray-100 rounded text-sm">U</kbd>
+                        </div>
+                        <p class="text-sm text-gray-600 text-left">
+                            Factual, narrative, geographical, genealogical
+                        </p>
+                    </button>
+                </div>
+
+                <!-- Skip Button -->
+                <div class="mt-4 text-center">
+                    <button onclick="SentimentAnnotator.skip()" class="text-gray-500 hover:text-gray-700">
+                        <kbd class="px-2 py-1 bg-gray-100 rounded text-sm mr-2">S</kbd>
+                        Skip this verse (unsure)
+                    </button>
+                </div>
+            </div>
+
+            <!-- Guidelines -->
+            <div class="border-t pt-4">
+                <button onclick="SentimentAnnotator.toggleGuidelines()" class="text-sm text-blue-600 hover:text-blue-800">
+                    <i class="fas fa-info-circle mr-1"></i>Show Annotation Guidelines
+                </button>
+                <div id="guidelines" class="hidden mt-4 p-4 bg-blue-50 rounded-lg text-sm">
+                    <h4 class="font-semibold mb-2">Guidelines:</h4>
+                    <ul class="space-y-2">
+                        <li><strong>Positive:</strong> Divine love, mercy, blessing, joy, praise, hope, salvation</li>
+                        <li><strong>Negative:</strong> Divine judgment, human sin, death, suffering, fear, condemnation</li>
+                        <li><strong>Neutral:</strong> Historical narrative, genealogies, geographic descriptions, factual statements</li>
+                        <li class="text-gray-600">• Consider overall emotional tone</li>
+                        <li class="text-gray-600">• "Fear of the Lord" is usually positive (reverence)</li>
+                        <li class="text-gray-600">• For mixed sentiment, choose the predominant one</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Completion Message -->
+        <div id="completionMessage" class="hidden text-center py-12">
+            <i class="fas fa-check-circle text-6xl text-green-600 mb-4"></i>
+            <h2 class="text-2xl font-bold mb-2">All Verses Annotated!</h2>
+            <p class="text-gray-600 mb-6">You have completed annotating all available verses.</p>
+            <button onclick="SentimentAnnotator.exportAnnotations()" class="btn-primary">
+                <i class="fas fa-download mr-2"></i>Export Your Annotations
+            </button>
+        </div>
+    </div>
+
+    <!-- Statistics Modal -->
+    <div id="statsModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-white rounded-lg max-w-2xl w-full p-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-2xl font-bold">Annotation Statistics</h2>
+                    <button onclick="SentimentAnnotator.closeStats()" class="text-gray-500 hover:text-gray-700">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+                <div id="statsContent">
+                    <!-- Stats will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.sentiment-btn:hover {
+    transform: translateY(-2px);
+}
+.sentiment-btn.positive-selected {
+    border-color: #10b981;
+    background-color: #dcfce7;
+}
+.sentiment-btn.negative-selected {
+    border-color: #ef4444;
+    background-color: #fee2e2;
+}
+.sentiment-btn.neutral-selected {
+    border-color: #6b7280;
+    background-color: #f3f4f6;
+}
+</style>
+
+<script>
+const SentimentAnnotator = {
+    currentVerse: null,
+    startTime: Date.now(),
+    annotationCount: 0,
+
+    init() {
+        this.loadNextVerse();
+        this.setupKeyboardShortcuts();
+        this.updateTimeEstimate();
+    },
+
+    setupKeyboardShortcuts() {
+        document.addEventListener('keydown', (e) => {
+            if (!this.currentVerse) return;
+            
+            switch(e.key.toUpperCase()) {
+                case 'P':
+                    this.annotate('positive');
+                    break;
+                case 'N':
+                    this.annotate('negative');
+                    break;
+                case 'U':
+                    this.annotate('neutral');
+                    break;
+                case 'S':
+                    this.skip();
+                    break;
+            }
+        });
+    },
+
+    async loadNextVerse() {
+        document.getElementById('loadingState').classList.remove('hidden');
+        document.getElementById('verseDisplay').classList.add('hidden');
+        document.getElementById('completionMessage').classList.add('hidden');
+
+        try {
+            const response = await fetch('/admin/api/sentiment/next-verse');
+            const data = await response.json();
+
+            if (data.complete) {
+                document.getElementById('loadingState').classList.add('hidden');
+                document.getElementById('completionMessage').classList.remove('hidden');
+                return;
+            }
+
+            this.currentVerse = data.verse;
+            this.displayVerse(data.verse);
+            this.updateProgress(data.progress);
+
+            document.getElementById('loadingState').classList.add('hidden');
+            document.getElementById('verseDisplay').classList.remove('hidden');
+        } catch (error) {
+            console.error('Error loading verse:', error);
+            alert('Failed to load verse. Please refresh the page.');
+        }
+    },
+
+    displayVerse(verse) {
+        document.getElementById('verseReference').textContent = 
+            `${verse.bookName} ${verse.chapter}:${verse.verse}`;
+        document.getElementById('verseBook').textContent = verse.bookName;
+        document.getElementById('verseGenre').textContent = verse.genreName;
+        document.getElementById('verseNumber').textContent = verse.sampleId;
+        document.getElementById('verseText').textContent = verse.text;
+
+        // Clear previous selection
+        document.querySelectorAll('.sentiment-btn').forEach(btn => {
+            btn.classList.remove('positive-selected', 'negative-selected', 'neutral-selected');
+        });
+    },
+
+    async annotate(sentiment) {
+        if (!this.currentVerse) return;
+
+        // Visual feedback
+        document.querySelectorAll('.sentiment-btn').forEach(btn => {
+            btn.classList.remove('positive-selected', 'negative-selected', 'neutral-selected');
+        });
+        event.currentTarget.classList.add(`${sentiment}-selected`);
+
+        try {
+            const response = await fetch('/admin/api/sentiment/annotate', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    sampleId: this.currentVerse.sampleId,
+                    sentiment: sentiment
+                })
+            });
+
+            if (response.ok) {
+                this.annotationCount++;
+                this.updateTimeEstimate();
+                setTimeout(() => this.loadNextVerse(), 500);
+            } else {
+                alert('Failed to save annotation. Please try again.');
+            }
+        } catch (error) {
+            console.error('Error saving annotation:', error);
+            alert('Failed to save annotation. Please try again.');
+        }
+    },
+
+    skip() {
+        this.loadNextVerse();
+    },
+
+    updateProgress(progress) {
+        const percent = (progress.annotated / progress.total * 100).toFixed(1);
+        document.getElementById('annotatedCount').textContent = progress.annotated;
+        document.getElementById('progressBar').style.width = `${percent}%`;
+        document.getElementById('progressPercent').textContent = percent;
+    },
+
+    updateTimeEstimate() {
+        if (this.annotationCount > 0) {
+            const timePerVerse = (Date.now() - this.startTime) / this.annotationCount / 1000;
+            const totalVerses = <%= totalVerses %>;
+            const annotated = parseInt(document.getElementById('annotatedCount').textContent);
+            const remaining = totalVerses - annotated;
+            const estimatedMinutes = Math.round((remaining * timePerVerse) / 60);
+            
+            if (estimatedMinutes > 60) {
+                const hours = Math.floor(estimatedMinutes / 60);
+                const mins = estimatedMinutes % 60;
+                document.getElementById('timeEstimate').textContent = 
+                    `~${hours}h ${mins}m remaining`;
+            } else {
+                document.getElementById('timeEstimate').textContent = 
+                    `~${estimatedMinutes}m remaining`;
+            }
+        }
+    },
+
+    toggleGuidelines() {
+        const guidelines = document.getElementById('guidelines');
+        guidelines.classList.toggle('hidden');
+    },
+
+    async exportAnnotations() {
+        window.location.href = '/admin/api/sentiment/export';
+    },
+
+    async showStats() {
+        document.getElementById('statsModal').classList.remove('hidden');
+        
+        try {
+            const response = await fetch('/admin/api/sentiment/stats');
+            const stats = await response.json();
+            
+            document.getElementById('statsContent').innerHTML = `
+                <div class="grid grid-cols-2 gap-4 mb-4">
+                    <div class="p-4 bg-gray-50 rounded">
+                        <p class="text-sm text-gray-600">Total Annotated</p>
+                        <p class="text-2xl font-bold">${stats.total}</p>
+                    </div>
+                    <div class="p-4 bg-gray-50 rounded">
+                        <p class="text-sm text-gray-600">Completion</p>
+                        <p class="text-2xl font-bold">${stats.percent}%</p>
+                    </div>
+                </div>
+                <div class="space-y-2">
+                    <div class="flex justify-between">
+                        <span class="text-green-700">Positive</span>
+                        <span>${stats.positive || 0} (${stats.positivePercent || 0}%)</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-red-700">Negative</span>
+                        <span>${stats.negative || 0} (${stats.negativePercent || 0}%)</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-gray-700">Neutral</span>
+                        <span>${stats.neutral || 0} (${stats.neutralPercent || 0}%)</span>
+                    </div>
+                </div>
+            `;
+        } catch (error) {
+            document.getElementById('statsContent').innerHTML = 
+                '<p class="text-red-600">Failed to load statistics</p>';
+        }
+    },
+
+    closeStats() {
+        document.getElementById('statsModal').classList.add('hidden');
+    }
+};
+
+// Initialize when page loads
+document.addEventListener('DOMContentLoaded', () => {
+    SentimentAnnotator.init();
+});
+</script>

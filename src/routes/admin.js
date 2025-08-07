@@ -1813,6 +1813,160 @@ router.post('/api/ai-assist', requireAdmin, async (req, res) => {
   }
 });
 
+// Sentiment Annotation API endpoints
+router.get('/api/sentiment/next-verse', requireAdmin, async (req, res) => {
+  try {
+    const SentimentAnnotation = require('../models/SentimentAnnotation');
+    const { Op } = require('sequelize');
+    
+    // Get next unannotated verse or verse not annotated by current user
+    const verse = await SentimentAnnotation.findOne({
+      where: {
+        [Op.or]: [
+          { annotatorId: null },
+          { annotatorId: { [Op.ne]: req.session.userId } }
+        ]
+      },
+      order: [['sampleId', 'ASC']]
+    });
+    
+    if (!verse) {
+      return res.json({ complete: true });
+    }
+    
+    // Get progress
+    const totalAnnotated = await SentimentAnnotation.count({
+      where: {
+        annotatorId: req.session.userId,
+        sentiment: { [Op.in]: ['positive', 'negative', 'neutral'] }
+      }
+    });
+    
+    res.json({
+      verse: verse.toJSON(),
+      progress: {
+        annotated: totalAnnotated,
+        total: await SentimentAnnotation.count()
+      }
+    });
+  } catch (error) {
+    console.error('Error fetching next verse:', error);
+    res.status(500).json({ error: 'Failed to fetch verse' });
+  }
+});
+
+router.post('/api/sentiment/annotate', requireAdmin, async (req, res) => {
+  try {
+    const SentimentAnnotation = require('../models/SentimentAnnotation');
+    const { sampleId, sentiment } = req.body;
+    
+    if (!['positive', 'negative', 'neutral', 'skip'].includes(sentiment)) {
+      return res.status(400).json({ error: 'Invalid sentiment value' });
+    }
+    
+    const verse = await SentimentAnnotation.findOne({
+      where: { sampleId }
+    });
+    
+    if (!verse) {
+      return res.status(404).json({ error: 'Verse not found' });
+    }
+    
+    // Update annotation
+    await verse.update({
+      sentiment: sentiment === 'skip' ? null : sentiment,
+      annotatorId: req.session.userId,
+      annotatedAt: new Date()
+    });
+    
+    res.json({ success: true });
+  } catch (error) {
+    console.error('Error saving annotation:', error);
+    res.status(500).json({ error: 'Failed to save annotation' });
+  }
+});
+
+router.get('/api/sentiment/stats', requireAdmin, async (req, res) => {
+  try {
+    const SentimentAnnotation = require('../models/SentimentAnnotation');
+    const { Op } = require('sequelize');
+    
+    const total = await SentimentAnnotation.count({
+      where: {
+        annotatorId: req.session.userId,
+        sentiment: { [Op.ne]: null }
+      }
+    });
+    
+    const positive = await SentimentAnnotation.count({
+      where: {
+        annotatorId: req.session.userId,
+        sentiment: 'positive'
+      }
+    });
+    
+    const negative = await SentimentAnnotation.count({
+      where: {
+        annotatorId: req.session.userId,
+        sentiment: 'negative'
+      }
+    });
+    
+    const neutral = await SentimentAnnotation.count({
+      where: {
+        annotatorId: req.session.userId,
+        sentiment: 'neutral'
+      }
+    });
+    
+    const totalVerses = await SentimentAnnotation.count();
+    
+    res.json({
+      total,
+      positive,
+      negative,
+      neutral,
+      percent: ((total / totalVerses) * 100).toFixed(1),
+      positivePercent: total > 0 ? ((positive / total) * 100).toFixed(1) : 0,
+      negativePercent: total > 0 ? ((negative / total) * 100).toFixed(1) : 0,
+      neutralPercent: total > 0 ? ((neutral / total) * 100).toFixed(1) : 0
+    });
+  } catch (error) {
+    console.error('Error fetching stats:', error);
+    res.status(500).json({ error: 'Failed to fetch statistics' });
+  }
+});
+
+router.get('/api/sentiment/export', requireAdmin, async (req, res) => {
+  try {
+    const SentimentAnnotation = require('../models/SentimentAnnotation');
+    const { Op } = require('sequelize');
+    
+    const annotations = await SentimentAnnotation.findAll({
+      where: {
+        annotatorId: req.session.userId,
+        sentiment: { [Op.ne]: null }
+      },
+      order: [['sampleId', 'ASC']]
+    });
+    
+    // Convert to CSV format
+    const csv = [
+      'sample_id,book_name,chapter,verse,text,genre_name,sentiment,annotated_at',
+      ...annotations.map(a => 
+        `${a.sampleId},"${a.bookName}",${a.chapter},${a.verse},"${a.text.replace(/"/g, '""')}","${a.genreName}","${a.sentiment}","${a.annotatedAt}"`
+      )
+    ].join('\n');
+    
+    res.setHeader('Content-Type', 'text/csv');
+    res.setHeader('Content-Disposition', `attachment; filename="sentiment_annotations_${new Date().toISOString().split('T')[0]}.csv"`);
+    res.send(csv);
+  } catch (error) {
+    console.error('Error exporting annotations:', error);
+    res.status(500).json({ error: 'Failed to export annotations' });
+  }
+});
+
 // Delete journey
 router.delete('/api/journeys/:id', requireAdmin, async (req, res) => {
   try {
@@ -1867,6 +2021,32 @@ router.get('/prayers', requireAdmin, async (req, res) => {
   }
 });
 
+// Bible Sentiment Annotation Tool
+router.get('/sentiment-annotation', requireAdmin, async (req, res) => {
+  try {
+    const SentimentAnnotation = require('../models/SentimentAnnotation');
+    const { Op } = require('sequelize');
+    
+    // Get annotation statistics for current user
+    const totalVerses = await SentimentAnnotation.count();
+    const annotatedByUser = await SentimentAnnotation.count({
+      where: { 
+        annotatorId: req.session.userId,
+        sentiment: { [Op.in]: ['positive', 'negative', 'neutral'] }
+      }
+    });
+    
+    res.render('pages/admin/sentiment-annotation', {
+      title: 'Bible Sentiment Research',
+      totalVerses,
+      annotatedByUser,
+      userId: req.session.userId
+    });
+  } catch (error) {
+    console.error('Error loading sentiment annotation:', error);
+    res.status(500).send('Error loading sentiment annotation tool');
+  }
+});
 
 // Daily Content Scheduler
 router.get('/daily-scheduler', requireAdmin, async (req, res) => {
