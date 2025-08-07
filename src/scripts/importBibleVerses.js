@@ -87,15 +87,15 @@ async function importVerses() {
       const genreName = genresMap[book.genreId];
       
       return {
-        sample_id: index + 1,
-        book_name: book.name,
+        sampleId: index + 1,
+        bookName: book.name,
         chapter: parseInt(verse.c),
         verse: parseInt(verse.v),
         text: verse.t,
-        genre_name: genreName,
+        genreName: genreName,
         sentiment: null,
-        annotator_id: null,
-        annotated_at: null,
+        annotatorId: null,
+        annotatedAt: null,
         notes: null
       };
     });
@@ -111,7 +111,7 @@ async function importVerses() {
     // Show sample statistics
     const genreCount = {};
     annotationsData.forEach(verse => {
-      genreCount[verse.genre_name] = (genreCount[verse.genre_name] || 0) + 1;
+      genreCount[verse.genreName] = (genreCount[verse.genreName] || 0) + 1;
     });
     
     console.log('\nDistribution by genre:');
