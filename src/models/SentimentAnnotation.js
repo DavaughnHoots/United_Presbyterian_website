@@ -53,6 +53,22 @@ module.exports = (sequelize, DataTypes) => {
   notes: {
     type: DataTypes.TEXT,
     allowNull: true
+  },
+  isConsistencyCheck: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: false,
+    allowNull: false,
+    field: 'is_consistency_check'
+  },
+  originalSentiment: {
+    type: DataTypes.ENUM('positive', 'negative', 'neutral', 'skip'),
+    allowNull: true,
+    field: 'original_sentiment'
+  },
+  consistencyCheckAt: {
+    type: DataTypes.DATE,
+    allowNull: true,
+    field: 'consistency_check_at'
   }
   }, {
     tableName: 'sentiment_annotations',

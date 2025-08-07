@@ -1,0 +1,349 @@
+<div class="max-w-6xl mx-auto">
+    <!-- Header -->
+    <div class="mb-8 flex justify-between items-center">
+        <div>
+            <h1 class="text-3xl font-bold mb-2" style="color: var(--text-primary);">My Annotation History</h1>
+            <p class="text-gray-600">Review and edit your Bible verse sentiment annotations</p>
+        </div>
+        <div class="flex gap-2">
+            <a href="/admin/sentiment-annotation" class="btn-secondary">
+                <i class="fas fa-arrow-left mr-2"></i>Back to Annotation
+            </a>
+            <button onclick="exportHistory()" class="btn-primary">
+                <i class="fas fa-download mr-2"></i>Export All
+            </button>
+        </div>
+    </div>
+
+    <!-- Filter Controls -->
+    <div class="module-card mb-6">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div>
+                <label class="block text-sm font-medium mb-1">Sentiment</label>
+                <select id="filterSentiment" onchange="filterTable()" class="w-full px-3 py-2 border rounded-lg">
+                    <option value="">All Sentiments</option>
+                    <option value="positive">Positive</option>
+                    <option value="negative">Negative</option>
+                    <option value="neutral">Neutral</option>
+                    <option value="skip">Skipped</option>
+                </select>
+            </div>
+            <div>
+                <label class="block text-sm font-medium mb-1">Book</label>
+                <select id="filterBook" onchange="filterTable()" class="w-full px-3 py-2 border rounded-lg">
+                    <option value="">All Books</option>
+                </select>
+            </div>
+            <div>
+                <label class="block text-sm font-medium mb-1">Genre</label>
+                <select id="filterGenre" onchange="filterTable()" class="w-full px-3 py-2 border rounded-lg">
+                    <option value="">All Genres</option>
+                    <option value="Law">Law</option>
+                    <option value="History">History</option>
+                    <option value="Wisdom">Wisdom</option>
+                    <option value="Prophets">Prophets</option>
+                    <option value="Gospels">Gospels</option>
+                    <option value="Acts">Acts</option>
+                    <option value="Epistles">Epistles</option>
+                    <option value="Apocalyptic">Apocalyptic</option>
+                </select>
+            </div>
+            <div>
+                <label class="block text-sm font-medium mb-1">Search</label>
+                <input type="text" id="searchText" onkeyup="filterTable()" placeholder="Search verse text..." 
+                       class="w-full px-3 py-2 border rounded-lg">
+            </div>
+        </div>
+    </div>
+
+    <!-- Statistics Summary -->
+    <div class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
+        <div class="module-card text-center">
+            <div class="text-2xl font-bold text-blue-600" id="totalCount">0</div>
+            <div class="text-sm text-gray-600">Total Annotated</div>
+        </div>
+        <div class="module-card text-center">
+            <div class="text-2xl font-bold text-green-600" id="positiveCount">0</div>
+            <div class="text-sm text-gray-600">Positive</div>
+        </div>
+        <div class="module-card text-center">
+            <div class="text-2xl font-bold text-red-600" id="negativeCount">0</div>
+            <div class="text-sm text-gray-600">Negative</div>
+        </div>
+        <div class="module-card text-center">
+            <div class="text-2xl font-bold text-gray-600" id="neutralCount">0</div>
+            <div class="text-sm text-gray-600">Neutral</div>
+        </div>
+        <div class="module-card text-center">
+            <div class="text-2xl font-bold text-purple-600" id="consistencyScore">-</div>
+            <div class="text-sm text-gray-600">Consistency Score</div>
+        </div>
+    </div>
+
+    <!-- Table -->
+    <div class="module-card">
+        <div class="overflow-x-auto">
+            <table id="historyTable" class="w-full">
+                <thead>
+                    <tr class="border-b">
+                        <th class="text-left py-2 px-4">Reference</th>
+                        <th class="text-left py-2 px-4">Text</th>
+                        <th class="text-center py-2 px-4">Sentiment</th>
+                        <th class="text-center py-2 px-4">Genre</th>
+                        <th class="text-center py-2 px-4">Date</th>
+                        <th class="text-center py-2 px-4">Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="historyTableBody">
+                    <!-- Rows will be populated by JavaScript -->
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- Loading State -->
+        <div id="loadingState" class="text-center py-12">
+            <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+            <p class="mt-4 text-gray-600">Loading annotations...</p>
+        </div>
+        
+        <!-- Empty State -->
+        <div id="emptyState" class="hidden text-center py-12">
+            <i class="fas fa-inbox text-4xl text-gray-400 mb-4"></i>
+            <p class="text-gray-600">No annotations found</p>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Modal -->
+<div id="editModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+    <div class="flex items-center justify-center min-h-screen p-4">
+        <div class="bg-white rounded-lg max-w-2xl w-full p-6">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-2xl font-bold">Edit Annotation</h2>
+                <button onclick="closeEditModal()" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            
+            <div class="mb-4">
+                <h3 class="font-semibold text-lg mb-2" id="editReference"></h3>
+                <p class="text-gray-700 mb-4" id="editText"></p>
+                
+                <div class="grid grid-cols-3 gap-4">
+                    <button onclick="saveSentiment('positive')" class="sentiment-edit-btn border-2 border-gray-300 rounded-lg p-4 hover:border-green-600">
+                        <i class="fas fa-smile text-2xl text-green-600"></i>
+                        <div class="mt-2 font-semibold">Positive</div>
+                    </button>
+                    <button onclick="saveSentiment('negative')" class="sentiment-edit-btn border-2 border-gray-300 rounded-lg p-4 hover:border-red-600">
+                        <i class="fas fa-frown text-2xl text-red-600"></i>
+                        <div class="mt-2 font-semibold">Negative</div>
+                    </button>
+                    <button onclick="saveSentiment('neutral')" class="sentiment-edit-btn border-2 border-gray-300 rounded-lg p-4 hover:border-gray-600">
+                        <i class="fas fa-meh text-2xl text-gray-600"></i>
+                        <div class="mt-2 font-semibold">Neutral</div>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="flex justify-end gap-2">
+                <button onclick="closeEditModal()" class="btn-secondary">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.sentiment-badge {
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+.sentiment-positive { background-color: #dcfce7; color: #166534; }
+.sentiment-negative { background-color: #fee2e2; color: #991b1b; }
+.sentiment-neutral { background-color: #f3f4f6; color: #374151; }
+.sentiment-skip { background-color: #fef3c7; color: #92400e; }
+</style>
+
+<script>
+let annotations = [];
+let currentEditVerse = null;
+
+async function loadHistory() {
+    document.getElementById('loadingState').classList.remove('hidden');
+    document.getElementById('historyTableBody').innerHTML = '';
+    
+    try {
+        const response = await fetch('/admin/api/sentiment/history');
+        annotations = await response.json();
+        
+        if (annotations.length === 0) {
+            document.getElementById('loadingState').classList.add('hidden');
+            document.getElementById('emptyState').classList.remove('hidden');
+            return;
+        }
+        
+        // Update statistics
+        updateStatistics();
+        
+        // Populate book filter
+        const books = [...new Set(annotations.map(a => a.bookName))];
+        const bookSelect = document.getElementById('filterBook');
+        books.forEach(book => {
+            const option = document.createElement('option');
+            option.value = book;
+            option.textContent = book;
+            bookSelect.appendChild(option);
+        });
+        
+        // Display annotations
+        displayAnnotations(annotations);
+        
+        document.getElementById('loadingState').classList.add('hidden');
+    } catch (error) {
+        console.error('Error loading history:', error);
+        alert('Failed to load annotation history');
+    }
+}
+
+function updateStatistics() {
+    const total = annotations.length;
+    const positive = annotations.filter(a => a.sentiment === 'positive').length;
+    const negative = annotations.filter(a => a.sentiment === 'negative').length;
+    const neutral = annotations.filter(a => a.sentiment === 'neutral').length;
+    
+    document.getElementById('totalCount').textContent = total;
+    document.getElementById('positiveCount').textContent = positive;
+    document.getElementById('negativeCount').textContent = negative;
+    document.getElementById('neutralCount').textContent = neutral;
+    
+    // Calculate consistency score if there are re-ratings
+    const reRatings = annotations.filter(a => a.isConsistencyCheck);
+    if (reRatings.length > 0) {
+        const consistent = reRatings.filter(a => a.sentiment === a.originalSentiment).length;
+        const score = Math.round((consistent / reRatings.length) * 100);
+        document.getElementById('consistencyScore').textContent = `${score}%`;
+    }
+}
+
+function displayAnnotations(items) {
+    const tbody = document.getElementById('historyTableBody');
+    tbody.innerHTML = '';
+    
+    items.forEach(annotation => {
+        const row = document.createElement('tr');
+        row.className = 'border-b hover:bg-gray-50';
+        
+        const date = new Date(annotation.annotatedAt).toLocaleDateString();
+        const textPreview = annotation.text.length > 100 ? 
+            annotation.text.substring(0, 100) + '...' : annotation.text;
+        
+        row.innerHTML = `
+            <td class="py-2 px-4 font-medium">
+                ${annotation.bookName} ${annotation.chapter}:${annotation.verse}
+                ${annotation.isConsistencyCheck ? '<span class="text-purple-600 text-xs ml-1">(Re-rate)</span>' : ''}
+            </td>
+            <td class="py-2 px-4 text-sm text-gray-600">${textPreview}</td>
+            <td class="py-2 px-4 text-center">
+                <span class="sentiment-badge sentiment-${annotation.sentiment}">${annotation.sentiment}</span>
+            </td>
+            <td class="py-2 px-4 text-center text-sm">${annotation.genreName}</td>
+            <td class="py-2 px-4 text-center text-sm">${date}</td>
+            <td class="py-2 px-4 text-center">
+                <button onclick="editAnnotation(${annotation.sampleId})" class="text-blue-600 hover:text-blue-800">
+                    <i class="fas fa-edit"></i>
+                </button>
+            </td>
+        `;
+        
+        tbody.appendChild(row);
+    });
+}
+
+function filterTable() {
+    const sentiment = document.getElementById('filterSentiment').value;
+    const book = document.getElementById('filterBook').value;
+    const genre = document.getElementById('filterGenre').value;
+    const searchText = document.getElementById('searchText').value.toLowerCase();
+    
+    let filtered = annotations;
+    
+    if (sentiment) filtered = filtered.filter(a => a.sentiment === sentiment);
+    if (book) filtered = filtered.filter(a => a.bookName === book);
+    if (genre) filtered = filtered.filter(a => a.genreName === genre);
+    if (searchText) filtered = filtered.filter(a => 
+        a.text.toLowerCase().includes(searchText) ||
+        `${a.bookName} ${a.chapter}:${a.verse}`.toLowerCase().includes(searchText)
+    );
+    
+    displayAnnotations(filtered);
+}
+
+function editAnnotation(sampleId) {
+    currentEditVerse = annotations.find(a => a.sampleId === sampleId);
+    if (!currentEditVerse) return;
+    
+    document.getElementById('editReference').textContent = 
+        `${currentEditVerse.bookName} ${currentEditVerse.chapter}:${currentEditVerse.verse}`;
+    document.getElementById('editText').textContent = currentEditVerse.text;
+    
+    // Highlight current sentiment
+    document.querySelectorAll('.sentiment-edit-btn').forEach(btn => {
+        btn.classList.remove('border-green-600', 'border-red-600', 'border-gray-600', 'bg-gray-50');
+    });
+    
+    const currentBtn = document.querySelector(`.sentiment-edit-btn:has(.fa-${
+        currentEditVerse.sentiment === 'positive' ? 'smile' : 
+        currentEditVerse.sentiment === 'negative' ? 'frown' : 'meh'
+    })`);
+    if (currentBtn) {
+        currentBtn.classList.add('bg-gray-50');
+        currentBtn.classList.add(
+            currentEditVerse.sentiment === 'positive' ? 'border-green-600' : 
+            currentEditVerse.sentiment === 'negative' ? 'border-red-600' : 'border-gray-600'
+        );
+    }
+    
+    document.getElementById('editModal').classList.remove('hidden');
+}
+
+async function saveSentiment(sentiment) {
+    if (!currentEditVerse) return;
+    
+    try {
+        const response = await fetch('/admin/api/sentiment/annotate', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                sampleId: currentEditVerse.sampleId,
+                sentiment: sentiment
+            })
+        });
+        
+        if (response.ok) {
+            // Update local data
+            currentEditVerse.sentiment = sentiment;
+            updateStatistics();
+            displayAnnotations(annotations);
+            closeEditModal();
+        } else {
+            alert('Failed to update annotation');
+        }
+    } catch (error) {
+        console.error('Error updating annotation:', error);
+        alert('Failed to update annotation');
+    }
+}
+
+function closeEditModal() {
+    document.getElementById('editModal').classList.add('hidden');
+    currentEditVerse = null;
+}
+
+function exportHistory() {
+    window.location.href = '/admin/api/sentiment/export';
+}
+
+// Initialize on page load
+document.addEventListener('DOMContentLoaded', loadHistory);
+</script>

@@ -1818,17 +1818,61 @@ router.get('/api/sentiment/next-verse', requireAdmin, async (req, res) => {
   try {
     const { SentimentAnnotation } = require('../models');
     const { Op } = require('sequelize');
+    const { verseId, direction } = req.query;
     
-    // Get next unannotated verse or verse not annotated by current user
-    const verse = await SentimentAnnotation.findOne({
-      where: {
-        [Op.or]: [
-          { annotatorId: null },
-          { annotatorId: { [Op.ne]: req.session.user.id } }
-        ]
-      },
-      order: [['sampleId', 'ASC']]
-    });
+    // Keep track of annotation count in session for re-rating
+    if (!req.session.annotationCount) {
+      req.session.annotationCount = 0;
+    }
+    
+    let verse;
+    
+    // Handle specific verse request (for navigation)
+    if (verseId) {
+      verse = await SentimentAnnotation.findOne({
+        where: { sampleId: parseInt(verseId) }
+      });
+    } 
+    // Check if it's time for a consistency check (every 10th verse)
+    else if (req.session.annotationCount > 0 && req.session.annotationCount % 10 === 0) {
+      // Get a random verse this user has already annotated
+      const annotatedVerses = await SentimentAnnotation.findAll({
+        where: {
+          annotatorId: req.session.user.id,
+          sentiment: { [Op.in]: ['positive', 'negative', 'neutral'] },
+          isConsistencyCheck: false // Don't re-rate consistency checks
+        },
+        attributes: ['sampleId']
+      });
+      
+      if (annotatedVerses.length > 0) {
+        const randomIndex = Math.floor(Math.random() * annotatedVerses.length);
+        const sampleId = annotatedVerses[randomIndex].sampleId;
+        
+        verse = await SentimentAnnotation.findOne({
+          where: { sampleId }
+        });
+        
+        // Mark this as a re-rating internally but don't expose to frontend yet
+        if (verse) {
+          verse.dataValues.isReRate = true;
+          verse.dataValues.previousSentiment = verse.sentiment;
+        }
+      }
+    }
+    
+    // Default: get next unannotated verse
+    if (!verse) {
+      verse = await SentimentAnnotation.findOne({
+        where: {
+          [Op.or]: [
+            { annotatorId: null },
+            { annotatorId: { [Op.ne]: req.session.user.id } }
+          ]
+        },
+        order: [['sampleId', 'ASC']]
+      });
+    }
     
     if (!verse) {
       return res.json({ complete: true });
@@ -1858,7 +1902,7 @@ router.get('/api/sentiment/next-verse', requireAdmin, async (req, res) => {
 router.post('/api/sentiment/annotate', requireAdmin, async (req, res) => {
   try {
     const { SentimentAnnotation } = require('../models');
-    const { sampleId, sentiment } = req.body;
+    const { sampleId, sentiment, isReRate, previousSentiment } = req.body;
     
     if (!['positive', 'negative', 'neutral', 'skip'].includes(sentiment)) {
       return res.status(400).json({ error: 'Invalid sentiment value' });
@@ -1872,14 +1916,43 @@ router.post('/api/sentiment/annotate', requireAdmin, async (req, res) => {
       return res.status(404).json({ error: 'Verse not found' });
     }
     
-    // Update annotation
-    await verse.update({
-      sentiment: sentiment === 'skip' ? null : sentiment,
-      annotatorId: req.session.user.id,
-      annotatedAt: new Date()
-    });
+    // Increment annotation count for re-rating tracking
+    if (!req.session.annotationCount) {
+      req.session.annotationCount = 0;
+    }
+    req.session.annotationCount++;
     
-    res.json({ success: true });
+    // Handle re-rating for consistency check
+    let consistencyResult = null;
+    if (isReRate && previousSentiment) {
+      consistencyResult = {
+        isConsistent: sentiment === previousSentiment,
+        original: previousSentiment,
+        new: sentiment
+      };
+      
+      // Store consistency check info
+      await verse.update({
+        sentiment: sentiment === 'skip' ? null : sentiment,
+        annotatorId: req.session.user.id,
+        annotatedAt: new Date(),
+        originalSentiment: previousSentiment,
+        isConsistencyCheck: true,
+        consistencyCheckAt: new Date()
+      });
+    } else {
+      // Normal annotation
+      await verse.update({
+        sentiment: sentiment === 'skip' ? null : sentiment,
+        annotatorId: req.session.user.id,
+        annotatedAt: new Date()
+      });
+    }
+    
+    res.json({ 
+      success: true,
+      consistencyResult 
+    });
   } catch (error) {
     console.error('Error saving annotation:', error);
     res.status(500).json({ error: 'Failed to save annotation' });
@@ -2045,6 +2118,39 @@ router.get('/sentiment-annotation', requireAdmin, async (req, res) => {
   } catch (error) {
     console.error('Error loading sentiment annotation:', error);
     res.status(500).send('Error loading sentiment annotation tool');
+  }
+});
+
+// Sentiment annotation history page
+router.get('/sentiment-annotation/history', requireAdmin, async (req, res) => {
+  try {
+    res.render('pages/admin/sentiment-history', {
+      title: 'My Annotation History'
+    });
+  } catch (error) {
+    console.error('Error loading sentiment history:', error);
+    res.status(500).send('Error loading annotation history');
+  }
+});
+
+// API endpoint for sentiment history
+router.get('/api/sentiment/history', requireAdmin, async (req, res) => {
+  try {
+    const { SentimentAnnotation } = require('../models');
+    const { Op } = require('sequelize');
+    
+    const annotations = await SentimentAnnotation.findAll({
+      where: {
+        annotatorId: req.session.user.id,
+        sentiment: { [Op.ne]: null }
+      },
+      order: [['annotatedAt', 'DESC']]
+    });
+    
+    res.json(annotations);
+  } catch (error) {
+    console.error('Error fetching annotation history:', error);
+    res.status(500).json({ error: 'Failed to fetch history' });
   }
 });
 
