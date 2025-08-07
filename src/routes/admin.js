@@ -1824,7 +1824,7 @@ router.get('/api/sentiment/next-verse', requireAdmin, async (req, res) => {
       where: {
         [Op.or]: [
           { annotatorId: null },
-          { annotatorId: { [Op.ne]: req.session.userId } }
+          { annotatorId: { [Op.ne]: req.session.user.id } }
         ]
       },
       order: [['sampleId', 'ASC']]
@@ -1837,7 +1837,7 @@ router.get('/api/sentiment/next-verse', requireAdmin, async (req, res) => {
     // Get progress
     const totalAnnotated = await SentimentAnnotation.count({
       where: {
-        annotatorId: req.session.userId,
+        annotatorId: req.session.user.id,
         sentiment: { [Op.in]: ['positive', 'negative', 'neutral'] }
       }
     });
@@ -1875,7 +1875,7 @@ router.post('/api/sentiment/annotate', requireAdmin, async (req, res) => {
     // Update annotation
     await verse.update({
       sentiment: sentiment === 'skip' ? null : sentiment,
-      annotatorId: req.session.userId,
+      annotatorId: req.session.user.id,
       annotatedAt: new Date()
     });
     
@@ -1893,28 +1893,28 @@ router.get('/api/sentiment/stats', requireAdmin, async (req, res) => {
     
     const total = await SentimentAnnotation.count({
       where: {
-        annotatorId: req.session.userId,
+        annotatorId: req.session.user.id,
         sentiment: { [Op.ne]: null }
       }
     });
     
     const positive = await SentimentAnnotation.count({
       where: {
-        annotatorId: req.session.userId,
+        annotatorId: req.session.user.id,
         sentiment: 'positive'
       }
     });
     
     const negative = await SentimentAnnotation.count({
       where: {
-        annotatorId: req.session.userId,
+        annotatorId: req.session.user.id,
         sentiment: 'negative'
       }
     });
     
     const neutral = await SentimentAnnotation.count({
       where: {
-        annotatorId: req.session.userId,
+        annotatorId: req.session.user.id,
         sentiment: 'neutral'
       }
     });
@@ -1944,7 +1944,7 @@ router.get('/api/sentiment/export', requireAdmin, async (req, res) => {
     
     const annotations = await SentimentAnnotation.findAll({
       where: {
-        annotatorId: req.session.userId,
+        annotatorId: req.session.user.id,
         sentiment: { [Op.ne]: null }
       },
       order: [['sampleId', 'ASC']]
@@ -2031,7 +2031,7 @@ router.get('/sentiment-annotation', requireAdmin, async (req, res) => {
     const totalVerses = await SentimentAnnotation.count();
     const annotatedByUser = await SentimentAnnotation.count({
       where: { 
-        annotatorId: req.session.userId,
+        annotatorId: req.session.user.id,
         sentiment: { [Op.in]: ['positive', 'negative', 'neutral'] }
       }
     });
@@ -2040,7 +2040,7 @@ router.get('/sentiment-annotation', requireAdmin, async (req, res) => {
       title: 'Bible Sentiment Research',
       totalVerses,
       annotatedByUser,
-      userId: req.session.userId
+      userId: req.session.user.id
     });
   } catch (error) {
     console.error('Error loading sentiment annotation:', error);
