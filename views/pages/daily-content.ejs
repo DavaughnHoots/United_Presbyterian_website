@@ -1,8 +1,76 @@
 <div class="max-w-4xl mx-auto">
+    <!-- Navigation Header -->
+    <div class="bg-white rounded-lg shadow-sm p-4 mb-6">
+        <div class="flex items-center justify-between">
+            <!-- Previous Day Button -->
+            <a href="/daily?date=<%= prevDateStr %>" 
+               class="p-2 hover:bg-gray-100 rounded-lg transition">
+                <i class="fas fa-chevron-left text-xl text-gray-600"></i>
+            </a>
+            
+            <!-- Date Display & Controls -->
+            <div class="text-center flex-1">
+                <h2 class="text-xl font-semibold text-gray-800">
+                    <%= selectedDateFormatted %>
+                </h2>
+                <% if (!isToday) { %>
+                    <div class="flex items-center gap-2 mt-2 justify-center">
+                        <span class="text-sm text-gray-500">Viewing past content</span>
+                        <a href="/daily" 
+                           class="px-3 py-1 bg-sky-blue text-white rounded-full text-sm hover:bg-blue-600 transition">
+                            Go to Today
+                        </a>
+                    </div>
+                <% } else { %>
+                    <div class="mt-2">
+                        <span class="text-sm text-green-600 font-medium">
+                            <i class="fas fa-calendar-check mr-1"></i>
+                            Today's Content
+                        </span>
+                    </div>
+                <% } %>
+            </div>
+            
+            <!-- Next Day Button -->
+            <% if (canGoNext) { %>
+                <a href="/daily?date=<%= nextDateStr %>" 
+                   class="p-2 hover:bg-gray-100 rounded-lg transition">
+                    <i class="fas fa-chevron-right text-xl text-gray-600"></i>
+                </a>
+            <% } else { %>
+                <button class="p-2 rounded-lg opacity-50 cursor-not-allowed" disabled>
+                    <i class="fas fa-chevron-right text-xl text-gray-400"></i>
+                </button>
+            <% } %>
+        </div>
+        
+        <!-- Visual date indicator dots -->
+        <div class="flex justify-center mt-4 gap-1">
+            <% 
+            // Show dots for last 5 days
+            for (let i = 4; i >= 0; i--) {
+                const dotDate = new Date(selectedDate);
+                dotDate.setDate(dotDate.getDate() - i);
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+                
+                let dotClass = "w-2 h-2 rounded-full ";
+                if (dotDate > today) {
+                    dotClass += "bg-gray-200"; // Future
+                } else if (i === 0) {
+                    dotClass += "bg-sky-blue"; // Selected
+                } else {
+                    dotClass += "bg-gray-300"; // Past
+                }
+            %>
+                <div class="<%= dotClass %>"></div>
+            <% } %>
+        </div>
+    </div>
+    
     <!-- Header -->
     <div class="text-center mb-6">
         <h1 class="text-3xl font-bold mb-2" style="color: var(--text-primary);">Daily Spiritual Journey</h1>
-        <p class="text-gray-600"><%= today %></p>
         
         <% if (userJourney && journeyDay) { %>
             <div class="mt-4">
@@ -1164,5 +1232,34 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     });
+});
+
+// Keyboard navigation
+document.addEventListener('keydown', function(e) {
+    // Only trigger if no input/textarea is focused
+    if (document.activeElement.tagName === 'INPUT' || 
+        document.activeElement.tagName === 'TEXTAREA') {
+        return;
+    }
+    
+    // Left arrow - previous day
+    if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        window.location.href = '/daily?date=<%= prevDateStr %>';
+    }
+    
+    // Right arrow - next day (if allowed)
+    <% if (canGoNext) { %>
+    if (e.key === 'ArrowRight') {
+        e.preventDefault();
+        window.location.href = '/daily?date=<%= nextDateStr %>';
+    }
+    <% } %>
+    
+    // 'T' key - return to today
+    if ((e.key === 't' || e.key === 'T') && !<%= isToday %>) {
+        e.preventDefault();
+        window.location.href = '/daily';
+    }
 });
 </script>

@@ -165,6 +165,30 @@ router.get('/daily', async (req, res) => {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     
+    // Get requested date from query parameter, default to today
+    let selectedDate = today;
+    if (req.query.date) {
+      const requestedDate = new Date(req.query.date + 'T12:00:00'); // Add noon to avoid timezone issues
+      if (!isNaN(requestedDate.getTime())) {
+        // Don't allow future dates
+        if (requestedDate <= today) {
+          selectedDate = requestedDate;
+          selectedDate.setHours(0, 0, 0, 0);
+        }
+      }
+    }
+    
+    // Calculate navigation dates
+    const prevDate = new Date(selectedDate);
+    prevDate.setDate(prevDate.getDate() - 1);
+    
+    const nextDate = new Date(selectedDate);
+    nextDate.setDate(nextDate.getDate() + 1);
+    
+    // Check if we can navigate forward (not beyond today)
+    const canGoNext = nextDate <= today;
+    const isToday = selectedDate.toDateString() === today.toDateString();
+    
     let userJourney = null;
     let journeyDay = null;
     let journeyContent = [];
@@ -249,11 +273,11 @@ router.get('/daily', async (req, res) => {
     let dailyScheduledContent = [];
     let userProgress = null;
     
-    // Fetch today's scheduled content
+    // Fetch scheduled content for selected date
     const { Content } = require('../models');
-    const todaySchedule = await DailyContent.findAll({
+    const selectedSchedule = await DailyContent.findAll({
       where: {
-        date: today.toISOString().split('T')[0]
+        date: selectedDate.toISOString().split('T')[0]
       },
       include: [{
         model: Content,
@@ -263,7 +287,7 @@ router.get('/daily', async (req, res) => {
     });
     
     // Transform to match journey content format
-    dailyScheduledContent = todaySchedule.map(item => ({
+    dailyScheduledContent = selectedSchedule.map(item => ({
       id: item.id,
       content_type: item.contentType,
       actualContent: item.content,
@@ -279,7 +303,14 @@ router.get('/daily', async (req, res) => {
       journeyContent: journeyContent,
       dailyScheduledContent: dailyScheduledContent,
       allContentCompleted: allContentCompleted,
-      today: today.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })
+      today: today.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }),
+      // Navigation data
+      selectedDate: selectedDate,
+      selectedDateFormatted: selectedDate.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }),
+      prevDateStr: prevDate.toISOString().split('T')[0],
+      nextDateStr: nextDate.toISOString().split('T')[0],
+      canGoNext: canGoNext,
+      isToday: isToday
     });
   } catch (error) {
     console.error('Error rendering daily content:', error);
