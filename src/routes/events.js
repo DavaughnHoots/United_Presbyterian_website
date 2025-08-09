@@ -54,6 +54,10 @@ router.get('/', async (req, res) => {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     
+    // Get end of today
+    const endOfToday = new Date(today);
+    endOfToday.setHours(23, 59, 59, 999);
+    
     const featuredEventsQuery = await Event.findAll({
       where: {
         isPublished: true,
@@ -108,10 +112,74 @@ router.get('/', async (req, res) => {
     featuredEvents.sort((a, b) => new Date(a.startDate) - new Date(b.startDate));
     const topFeaturedEvents = featuredEvents.slice(0, 3);
     
+    // Get today's events
+    const todayEventsQuery = await Event.findAll({
+      where: {
+        isPublished: true,
+        [Op.or]: [
+          // Non-recurring events happening today
+          {
+            isRecurring: false,
+            startDate: {
+              [Op.between]: [today, endOfToday]
+            }
+          },
+          // Recurring events that might have an occurrence today
+          {
+            isRecurring: true,
+            startDate: {
+              [Op.lte]: endOfToday
+            },
+            [Op.or]: [
+              { recurrenceEnd: null },
+              { recurrenceEnd: { [Op.gte]: today } }
+            ]
+          }
+        ]
+      },
+      order: [['startDate', 'ASC'], ['startTime', 'ASC']]
+    });
+    
+    // Process today's events to include recurring occurrences
+    const todayEvents = [];
+    for (const event of todayEventsQuery) {
+      const eventData = event.toJSON();
+      
+      if (event.isRecurring) {
+        // Generate today's occurrences for recurring events
+        const occurrences = generateRecurringOccurrences(eventData, today, endOfToday);
+        for (const occurrence of occurrences) {
+          todayEvents.push({
+            ...occurrence,
+            startDate: formatDateForFrontend(occurrence.startDate, occurrence.startTime),
+            endDate: formatDateForFrontend(occurrence.endDate, occurrence.endTime)
+          });
+        }
+      } else {
+        // Add non-recurring event if it's happening today
+        const eventStart = new Date(event.startDate);
+        if (eventStart >= today && eventStart <= endOfToday) {
+          todayEvents.push({
+            ...eventData,
+            startDate: formatDateForFrontend(eventData.startDate, eventData.startTime),
+            endDate: formatDateForFrontend(eventData.endDate, eventData.endTime)
+          });
+        }
+      }
+    }
+    
+    // Sort today's events by time
+    todayEvents.sort((a, b) => {
+      const aTime = a.startTime || '00:00';
+      const bTime = b.startTime || '00:00';
+      return aTime.localeCompare(bTime);
+    });
+    
     res.render('pages/events', {
       title: 'Events Calendar - United Presbyterian Church',
       user: req.session.user,
       featuredEvents: topFeaturedEvents,
+      todayEvents: todayEvents,
       currentView: view,
       currentDate: date
     });

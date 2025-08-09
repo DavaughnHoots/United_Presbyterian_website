@@ -78,6 +78,89 @@
         </div>
     <% } %>
     
+    <!-- Today's Events -->
+    <% if (typeof todayEvents !== 'undefined' && todayEvents && todayEvents.length > 0) { %>
+        <div class="mb-12">
+            <h2 class="text-2xl font-semibold mb-6 flex items-center">
+                <i class="fas fa-calendar-day text-sky-blue mr-2"></i>
+                Today's Events
+                <span class="ml-3 text-sm text-gray-500"><%= new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' }) %></span>
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <% todayEvents.forEach(event => { %>
+                    <div class="module-card hover:shadow-lg transition-shadow">
+                        <div class="flex items-start justify-between mb-3">
+                            <div class="flex-1">
+                                <h3 class="font-semibold text-lg mb-1">
+                                    <a href="/events/<%= event.id %>" class="hover:text-sky-blue transition">
+                                        <%= event.title %>
+                                    </a>
+                                </h3>
+                                <div class="text-sm text-gray-600 space-y-1">
+                                    <div class="flex items-center">
+                                        <i class="fas fa-clock mr-2 text-sky-blue"></i>
+                                        <% if (event.startTime) { %>
+                                            <% 
+                                                const [hours, minutes] = (event.startTime || '00:00').split(':');
+                                                const hour = parseInt(hours);
+                                                const period = hour >= 12 ? 'PM' : 'AM';
+                                                const displayHour = hour === 0 ? 12 : (hour > 12 ? hour - 12 : hour);
+                                            %>
+                                            <%= displayHour %>:<%= minutes %> <%= period %>
+                                            <% if (event.endTime) { %>
+                                                <% 
+                                                    const [endHours, endMinutes] = event.endTime.split(':');
+                                                    const endHour = parseInt(endHours);
+                                                    const endPeriod = endHour >= 12 ? 'PM' : 'AM';
+                                                    const displayEndHour = endHour === 0 ? 12 : (endHour > 12 ? endHour - 12 : endHour);
+                                                %>
+                                                - <%= displayEndHour %>:<%= endMinutes %> <%= endPeriod %>
+                                            <% } %>
+                                        <% } else { %>
+                                            All Day
+                                        <% } %>
+                                    </div>
+                                    <% if (event.location) { %>
+                                        <div class="flex items-center">
+                                            <i class="fas fa-map-marker-alt mr-2 text-sky-blue"></i>
+                                            <%= event.location %>
+                                        </div>
+                                    <% } %>
+                                    <% if (event.description) { %>
+                                        <div class="text-gray-600 line-clamp-2 mt-2">
+                                            <%= event.description %>
+                                        </div>
+                                    <% } %>
+                                </div>
+                            </div>
+                            <% if (event.category) { %>
+                                <div class="event-category-badge <%= event.category %>">
+                                    <i class="fas <%= getCategoryIcon(event.category) %>"></i>
+                                </div>
+                            <% } %>
+                        </div>
+                        <div class="flex items-center gap-3 pt-3 border-t">
+                            <a href="/events/<%= event.id %>" class="text-sm text-sky-blue hover:underline">
+                                View Details
+                            </a>
+                            <% if (event.link) { %>
+                                <a href="<%= event.link %>" target="_blank" rel="noopener noreferrer" 
+                                   class="text-sm text-sky-blue hover:underline">
+                                    <i class="fas fa-external-link-alt mr-1"></i> Event Link
+                                </a>
+                            <% } %>
+                            <% if (event.requireRegistration) { %>
+                                <span class="text-sm text-green-600">
+                                    <i class="fas fa-user-check mr-1"></i> Registration Required
+                                </span>
+                            <% } %>
+                        </div>
+                    </div>
+                <% }) %>
+            </div>
+        </div>
+    <% } %>
+    
     <!-- Calendar Controls -->
     <div class="module-card mb-6">
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
