@@ -30,13 +30,42 @@ router.get('/', requireAdmin, async (req, res) => {
       limit: 5
     });
     
+    // Define available quick actions
+    const availableQuickActions = [
+      { id: 'submissions', label: 'Moderate Submissions', icon: 'fa-comments', color: 'sky-blue', href: '/admin/submissions', badge: stats.pendingSubmissions },
+      { id: 'content', label: 'Manage Content Library', icon: 'fa-book', color: 'heaven-blue', href: '/admin/content' },
+      { id: 'users', label: 'Manage Users', icon: 'fa-user-cog', color: 'purple-600', href: '/admin/users' },
+      { id: 'events', label: 'Manage Events', icon: 'fa-calendar-alt', color: 'green-600', href: '/admin/events' },
+      { id: 'journeys', label: 'Journey Builder', icon: 'fa-route', color: 'purple-600', href: '/admin/journeys' },
+      { id: 'prayers', label: 'Prayer Management', icon: 'fa-praying-hands', color: 'indigo-600', href: '/admin/prayers' },
+      { id: 'daily-scheduler', label: 'Daily Content Scheduler', icon: 'fa-calendar-day', color: 'orange-600', href: '/admin/daily-scheduler' },
+      { id: 'sentiment', label: 'Bible Sentiment Research', icon: 'fa-flask', color: 'cyan-600', href: '/admin/sentiment-annotation' },
+      { id: 'historical', label: 'Historical Contexts', icon: 'fa-history', color: 'amber-600', href: '/admin/historical-contexts' },
+      { id: 'maps', label: 'Interactive Maps', icon: 'fa-map-marked-alt', color: 'teal-600', href: '/admin/interactive-maps' },
+      { id: 'settings', label: 'Site Settings', icon: 'fa-cog', color: 'gray-600', href: '/admin/settings' }
+    ];
+    
+    // Get user's quick action preferences
+    const userPreferences = adminUser.preferences || {};
+    const quickActionsConfig = userPreferences.quickActions || {
+      visible: availableQuickActions.map(action => action.id) // Default to all visible
+    };
+    
+    // Filter visible quick actions
+    const visibleQuickActions = availableQuickActions.filter(action => 
+      quickActionsConfig.visible.includes(action.id)
+    );
+    
     res.render('pages/admin/dashboard', {
       title: 'Admin Dashboard',
       user: req.session.user,
       stats,
       recentSubmissions,
       needsPassword,
-      success: req.query.success
+      success: req.query.success,
+      availableQuickActions,
+      visibleQuickActions,
+      quickActionsConfig
     });
   } catch (error) {
     console.error('Error rendering admin dashboard:', error);
@@ -192,6 +221,33 @@ router.post('/setup-password', requireAdmin, async (req, res) => {
   } catch (error) {
     console.error('Error setting password:', error);
     res.redirect('/admin/setup-password?error=Failed to set password');
+  }
+});
+
+// API endpoint to save quick actions preferences
+router.post('/api/quick-actions-preferences', requireAdmin, async (req, res) => {
+  try {
+    const { visible } = req.body;
+    
+    // Get current user
+    const user = await User.findByPk(req.session.user.id);
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+    
+    // Update preferences
+    const preferences = user.preferences || {};
+    preferences.quickActions = {
+      visible: visible || []
+    };
+    
+    user.preferences = preferences;
+    await user.save();
+    
+    res.json({ success: true, message: 'Quick actions preferences saved' });
+  } catch (error) {
+    console.error('Error saving quick actions preferences:', error);
+    res.status(500).json({ error: 'Failed to save preferences' });
   }
 });
 
