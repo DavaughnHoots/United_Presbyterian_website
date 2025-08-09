@@ -15,6 +15,46 @@
         <h1 class="text-3xl font-bold text-gray-800" id="greeting">Good Morning</h1>
     </div>
     
+    <!-- Daily Content Preview -->
+    <div class="module-card mb-6">
+        <h3 class="text-xl font-semibold mb-4">Today's Spiritual Journey</h3>
+        <div class="space-y-3">
+            <div class="flex items-center gap-3">
+                <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
+                    <i class="fas fa-book-bible text-sky-blue"></i>
+                </div>
+                <div class="flex-1">
+                    <p class="font-medium">Daily Reading</p>
+                    <p class="text-sm text-gray-600">John 3:16</p>
+                </div>
+                <i class="fas fa-chevron-right text-gray-400"></i>
+            </div>
+            
+            <div class="flex items-center gap-3">
+                <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
+                    <i class="fas fa-pray text-sky-blue"></i>
+                </div>
+                <div class="flex-1">
+                    <p class="font-medium">Morning Prayer</p>
+                    <p class="text-sm text-gray-600">Start your day with God</p>
+                </div>
+                <i class="fas fa-chevron-right text-gray-400"></i>
+            </div>
+            
+            <div class="flex items-center gap-3">
+                <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
+                    <i class="fas fa-music text-sky-blue"></i>
+                </div>
+                <div class="flex-1">
+                    <p class="font-medium">Hymn of the Day</p>
+                    <p class="text-sm text-gray-600">Amazing Grace</p>
+                </div>
+                <i class="fas fa-chevron-right text-gray-400"></i>
+            </div>
+        </div>
+        <a href="/daily" class="btn-primary w-full text-center mt-4">Explore Today's Content</a>
+    </div>
+    
     <% if (currentEvent) { %>
         <!-- Happening Now Section -->
         <div class="module-card mb-6 border-2 border-red-500 bg-red-50 relative overflow-hidden">
@@ -146,46 +186,6 @@
         <p class="text-3xl font-bold mb-1">Sunday 11:00 AM</p>
         <p class="text-sm opacity-90">Join us for worship</p>
         <a href="https://www.google.com/maps/dir/?api=1&destination=<%= encodedAddress %>" target="_blank" rel="noopener noreferrer" class="btn-light mt-4">Get Directions</a>
-    </div>
-    
-    <!-- Daily Content Preview -->
-    <div class="module-card mb-6">
-        <h3 class="text-xl font-semibold mb-4">Today's Spiritual Journey</h3>
-        <div class="space-y-3">
-            <div class="flex items-center gap-3">
-                <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
-                    <i class="fas fa-book-bible text-sky-blue"></i>
-                </div>
-                <div class="flex-1">
-                    <p class="font-medium">Daily Reading</p>
-                    <p class="text-sm text-gray-600">John 3:16</p>
-                </div>
-                <i class="fas fa-chevron-right text-gray-400"></i>
-            </div>
-            
-            <div class="flex items-center gap-3">
-                <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
-                    <i class="fas fa-pray text-sky-blue"></i>
-                </div>
-                <div class="flex-1">
-                    <p class="font-medium">Morning Prayer</p>
-                    <p class="text-sm text-gray-600">Start your day with God</p>
-                </div>
-                <i class="fas fa-chevron-right text-gray-400"></i>
-            </div>
-            
-            <div class="flex items-center gap-3">
-                <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
-                    <i class="fas fa-music text-sky-blue"></i>
-                </div>
-                <div class="flex-1">
-                    <p class="font-medium">Hymn of the Day</p>
-                    <p class="text-sm text-gray-600">Amazing Grace</p>
-                </div>
-                <i class="fas fa-chevron-right text-gray-400"></i>
-            </div>
-        </div>
-        <a href="/daily" class="btn-primary w-full text-center mt-4">Explore Today's Content</a>
     </div>
     
     <% if (user) { %>
