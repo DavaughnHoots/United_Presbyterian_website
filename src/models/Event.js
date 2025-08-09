@@ -111,6 +111,11 @@ module.exports = (sequelize, DataTypes) => {
     type: DataTypes.BOOLEAN,
     defaultValue: false
   },
+  showInHappeningNow: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: false,
+    field: 'show_in_happening_now'
+  },
   maxAttendees: {
     type: DataTypes.INTEGER,
     allowNull: true

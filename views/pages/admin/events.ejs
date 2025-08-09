@@ -265,6 +265,13 @@
                                 <span>Require registration for this event</span>
                             </label>
                         </div>
+                        
+                        <div>
+                            <label class="flex items-center">
+                                <input type="checkbox" id="eventShowInHappeningNow" name="showInHappeningNow" class="mr-2">
+                                <span>Show in "Happening Now" section on home page</span>
+                            </label>
+                        </div>
                     </div>
                     
                     <div class="mt-6 flex justify-end space-x-3">
@@ -324,6 +331,7 @@ function showAddEventModal() {
     document.getElementById('modalTitle').textContent = 'Add New Event';
     document.getElementById('eventForm').reset();
     document.getElementById('eventId').value = '';
+    document.getElementById('recurringOptions').classList.add('hidden');
     document.getElementById('eventModal').classList.remove('hidden');
 }
 
@@ -344,6 +352,7 @@ function editEvent(eventId) {
     document.getElementById('eventLink').value = event.link || '';
     document.getElementById('eventRecurring').checked = event.isRecurring;
     document.getElementById('eventRequireRegistration').checked = event.requireRegistration;
+    document.getElementById('eventShowInHappeningNow').checked = event.showInHappeningNow;
     
     if (event.isRecurring) {
         document.getElementById('recurringOptions').classList.remove('hidden');
@@ -372,6 +381,7 @@ async function saveEvent(e) {
     // Convert checkboxes
     eventData.isRecurring = !!eventData.isRecurring;
     eventData.requireRegistration = !!eventData.requireRegistration;
+    eventData.showInHappeningNow = !!eventData.showInHappeningNow;
     
     // Clean up data
     if (!eventData.maxAttendees) delete eventData.maxAttendees;

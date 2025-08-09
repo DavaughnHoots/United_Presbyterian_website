@@ -26,10 +26,11 @@ router.get('/', async (req, res) => {
     const endOfDay = new Date(today);
     endOfDay.setHours(23, 59, 59, 999);
     
-    // Find currently active events
+    // Find currently active events that should show in Happening Now
     const events = await Event.findAll({
       where: {
         isPublished: true,
+        showInHappeningNow: true, // Only show events marked for Happening Now
         [Op.or]: [
           // Non-recurring events happening today
           {
@@ -134,13 +135,19 @@ router.get('/', async (req, res) => {
     console.log('Home page - Session user:', req.session.user);
     console.log('Home page - res.locals.user:', res.locals.user);
     
+    // Encode church address for Google Maps URL
+    const churchAddress = settings.churchAddress || '';
+    const encodedAddress = encodeURIComponent(churchAddress.replace(/\n/g, ', '));
+    
     res.render('pages/home', {
       title: settings.churchName || 'United Presbyterian Church',
       churchName: settings.churchName || 'United Presbyterian Church',
       welcomeMessage: res.locals.welcomeMessage,
       user: res.locals.user,
       currentEvent,
-      upcomingEvents: upcomingEvents.slice(0, 3) // Show next 3 upcoming events today
+      upcomingEvents: upcomingEvents.slice(0, 3), // Show next 3 upcoming events today
+      churchAddress,
+      encodedAddress
     });
   } catch (error) {
     console.error('Error rendering home page:', error);
