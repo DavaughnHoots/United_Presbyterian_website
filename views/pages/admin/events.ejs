@@ -82,7 +82,7 @@
                                 }) %>
                                 <span class="mx-2">•</span>
                                 <i class="fas fa-clock mr-2"></i>
-                                <%= new Date('2000-01-01T' + event.startTime).toLocaleTimeString('en-US', { 
+                                <%= new Date('2000-01-01T' + (event.startTime || '00:00')).toLocaleTimeString('en-US', { 
                                     hour: 'numeric', 
                                     minute: '2-digit' 
                                 }) %>
