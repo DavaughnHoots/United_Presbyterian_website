@@ -335,6 +335,13 @@ function showAddEventModal() {
     document.getElementById('eventModal').classList.remove('hidden');
 }
 
+function formatDateForInput(dateString) {
+    if (!dateString) return '';
+    const date = new Date(dateString);
+    if (isNaN(date.getTime())) return '';
+    return date.toISOString().split('T')[0];
+}
+
 function editEvent(eventId) {
     const event = allEvents.find(e => e.id === eventId);
     if (!event) return;
@@ -342,13 +349,13 @@ function editEvent(eventId) {
     document.getElementById('modalTitle').textContent = 'Edit Event';
     document.getElementById('eventId').value = event.id;
     document.getElementById('eventTitle').value = event.title;
-    document.getElementById('eventDate').value = event.startDate;
+    document.getElementById('eventDate').value = formatDateForInput(event.startDate);
     document.getElementById('eventStartTime').value = event.startTime;
     document.getElementById('eventEndTime').value = event.endTime || '';
     document.getElementById('eventLocation').value = event.location || '';
     document.getElementById('eventDescription').value = event.description || '';
     document.getElementById('eventMaxAttendees').value = event.maxAttendees || '';
-    document.getElementById('eventDeadline').value = event.registrationDeadline || '';
+    document.getElementById('eventDeadline').value = formatDateForInput(event.registrationDeadline);
     document.getElementById('eventLink').value = event.link || '';
     document.getElementById('eventRecurring').checked = event.isRecurring;
     document.getElementById('eventRequireRegistration').checked = event.requireRegistration;
@@ -357,7 +364,7 @@ function editEvent(eventId) {
     if (event.isRecurring) {
         document.getElementById('recurringOptions').classList.remove('hidden');
         document.getElementById('recurrencePattern').value = event.recurrencePattern || 'weekly';
-        document.getElementById('recurrenceEnd').value = event.recurrenceEnd || '';
+        document.getElementById('recurrenceEnd').value = formatDateForInput(event.recurrenceEnd);
     }
     
     document.getElementById('eventModal').classList.remove('hidden');
