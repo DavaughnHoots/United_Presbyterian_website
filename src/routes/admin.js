@@ -3259,34 +3259,27 @@ router.get('/analytics', requireAdmin, async (req, res) => {
       }
     });
     
-    // Completion rates
-    const totalCompletions = await UserProgress.count({
-      where: {
-        completed: true
-      }
-    });
+    // Completion rates - count records with any completed content
+    const totalCompletions = await UserProgress.count();
     
     const uniqueCompletingUsers = await UserProgress.count({
-      where: {
-        completed: true
-      },
       distinct: true,
       col: 'userId'
     });
     
-    // Weekly activity trend
+    // Weekly activity trend - use date field
     const weeklyActivity = await UserProgress.findAll({
       attributes: [
-        [require('sequelize').fn('DATE', require('sequelize').col('completedAt')), 'date'],
+        ['date', 'date'],
         [require('sequelize').fn('COUNT', require('sequelize').col('*')), 'count']
       ],
       where: {
-        completedAt: {
+        date: {
           [Op.gte]: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
         }
       },
-      group: [require('sequelize').fn('DATE', require('sequelize').col('completedAt'))],
-      order: [[require('sequelize').fn('DATE', require('sequelize').col('completedAt')), 'ASC']]
+      group: ['date'],
+      order: [['date', 'ASC']]
     });
     
     res.render('pages/admin/analytics', {
