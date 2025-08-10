@@ -62,6 +62,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.DATEONLY,
       allowNull: true
     },
+    totalDaysActive: {
+      type: DataTypes.INTEGER,
+      defaultValue: 0
+    },
     preferences: {
       type: DataTypes.JSONB,
       defaultValue: {

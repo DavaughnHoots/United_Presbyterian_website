@@ -21,6 +21,9 @@ const JourneyContent = require('./JourneyContent')(sequelize, DataTypes);
 const UserJourney = require('./UserJourney')(sequelize, DataTypes);
 const UserJourneyProgress = require('./UserJourneyProgress')(sequelize, DataTypes);
 const SentimentAnnotation = require('./SentimentAnnotation')(sequelize, DataTypes);
+const UserProgress = require('./UserProgress')(sequelize, DataTypes);
+const ContentEngagement = require('./ContentEngagement')(sequelize, DataTypes);
+const AnalyticsEvent = require('./AnalyticsEvent')(sequelize, DataTypes);
 
 // Define associations
 User.hasMany(Progress, { foreignKey: 'userId' });
@@ -65,7 +68,10 @@ const models = {
   JourneyContent,
   UserJourney,
   UserJourneyProgress,
-  SentimentAnnotation
+  SentimentAnnotation,
+  UserProgress,
+  ContentEngagement,
+  AnalyticsEvent
 };
 
 Object.keys(models).forEach(modelName => {
