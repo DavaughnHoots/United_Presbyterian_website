@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { requireAuth, requireAdmin } = require('../middleware/auth');
-const { Submission, DailyContent, User, Content, Setting, Event, EventRegistration /*, UserActivity*/ } = require('../models');
+const { Submission, DailyContent, User, Content, Setting, Event, EventRegistration, UserProgress, ContentEngagement, AnalyticsEvent /*, UserActivity*/ } = require('../models');
 const { Op } = require('sequelize');
 const multer = require('multer');
 const csv = require('csv-parse');
@@ -3167,8 +3167,6 @@ router.get('/api/admin/daily-schedule/preview/:date', requireAdmin, async (req, 
 // Analytics Dashboard
 router.get('/analytics', requireAdmin, async (req, res) => {
   try {
-    const { AnalyticsEvent, ContentEngagement, UserProgress, User } = require('../models');
-    const { Op } = require('sequelize');
     
     // Get date range for analytics (default to last 30 days)
     const endDate = new Date();
