@@ -258,14 +258,54 @@ function getCategoryIcon(category) {
 <script>
 // Interactive greeting functionality
 let hasGreetingBeenClicked = false;
+let greetingMessageIndex = 0;
+
+// Array of positive greeting messages with emojis
+const greetingMessages = [
+    { emoji: '😊', message: 'Nice to see you today!' },
+    { emoji: '🌟', message: 'You are blessed!' },
+    { emoji: '💖', message: 'God loves you!' },
+    { emoji: '🙏', message: 'Have a blessed day!' },
+    { emoji: '✨', message: 'You are amazing!' },
+    { emoji: '🌈', message: 'Hope shines through you!' },
+    { emoji: '🕊️', message: 'Peace be with you!' },
+    { emoji: '💪', message: 'Stay strong in faith!' },
+    { emoji: '🌻', message: 'Keep growing!' },
+    { emoji: '⭐', message: 'You shine bright!' },
+    { emoji: '🎉', message: 'Rejoice in today!' },
+    { emoji: '💝', message: 'You are cherished!' },
+    { emoji: '🌺', message: 'Beautiful soul!' },
+    { emoji: '🔥', message: 'Faith on fire!' },
+    { emoji: '🌸', message: 'Bloom where you are!' },
+    { emoji: '👑', message: 'Child of the King!' },
+    { emoji: '🎵', message: 'Sing a new song!' },
+    { emoji: '🌅', message: 'New mercies today!' },
+    { emoji: '💫', message: 'Walking in purpose!' },
+    { emoji: '🏆', message: 'Victory is yours!' }
+];
 
 function handleGreetingClick() {
-    if (hasGreetingBeenClicked) return; // Only allow one click per session
+    if (hasGreetingBeenClicked) return; // Only allow one click per animation cycle
     
     const greetingName = document.getElementById('greetingName');
     const greetingText = document.getElementById('greetingText');
     const greetingClickedElement = document.getElementById('greetingClicked');
     const greetingCard = document.getElementById('greetingCard');
+    const greetingEmoji = document.getElementById('greetingEmoji');
+    const greetingMessage = document.getElementById('greetingMessage');
+    
+    // Get next message (random selection for more variety)
+    // Avoid showing the same message twice in a row
+    let newIndex;
+    do {
+        newIndex = Math.floor(Math.random() * greetingMessages.length);
+    } while (newIndex === greetingMessageIndex && greetingMessages.length > 1);
+    greetingMessageIndex = newIndex;
+    const currentGreeting = greetingMessages[greetingMessageIndex];
+    
+    // Update the greeting content
+    greetingEmoji.textContent = currentGreeting.emoji;
+    greetingMessage.textContent = currentGreeting.message;
     
     // Hide original content
     greetingName.style.display = 'none';
@@ -287,19 +327,20 @@ function handleGreetingClick() {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            timeOfDay: getTimeOfDay()
+            timeOfDay: getTimeOfDay(),
+            message: currentGreeting.message
         })
     }).catch(err => console.error('Failed to track greeting click:', err));
     
     hasGreetingBeenClicked = true;
     
-    // Revert after 5 seconds
+    // Revert after 3 seconds (shorter to encourage more clicks)
     setTimeout(() => {
         greetingName.style.display = 'block';
         greetingText.style.display = 'block';
-        document.getElementById('greetingClicked').classList.add('hidden');
+        greetingClickedElement.classList.add('hidden');
         hasGreetingBeenClicked = false;
-    }, 5000);
+    }, 3000);
 }
 
 // Get time of day for greeting
