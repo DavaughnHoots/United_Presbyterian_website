@@ -208,6 +208,24 @@ body > * {
   border: 1px solid rgba(255, 255, 255, 0.5);
 }
 
+/* Subtle wiggle animation for greeting card hint */
+@keyframes wiggle {
+  0%, 100% { 
+    transform: rotate(0deg) scale(1); 
+  }
+  25% { 
+    transform: rotate(-1.5deg) scale(1.01); 
+  }
+  75% { 
+    transform: rotate(1.5deg) scale(1.01); 
+  }
+}
+
+.wiggle-hint {
+  animation: wiggle 0.4s ease-in-out;
+  animation-iteration-count: 2;
+}
+
 /* Event cards */
 .event-card {
   display: flex;

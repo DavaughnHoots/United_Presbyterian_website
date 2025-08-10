@@ -259,6 +259,7 @@ function getCategoryIcon(category) {
 // Interactive greeting functionality
 let hasGreetingBeenClicked = false;
 let greetingMessageIndex = 0;
+let wiggleInterval;
 
 // Array of positive greeting messages with emojis
 const greetingMessages = [
@@ -334,12 +335,22 @@ function handleGreetingClick() {
     
     hasGreetingBeenClicked = true;
     
+    // Stop wiggle interval when user interacts
+    if (wiggleInterval) {
+        clearInterval(wiggleInterval);
+    }
+    
     // Revert after 3 seconds (shorter to encourage more clicks)
     setTimeout(() => {
         greetingName.style.display = 'block';
         greetingText.style.display = 'block';
         greetingClickedElement.classList.add('hidden');
         hasGreetingBeenClicked = false;
+        
+        // Resume wiggle hints after a delay
+        setTimeout(() => {
+            startWiggleHint();
+        }, 5000);
     }, 3000);
 }
 
@@ -367,9 +378,42 @@ function updateGreeting() {
     greetingElement.textContent = greeting;
 }
 
+// Function to start wiggle hint animation
+function startWiggleHint() {
+    const greetingCard = document.getElementById('greetingCard');
+    
+    // Initial wiggle after 3 seconds
+    setTimeout(() => {
+        if (!hasGreetingBeenClicked) {
+            greetingCard.classList.add('wiggle-hint');
+            setTimeout(() => {
+                greetingCard.classList.remove('wiggle-hint');
+            }, 800); // Duration of 2 wiggles
+        }
+    }, 3000);
+    
+    // Then wiggle every 8 seconds
+    wiggleInterval = setInterval(() => {
+        if (!hasGreetingBeenClicked) {
+            greetingCard.classList.add('wiggle-hint');
+            setTimeout(() => {
+                greetingCard.classList.remove('wiggle-hint');
+            }, 800); // Duration of 2 wiggles
+        }
+    }, 8000);
+}
+
 // Update greeting on page load
 document.addEventListener('DOMContentLoaded', function() {
     updateGreeting();
+    
+    // Start the wiggle hints
+    startWiggleHint();
+    
+    // Clean up interval when user leaves page
+    window.addEventListener('beforeunload', () => {
+        if (wiggleInterval) clearInterval(wiggleInterval);
+    });
     
     // Fetch latest progress stats if user is logged in
     <% if (user) { %>
