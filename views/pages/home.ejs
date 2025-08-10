@@ -257,14 +257,14 @@ function getCategoryIcon(category) {
 
 <script>
 // Interactive greeting functionality
-let greetingClicked = false;
+let hasGreetingBeenClicked = false;
 
 function handleGreetingClick() {
-    if (greetingClicked) return; // Only allow one click per session
+    if (hasGreetingBeenClicked) return; // Only allow one click per session
     
     const greetingName = document.getElementById('greetingName');
     const greetingText = document.getElementById('greetingText');
-    const greetingClicked = document.getElementById('greetingClicked');
+    const greetingClickedElement = document.getElementById('greetingClicked');
     const greetingCard = document.getElementById('greetingCard');
     
     // Hide original content
@@ -272,7 +272,7 @@ function handleGreetingClick() {
     greetingText.style.display = 'none';
     
     // Show clicked content
-    greetingClicked.classList.remove('hidden');
+    greetingClickedElement.classList.remove('hidden');
     
     // Add animation
     greetingCard.classList.add('animate-bounce');
@@ -291,14 +291,14 @@ function handleGreetingClick() {
         })
     }).catch(err => console.error('Failed to track greeting click:', err));
     
-    greetingClicked = true;
+    hasGreetingBeenClicked = true;
     
     // Revert after 5 seconds
     setTimeout(() => {
         greetingName.style.display = 'block';
         greetingText.style.display = 'block';
         document.getElementById('greetingClicked').classList.add('hidden');
-        greetingClicked = false;
+        hasGreetingBeenClicked = false;
     }, 5000);
 }
 
