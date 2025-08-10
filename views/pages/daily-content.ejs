@@ -124,6 +124,24 @@
                             <%= contentData.content || '' %>
                         </p>
                     </div>
+                    
+                    <!-- Amen Button -->
+                    <div class="mt-4 flex items-center justify-between border-t pt-4">
+                        <button onclick="handleAmen('scripture_reading', '<%= contentData.id %>')" 
+                                class="amen-button flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-blue-50 hover:border-blue-300 transition-all"
+                                data-content-type="scripture_reading" 
+                                data-content-id="<%= contentData.id %>">
+                            <i class="fas fa-praying-hands text-blue-600"></i>
+                            <span>Amen</span>
+                            <span class="amen-count ml-2 text-gray-500" id="amen-count-scripture_reading-<%= contentData.id %>">(0)</span>
+                        </button>
+                        <% if (user) { %>
+                            <button onclick="markAsComplete('scripture_reading', '<%= contentData.id %>')" 
+                                    class="text-sm text-green-600 hover:text-green-700">
+                                <i class="fas fa-check-circle mr-1"></i>Mark as Read
+                            </button>
+                        <% } %>
+                    </div>
                 </div>
             <% } else if (content.content_type === 'hymn' && contentData) { %>
                 <!-- Hymn Card -->
@@ -166,6 +184,24 @@
                             <% } %>
                         </div>
                     <% } %>
+                    
+                    <!-- Amen Button -->
+                    <div class="mt-4 flex items-center justify-between border-t pt-4">
+                        <button onclick="handleAmen('hymn', '<%= contentData.id %>')" 
+                                class="amen-button flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-green-50 hover:border-green-300 transition-all"
+                                data-content-type="hymn" 
+                                data-content-id="<%= contentData.id %>">
+                            <i class="fas fa-praying-hands text-green-600"></i>
+                            <span>Amen</span>
+                            <span class="amen-count ml-2 text-gray-500" id="amen-count-hymn-<%= contentData.id %>">(0)</span>
+                        </button>
+                        <% if (user) { %>
+                            <button onclick="markAsComplete('hymn', '<%= contentData.id %>')" 
+                                    class="text-sm text-green-600 hover:text-green-700">
+                                <i class="fas fa-check-circle mr-1"></i>Mark as Sung
+                            </button>
+                        <% } %>
+                    </div>
                 </div>
             <% } else if (content.content_type === 'prayer' && contentData) { %>
                 <!-- Prayer Card -->
@@ -188,6 +224,24 @@
                         <p class="text-gray-700 leading-relaxed whitespace-pre-line">
                             <%= contentData.content || '' %>
                         </p>
+                    </div>
+                    
+                    <!-- Amen Button -->
+                    <div class="mt-4 flex items-center justify-between border-t pt-4">
+                        <button onclick="handleAmen('prayer', '<%= contentData.id %>')" 
+                                class="amen-button flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-indigo-50 hover:border-indigo-300 transition-all"
+                                data-content-type="prayer" 
+                                data-content-id="<%= contentData.id %>">
+                            <i class="fas fa-praying-hands text-indigo-600"></i>
+                            <span>Amen</span>
+                            <span class="amen-count ml-2 text-gray-500" id="amen-count-prayer-<%= contentData.id %>">(0)</span>
+                        </button>
+                        <% if (user) { %>
+                            <button onclick="markAsComplete('prayer', '<%= contentData.id %>')" 
+                                    class="text-sm text-green-600 hover:text-green-700">
+                                <i class="fas fa-check-circle mr-1"></i>Mark as Prayed
+                            </button>
+                        <% } %>
                     </div>
                 </div>
             <% } else if (content.content_type === 'journaling_prompt' && contentData) { %>
@@ -1260,6 +1314,133 @@ document.addEventListener('keydown', function(e) {
     if ((e.key === 't' || e.key === 'T') && !<%= isToday %>) {
         e.preventDefault();
         window.location.href = '/daily';
+    }
+});
+
+// Amen button functionality
+async function handleAmen(contentType, contentId) {
+    try {
+        const response = await fetch('/api/engagement/amen', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                contentType: contentType,
+                contentId: contentId
+            })
+        });
+        
+        if (response.ok) {
+            const result = await response.json();
+            
+            // Update the count display
+            const countElement = document.getElementById(`amen-count-${contentType}-${contentId}`);
+            if (countElement) {
+                countElement.textContent = `(${result.count})`;
+            }
+            
+            // Add visual feedback
+            const button = document.querySelector(`button[data-content-type="${contentType}"][data-content-id="${contentId}"]`);
+            if (button) {
+                // Add animation class
+                button.classList.add('animate-pulse');
+                
+                // Change button style to indicate it's been clicked
+                if (result.action === 'added') {
+                    button.classList.add('bg-blue-50', 'border-blue-400');
+                    button.querySelector('i').classList.add('text-blue-700');
+                } else {
+                    button.classList.remove('bg-blue-50', 'border-blue-400');
+                    button.querySelector('i').classList.remove('text-blue-700');
+                }
+                
+                // Remove animation after a moment
+                setTimeout(() => {
+                    button.classList.remove('animate-pulse');
+                }, 1000);
+            }
+        } else {
+            console.error('Failed to record Amen');
+        }
+    } catch (error) {
+        console.error('Error recording Amen:', error);
+    }
+}
+
+// Mark content as complete
+async function markAsComplete(contentType, contentId) {
+    try {
+        const response = await fetch('/api/progress/complete', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                contentType: contentType,
+                contentId: contentId
+            })
+        });
+        
+        if (response.ok) {
+            const result = await response.json();
+            
+            // Show success message and reload page
+            const button = event.target.closest('button');
+            if (button) {
+                button.innerHTML = '<i class="fas fa-check mr-1"></i>Completed!';
+                button.classList.add('text-green-700');
+                button.disabled = true;
+            }
+            
+            // Reload page after a moment to show updated progress
+            setTimeout(() => {
+                location.reload();
+            }, 1500);
+        } else {
+            alert('Please log in to track your progress');
+        }
+    } catch (error) {
+        console.error('Error marking complete:', error);
+        alert('An error occurred. Please try again.');
+    }
+}
+
+// Load Amen counts on page load
+document.addEventListener('DOMContentLoaded', async function() {
+    // Get all unique content items with Amen buttons
+    const amenButtons = document.querySelectorAll('.amen-button');
+    const contentItems = [];
+    
+    amenButtons.forEach(button => {
+        const contentType = button.dataset.contentType;
+        const contentId = button.dataset.contentId;
+        if (contentType && contentId) {
+            contentItems.push({ contentType, contentId });
+        }
+    });
+    
+    // Fetch counts for all items
+    if (contentItems.length > 0) {
+        try {
+            const promises = contentItems.map(item => 
+                fetch(`/api/engagement/amen-count?contentType=${item.contentType}&contentId=${item.contentId}`)
+                    .then(res => res.json())
+                    .then(data => ({ ...item, count: data.count }))
+            );
+            
+            const results = await Promise.all(promises);
+            
+            // Update all count displays
+            results.forEach(result => {
+                const countElement = document.getElementById(`amen-count-${result.contentType}-${result.contentId}`);
+                if (countElement) {
+                    countElement.textContent = `(${result.count})`;
+                }
+            });
+        } catch (error) {
+            console.error('Error loading Amen counts:', error);
+        }
     }
 });
 </script>
