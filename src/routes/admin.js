@@ -32,6 +32,7 @@ router.get('/', requireAdmin, async (req, res) => {
     
     // Define available quick actions
     const availableQuickActions = [
+      { id: 'analytics', label: 'Analytics Dashboard', icon: 'fa-chart-line', color: 'red-600', href: '/admin/analytics' },
       { id: 'submissions', label: 'Moderate Submissions', icon: 'fa-comments', color: 'sky-blue', href: '/admin/submissions', badge: stats.pendingSubmissions },
       { id: 'content', label: 'Manage Content Library', icon: 'fa-book', color: 'heaven-blue', href: '/admin/content' },
       { id: 'users', label: 'Manage Users', icon: 'fa-user-cog', color: 'purple-600', href: '/admin/users' },
@@ -3160,6 +3161,157 @@ router.get('/api/admin/daily-schedule/preview/:date', requireAdmin, async (req, 
   } catch (error) {
     console.error('Error fetching preview:', error);
     res.status(500).json({ error: 'Failed to fetch preview' });
+  }
+});
+
+// Analytics Dashboard
+router.get('/analytics', requireAdmin, async (req, res) => {
+  try {
+    const { AnalyticsEvent, ContentEngagement, UserProgress, User } = require('../models');
+    const { Op } = require('sequelize');
+    
+    // Get date range for analytics (default to last 30 days)
+    const endDate = new Date();
+    const startDate = new Date();
+    startDate.setDate(startDate.getDate() - 30);
+    
+    // Daily Active Users (last 7 days)
+    const dauData = await AnalyticsEvent.getDailyActiveUsers(7);
+    
+    // User engagement metrics
+    const totalUsers = await User.count();
+    const activeUsers = await User.count({
+      where: {
+        lastActiveDate: {
+          [Op.gte]: startDate
+        }
+      }
+    });
+    
+    // Progress tracking metrics
+    const usersWithStreaks = await User.count({
+      where: {
+        currentStreak: {
+          [Op.gt]: 0
+        }
+      }
+    });
+    
+    const avgStreak = await User.findOne({
+      attributes: [
+        [require('sequelize').fn('AVG', require('sequelize').col('currentStreak')), 'avgStreak']
+      ]
+    });
+    
+    const maxStreak = await User.findOne({
+      attributes: [
+        [require('sequelize').fn('MAX', require('sequelize').col('longestStreak')), 'maxStreak']
+      ]
+    });
+    
+    // Content engagement metrics
+    const totalAmens = await ContentEngagement.count({
+      where: {
+        engagementType: 'amen'
+      }
+    });
+    
+    const uniqueAmenUsers = await ContentEngagement.count({
+      where: {
+        engagementType: 'amen',
+        userId: {
+          [Op.ne]: null
+        }
+      },
+      distinct: true,
+      col: 'userId'
+    });
+    
+    // Popular content by Amens
+    const popularContent = await ContentEngagement.findAll({
+      attributes: [
+        'contentType',
+        'contentId',
+        [require('sequelize').fn('COUNT', require('sequelize').col('*')), 'amenCount']
+      ],
+      where: {
+        engagementType: 'amen'
+      },
+      group: ['contentType', 'contentId'],
+      order: [[require('sequelize').literal('amenCount'), 'DESC']],
+      limit: 10
+    });
+    
+    // Greeting interactions
+    const greetingClicks = await AnalyticsEvent.count({
+      where: {
+        eventType: 'greeting_click'
+      }
+    });
+    
+    const todayGreetings = await AnalyticsEvent.count({
+      where: {
+        eventType: 'greeting_click',
+        createdAt: {
+          [Op.gte]: new Date().setHours(0, 0, 0, 0)
+        }
+      }
+    });
+    
+    // Completion rates
+    const totalCompletions = await UserProgress.count({
+      where: {
+        completed: true
+      }
+    });
+    
+    const uniqueCompletingUsers = await UserProgress.count({
+      where: {
+        completed: true
+      },
+      distinct: true,
+      col: 'userId'
+    });
+    
+    // Weekly activity trend
+    const weeklyActivity = await UserProgress.findAll({
+      attributes: [
+        [require('sequelize').fn('DATE', require('sequelize').col('completedAt')), 'date'],
+        [require('sequelize').fn('COUNT', require('sequelize').col('*')), 'count']
+      ],
+      where: {
+        completedAt: {
+          [Op.gte]: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
+        }
+      },
+      group: [require('sequelize').fn('DATE', require('sequelize').col('completedAt'))],
+      order: [[require('sequelize').fn('DATE', require('sequelize').col('completedAt')), 'ASC']]
+    });
+    
+    res.render('pages/admin/analytics', {
+      title: 'Analytics Dashboard',
+      user: req.session.user,
+      stats: {
+        totalUsers,
+        activeUsers,
+        usersWithStreaks,
+        avgStreak: avgStreak?.dataValues?.avgStreak || 0,
+        maxStreak: maxStreak?.dataValues?.maxStreak || 0,
+        totalAmens,
+        uniqueAmenUsers,
+        greetingClicks,
+        todayGreetings,
+        totalCompletions,
+        uniqueCompletingUsers,
+        engagementRate: totalUsers > 0 ? ((activeUsers / totalUsers) * 100).toFixed(1) : 0
+      },
+      dauData,
+      popularContent,
+      weeklyActivity
+    });
+  } catch (error) {
+    console.error('Error rendering analytics dashboard:', error);
+    res.status(500).send('Internal server error');
   }
 });
 
