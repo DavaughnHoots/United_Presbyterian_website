@@ -3247,11 +3247,14 @@ router.get('/analytics', requireAdmin, async (req, res) => {
       }
     });
     
+    const todayStart = new Date();
+    todayStart.setHours(0, 0, 0, 0);
+    
     const todayGreetings = await AnalyticsEvent.count({
       where: {
         eventType: 'greeting_click',
         createdAt: {
-          [Op.gte]: new Date().setHours(0, 0, 0, 0)
+          [Op.gte]: todayStart
         }
       }
     });
