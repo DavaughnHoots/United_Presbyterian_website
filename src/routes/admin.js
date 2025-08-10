@@ -3236,7 +3236,7 @@ router.get('/analytics', requireAdmin, async (req, res) => {
         engagementType: 'amen'
       },
       group: ['contentType', 'contentId'],
-      order: [[require('sequelize').literal('amenCount'), 'DESC']],
+      order: [[require('sequelize').fn('COUNT', require('sequelize').col('*')), 'DESC']],
       limit: 10
     });
     
