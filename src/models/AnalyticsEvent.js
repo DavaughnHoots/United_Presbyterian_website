@@ -1,3 +1,5 @@
+const { Op } = require('sequelize');
+
 module.exports = (sequelize, DataTypes) => {
   const AnalyticsEvent = sequelize.define('AnalyticsEvent', {
     id: {
@@ -72,26 +74,37 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
 
-  AnalyticsEvent.getDailyActiveUsers = async function(date = new Date()) {
-    const startOfDay = new Date(date);
-    startOfDay.setHours(0, 0, 0, 0);
-    const endOfDay = new Date(date);
-    endOfDay.setHours(23, 59, 59, 999);
-
-    const count = await this.count({
-      where: {
-        createdAt: {
-          [sequelize.Op.between]: [startOfDay, endOfDay]
+  AnalyticsEvent.getDailyActiveUsers = async function(days = 7) {
+    const results = [];
+    
+    for (let i = days - 1; i >= 0; i--) {
+      const date = new Date();
+      date.setDate(date.getDate() - i);
+      const startOfDay = new Date(date);
+      startOfDay.setHours(0, 0, 0, 0);
+      const endOfDay = new Date(date);
+      endOfDay.setHours(23, 59, 59, 999);
+      
+      const count = await this.count({
+        where: {
+          createdAt: {
+            [Op.between]: [startOfDay, endOfDay]
+          },
+          userId: {
+            [Op.ne]: null
+          }
         },
-        userId: {
-          [sequelize.Op.ne]: null
-        }
-      },
-      distinct: true,
-      col: 'userId'
-    });
-
-    return count;
+        distinct: true,
+        col: 'userId'
+      });
+      
+      results.push({
+        date: startOfDay.toISOString().split('T')[0],
+        count
+      });
+    }
+    
+    return results;
   };
 
   return AnalyticsEvent;

@@ -88,7 +88,33 @@ router.post('/amen', async (req, res) => {
   }
 });
 
-// Get Amen count for content
+// Get Amen count for content (query params version for frontend)
+router.get('/amen-count', async (req, res) => {
+  try {
+    const { contentType, contentId } = req.query;
+    
+    if (!contentType || !contentId) {
+      return res.status(400).json({ error: 'Missing contentType or contentId' });
+    }
+    
+    const userId = req.session.user ? req.session.user.id : null;
+    
+    const count = await ContentEngagement.getAmenCount(contentType, contentId);
+    const hasEngaged = userId ? 
+      await ContentEngagement.hasUserEngaged(contentType, contentId, userId) :
+      false;
+    
+    res.json({
+      count,
+      hasEngaged
+    });
+  } catch (error) {
+    console.error('Error getting Amen count:', error);
+    res.status(500).json({ error: 'Failed to get Amen count' });
+  }
+});
+
+// Get Amen count for content (path params version - kept for compatibility)
 router.get('/count/:contentType/:contentId', async (req, res) => {
   try {
     const { contentType, contentId } = req.params;
