@@ -9,10 +9,15 @@
         </div>
     <% } %>
     
-    <!-- Greeting Card -->
-    <div class="greeting-card mb-6">
-        <p class="text-gray-500 text-sm">Hi <%= user ? user.firstName : 'Friend' %></p>
-        <h1 class="text-3xl font-bold text-gray-800" id="greeting">Good Morning</h1>
+    <!-- Interactive Greeting Card -->
+    <div class="greeting-card mb-6 cursor-pointer hover:shadow-lg transition-all duration-300" 
+         id="greetingCard" onclick="handleGreetingClick()">
+        <p class="text-gray-500 text-sm" id="greetingName">Hi <%= user ? user.firstName : 'Friend' %></p>
+        <h1 class="text-3xl font-bold text-gray-800" id="greetingText">Good Morning</h1>
+        <div class="hidden" id="greetingClicked">
+            <p class="text-2xl" id="greetingEmoji">😊</p>
+            <h1 class="text-2xl font-bold text-sky-blue" id="greetingMessage">Nice to see you today!</h1>
+        </div>
     </div>
     
     <!-- Daily Content Preview -->
@@ -190,22 +195,37 @@
     
     <% if (user) { %>
         <!-- User Progress Section -->
-        <div class="module-card">
+        <div class="module-card" id="progressCard">
             <h3 class="text-xl font-semibold mb-4">Your Spiritual Progress</h3>
             <div class="grid grid-cols-2 gap-4 mb-4">
                 <div class="text-center p-4 bg-gray-50 rounded-lg">
-                    <p class="text-2xl font-bold text-sky-blue">0</p>
+                    <p class="text-2xl font-bold text-sky-blue" id="currentStreak"><%= user.currentStreak || 0 %></p>
                     <p class="text-sm text-gray-600">Current Streak</p>
+                    <% if (user.currentStreak >= 7) { %>
+                        <span class="text-xs text-orange-500">🔥 On fire!</span>
+                    <% } %>
                 </div>
                 <div class="text-center p-4 bg-gray-50 rounded-lg">
-                    <p class="text-2xl font-bold text-green-600">0</p>
+                    <p class="text-2xl font-bold text-green-600" id="daysActive"><%= user.totalDaysActive || 0 %></p>
                     <p class="text-sm text-gray-600">Days Active</p>
                 </div>
             </div>
             <div class="w-full bg-gray-200 rounded-full h-2">
-                <div class="bg-gradient-to-r from-sky-blue to-heaven-blue h-2 rounded-full" style="width: 0%"></div>
+                <% const progressPercent = Math.min(100, Math.round(((user.totalDaysActive || 0) / 30) * 100)); %>
+                <div class="bg-gradient-to-r from-sky-blue to-heaven-blue h-2 rounded-full transition-all duration-500" 
+                     style="width: <%= progressPercent %>%" id="progressBar"></div>
             </div>
-            <p class="text-sm text-gray-600 mt-2">Complete daily content to build your streak!</p>
+            <p class="text-sm text-gray-600 mt-2" id="progressMessage">
+                <% if (user.currentStreak >= 30) { %>
+                    🎉 Amazing dedication! 30+ day streak!
+                <% } else if (user.currentStreak >= 7) { %>
+                    🌟 Great job! Keep your streak going!
+                <% } else if (user.currentStreak >= 1) { %>
+                    💪 You're on a <%= user.currentStreak %> day streak!
+                <% } else { %>
+                    Complete daily content to build your streak!
+                <% } %>
+            </p>
         </div>
     <% } else { %>
         <!-- Join Community Card -->
@@ -234,3 +254,103 @@ function getCategoryIcon(category) {
     return icons[category] || 'fa-calendar';
 }
 %>
+
+<script>
+// Interactive greeting functionality
+let greetingClicked = false;
+
+function handleGreetingClick() {
+    if (greetingClicked) return; // Only allow one click per session
+    
+    const greetingName = document.getElementById('greetingName');
+    const greetingText = document.getElementById('greetingText');
+    const greetingClicked = document.getElementById('greetingClicked');
+    const greetingCard = document.getElementById('greetingCard');
+    
+    // Hide original content
+    greetingName.style.display = 'none';
+    greetingText.style.display = 'none';
+    
+    // Show clicked content
+    greetingClicked.classList.remove('hidden');
+    
+    // Add animation
+    greetingCard.classList.add('animate-bounce');
+    setTimeout(() => {
+        greetingCard.classList.remove('animate-bounce');
+    }, 1000);
+    
+    // Track the interaction
+    fetch('/api/analytics/greeting-click', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            timeOfDay: getTimeOfDay()
+        })
+    }).catch(err => console.error('Failed to track greeting click:', err));
+    
+    greetingClicked = true;
+    
+    // Revert after 5 seconds
+    setTimeout(() => {
+        greetingName.style.display = 'block';
+        greetingText.style.display = 'block';
+        document.getElementById('greetingClicked').classList.add('hidden');
+        greetingClicked = false;
+    }, 5000);
+}
+
+// Get time of day for greeting
+function getTimeOfDay() {
+    const hour = new Date().getHours();
+    if (hour < 12) return 'morning';
+    if (hour < 17) return 'afternoon';
+    return 'evening';
+}
+
+// Update greeting based on time of day
+function updateGreeting() {
+    const hour = new Date().getHours();
+    const greetingElement = document.getElementById('greetingText');
+    if (!greetingElement) return;
+    
+    let greeting = 'Good Morning';
+    if (hour >= 12 && hour < 17) {
+        greeting = 'Good Afternoon';
+    } else if (hour >= 17) {
+        greeting = 'Good Evening';
+    }
+    
+    greetingElement.textContent = greeting;
+}
+
+// Update greeting on page load
+document.addEventListener('DOMContentLoaded', function() {
+    updateGreeting();
+    
+    // Fetch latest progress stats if user is logged in
+    <% if (user) { %>
+    fetch('/api/progress/stats')
+        .then(res => res.json())
+        .then(data => {
+            // Update progress display with latest data
+            document.getElementById('currentStreak').textContent = data.currentStreak;
+            document.getElementById('daysActive').textContent = data.totalDaysActive;
+            document.getElementById('progressBar').style.width = data.progressPercentage + '%';
+            
+            // Update message based on streak
+            const messageEl = document.getElementById('progressMessage');
+            if (data.currentStreak >= 30) {
+                messageEl.textContent = '🎉 Amazing dedication! 30+ day streak!';
+            } else if (data.currentStreak >= 7) {
+                messageEl.textContent = '🌟 Great job! Keep your streak going!';
+            } else if (data.currentStreak >= 1) {
+                messageEl.textContent = `💪 You're on a ${data.currentStreak} day streak!`;
+            }
+        })
+        .catch(err => console.error('Failed to fetch progress:', err));
+    <% } %>
+});
+</script>

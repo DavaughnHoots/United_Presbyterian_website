@@ -4,6 +4,11 @@ const rateLimit = require('express-rate-limit');
 const { requireAuth } = require('../middleware/auth');
 const { Progress: UserProgress, DailyContent, User, Submission, PrayerSupport, SubmissionUpdate } = require('../models');
 
+// Mount sub-routers for new features
+router.use('/progress', require('./api/progress'));
+router.use('/engagement', require('./api/engagement'));
+router.use('/analytics', require('./api/analytics'));
+
 // Rate limiter for anonymous submissions
 const submissionLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
@@ -13,34 +18,7 @@ const submissionLimiter = rateLimit({
   legacyHeaders: false,
 });
 
-// Get user progress
-router.get('/progress', requireAuth, async (req, res) => {
-  try {
-    // TODO: Fetch user progress from database
-    res.json({
-      currentStreak: 0,
-      longestStreak: 0,
-      completedItems: []
-    });
-  } catch (error) {
-    console.error('Error fetching progress:', error);
-    res.status(500).json({ error: 'Failed to fetch progress' });
-  }
-});
-
-// Update content progress
-router.post('/progress/:contentId', requireAuth, async (req, res) => {
-  try {
-    const { contentId } = req.params;
-    const { status, progressPercentage } = req.body;
-    
-    // TODO: Update progress in database
-    res.json({ success: true });
-  } catch (error) {
-    console.error('Error updating progress:', error);
-    res.status(500).json({ error: 'Failed to update progress' });
-  }
-});
+// Legacy progress routes removed - now handled by api/progress.js
 
 // Submit content (anonymous or attributed)
 router.post('/submissions', submissionLimiter, async (req, res) => {
