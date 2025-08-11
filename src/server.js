@@ -35,7 +35,7 @@ app.use(helmet({
       fontSrc: ["'self'", "https://fonts.gstatic.com", "https://cdnjs.cloudflare.com"],
       frameSrc: ["'self'", "https://www.youtube.com", "https://www.youtube-nocookie.com", "https://www.google.com", "https://youtube.com", "https://youtu.be"],
       mediaSrc: ["'self'", "https://www.youtube.com", "https://youtube.com", "https://youtu.be", "https:", "blob:"],
-      connectSrc: ["'self'", "https://fonts.googleapis.com", "https://fonts.gstatic.com", "https://cdnjs.cloudflare.com", "https://cdn.tailwindcss.com", "https://images.unsplash.com", "https://www.youtube.com", "https://youtube.com"]
+      connectSrc: ["'self'", "https://fonts.googleapis.com", "https://fonts.gstatic.com", "https://cdnjs.cloudflare.com", "https://cdn.jsdelivr.net", "https://cdn.tailwindcss.com", "https://images.unsplash.com", "https://www.youtube.com", "https://youtube.com"]
     }
   }
 }));
