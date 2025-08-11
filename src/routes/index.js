@@ -5,9 +5,17 @@ const { requireAuth } = require('../middleware/auth');
 // Home page
 router.get('/', async (req, res) => {
   try {
-    const { Setting, Event } = require('../models');
+    const { Setting, Event, AnalyticsEvent } = require('../models');
     const { Op } = require('sequelize');
     const { generateRecurringOccurrences } = require('../utils/recurringEvents');
+    
+    // Track page view
+    await AnalyticsEvent.trackEvent('page_view', {
+      userId: req.session.user ? req.session.user.id : null,
+      sessionId: req.sessionID,
+      page: '/',
+      userAgent: req.headers['user-agent']
+    });
     
     // Get church settings
     const settings = await Setting.getAll();
@@ -158,8 +166,16 @@ router.get('/', async (req, res) => {
 // Daily content page
 router.get('/daily', async (req, res) => {
   try {
-    const { DailyContent, UserProgress, UserJourney, JourneyDay, JourneyContent, UserJourneyProgress } = require('../models');
+    const { DailyContent, UserProgress, UserJourney, JourneyDay, JourneyContent, UserJourneyProgress, AnalyticsEvent } = require('../models');
     const { Op } = require('sequelize');
+    
+    // Track page view
+    await AnalyticsEvent.trackEvent('page_view', {
+      userId: req.session.user ? req.session.user.id : null,
+      sessionId: req.sessionID,
+      page: '/daily',
+      userAgent: req.headers['user-agent']
+    });
     
     // Get today's date (start of day)
     const today = new Date();

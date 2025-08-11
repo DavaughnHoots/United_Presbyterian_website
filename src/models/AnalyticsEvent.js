@@ -41,12 +41,15 @@ module.exports = (sequelize, DataTypes) => {
     ipHash: {
       type: DataTypes.STRING,
       allowNull: true
+    },
+    createdAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: DataTypes.NOW
     }
   }, {
     tableName: 'analytics_events',
-    timestamps: false, // We only need createdAt
-    createdAt: true,
-    updatedAt: false
+    timestamps: false
   });
 
   // Associations

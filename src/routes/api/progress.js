@@ -54,6 +54,8 @@ router.post('/complete', requireAuth, async (req, res) => {
       // Track analytics event
       await AnalyticsEvent.trackEvent('content_complete', {
         userId,
+        sessionId: req.sessionID,
+        page: '/daily',
         metadata: { contentType, contentId, timeSpent }
       });
     }
