@@ -5,17 +5,36 @@ const { requireAuth } = require('../middleware/auth');
 // Home page
 router.get('/', async (req, res) => {
   try {
-    const { Setting, Event, AnalyticsEvent } = require('../models');
+    const { Setting, Event, AnalyticsEvent, User } = require('../models');
     const { Op } = require('sequelize');
     const { generateRecurringOccurrences } = require('../utils/recurringEvents');
     
-    // Track page view
-    await AnalyticsEvent.trackEvent('page_view', {
-      userId: req.session.user ? req.session.user.id : null,
-      sessionId: req.sessionID,
-      page: '/',
-      userAgent: req.headers['user-agent']
-    });
+    // Track page view and update last active date
+    if (req.session.user) {
+      await AnalyticsEvent.trackEvent('page_view', {
+        userId: req.session.user.id,
+        sessionId: req.sessionID,
+        page: '/',
+        userAgent: req.headers['user-agent']
+      });
+      
+      // Update user's last active date
+      const user = await User.findByPk(req.session.user.id);
+      if (user) {
+        const today = new Date().toISOString().split('T')[0];
+        if (user.lastActiveDate !== today) {
+          user.lastActiveDate = today;
+          await user.save();
+        }
+      }
+    } else {
+      await AnalyticsEvent.trackEvent('page_view', {
+        userId: null,
+        sessionId: req.sessionID,
+        page: '/',
+        userAgent: req.headers['user-agent']
+      });
+    }
     
     // Get church settings
     const settings = await Setting.getAll();
@@ -166,16 +185,35 @@ router.get('/', async (req, res) => {
 // Daily content page
 router.get('/daily', async (req, res) => {
   try {
-    const { DailyContent, UserProgress, UserJourney, JourneyDay, JourneyContent, UserJourneyProgress, AnalyticsEvent } = require('../models');
+    const { DailyContent, UserProgress, UserJourney, JourneyDay, JourneyContent, UserJourneyProgress, AnalyticsEvent, User } = require('../models');
     const { Op } = require('sequelize');
     
-    // Track page view
-    await AnalyticsEvent.trackEvent('page_view', {
-      userId: req.session.user ? req.session.user.id : null,
-      sessionId: req.sessionID,
-      page: '/daily',
-      userAgent: req.headers['user-agent']
-    });
+    // Track page view and update last active date
+    if (req.session.user) {
+      await AnalyticsEvent.trackEvent('page_view', {
+        userId: req.session.user.id,
+        sessionId: req.sessionID,
+        page: '/daily',
+        userAgent: req.headers['user-agent']
+      });
+      
+      // Update user's last active date
+      const user = await User.findByPk(req.session.user.id);
+      if (user) {
+        const today = new Date().toISOString().split('T')[0];
+        if (user.lastActiveDate !== today) {
+          user.lastActiveDate = today;
+          await user.save();
+        }
+      }
+    } else {
+      await AnalyticsEvent.trackEvent('page_view', {
+        userId: null,
+        sessionId: req.sessionID,
+        page: '/daily',
+        userAgent: req.headers['user-agent']
+      });
+    }
     
     // Get today's date (start of day)
     const today = new Date();
