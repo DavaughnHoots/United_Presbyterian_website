@@ -60,11 +60,8 @@ module.exports = (sequelize, DataTypes) => {
 
   // Associations
   Announcement.associate = function(models) {
-    Announcement.belongsTo(models.User, {
-      foreignKey: 'createdBy',
-      as: 'creator'
-    });
-    
+    // Association is already defined in index.js to avoid duplicate alias
+    // Just define the many-to-many here
     Announcement.belongsToMany(models.User, {
       through: models.UserAnnouncement,
       foreignKey: 'announcementId',

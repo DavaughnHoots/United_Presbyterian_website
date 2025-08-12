@@ -57,7 +57,7 @@ UserBadge.belongsTo(User, { foreignKey: 'userId' });
 
 // Announcement associations
 User.hasMany(Announcement, { foreignKey: 'createdBy', as: 'createdAnnouncements' });
-Announcement.belongsTo(User, { foreignKey: 'createdBy', as: 'creator' });
+Announcement.belongsTo(User, { foreignKey: 'createdBy', as: 'announcementCreator' });
 
 // User-Announcement many-to-many
 User.belongsToMany(Announcement, { 
