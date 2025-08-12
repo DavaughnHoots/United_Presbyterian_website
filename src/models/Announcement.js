@@ -58,17 +58,7 @@ module.exports = (sequelize, DataTypes) => {
     timestamps: true
   });
 
-  // Associations
-  Announcement.associate = function(models) {
-    // Association is already defined in index.js to avoid duplicate alias
-    // Just define the many-to-many here
-    Announcement.belongsToMany(models.User, {
-      through: models.UserAnnouncement,
-      foreignKey: 'announcementId',
-      otherKey: 'userId',
-      as: 'readers'
-    });
-  };
+  // Associations are defined in index.js to avoid duplicate aliases
 
   // Class methods
   Announcement.getActiveAnnouncements = async function(userId = null, isAdmin = false) {
