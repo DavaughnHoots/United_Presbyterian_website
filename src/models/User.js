@@ -66,6 +66,22 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       defaultValue: 0
     },
+    requirePassword: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+      allowNull: false,
+      comment: 'Whether user must enter password to login'
+    },
+    deletionRequestedAt: {
+      type: DataTypes.DATE,
+      allowNull: true,
+      comment: 'Timestamp when user requested account deletion'
+    },
+    deletionReason: {
+      type: DataTypes.TEXT,
+      allowNull: true,
+      comment: 'Optional reason provided for account deletion'
+    },
     preferences: {
       type: DataTypes.JSONB,
       defaultValue: {

@@ -1,0 +1,500 @@
+<div class="max-w-4xl mx-auto">
+  <h1 class="text-3xl font-bold mb-6" style="color: var(--text-primary);">Account Settings</h1>
+  
+  <!-- Success/Error Messages -->
+  <div id="alertContainer"></div>
+  
+  <!-- Tabs Navigation -->
+  <div class="border-b border-gray-200 mb-6">
+    <nav class="-mb-px flex space-x-8">
+      <button onclick="switchTab('general')" class="tab-button active" data-tab="general">
+        <i class="fas fa-user mr-2"></i>General
+      </button>
+      <button onclick="switchTab('security')" class="tab-button" data-tab="security">
+        <i class="fas fa-lock mr-2"></i>Security
+      </button>
+      <button onclick="switchTab('badges')" class="tab-button" data-tab="badges">
+        <i class="fas fa-trophy mr-2"></i>Badges
+      </button>
+      <button onclick="switchTab('announcements')" class="tab-button" data-tab="announcements">
+        <i class="fas fa-bullhorn mr-2"></i>Announcements
+        <% if (typeof unreadCount !== 'undefined' && unreadCount > 0) { %>
+          <span class="ml-2 px-2 py-1 text-xs bg-red-500 text-white rounded-full"><%= unreadCount %></span>
+        <% } %>
+      </button>
+      <button onclick="switchTab('privacy')" class="tab-button" data-tab="privacy">
+        <i class="fas fa-user-shield mr-2"></i>Privacy
+      </button>
+    </nav>
+  </div>
+  
+  <!-- Tab Content -->
+  <div id="generalTab" class="tab-content active">
+    <div class="module-card">
+      <h2 class="text-xl font-semibold mb-4">Personal Information</h2>
+      <form id="generalForm" class="space-y-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">First Name</label>
+            <input type="text" name="firstName" value="<%= user.firstName %>" 
+                   class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Last Name</label>
+            <input type="text" name="lastName" value="<%= user.lastName %>" 
+                   class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+          </div>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Email (Login)</label>
+          <input type="email" value="<%= user.email %>" disabled 
+                 class="w-full px-3 py-2 bg-gray-100 border border-gray-300 rounded-md cursor-not-allowed">
+          <p class="text-sm text-gray-500 mt-1">Contact an administrator to change your email address</p>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Personal Email (Optional)</label>
+          <input type="email" name="personalEmail" value="<%= user.personalEmail || '' %>" 
+                 placeholder="your.personal@email.com"
+                 class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+          <p class="text-sm text-gray-500 mt-1">Used for important church communications</p>
+        </div>
+        <button type="submit" class="btn-primary">
+          <i class="fas fa-save mr-2"></i>Save Changes
+        </button>
+      </form>
+    </div>
+  </div>
+  
+  <div id="securityTab" class="tab-content" style="display: none;">
+    <div class="module-card">
+      <h2 class="text-xl font-semibold mb-4">Security Settings</h2>
+      
+      <!-- Password Protection Toggle -->
+      <div class="mb-6 p-4 bg-gray-50 rounded-lg">
+        <div class="flex items-center justify-between mb-3">
+          <div>
+            <h3 class="font-medium">Password Protection</h3>
+            <p class="text-sm text-gray-600">Require password when signing in</p>
+          </div>
+          <label class="relative inline-flex items-center cursor-pointer">
+            <input type="checkbox" id="requirePassword" class="sr-only peer" 
+                   <%= user.requirePassword ? 'checked' : '' %>>
+            <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+          </label>
+        </div>
+        
+        <div id="passwordSection" class="<%= !user.requirePassword ? 'hidden' : '' %>">
+          <div class="border-t pt-4">
+            <form id="passwordForm" class="space-y-4">
+              <% if (user.password) { %>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Current Password</label>
+                  <input type="password" name="currentPassword" 
+                         class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                </div>
+              <% } %>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">New Password</label>
+                <input type="password" name="newPassword" 
+                       class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Confirm New Password</label>
+                <input type="password" name="confirmPassword" 
+                       class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+              </div>
+              <button type="submit" class="btn-primary">
+                <i class="fas fa-key mr-2"></i>Update Password
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Login History -->
+      <div>
+        <h3 class="font-medium mb-3">Recent Activity</h3>
+        <div class="text-sm text-gray-600">
+          <p>Last active: <%= user.lastActiveDate ? new Date(user.lastActiveDate).toLocaleDateString() : 'Never' %></p>
+          <p>Account created: <%= new Date(user.createdAt).toLocaleDateString() %></p>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div id="badgesTab" class="tab-content" style="display: none;">
+    <div class="module-card">
+      <h2 class="text-xl font-semibold mb-4">Your Badges</h2>
+      
+      <% if (badges && badges.length > 0) { %>
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          <% badges.forEach(badge => { %>
+            <div class="text-center p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+              <div class="text-4xl mb-2"><%= badge.badgeIcon %></div>
+              <div class="font-medium text-sm"><%= badge.badgeName %></div>
+              <div class="text-xs text-gray-500 mt-1">
+                <%= new Date(badge.earnedAt).toLocaleDateString() %>
+              </div>
+              <% if (badge.tier > 1) { %>
+                <div class="mt-2">
+                  <% for(let i = 0; i < badge.tier; i++) { %>
+                    <i class="fas fa-star text-yellow-500 text-xs"></i>
+                  <% } %>
+                </div>
+              <% } %>
+            </div>
+          <% }) %>
+        </div>
+      <% } else { %>
+        <div class="text-center py-8 text-gray-500">
+          <i class="fas fa-trophy text-4xl mb-3"></i>
+          <p>No badges earned yet. Keep up your spiritual journey to earn badges!</p>
+        </div>
+      <% } %>
+      
+      <!-- Available Badges -->
+      <h3 class="text-lg font-semibold mt-6 mb-3">Available Badges</h3>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+        <div class="flex items-center p-3 bg-gray-50 rounded">
+          <span class="text-2xl mr-3">🔥</span>
+          <div>
+            <div class="font-medium">Streak Badges</div>
+            <div class="text-sm text-gray-600">Maintain daily devotion for 7, 30, or 100 days</div>
+          </div>
+        </div>
+        <div class="flex items-center p-3 bg-gray-50 rounded">
+          <span class="text-2xl mr-3">📖</span>
+          <div>
+            <div class="font-medium">Scripture Scholar</div>
+            <div class="text-sm text-gray-600">Complete 50, 100, or 500 scripture readings</div>
+          </div>
+        </div>
+        <div class="flex items-center p-3 bg-gray-50 rounded">
+          <span class="text-2xl mr-3">🙏</span>
+          <div>
+            <div class="font-medium">Prayer Warrior</div>
+            <div class="text-sm text-gray-600">Submit 10, 25, or 50 prayer requests</div>
+          </div>
+        </div>
+        <div class="flex items-center p-3 bg-gray-50 rounded">
+          <span class="text-2xl mr-3">💝</span>
+          <div>
+            <div class="font-medium">Encourager</div>
+            <div class="text-sm text-gray-600">Give 50, 100, or 500 Amens</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div id="announcementsTab" class="tab-content" style="display: none;">
+    <div class="module-card">
+      <h2 class="text-xl font-semibold mb-4">Church Announcements</h2>
+      
+      <% if (announcements && announcements.length > 0) { %>
+        <div class="space-y-3">
+          <% announcements.forEach(announcement => { %>
+            <div class="border rounded-lg p-4 <%= announcement.userStatus && !announcement.userStatus.readAt ? 'bg-blue-50 border-blue-200' : '' %>"
+                 data-announcement-id="<%= announcement.id %>">
+              <div class="flex justify-between items-start">
+                <div class="flex-1">
+                  <div class="flex items-center mb-2">
+                    <% if (announcement.priority === 'urgent') { %>
+                      <span class="px-2 py-1 text-xs bg-red-100 text-red-800 rounded mr-2">URGENT</span>
+                    <% } else if (announcement.priority === 'important') { %>
+                      <span class="px-2 py-1 text-xs bg-yellow-100 text-yellow-800 rounded mr-2">IMPORTANT</span>
+                    <% } %>
+                    <h3 class="font-semibold"><%= announcement.title %></h3>
+                    <% if (announcement.userStatus && !announcement.userStatus.readAt) { %>
+                      <span class="ml-2 px-2 py-1 text-xs bg-blue-500 text-white rounded">NEW</span>
+                    <% } %>
+                  </div>
+                  <p class="text-gray-700 mb-2"><%= announcement.content %></p>
+                  <p class="text-xs text-gray-500">
+                    Posted <%= new Date(announcement.createdAt).toLocaleDateString() %>
+                    <% if (announcement.expiresAt) { %>
+                      • Expires <%= new Date(announcement.expiresAt).toLocaleDateString() %>
+                    <% } %>
+                  </p>
+                </div>
+                <button onclick="dismissAnnouncement('<%= announcement.id %>')" 
+                        class="ml-3 text-gray-400 hover:text-gray-600">
+                  <i class="fas fa-times"></i>
+                </button>
+              </div>
+            </div>
+          <% }) %>
+        </div>
+      <% } else { %>
+        <div class="text-center py-8 text-gray-500">
+          <i class="fas fa-bullhorn text-4xl mb-3"></i>
+          <p>No announcements at this time</p>
+        </div>
+      <% } %>
+    </div>
+  </div>
+  
+  <div id="privacyTab" class="tab-content" style="display: none;">
+    <div class="module-card">
+      <h2 class="text-xl font-semibold mb-4">Privacy & Account</h2>
+      
+      <!-- Account Deletion -->
+      <div class="border border-red-200 rounded-lg p-4 bg-red-50">
+        <h3 class="font-semibold text-red-800 mb-2">Delete Account</h3>
+        <p class="text-sm text-gray-700 mb-4">
+          Once you request account deletion, an administrator will review your request. 
+          Your account will be deactivated and your data will be removed according to our privacy policy.
+        </p>
+        <% if (user.deletionRequestedAt) { %>
+          <div class="p-3 bg-yellow-100 rounded mb-3">
+            <p class="text-sm text-yellow-800">
+              <i class="fas fa-info-circle mr-2"></i>
+              Deletion requested on <%= new Date(user.deletionRequestedAt).toLocaleDateString() %>
+            </p>
+          </div>
+        <% } else { %>
+          <button onclick="requestDeletion()" class="btn-danger">
+            <i class="fas fa-trash-alt mr-2"></i>Request Account Deletion
+          </button>
+        <% } %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+.tab-button {
+  @apply py-2 px-1 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300 transition-colors;
+}
+.tab-button.active {
+  @apply text-blue-600 border-blue-600;
+}
+.btn-primary {
+  @apply px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors;
+}
+.btn-danger {
+  @apply px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors;
+}
+</style>
+
+<script>
+// Tab switching
+function switchTab(tabName) {
+  // Hide all tabs
+  document.querySelectorAll('.tab-content').forEach(tab => {
+    tab.style.display = 'none';
+  });
+  
+  // Remove active class from all buttons
+  document.querySelectorAll('.tab-button').forEach(btn => {
+    btn.classList.remove('active');
+  });
+  
+  // Show selected tab
+  document.getElementById(tabName + 'Tab').style.display = 'block';
+  
+  // Add active class to clicked button
+  document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
+  
+  // Mark announcements as read when tab is opened
+  if (tabName === 'announcements') {
+    markAnnouncementsAsRead();
+  }
+}
+
+// Show alert message
+function showAlert(message, type = 'success') {
+  const alertHtml = `
+    <div class="mb-4 p-4 rounded-md ${type === 'success' ? 'bg-green-50 text-green-800' : 'bg-red-50 text-red-800'}">
+      <div class="flex">
+        <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'} mr-2"></i>
+        <div>${message}</div>
+      </div>
+    </div>
+  `;
+  
+  const container = document.getElementById('alertContainer');
+  container.innerHTML = alertHtml;
+  
+  setTimeout(() => {
+    container.innerHTML = '';
+  }, 5000);
+}
+
+// General form submission
+document.getElementById('generalForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  
+  const formData = new FormData(e.target);
+  const data = Object.fromEntries(formData);
+  
+  try {
+    const response = await fetch('/api/user/update-profile', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+    
+    const result = await response.json();
+    
+    if (response.ok) {
+      showAlert('Profile updated successfully!');
+    } else {
+      showAlert(result.error || 'Failed to update profile', 'error');
+    }
+  } catch (error) {
+    showAlert('An error occurred. Please try again.', 'error');
+  }
+});
+
+// Password protection toggle
+document.getElementById('requirePassword').addEventListener('change', async (e) => {
+  const requirePassword = e.target.checked;
+  const passwordSection = document.getElementById('passwordSection');
+  
+  if (requirePassword) {
+    passwordSection.classList.remove('hidden');
+  } else {
+    // Confirm disabling password protection
+    if (!confirm('Are you sure you want to disable password protection?')) {
+      e.target.checked = true;
+      return;
+    }
+    
+    passwordSection.classList.add('hidden');
+    
+    try {
+      const response = await fetch('/api/user/toggle-password', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ requirePassword: false })
+      });
+      
+      if (response.ok) {
+        showAlert('Password protection disabled');
+      } else {
+        e.target.checked = true;
+        passwordSection.classList.remove('hidden');
+        showAlert('Failed to update setting', 'error');
+      }
+    } catch (error) {
+      e.target.checked = true;
+      passwordSection.classList.remove('hidden');
+      showAlert('An error occurred', 'error');
+    }
+  }
+});
+
+// Password form submission
+document.getElementById('passwordForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  
+  const formData = new FormData(e.target);
+  const data = Object.fromEntries(formData);
+  
+  if (data.newPassword !== data.confirmPassword) {
+    showAlert('Passwords do not match', 'error');
+    return;
+  }
+  
+  try {
+    const response = await fetch('/api/user/update-password', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+    
+    const result = await response.json();
+    
+    if (response.ok) {
+      showAlert('Password updated successfully!');
+      e.target.reset();
+    } else {
+      showAlert(result.error || 'Failed to update password', 'error');
+    }
+  } catch (error) {
+    showAlert('An error occurred. Please try again.', 'error');
+  }
+});
+
+// Request account deletion
+async function requestDeletion() {
+  const reason = prompt('Please tell us why you want to delete your account (optional):');
+  
+  if (reason === null) return; // User cancelled
+  
+  if (!confirm('Are you sure you want to request account deletion? This action cannot be undone.')) {
+    return;
+  }
+  
+  try {
+    const response = await fetch('/api/user/request-deletion', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ reason })
+    });
+    
+    if (response.ok) {
+      showAlert('Deletion request submitted. An administrator will review your request.');
+      setTimeout(() => location.reload(), 2000);
+    } else {
+      showAlert('Failed to submit deletion request', 'error');
+    }
+  } catch (error) {
+    showAlert('An error occurred. Please try again.', 'error');
+  }
+}
+
+// Mark announcements as read
+async function markAnnouncementsAsRead() {
+  const unreadAnnouncements = document.querySelectorAll('[data-announcement-id]');
+  const announcementIds = [];
+  
+  unreadAnnouncements.forEach(el => {
+    const id = el.dataset.announcementId;
+    if (el.classList.contains('bg-blue-50')) {
+      announcementIds.push(id);
+    }
+  });
+  
+  if (announcementIds.length > 0) {
+    try {
+      await fetch('/api/announcements/mark-read', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ announcementIds })
+      });
+      
+      // Remove unread styling
+      announcementIds.forEach(id => {
+        const el = document.querySelector(`[data-announcement-id="${id}"]`);
+        el.classList.remove('bg-blue-50', 'border-blue-200');
+        const newBadge = el.querySelector('.bg-blue-500');
+        if (newBadge) newBadge.remove();
+      });
+    } catch (error) {
+      console.error('Failed to mark announcements as read:', error);
+    }
+  }
+}
+
+// Dismiss announcement
+async function dismissAnnouncement(announcementId) {
+  if (!confirm('Dismiss this announcement?')) return;
+  
+  try {
+    const response = await fetch(`/api/announcements/${announcementId}/dismiss`, {
+      method: 'POST'
+    });
+    
+    if (response.ok) {
+      const el = document.querySelector(`[data-announcement-id="${announcementId}"]`);
+      el.style.transition = 'opacity 0.3s';
+      el.style.opacity = '0';
+      setTimeout(() => el.remove(), 300);
+    }
+  } catch (error) {
+    showAlert('Failed to dismiss announcement', 'error');
+  }
+}
+</script>

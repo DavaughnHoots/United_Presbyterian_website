@@ -430,11 +430,57 @@ router.get('/live', async (req, res) => {
 // Profile page (requires authentication)
 router.get('/profile', requireAuth, async (req, res) => {
   try {
+    const { User, UserBadge } = require('../models');
+    
+    // Get user with badges
+    const userWithBadges = await User.findByPk(req.session.user.id, {
+      include: [
+        { model: UserBadge, as: 'badges' }
+      ]
+    });
+    
+    // Update session with latest user data
+    req.session.user = userWithBadges.toJSON();
+    
     res.render('pages/profile', {
-      title: 'My Profile'
+      title: 'My Profile',
+      user: req.session.user
     });
   } catch (error) {
     console.error('Error rendering profile page:', error);
+    res.status(500).send('Internal server error');
+  }
+});
+
+router.get('/profile/settings', requireAuth, async (req, res) => {
+  try {
+    const { User, UserBadge, Announcement } = require('../models');
+    
+    // Get user with badges
+    const user = await User.findByPk(req.session.user.id, {
+      include: [
+        { model: UserBadge, as: 'badges', order: [['earnedAt', 'DESC']] }
+      ]
+    });
+    
+    // Get active announcements for this user
+    const announcements = await Announcement.getActiveAnnouncements(
+      req.session.user.id, 
+      req.session.user.isAdmin
+    );
+    
+    // Count unread announcements
+    const unreadCount = await Announcement.getUnreadCount(req.session.user.id);
+    
+    res.render('pages/profile/settings', {
+      title: 'Account Settings',
+      user: user.toJSON(),
+      badges: user.badges,
+      announcements,
+      unreadCount
+    });
+  } catch (error) {
+    console.error('Error loading settings:', error);
     res.status(500).send('Internal server error');
   }
 });

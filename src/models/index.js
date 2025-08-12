@@ -24,6 +24,9 @@ const SentimentAnnotation = require('./SentimentAnnotation')(sequelize, DataType
 const UserProgress = require('./UserProgress')(sequelize, DataTypes);
 const ContentEngagement = require('./ContentEngagement')(sequelize, DataTypes);
 const AnalyticsEvent = require('./AnalyticsEvent')(sequelize, DataTypes);
+const UserBadge = require('./UserBadge')(sequelize, DataTypes);
+const Announcement = require('./Announcement')(sequelize, DataTypes);
+const UserAnnouncement = require('./UserAnnouncement')(sequelize, DataTypes);
 
 // Define associations
 User.hasMany(Progress, { foreignKey: 'userId' });
@@ -48,6 +51,28 @@ EventRegistration.belongsTo(User, { foreignKey: 'userId' });
 User.hasMany(UserActivity, { foreignKey: 'userId' });
 UserActivity.belongsTo(User, { foreignKey: 'userId' });
 
+// Badge associations
+User.hasMany(UserBadge, { foreignKey: 'userId', as: 'badges' });
+UserBadge.belongsTo(User, { foreignKey: 'userId' });
+
+// Announcement associations
+User.hasMany(Announcement, { foreignKey: 'createdBy', as: 'createdAnnouncements' });
+Announcement.belongsTo(User, { foreignKey: 'createdBy', as: 'creator' });
+
+// User-Announcement many-to-many
+User.belongsToMany(Announcement, { 
+  through: UserAnnouncement, 
+  foreignKey: 'userId',
+  otherKey: 'announcementId',
+  as: 'announcements' 
+});
+Announcement.belongsToMany(User, { 
+  through: UserAnnouncement, 
+  foreignKey: 'announcementId',
+  otherKey: 'userId',
+  as: 'readers' 
+});
+
 // Call associate methods if they exist
 const models = {
   User,
@@ -71,7 +96,10 @@ const models = {
   SentimentAnnotation,
   UserProgress,
   ContentEngagement,
-  AnalyticsEvent
+  AnalyticsEvent,
+  UserBadge,
+  Announcement,
+  UserAnnouncement
 };
 
 Object.keys(models).forEach(modelName => {

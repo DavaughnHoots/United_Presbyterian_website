@@ -343,4 +343,145 @@ router.post('/submissions/:id/update', requireAuth, async (req, res) => {
 // Journey routes
 router.use('/journeys', require('./api/journeys'));
 
+// User profile routes
+router.put('/user/update-profile', requireAuth, async (req, res) => {
+  try {
+    const { firstName, lastName, personalEmail } = req.body;
+    const { User } = require('../models');
+    
+    const user = await User.findByPk(req.session.user.id);
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+    
+    // Update fields
+    if (firstName) user.firstName = firstName;
+    if (lastName) user.lastName = lastName;
+    if (personalEmail !== undefined) user.personalEmail = personalEmail || null;
+    
+    await user.save();
+    
+    // Update session
+    req.session.user.firstName = user.firstName;
+    req.session.user.lastName = user.lastName;
+    req.session.user.personalEmail = user.personalEmail;
+    
+    res.json({ success: true, user: user.toJSON() });
+  } catch (error) {
+    console.error('Error updating profile:', error);
+    res.status(500).json({ error: 'Failed to update profile' });
+  }
+});
+
+// Toggle password requirement
+router.put('/user/toggle-password', requireAuth, async (req, res) => {
+  try {
+    const { requirePassword } = req.body;
+    const { User } = require('../models');
+    
+    const user = await User.findByPk(req.session.user.id);
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+    
+    user.requirePassword = requirePassword;
+    await user.save();
+    
+    req.session.user.requirePassword = requirePassword;
+    
+    res.json({ success: true });
+  } catch (error) {
+    console.error('Error toggling password requirement:', error);
+    res.status(500).json({ error: 'Failed to update setting' });
+  }
+});
+
+// Update password
+router.put('/user/update-password', requireAuth, async (req, res) => {
+  try {
+    const { currentPassword, newPassword } = req.body;
+    const { User } = require('../models');
+    const bcrypt = require('bcryptjs');
+    
+    const user = await User.findByPk(req.session.user.id);
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+    
+    // Verify current password if user has one
+    if (user.password && currentPassword) {
+      const isValid = await bcrypt.compare(currentPassword, user.password);
+      if (!isValid) {
+        return res.status(400).json({ error: 'Current password is incorrect' });
+      }
+    }
+    
+    // Hash and save new password
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    user.password = hashedPassword;
+    user.requirePassword = true;
+    await user.save();
+    
+    req.session.user.requirePassword = true;
+    
+    res.json({ success: true });
+  } catch (error) {
+    console.error('Error updating password:', error);
+    res.status(500).json({ error: 'Failed to update password' });
+  }
+});
+
+// Request account deletion
+router.post('/user/request-deletion', requireAuth, async (req, res) => {
+  try {
+    const { reason } = req.body;
+    const { User } = require('../models');
+    
+    const user = await User.findByPk(req.session.user.id);
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+    
+    user.deletionRequestedAt = new Date();
+    user.deletionReason = reason || null;
+    await user.save();
+    
+    res.json({ success: true });
+  } catch (error) {
+    console.error('Error requesting deletion:', error);
+    res.status(500).json({ error: 'Failed to submit deletion request' });
+  }
+});
+
+// Announcement routes
+router.post('/announcements/mark-read', requireAuth, async (req, res) => {
+  try {
+    const { announcementIds } = req.body;
+    const { UserAnnouncement } = require('../models');
+    
+    for (const announcementId of announcementIds) {
+      await UserAnnouncement.markAsRead(req.session.user.id, announcementId);
+    }
+    
+    res.json({ success: true });
+  } catch (error) {
+    console.error('Error marking announcements as read:', error);
+    res.status(500).json({ error: 'Failed to mark as read' });
+  }
+});
+
+router.post('/announcements/:id/dismiss', requireAuth, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { UserAnnouncement } = require('../models');
+    
+    await UserAnnouncement.markAsDismissed(req.session.user.id, id);
+    
+    res.json({ success: true });
+  } catch (error) {
+    console.error('Error dismissing announcement:', error);
+    res.status(500).json({ error: 'Failed to dismiss announcement' });
+  }
+});
+
 module.exports = router;
